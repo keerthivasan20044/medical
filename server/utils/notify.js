@@ -1,0 +1,44 @@
+import nodemailer from 'nodemailer';
+import twilio from 'twilio';
+
+let transporter;
+function getTransporter() {
+  if (transporter) return transporter;
+  if (!process.env.SMTP_HOST) return null;
+  transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT || 587),
+    secure: false,
+    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+  });
+  return transporter;
+}
+
+function getTwilioClient() {
+  if (!process.env.TWILIO_SID || !process.env.TWILIO_TOKEN) return null;
+  return twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+}
+
+export async function sendEmail(to, subject, body, attachments) {
+  const t = getTransporter();
+  if (!t) {
+    console.log(`[email] to=${to} subject=${subject} body=${body}`);
+    return;
+  }
+  await t.sendMail({
+    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+    to,
+    subject,
+    text: body,
+    attachments: attachments || []
+  });
+}
+
+export async function sendSMS(to, message) {
+  const client = getTwilioClient();
+  if (!client) {
+    console.log(`[sms] to=${to} message=${message}`);
+    return;
+  }
+  await client.messages.create({ from: process.env.TWILIO_FROM, to, body: message });
+}
