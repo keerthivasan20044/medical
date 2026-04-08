@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace=client\" \"npm run dev --workspace=server\"",
-    "build": "npm run build --workspace=client",
+    "build": "npm run build --workspace=client && (robocopy client\\dist dist /E /MOVE || move client\\dist dist || mv client/dist dist || true)",
     "server-start": "npm start --workspace=server",
     "postinstall": "npm install --workspace=client && npm install --workspace=server"
   },
