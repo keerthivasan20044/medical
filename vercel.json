@@ -1,5 +1,7 @@
 {
   "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "functions": {
     "server/index.js": {
       "runtime": "@vercel/node",
@@ -10,6 +12,15 @@
     {
       "source": "/api/(.*)",
       "destination": "/server/index.js"
+    },
+    {
+      "source": "/assets/(.*)",
+      "destination": "/client/dist/assets/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/client/dist/index.html",
+      "check": true
     },
     {
       "source": "/(.*)",
