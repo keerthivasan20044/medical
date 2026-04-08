@@ -71,11 +71,16 @@ app.use('/api/coupons', couponRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
+// Connect to DB immediately
+const dbPromise = connectDB().catch(err => {
+  console.error('Failed to connect to DB during initialization:', err);
+});
+
 const PORT = process.env.PORT || 5001;
 
 // Only listen if not running as a Vercel function
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-  connectDB().then(() => {
+  dbPromise.then(() => {
     server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   });
 }

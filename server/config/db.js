@@ -18,6 +18,9 @@ export async function connectDB() {
     return true;
   } catch (error) {
     console.error('MongoDB connection error:', error.message);
-    process.exit(1); // Exit immediately if DB connection fails
+    if (!process.env.VERCEL) {
+      process.exit(1); // Only exit in local dev/standalone server
+    }
+    throw error;
   }
 }
