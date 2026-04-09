@@ -1,11 +1,15 @@
-import { useState, useMemo } from 'react';
+﻿import { useState, useMemo } from 'react';
 import { Search, X, Star, ShoppingBag, Plus, Info, Globe, ShieldCheck, FileText, ChevronRight, Activity, Zap, Award, ArrowRightLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { medicines } from '../../utils/data.js';
+import { useLanguage } from '../../context/LanguageContext.jsx';
+
 
 export default function MedicineComparePage() {
+  const { t } = useLanguage();
   const [compareIds, setCompareIds] = useState([]);
+
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -36,7 +40,7 @@ export default function MedicineComparePage() {
     { label: 'Terminal MRP', icon: Award, val: m => `\u20B9${m.mrp}` },
     { label: 'Rx Protocol', icon: FileText, val: m => m.requiresRx ? 'Required' : 'Not Req.' },
     { label: 'Therapeutic Enclave', icon: Info, val: m => m.category },
-    { label: 'Audit Performance', icon: Star, val: m => `${m.rating} ★ (${m.reviewsCount})` },
+    { label: 'Audit Performance', icon: Star, val: m => `${m.rating} â˜… (${m.reviewsCount})` },
     { label: 'Inventory State', icon: Activity, val: m => m.stockCount > 0 ? 'Optimal' : 'Offline' }
   ];
 
@@ -53,15 +57,15 @@ export default function MedicineComparePage() {
                <ChevronRight size={14} className="opacity-40" />
                <Link to="/medicines" className="hover:text-brand-teal transition-all">Medicines</Link>
                <ChevronRight size={14} className="opacity-40" />
-               <span className="text-brand-teal">Compare Protocols</span>
+               <span className="text-brand-teal">{t('compareProtocols')}</span>
             </div>
             
             <div className="flex flex-col lg:flex-row justify-between items-end gap-12">
                <div className="space-y-6">
                   <h1 className="font-syne font-black text-6xl lg:text-9xl text-white leading-[0.85] tracking-tighter uppercase italic drop-shadow-2xl">
-                     Protocol <br/><span className="text-brand-teal">Uplink</span>
+                     {t('protocolUplink').split(' ')[0]} <br/><span className="text-brand-teal">{t('protocolUplink').split(' ')[1]}</span>
                   </h1>
-                  <p className="text-white/40 font-dm text-2xl italic leading-relaxed max-w-xl">Compare clinical trajectories for up to 3 medical nodes in real-time district synchronization.</p>
+                  <p className="text-white/40 font-dm text-2xl italic leading-relaxed max-w-xl">{t('clinicalTrajectories')}</p>
                </div>
                
                {compareIds.length > 0 && (
@@ -69,7 +73,7 @@ export default function MedicineComparePage() {
                    onClick={() => setCompareIds([])}
                    className="h-16 px-10 bg-white/5 border border-white/10 text-white font-syne font-black text-[9px] uppercase italic tracking-widest rounded-2xl hover:bg-red-500 hover:border-red-500 transition-all duration-700 flex items-center gap-4 active:scale-95 shadow-4xl"
                  >
-                    <X size={18}/> PURGE COMPARISON MATRIX
+                    <X size={18}/> {t('clearCompare')}
                  </button>
                )}
             </div>
@@ -134,8 +138,8 @@ export default function MedicineComparePage() {
                         <div className="h-full flex flex-col items-center justify-center p-12 text-center space-y-8 bg-gray-50/50 rounded-[4rem] border-2 border-dashed border-black/[0.05] min-h-[800px]">
                            <div className="h-32 w-32 bg-white rounded-[3.5rem] flex items-center justify-center text-gray-200 border border-black/[0.03] shadow-soft group-hover:scale-110 transition-transform"><Plus size={48} className="animate-pulse"/></div>
                            <div className="space-y-4">
-                              <h4 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic tracking-tighter">Add Component</h4>
-                              <p className="text-gray-300 font-dm italic font-bold">Initialize a new medical node for comparison.</p>
+                              <h4 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic tracking-tighter">{t('addMedicine')}</h4>
+                              <p className="text-gray-300 font-dm italic font-bold">{t('initializeDescription') || 'Initialize a new medical node for comparison.'}</p>
                            </div>
                            <button 
                              onClick={() => setShowSearch(true)}

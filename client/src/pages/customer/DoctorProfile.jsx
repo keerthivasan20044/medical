@@ -9,9 +9,13 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { doctors } from '../../utils/data.js';
 import { toast } from 'react-hot-toast';
+import { useLanguage } from '../../context/LanguageContext.jsx';
+
 
 export default function DoctorProfile() {
+  const { t } = useLanguage();
   const { id } = useParams();
+
   const [activeTab, setActiveTab] = useState('About');
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(0);
@@ -85,7 +89,7 @@ export default function DoctorProfile() {
                      </div>
                      <div className="pl-6 flex items-center gap-2 text-xs font-dm font-bold text-gray-400">
                         <Verified size={18} className="text-[#02C39A]" />
-                        MC Reg: {doc.regNo || 'TNMC-XXXXX'}
+                        {t('verifiedMcReg')}: {doc.regNo || 'TNMC-XXXXX'}
                      </div>
                   </div>
 
@@ -97,12 +101,12 @@ export default function DoctorProfile() {
 
                   <div className="flex flex-col md:flex-row gap-6 pt-6">
                      <div className="flex flex-col">
-                        <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">Consulting at</span>
+                        <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">{t('consultingAt')}</span>
                         <div className="text-sm font-dm font-bold text-[#0a1628] italic">{doc.hospital}</div>
                      </div>
                      <div className="flex flex-col">
-                        <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">Experience</span>
-                        <div className="text-sm font-dm font-bold text-[#0a1628] uppercase">{doc.experience} Years of Practice</div>
+                        <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">{t('experience')}</span>
+                        <div className="text-sm font-dm font-bold text-[#0a1628] uppercase">{doc.experience} {t('yearsOfPractice')}</div>
                      </div>
                   </div>
                </div>
@@ -112,14 +116,14 @@ export default function DoctorProfile() {
                <div className="absolute top-0 right-0 h-32 w-32 bg-[#02C39A] rounded-full blur-[100px] opacity-10" />
                <div className="relative z-10 flex flex-col items-center gap-6">
                   <div className="flex flex-col items-center">
-                     <span className="text-[10px] text-white/30 font-bold uppercase tracking-widest">Consultation Fee</span>
+                     <span className="text-[10px] text-white/30 font-bold uppercase tracking-widest">{t('consultationFee')}</span>
                      <div className="text-5xl font-syne font-black text-[#02C39A] tracking-tighter">₹{doc.fee}</div>
                   </div>
                   <button 
                     onClick={() => setShowModal(true)}
                     className="w-full h-16 bg-white text-[#0a1628] rounded-3xl font-syne font-bold text-lg shadow-xl hover:scale-[1.05] active:scale-95 transition-all text-center flex items-center justify-center gap-3"
                   >
-                     Book Appointment <ArrowRight size={20} />
+                     {t('bookAppointment')} <ArrowRight size={20} />
                   </button>
                   <p className="text-[10px] text-white/30 font-dm text-center italic">100% Secure Architecture Payment. Instant confirmation in Karaikal district.</p>
                </div>
@@ -129,13 +133,13 @@ export default function DoctorProfile() {
          {/* Tabs Section */}
          <div className="mt-24">
             <div className="flex items-center gap-8 border-b border-gray-100 mb-12 overflow-x-auto no-scrollbar">
-               {['About', 'Experience', 'Reviews', 'Schedule'].map(t => (
+               {['About', 'Experience', 'Reviews', 'Schedule'].map(tabKey => (
                   <button 
-                    key={t}
-                    onClick={() => setActiveTab(t)}
-                    className={`pb-6 font-syne font-bold text-sm uppercase tracking-widest transition-all whitespace-nowrap border-b-4 ${activeTab === t ? 'border-[#028090] text-[#028090]' : 'border-transparent text-gray-300 hover:text-gray-400'}`}
+                    key={tabKey}
+                    onClick={() => setActiveTab(tabKey)}
+                    className={`pb-6 font-syne font-bold text-sm uppercase tracking-widest transition-all whitespace-nowrap border-b-4 ${activeTab === tabKey ? 'border-[#028090] text-[#028090]' : 'border-transparent text-gray-300 hover:text-gray-400'}`}
                   >
-                     {t}
+                     {t(tabKey.toLowerCase())}
                   </button>
                ))}
             </div>
@@ -149,13 +153,13 @@ export default function DoctorProfile() {
                         className="space-y-12"
                      >
                         <div className="space-y-6">
-                           <h3 className="font-syne font-black text-2xl text-[#0a1628]">Professional Bio</h3>
+                           <h3 className="font-syne font-black text-2xl text-[#0a1628]">{t('professionalBio')}</h3>
                            <p className="text-gray-400 font-dm text-lg leading-relaxed">{doc.bio || `Dr. ${doc.name.split(' ').slice(1).join(' ')} is a highly respected ${doc.spec} serving the Karaikal district. Known for specialized attention to patients and accurate clinical diagnosis.`}</p>
                         </div>
                         
                         <div className="grid md:grid-cols-2 gap-12">
                            <div className="space-y-6">
-                              <h3 className="font-syne font-black text-[#0a1628] flex items-center gap-3 text-lg"><GraduationCap className="text-[#028090]" /> Education</h3>
+                              <h3 className="font-syne font-black text-[#0a1628] flex items-center gap-3 text-lg"><GraduationCap className="text-[#028090]" /> {t('education')}</h3>
                               <div className="space-y-4">
                                  {doc.education?.map((e, i) => (
                                     <div key={i} className="flex gap-4">
@@ -166,7 +170,7 @@ export default function DoctorProfile() {
                               </div>
                            </div>
                            <div className="space-y-6">
-                              <h3 className="font-syne font-black text-[#0a1628] flex items-center gap-3 text-lg"><Award className="text-[#028090]" /> Expertise</h3>
+                              <h3 className="font-syne font-black text-[#0a1628] flex items-center gap-3 text-lg"><Award className="text-[#028090]" /> {t('expertise')}</h3>
                               <div className="flex flex-wrap gap-2">
                                  {doc.tags?.map(tag => (
                                     <span key={tag} className="px-5 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-xs font-dm font-bold text-gray-400 whitespace-nowrap">{tag} Expert</span>
@@ -184,7 +188,7 @@ export default function DoctorProfile() {
                         className="space-y-12"
                      >
                         <div className="space-y-8">
-                           <h3 className="font-syne font-black text-[#0a1628] text-2xl">Consultation Calendar</h3>
+                           <h3 className="font-syne font-black text-[#0a1628] text-2xl">{t('consultationCalendar')}</h3>
                            <div className="grid grid-cols-7 gap-4">
                               {DATES.map((d, i) => (
                                  <button 
@@ -201,7 +205,7 @@ export default function DoctorProfile() {
                         </div>
 
                         <div className="space-y-8">
-                           <h3 className="font-syne font-black text-[#0a1628] text-2xl">Available Shifts</h3>
+                           <h3 className="font-syne font-black text-[#0a1628] text-2xl">{t('availableShifts')}</h3>
                            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4">
                               {SLOTS.map(t => (
                                  <button 
@@ -237,7 +241,7 @@ export default function DoctorProfile() {
                   <div className="p-12 space-y-10">
                      <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                           <h3 className="font-syne font-black text-[#0a1628] text-3xl">Architecture Consultation</h3>
+                           <h3 className="font-syne font-black text-[#0a1628] text-3xl">{t('architectureConsultation')}</h3>
                            <p className="text-gray-400 font-dm">Consult with {doc.name} from Karaikal.</p>
                         </div>
                         <button onClick={() => setShowModal(false)} className="h-12 w-12 bg-gray-50 hover:bg-white rounded-full flex items-center justify-center text-gray-400 shadow-sm transition"><X size={20} /></button>
@@ -245,7 +249,7 @@ export default function DoctorProfile() {
 
                      <div className="grid grid-cols-2 gap-8 py-8 border-y border-gray-100">
                         <div className="space-y-4">
-                           <label className="text-[10px] font-black font-syne uppercase tracking-widest text-[#0a1628]">Select Category</label>
+                           <label className="text-[10px] font-black font-syne uppercase tracking-widest text-[#0a1628]">{t('selectCategory')}</label>
                            <div className="grid grid-cols-1 gap-2">
                               {['Video Call', 'Audio Call', 'In-Person'].map(type => (
                                  <button key={type} className="w-full py-4 bg-gray-50 border border-gray-100 rounded-2xl text-xs font-bold font-dm text-[#0a1628] text-left px-5 hover:bg-white hover:border-[#028090] transition flex items-center justify-between">
@@ -255,9 +259,9 @@ export default function DoctorProfile() {
                            </div>
                         </div>
                         <div className="space-y-4">
-                           <label className="text-[10px] font-black font-syne uppercase tracking-widest text-[#0a1628]">Quick Symptoms</label>
+                           <label className="text-[10px] font-black font-syne uppercase tracking-widest text-[#0a1628]">{t('quickSymptoms')}</label>
                            <textarea 
-                              placeholder="Describe your architecture ailment..." 
+                              placeholder={t('symptomPlaceholder')} 
                               className="w-full h-[180px] p-6 bg-gray-50 border border-gray-100 rounded-[2rem] outline-none font-dm text-sm focus:bg-white focus:border-[#028090] transition resize-none"
                            />
                         </div>
@@ -265,14 +269,14 @@ export default function DoctorProfile() {
 
                      <div className="flex items-center justify-between pt-4">
                         <div className="flex flex-col">
-                           <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">Selected Slot</span>
+                           <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">{t('selectedSlot')}</span>
                            <div className="text-lg font-syne font-black text-[#0a1628]">{DATES[selectedDate].date} {DATES[selectedDate].month} · {selectedTime || 'Not Set'}</div>
                         </div>
                         <button 
                            onClick={handleBooking}
                            className="px-12 py-5 bg-[#028090] text-white font-syne font-bold rounded-2xl shadow-xl shadow-[#028090]/20 hover:scale-105 active:scale-95 transition-all text-lg"
                         >
-                           Confirm & Pay ₹{doc.fee}
+                           {t('confirmAndPay')} ₹{doc.fee}
                         </button>
                      </div>
                   </div>

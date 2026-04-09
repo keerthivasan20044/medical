@@ -18,7 +18,8 @@ function cookieOptions() {
   return {
     httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production'
+    secure: process.env.NODE_ENV === 'production',
+    path: '/'
   };
 }
 
@@ -222,8 +223,8 @@ export async function logoutUser(req, res) {
   if (req.user?.id) {
     await User.findByIdAndUpdate(req.user.id, { refreshToken: null });
   }
-  res.clearCookie('accessToken');
-  res.clearCookie('refreshToken');
+  res.clearCookie('accessToken', cookieOptions());
+  res.clearCookie('refreshToken', cookieOptions());
   res.json({ message: 'Logged out' });
 }
 

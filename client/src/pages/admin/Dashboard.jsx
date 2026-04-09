@@ -137,7 +137,7 @@ export default function AdminDashboard() {
          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-1">
                <div className="text-[10px] font-black text-[#028090] uppercase tracking-[0.3em]">Command Center v2.0</div>
-               <h1 className="font-syne font-black text-4xl text-[#0a1628]">MediReach Admin — <span className="text-[#028090]">Karaikal Operations</span></h1>
+               <h1 className="font-syne font-black text-4xl text-[#0a1628]">MediPharm Admin — <span className="text-[#028090]">Karaikal Operations</span></h1>
             </div>
             <div className="flex items-center gap-4 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
                <div className="px-6 py-2 border-r border-gray-100 hidden lg:block">

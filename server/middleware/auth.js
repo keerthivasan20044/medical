@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
@@ -20,7 +21,6 @@ export async function verifyToken(req, res, next) {
     const decoded = jwt.verify(token, JWT_SECRET);
     
     // Achieving "Real-time" Authorization: Validating actual DB state
-    const User = (await import('../models/User.js')).default;
     const user = await User.findById(decoded.id).select('isActive verified role').lean();
     
     if (!user || !user.isActive) {

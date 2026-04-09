@@ -52,8 +52,8 @@ app.use((req, res, next) => {
 app.use(cookieParser());
 app.use(morgan('dev'));
 
-app.get('/', (req, res) => res.json({ status: 'MediReach API running' }));
-app.get('/api/health', (req, res) => res.json({ status: 'OK', message: 'MediReach API Synchronized' }));
+app.get('/', (req, res) => res.json({ status: 'MediPharm API running' }));
+app.get('/api/health', (req, res) => res.json({ status: 'OK', message: 'MediPharm API Synchronized' }));
 app.get('/api/public/stats', getPublicStats);
 
 app.use('/api/auth', authRoutes);
