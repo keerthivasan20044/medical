@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Search, Filter, Grid, Map, List, ChevronRight, X, Star, Clock, ShoppingBag, Sliders, LayoutGrid, Info, Activity, ShieldCheck, Globe, CheckCircle2, ChevronDown, Store, Pill, FileText, ArrowUpDown, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { pharmacies } from '../../utils/data.js';
 import { medicineService } from '../../services/apiServices';
