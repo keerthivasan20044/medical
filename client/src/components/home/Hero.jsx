@@ -86,7 +86,7 @@ export default function Hero() {
           </div>
 
           <div className="space-y-6">
-             <h1 className="font-syne font-black text-white text-4xl md:text-7xl lg:text-8xl xl:text-9xl leading-[0.9] uppercase italic tracking-tighter text-center lg:text-left transition-all">
+             <h1 className="font-syne font-black text-white text-[clamp(2rem,10vw,8rem)] leading-[0.9] uppercase italic tracking-tighter text-center lg:text-left transition-all">
                 {t('heroTitle').split(' ').slice(0, -1).join(' ')} <br />
                 <span className="text-brand-teal drop-shadow-[0_0_30px_rgba(2,195,154,0.3)]">
                    {t('heroTitle').split(' ').slice(-1)}

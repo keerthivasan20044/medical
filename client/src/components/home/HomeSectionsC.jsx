@@ -28,7 +28,7 @@ export function VaccineShowcase() {
    ];
 
    return (
-      <section className="py-24 md:py-32 bg-[#028090]/5 relative overflow-hidden">
+      <section className="py-16 md:py-32 bg-[#028090]/5 relative overflow-hidden">
          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-teal/5 rounded-full blur-[150px]" />
          <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
             <div className="flex items-center justify-between mb-12 md:mb-20 border-l-8 border-brand-teal pl-6 md:pl-10">
@@ -93,7 +93,7 @@ export function HowItWorks() {
    ];
 
    return (
-      <section className="py-24 lg:py-40 bg-[#0a1628] relative overflow-hidden">
+      <section className="py-16 lg:py-40 bg-[#0a1628] relative overflow-hidden">
          {/* HUD Grid Infrastructure */}
          <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(2,195,154,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(2,195,154,0.1) 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[600px] bg-brand-teal/5 rounded-full blur-[250px] opacity-20" />
@@ -150,7 +150,7 @@ export function DoctorsConsultation() {
    ];
 
    return (
-      <section className="py-24 md:py-32 bg-[#f8fafc] relative overflow-hidden">
+      <section className="py-16 md:py-32 bg-[#f8fafc] relative overflow-hidden">
          <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-16 md:mb-24 border-l-8 border-brand-teal pl-6 md:pl-10">
                <div className="space-y-6 text-center lg:text-left grow">
@@ -209,7 +209,7 @@ export function DoctorsConsultation() {
 export function GPSTracking() {
    const { t } = useLanguage();
    return (
-      <section className="py-24 md:py-40 bg-white relative overflow-hidden">
+      <section className="py-16 md:py-40 bg-white relative overflow-hidden">
          <div className="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-16 lg:gap-32 items-center">
             <div className="space-y-12 text-center lg:text-left">
                <div className="space-y-8">
@@ -294,7 +294,7 @@ export function GPSTracking() {
 export function PrescriptionUpload() {
    const { t } = useLanguage();
    return (
-      <section className="py-24 md:py-32 bg-gradient-to-br from-[#028090] via-[#02C39A] to-[#01606e] relative overflow-hidden">
+      <section className="py-16 md:py-32 bg-gradient-to-br from-[#028090] via-[#02C39A] to-[#01606e] relative overflow-hidden">
          {/* Moving Mesh Background */}
          <div className="absolute top-[-10%] right-[-10%] h-[600px] w-[600px] bg-white rounded-full blur-[180px] opacity-10 animate-pulse" />
          
@@ -373,7 +373,7 @@ export function Testimonials() {
    ];
 
    return (
-      <section className="py-24 md:py-32 bg-white relative overflow-hidden">
+      <section className="py-16 md:py-32 bg-white relative overflow-hidden">
          <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
             <div className="text-center space-y-8 mb-16 md:mb-24 max-w-4xl mx-auto">
                <div className="inline-flex items-center gap-3 px-6 py-2 bg-[#0a1628] text-brand-teal rounded-full font-syne font-black text-[10px] uppercase tracking-[0.4em] italic shadow-2xl">
@@ -615,7 +615,7 @@ export function EmergencyBanner() {
 export function DistrictBackdrop() {
    const { t } = useLanguage();
    return (
-      <section className="py-56 relative overflow-hidden bg-[#0a1628]">
+      <section className="py-24 lg:py-56 relative overflow-hidden bg-[#0a1628]">
          <div className="absolute inset-0 grayscale opacity-20 transition-all duration-1000 hover:grayscale-0 hover:opacity-40">
             <img src="/assets/hospital_pro.png" alt="Karaikal District" className="w-full h-full object-cover scale-110 animate-pulse-slow" />
          </div>

@@ -128,7 +128,7 @@ export default function Register() {
        <div className="absolute inset-0 bg-grid opacity-5" />
        <div className="absolute top-0 right-0 h-96 w-96 bg-[#028090] rounded-full blur-[150px] opacity-10 animate-pulse" />
        
-       <div className="w-full max-w-4xl bg-white rounded-3xl md:rounded-[5rem] shadow-4xl overflow-hidden relative z-10 grid md:grid-cols-[1fr_2fr]">
+       <div className="w-full max-w-4xl bg-white rounded-[2rem] md:rounded-[5rem] shadow-4xl overflow-hidden relative z-10 grid md:grid-cols-[1fr_2fr]">
           <aside className="bg-gray-50 p-8 md:p-12 space-y-12 border-r border-gray-100 hidden lg:block">
              <div className="space-y-4">
                 <Link to="/" className="flex items-center gap-3">

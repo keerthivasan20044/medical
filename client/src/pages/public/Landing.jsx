@@ -65,7 +65,7 @@ export default function Landing() {
          initial={{ opacity: 0 }}
          whileInView={{ opacity: 1 }}
          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-         className="fixed bottom-8 right-8 h-14 w-14 bg-[#0a1628] text-white rounded-2xl shadow-2xl flex items-center justify-center hover:bg-[#028090] transition-all z-50 focus:outline-none"
+         className="fixed bottom-32 right-6 md:bottom-8 md:right-8 h-14 w-14 bg-[#0a1628] text-white rounded-2xl shadow-2xl flex items-center justify-center hover:bg-[#028090] transition-all z-50 focus:outline-none"
       >
          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 15l-6-6-6 6" />

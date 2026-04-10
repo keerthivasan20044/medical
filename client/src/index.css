@@ -187,6 +187,8 @@
 body {
   background: #ffffff;
   color: var(--navy);
+  overflow-x: hidden;
+  width: 100%;
 }
 
 @layer base {
@@ -217,6 +219,20 @@ body {
   *:focus-visible {
     outline: 2px solid rgba(2,128,144,0.5);
     outline-offset: 2px;
+  }
+}
+
+/* Mobile-First Layout Optimizations */
+@media (max-width: 768px) {
+  .font-syne {
+    letter-spacing: -0.02em;
+  }
+  .grid {
+    gap: 1.5rem !important;
+  }
+  section {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
   }
 }
 

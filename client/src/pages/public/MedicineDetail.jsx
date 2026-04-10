@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Star, MapPin, Phone, Clock, Truck, ShieldCheck, Heart, ChevronRight, Share2, Plus, Minus, Info, CheckCircle2, ShoppingBag, Zap, Award, Tag, Pill, AlertTriangle, FileText, Globe, Search, Store } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { medicines, pharmacies } from '../../utils/data.js';
 import { addItem } from '../../store/cartSlice.js';
@@ -16,6 +16,7 @@ export default function MedicineDetailPage() {
   const [activeImg, setActiveImg] = useState(0);
   const [openAccordions, setOpenAccordions] = useState(['Description']);
   const [isFavorite, setIsFavorite] = useState(false);
+  const { items: cartItems } = useSelector(state => state.cart);
   const dispatch = useDispatch();
 
   const medicine = useMemo(() => medicines.find(m => m.id === id), [id]);
@@ -55,7 +56,14 @@ export default function MedicineDetailPage() {
   };
 
   const handleAddToCart = () => {
-    dispatch(addItem({ ...medicine, qty }));
+    dispatch(addItem({
+      id: medicine._id || medicine.id,
+      name: medicine.name,
+      price: medicine.price,
+      image: medicine.images?.[0] || '/assets/medicine_default.png',
+      brand: medicine.brand,
+      qty
+    }));
     toast.success(`${qty} units of ${medicine.name} added to payload.`);
   };
 
@@ -285,7 +293,12 @@ export default function MedicineDetailPage() {
          </div>
          <div className="grid md:grid-cols-4 gap-12">
             {similarMedicines.map(m => (
-              <MedicineCard key={m.id} item={m} />
+              <MedicineCard 
+                key={m._id || m.id} 
+                item={m} 
+                onAdd={(item) => dispatch(addItem({ ...item, id: item._id || item.id, image: item.images?.[0], qty: 1 }))}
+                isAdded={cartItems.some(item => item.id === (m._id || m.id))}
+              />
             ))}
          </div>
       </section>
@@ -324,7 +337,12 @@ export default function MedicineDetailPage() {
                <div className="font-syne font-black text-brand-teal text-3xl italic">₹{medicine.price}</div>
                <div className="h-8 w-px bg-white/10" />
             </div>
-            <button className="flex-1 h-14 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-mint">Add Payload</button>
+            <button 
+              onClick={handleAddToCart}
+              className="flex-1 h-14 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-mint"
+            >
+               Add Payload
+            </button>
          </motion.div>
       </AnimatePresence>
     </div>

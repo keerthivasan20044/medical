@@ -48,8 +48,8 @@ export default function PharmacistDashboard() {
   };
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-48 pt-24 px-10">
-      <div className="max-w-7xl mx-auto space-y-20">
+    <div className="bg-[#f8fafc] min-h-screen pb-48 pt-24 px-6 md:px-10">
+      <div className="max-w-7xl mx-auto space-y-12 md:space-y-20">
         
         {/* District Command Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 pb-12 border-b border-black/[0.03]">

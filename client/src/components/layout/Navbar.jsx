@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { logoutUser } from '../../store/authSlice';
 import { clearCart, removeItem, changeQty } from '../../store/cartSlice';
+import { setCartOpen } from '../../store/uiSlice';
 import { markAllNotificationsRead } from '../../store/notificationsSlice';
 import { useSocket } from '../../context/SocketContext.jsx';
 import { useLanguage } from '../../context/LanguageContext.jsx';
@@ -393,13 +394,84 @@ const UserDropdown = ({ user, isAuthenticated, onClose }) => {
   );
 };
 
+// ─── Search Overlay ───────────────────────────────────────────────────────────
+
+const SearchOverlay = ({ isOpen, onClose }) => {
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+       navigate(`/medicines?q=${encodeURIComponent(query)}`);
+       onClose();
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-[#0a1628]/95 backdrop-blur-2xl z-[3000] flex flex-col items-center justify-center p-6"
+        >
+          <button 
+            onClick={onClose}
+            className="absolute top-10 right-10 h-16 w-16 rounded-full bg-white/5 border border-white/10 text-white hover:bg-brand-teal hover:text-[#0a1628] transition-all flex items-center justify-center"
+          >
+            <X size={32} />
+          </button>
+
+          <div className="w-full max-w-4xl space-y-12">
+            <div className="text-center space-y-4">
+              <h2 className="font-syne font-black text-6xl md:text-8xl text-white uppercase italic tracking-tighter">Clinical <span className="text-brand-teal">Search</span></h2>
+              <p className="text-white/40 font-dm italic text-xl">Enter clinical node ID or generic molecular signature...</p>
+            </div>
+
+            <form onSubmit={handleSearch} className="relative group">
+              <input 
+                autoFocus
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Ex: Paracetamol, Zithromax, KKL-Node-42..."
+                className="w-full bg-white/5 border-b-[4px] border-white/10 px-0 py-10 font-syne font-black text-4xl md:text-6xl text-brand-teal placeholder:text-white/5 outline-none focus:border-brand-teal transition-all uppercase italic"
+              />
+              <button type="submit" className="absolute right-0 top-1/2 -translate-y-1/2 h-20 w-20 bg-brand-teal text-[#0a1628] rounded-3xl flex items-center justify-center shadow-mint hover:scale-110 transition-all">
+                <ArrowRight size={32} />
+              </button>
+            </form>
+
+            <div className="flex flex-wrap items-center justify-center gap-6">
+              <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mr-4 italic">Trending Nodes:</span>
+              {['Antibiotics', 'Pain Relief', 'Cardiac', 'Pediatric'].map(tag => (
+                <button 
+                  key={tag}
+                  onClick={() => { setQuery(tag); }}
+                  className="px-6 py-2 rounded-xl bg-white/5 border border-white/10 text-white/40 text-[10px] font-black uppercase tracking-widest hover:bg-brand-teal hover:text-[#0a1628] hover:border-brand-teal transition-all italic"
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 // ─── Main Navbar ──────────────────────────────────────────────────────────────
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled]       = useState(false);
-  const [showCart, setShowCart]           = useState(false);
+  const [showSearch, setShowSearch]       = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const { cartOpen } = useSelector(state => state.ui);
 
   const { pathname } = useLocation();
   const dispatch     = useDispatch();
@@ -451,6 +523,7 @@ export default function Navbar() {
             {/* Search */}
             <div className="hidden lg:block relative group">
               <button 
+                onClick={() => setShowSearch(true)}
                 className="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50/80 border border-black/[0.04] text-gray-400 hover:text-brand-teal hover:border-brand-teal/20 transition-all"
                 title={t('searchMedicines')}
               >
@@ -461,7 +534,7 @@ export default function Navbar() {
             {/* Cart - Redesigned to be secondary style */}
             <button
               id="nav-cart-btn"
-              onClick={() => setShowCart(true)}
+              onClick={() => dispatch(setCartOpen(true))}
               className="relative h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50/80 border border-black/[0.04] text-gray-400 hover:text-brand-teal hover:border-brand-teal/20 transition-all group shrink-0"
               title={t('viewCart')}
             >
@@ -522,8 +595,11 @@ export default function Navbar() {
         </div>
       </header>
 
+      {/* Search Overlay */}
+      <SearchOverlay isOpen={showSearch} onClose={() => setShowSearch(false)} />
+
       {/* Cart Drawer */}
-      <CartDrawer isOpen={showCart} onClose={() => setShowCart(false)} />
+      <CartDrawer isOpen={cartOpen} onClose={() => dispatch(setCartOpen(false))} />
 
       {/* Mobile Drawer */}
       <AnimatePresence>
@@ -632,48 +708,6 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Mobile Bottom Tab Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl z-[999]
-                      h-[64px] lg:hidden flex items-center justify-between px-6 sm:px-10
-                      border-t border-black/[0.06] shadow-[0_-8px_32px_rgba(10,22,40,0.1)]">
-        {[
-          { label: t('home')    || 'Home',    icon: Home,       to: '/'           },
-          { label: t('search')  || 'Search',  icon: Search,     to: '/search'     },
-          { label: t('cart')    || 'Cart',    icon: ShoppingBag,to: '/cart',   badge: totalQty     },
-          { label: t('alerts')  || 'Alerts',  icon: Bell,       to: '/notifications', badge: unreadNotifs },
-          { label: t('profile') || 'Profile', icon: User,       to: isAuthenticated ? '/profile' : '/login' },
-        ].map(item => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            className={({ isActive }) =>
-              `flex flex-col items-center gap-1 min-w-[56px] relative transition-all duration-300
-               ${isActive ? 'text-brand-teal scale-[1.08]' : 'text-gray-300 hover:text-gray-500'}`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                {isActive && (
-                  <motion.span
-                    layoutId="tab-indicator"
-                    className="absolute -top-[1px] w-6 h-0.5 bg-brand-teal rounded-full shadow-[0_0_8px_#02C39A]"
-                  />
-                )}
-                <div className="relative">
-                  <item.icon size={22} strokeWidth={isActive ? 2.5 : 1.75} />
-                  {item.badge > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 h-4 w-4 bg-[#0a1628] text-brand-teal
-                                     text-[9px] font-black rounded-full flex items-center justify-center ring-2 ring-white">
-                      {item.badge}
-                    </span>
-                  )}
-                </div>
-                <span className="text-[10px] font-syne font-semibold leading-none">{item.label}</span>
-              </>
-            )}
-          </NavLink>
-        ))}
-      </nav>
     </>
   );
 }

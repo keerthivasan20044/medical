@@ -1,3 +1,4 @@
+import { useState, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -195,13 +196,13 @@ export default function OrderTrack() {
                     <Activity size={14} className="animate-pulse" /> Live Pulse Sync
                  </div>
               </div>
-              <div className="grid grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
                  {STEPS.map((s, idx) => {
                     const Icon = s.icon;
                     const isDone = idx < currentStep;
                     const isCurrent = idx === currentStep;
                     return (
-                       <div key={s.key} className="space-y-4 text-center">
+                       <div key={s.key} className={`space-y-4 text-center ${idx === 4 ? 'col-span-2 md:col-span-1' : ''}`}>
                           <div className={`h-16 rounded-3xl flex items-center justify-center relative transition duration-700 ${
                              isDone ? 'bg-[#02C39A] text-white shadow-lg shadow-[#02C39A]/20' : 
                              isCurrent ? 'bg-[#0a1628] text-white animate-pulse' : 
@@ -209,7 +210,7 @@ export default function OrderTrack() {
                           }`}>
                              <Icon size={24} />
                              {idx < STEPS.length - 1 && (
-                                <div className={`absolute left-full top-1/2 -translate-y-1/2 w-full h-[2px] z-[-1] ${isDone ? 'bg-[#02C39A]' : 'bg-gray-100'}`} />
+                                <div className={`hidden md:block absolute left-full top-1/2 -translate-y-1/2 w-full h-[2px] z-[-1] ${isDone ? 'bg-[#02C39A]' : 'bg-gray-100'}`} />
                              )}
                           </div>
                           <div className={`text-[10px] font-black uppercase tracking-widest ${isDone || isCurrent ? 'text-[#0a1628]' : 'text-gray-300'}`}>

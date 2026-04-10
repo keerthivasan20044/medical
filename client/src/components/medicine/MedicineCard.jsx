@@ -5,7 +5,8 @@ import { motion } from 'framer-motion';
 
 export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) {
   const [isFavorite, setIsFavorite] = useState(false);
-  const { id, name, brand, generic, category, price, mrp, discount, stock, stockCount, requiresRx, pharmacyName, images } = item;
+  const id = item.id || item._id;
+  const { name, brand, generic, category, price, mrp, discount, stock, stockCount, requiresRx, pharmacyName, images } = item;
   
   const isOutOfStock = stock === 'out' || stockCount === 0;
   const isLowStock = stockCount > 0 && stockCount < 20;

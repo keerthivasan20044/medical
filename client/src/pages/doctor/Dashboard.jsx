@@ -17,7 +17,7 @@ export default function DoctorDashboard() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="bg-[#f0f2f5] min-h-screen pb-20 pt-24 px-8">
+    <div className="bg-[#f0f2f5] min-h-screen pb-20 pt-24 px-6 md:px-8">
       <div className="max-w-[1500px] mx-auto space-y-12">
         {/* Header Architecture */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 pb-12 border-b border-gray-100">

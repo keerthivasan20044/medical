@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Search, Filter, Grid, Map, List, ChevronRight, X, Star, Clock, ShoppingBag, Sliders, LayoutGrid, Info, Activity, ShieldCheck, Globe, CheckCircle2, ChevronDown, Store, Pill, FileText, ArrowUpDown, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -23,7 +24,20 @@ export default function MedicinesListPage() {
   const [rxFilter, setRxFilter] = useState('Both'); // Yes, No, Both
   const [availability, setAvailability] = useState('All'); // In Stock, All
   const [sortBy, setSortBy] = useState('Most Popular');
+  const { items: cartItems } = useSelector(state => state.cart);
   const dispatch = useDispatch();
+
+  const handleAddToCart = (item) => {
+    dispatch(addItem({
+      id: item._id || item.id,
+      name: item.name,
+      price: item.price,
+      image: item.images?.[0] || '/assets/medicine_default.png',
+      brand: item.brand,
+      qty: 1
+    }));
+    toast.success(`${item.name} added to payload`);
+  };
 
   useEffect(() => {
     fetchMedicines();
@@ -316,13 +330,18 @@ export default function MedicinesListPage() {
                   <AnimatePresence mode="popLayout">
                     {filteredMedicines.map((m, idx) => (
                       <motion.div 
-                        key={m.id}
+                        key={m._id || m.id}
                         layout
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.05 }}
                       >
-                         <MedicineCard item={m} layout={viewMode} onAdd={handleAddToCart} />
+                         <MedicineCard 
+                            item={m} 
+                            layout={viewMode} 
+                            onAdd={handleAddToCart} 
+                            isAdded={cartItems.some(item => item.id === (m._id || m.id))}
+                         />
                       </motion.div>
                     ))}
                   </AnimatePresence>

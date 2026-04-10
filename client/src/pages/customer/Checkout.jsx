@@ -63,7 +63,7 @@ export default function Checkout() {
 
     if (method === 'cod') {
       const confirm = await dispatch(confirmPayment({ orderId, method }));
-      return confirm.meta.requestStatus === 'fulfilled' ? navigate('/payment/success') : setError(t('protocolConfirmationFailed'));
+      return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError(t('protocolConfirmationFailed'));
     }
 
     const ok = await loadRazorpay();
@@ -87,7 +87,7 @@ export default function Checkout() {
           razorpay_order_id: response.razorpay_order_id,
           razorpay_signature: response.razorpay_signature
         }));
-        return confirm.meta.requestStatus === 'fulfilled' ? navigate('/payment/success') : setError(t('nodeSyncFailed'));
+        return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError(t('nodeSyncFailed'));
       },
       prefill: { name: 'User', email: 'user@karaikal.in', contact: '9876543210' },
       theme: { color: '#028090' }
@@ -129,21 +129,21 @@ export default function Checkout() {
                     exit={{ opacity: 0, x: 30 }}
                     className="space-y-12"
                   >
-                     <div className="bg-white border border-gray-100 rounded-[5rem] p-16 space-y-12 shadow-4xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 h-64 w-64 bg-brand-teal opacity-[0.02] rounded-full blur-[100px]" />
-                        <div className="flex items-center justify-between relative z-10 border-b border-gray-50 pb-8">
+                     <div className="bg-white border border-gray-100 rounded-[2.5rem] md:rounded-[5rem] p-8 md:p-16 space-y-12 shadow-4xl relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 h-40 md:h-64 w-40 md:w-64 bg-brand-teal opacity-[0.02] rounded-full blur-[100px]" />
+                        <div className="flex flex-col md:flex-row md:items-center justify-between relative z-10 border-b border-gray-50 pb-8 gap-4">
                            <div className="flex items-center gap-6">
                               <div className="h-1.5 w-12 bg-brand-teal rounded-full" />
-                              <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic tracking-tighter">{t('shippingEnclave')}</h2>
+                              <h2 className="font-syne font-black text-2xl md:text-3xl text-[#0a1628] uppercase italic tracking-tighter">{t('shippingEnclave')}</h2>
                            </div>
-                           <button className="text-[10px] font-black text-brand-teal uppercase tracking-widest border-b border-brand-teal italic hover:scale-110 transition-transform">{t('editProtocolAddress')}</button>
+                           <button className="text-[10px] font-black text-brand-teal uppercase tracking-widest border-b border-brand-teal italic hover:scale-110 transition-transform w-fit">{t('editProtocolAddress')}</button>
                         </div>
-                        <div className="p-10 bg-gray-50 rounded-[3.5rem] border border-gray-100 flex items-start gap-8 relative z-10 group/address hover:bg-white hover:shadow-4xl transition-all duration-1000">
-                           <div className="h-20 w-20 bg-white border border-gray-50 rounded-[2rem] flex items-center justify-center text-brand-teal shadow-inner group-hover/address:bg-[#0a1628] group-hover/address:text-white transition-all duration-700 shrink-0"><MapPin size={32}/></div>
-                           <div className="space-y-3">
-                              <div className="text-[10px] text-gray-200 font-black uppercase tracking-[0.3em] italic">{t('primaryNodeDestination')}</div>
-                              <div className="font-syne font-black text-2xl text-[#0a1628] italic">42 Gandhi Nagar, Main Market Road</div>
-                              <div className="text-lg font-dm font-bold text-gray-300 italic">Karaikal District Enclave, 609602</div>
+                        <div className="p-6 md:p-10 bg-gray-50 rounded-[2rem] md:rounded-[3.5rem] border border-gray-100 flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 relative z-10 group/address hover:bg-white hover:shadow-4xl transition-all duration-1000">
+                           <div className="h-16 w-16 md:h-20 md:w-20 bg-white border border-gray-50 rounded-2xl md:rounded-[2rem] flex items-center justify-center text-brand-teal shadow-inner group-hover/address:bg-[#0a1628] group-hover/address:text-white transition-all duration-700 shrink-0"><MapPin size={28}/></div>
+                           <div className="space-y-2 md:space-y-3 text-center md:text-left">
+                              <div className="text-[9px] text-gray-200 font-black uppercase tracking-[0.3em] italic">{t('primaryNodeDestination')}</div>
+                              <div className="font-syne font-black text-xl md:text-2xl text-[#0a1628] italic">42 Gandhi Nagar, Main Market Road</div>
+                              <div className="text-base md:text-lg font-dm font-bold text-gray-300 italic">Karaikal District Enclave, 609602</div>
                            </div>
                         </div>
                      </div>
@@ -201,15 +201,15 @@ export default function Checkout() {
                     exit={{ opacity: 0, x: -30 }}
                     className="space-y-16"
                   >
-                     <div className="bg-brand-teal rounded-[5rem] p-24 text-white text-center space-y-12 relative overflow-hidden group shadow-4xl shadow-brand-teal/30">
+                     <div className="bg-brand-teal rounded-[3rem] md:rounded-[5rem] p-8 md:p-24 text-white text-center space-y-8 md:space-y-12 relative overflow-hidden group shadow-4xl shadow-brand-teal/30">
                         <div className="absolute top-0 right-0 h-96 w-96 bg-white/10 rounded-full blur-[120px] animate-pulse" />
-                        <div className="h-32 w-32 bg-white/10 rounded-[3rem] flex items-center justify-center mx-auto backdrop-blur-3xl border-2 border-white/20 mb-6 shadow-4xl"><ShieldCheck size={64} className="text-white drop-shadow-2xl" /></div>
-                        <h2 className="font-syne font-black text-6xl lg:text-7xl uppercase italic leading-none">{t('authorize')} <br /> {t('synchronization')}?</h2>
-                        <p className="text-white/60 font-dm text-xl italic font-bold max-w-lg mx-auto leading-relaxed">{t('authorizeSyncDesc')}</p>
+                        <div className="h-24 w-24 md:h-32 md:w-32 bg-white/10 rounded-[2rem] md:rounded-[3rem] flex items-center justify-center mx-auto backdrop-blur-3xl border-2 border-white/20 mb-6 shadow-4xl"><ShieldCheck size={48} md:size={64} className="text-white drop-shadow-2xl" /></div>
+                        <h2 className="font-syne font-black text-4xl md:text-7xl uppercase italic leading-none">{t('authorize')} <br /> {t('synchronization')}?</h2>
+                        <p className="text-white/60 font-dm text-lg md:text-xl italic font-bold max-w-lg mx-auto leading-relaxed">{t('authorizeSyncDesc')}</p>
                         
-                        <div className="flex flex-col md:flex-row gap-8 pt-12">
-                           <button onClick={() => setStep(1)} className="flex-1 h-24 bg-white/10 border-2 border-white/20 rounded-[3rem] font-syne font-black text-sm uppercase tracking-[0.3em] hover:bg-white/20 transition-all duration-700 backdrop-blur-3xl italic">{t('modifyArchitecture')}</button>
-                           <button onClick={handlePay} disabled={status === 'loading'} className="flex-1 h-24 bg-white text-[#0a1628] rounded-[3rem] font-syne font-black text-sm uppercase tracking-[0.3em] shadow-4xl hover:scale-105 active:scale-95 transition-all duration-700 flex items-center justify-center gap-4 italic">
+                        <div className="flex flex-col md:flex-row gap-4 md:gap-8 pt-6 md:pt-12">
+                           <button onClick={() => setStep(1)} className="flex-1 h-16 md:h-24 bg-white/10 border-2 border-white/20 rounded-2xl md:rounded-[3rem] font-syne font-black text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-white/20 transition-all duration-700 backdrop-blur-3xl italic">{t('modifyArchitecture')}</button>
+                           <button onClick={handlePay} disabled={status === 'loading'} className="flex-1 h-16 md:h-24 bg-white text-[#0a1628] rounded-2xl md:rounded-[3rem] font-syne font-black text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] shadow-4xl hover:scale-105 active:scale-95 transition-all duration-700 flex items-center justify-center gap-4 italic">
                               {status === 'loading' ? t('syncing') : t('authorizeTransaction')} <ArrowRight size={24} />
                            </button>
                         </div>

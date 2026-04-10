@@ -2,7 +2,10 @@ import { motion } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Star, ShoppingBag, Store, MapPin, Clock, Truck, ShieldCheck, Heart, RefreshCw, Activity, Globe, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-hot-toast';
 import { useLanguage } from '../../context/LanguageContext.jsx';
+import { addItem } from '../../store/cartSlice.js';
 import { medicines as mockMedicines, pharmacies } from '../../utils/data.js';
 import MedicineCard from '../medicine/MedicineCard.jsx';
 import { medicineService } from '../../services/apiServices';
@@ -12,6 +15,20 @@ export function FeaturedMedicines() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
+  const { items: cartItems } = useSelector(state => state.cart);
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (item) => {
+    dispatch(addItem({
+      id: item._id || item.id,
+      name: item.name,
+      price: item.price,
+      image: item.images?.[0] || item.image || '/assets/medicine_default.png',
+      brand: item.brand,
+      qty: 1
+    }));
+    toast.success(`${item.name} added to payload`);
+  };
 
   useEffect(() => {
     const fetchMeds = async () => {
@@ -53,7 +70,7 @@ export function FeaturedMedicines() {
   const currentItems = items.slice(currentPage * perPage, (currentPage + 1) * perPage);
 
   return (
-    <section className="py-32 bg-[#f8fafc] overflow-hidden min-h-[800px] flex flex-col justify-center relative">
+    <section className="py-16 md:py-32 bg-[#f8fafc] overflow-hidden min-h-[800px] flex flex-col justify-center relative">
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#0a1628 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
       
       <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10 w-full">
@@ -104,7 +121,12 @@ export function FeaturedMedicines() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10"
             >
                {currentItems.map((m, idx) => (
-                 <MedicineCard key={m._id || m.id} item={m} />
+                 <MedicineCard 
+                    key={m._id || m.id} 
+                    item={m} 
+                    onAdd={handleAddToCart}
+                    isAdded={cartItems.some(item => item.id === (m._id || m.id))}
+                 />
                ))}
             </motion.div>
 
@@ -136,7 +158,7 @@ export function KaraikalPharmacies() {
   const TABS = ['All', 'Open Now', 'Free Delivery', 'Top Rated', '24 Hours'];
 
   return (
-    <section className="py-32 bg-white relative overflow-hidden">
+    <section className="py-16 md:py-32 bg-white relative overflow-hidden">
        {/* Background Noise & HUD */}
        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(10,22,40,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(10,22,40,0.1) 1px, transparent 1px)', backgroundSize: '100px 100px' }} />
 
