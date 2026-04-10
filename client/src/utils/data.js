@@ -803,7 +803,7 @@ export const blogPosts = [
     id: 'blog-3',
     slug: 'diabetes-management-at-home',
     title: 'Precision Diabetes Management: A Node Tutorial',
-    excerpt: 'Synchronizing your glucose monitoring with the MediReach enclave for real-time district-wide health updates...',
+    excerpt: 'Synchronizing your glucose monitoring with the MediPharm enclave for real-time district-wide health updates...',
     author: 'Dr. S. Priya Raman',
     authorHospital: 'Govt. General Hospital, Karaikal',
     date: '20 Mar 2026',
