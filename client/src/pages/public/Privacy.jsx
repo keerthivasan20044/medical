@@ -53,7 +53,7 @@ export default function Privacy() {
           </div>
           <h1 className="font-heading text-3xl md:text-4xl text-brand-navy mt-3">Your data, handled with care.</h1>
           <p className="text-brand-muted mt-3 max-w-2xl">
-            This policy explains what MediReach collects, why we need it, and how you can control your information.
+            This policy explains what MediPharm collects, why we need it, and how you can control your information.
           </p>
           <p className="text-xs text-brand-muted mt-3">Effective date: March 24, 2026</p>
 
@@ -109,7 +109,7 @@ export default function Privacy() {
               Report a security issue or request data deletion.
             </p>
             <div className="mt-3 inline-flex items-center gap-2 text-sm text-brand-teal">
-              <Mail size={16} /> security@medireach.in
+              <Mail size={16} /> security@medipharm.in
             </div>
           </div>
         </div>

@@ -37,7 +37,7 @@ const TIMELINE = [
   { label: 'UPI', value: '1-3 business days' },
   { label: 'Cards', value: '3-7 business days' },
   { label: 'Net Banking', value: '2-5 business days' },
-  { label: 'MediReach Wallet', value: 'Instant' }
+  { label: 'MediPharm Wallet', value: 'Instant' }
 ];
 
 export default function Refund() {

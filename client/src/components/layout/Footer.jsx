@@ -30,7 +30,7 @@ export default function Footer() {
               <div className="flex flex-col -gap-2">
                  <div className="flex items-baseline leading-none">
                     <span className="font-syne font-black text-4xl text-white tracking-tighter uppercase italic">Medi</span>
-                    <span className="font-syne font-black text-4xl text-brand-teal tracking-tighter uppercase italic drop-shadow-[0_0_20px_rgba(2,195,154,0.4)]">Reach</span>
+                    <span className="font-syne font-black text-4xl text-brand-teal tracking-tighter uppercase italic drop-shadow-[0_0_20px_rgba(2,195,154,0.4)]">Pharm</span>
                  </div>
                  <div className="flex items-center gap-3 mt-2 bg-white/5 px-3 py-1 rounded-full border border-white/5">
                     <div className={`h-2 w-2 rounded-full ${isConnected ? 'bg-brand-teal animate-pulse shadow-[0_0_10px_#02C39A]' : 'bg-red-500 shadow-[0_0_10px_#ef4444]'}`} />
@@ -110,7 +110,7 @@ export default function Footer() {
               </li>
               <li className="flex gap-6 group cursor-pointer hover:text-white transition-colors">
                 <div className="h-12 w-12 bg-white/5 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-brand-teal group-hover:text-[#0a1628] transition-all duration-500"><Mail size={22} /></div>
-                <span>support@medireach.com <br/><span className="text-[11px] text-white/10 uppercase tracking-widest">{t('emailSync')}</span></span>
+                <span>support@medipharm.com <br/><span className="text-[11px] text-white/10 uppercase tracking-widest">{t('emailSync')}</span></span>
               </li>
            </ul>
         </div>
@@ -143,7 +143,7 @@ export default function Footer() {
          </div>
          <div className="flex flex-col items-center lg:items-end gap-2">
             <div className="font-syne font-black text-xl uppercase tracking-[0.5em] text-white/20 italic group transition-colors">
-               &copy; {currentYear} <span className="text-brand-teal opacity-50 group-hover:opacity-100 transition-opacity">MediReach</span>
+               &copy; {currentYear} <span className="text-brand-teal opacity-50 group-hover:opacity-100 transition-opacity">MediPharm</span>
             </div>
             <div className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-teal animate-pulse italic">{t('districtAuthorityAuthorized')}</div>
          </div>

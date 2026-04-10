@@ -18,7 +18,7 @@ export default function Contact() {
     { icon: Landmark, label: t('enclaveHub'), val: '12, Market Road, Karaikal, Tamil Nadu - 609602', sub: t('nearSBI') },
     { icon: Phone, label: t('supportArchitecture'), val: '+91 98765 43210', sub: t('available247') },
     { icon: MessageCircle, label: t('whatsAppStream'), val: '+91 98765 43210', sub: t('textQuickQuery') },
-    { icon: Mail, label: t('emailProtocol'), val: 'support@medireach.in', sub: t('responseTime') }
+    { icon: Mail, label: t('emailProtocol'), val: 'support@medipharm.in', sub: t('responseTime') }
   ];
 
   const EMERGENCY_NODES = [

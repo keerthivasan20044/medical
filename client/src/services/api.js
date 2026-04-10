@@ -28,7 +28,7 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401 && !original._retry) {
       // Only attempts refresh if we have a local session record to avoid noise on public visits
-      const hasAuthRecord = localStorage.getItem('medireach_auth_v1');
+      const hasAuthRecord = localStorage.getItem('medipharm_auth_v1');
       if (!hasAuthRecord) {
         return Promise.reject(error);
       }
@@ -41,8 +41,8 @@ api.interceptors.response.use(
       } catch (e) {
         console.error('[API] Resilience Protocol Failed.');
         // Purge invalid session data to prevent persistent refresh failure spam
-        localStorage.removeItem('medireach_auth_v1');
-        localStorage.removeItem('medireach_cart_v1');
+        localStorage.removeItem('medipharm_auth_v1');
+        localStorage.removeItem('medipharm_cart_v1');
         // Don't force redirect here, let the app logic handle auth state
         return Promise.reject(e);
       }

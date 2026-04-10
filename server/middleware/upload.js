@@ -15,7 +15,7 @@ const storage = cloudinaryReady
   ? new CloudinaryStorage({
       cloudinary,
       params: {
-        folder: 'medireach/prescriptions',
+        folder: 'medipharm/prescriptions',
         allowed_formats: ['jpg', 'jpeg', 'png', 'pdf'],
         transformation: [{ width: 1000, height: 1000, crop: 'limit' }]
       }

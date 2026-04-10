@@ -32,7 +32,7 @@ export default function HelpCenter() {
             <div className="grid grid-cols-1 gap-6">
                {[
                   { label: 'Voice Handshake', val: '+91 94432 XXXXX', icon: Phone },
-                  { label: 'Uplink Support', val: 'support@medireach.com', icon: Mail },
+                  { label: 'Uplink Support', val: 'support@medipharm.com', icon: Mail },
                   { label: 'Live Tele-Support', val: '10 AM - 8 PM', icon: MessageSquare }
                ].map(item => (
                   <div key={item.label} className="bg-white p-12 rounded-[3.5rem] border border-black/[0.01] shadow-soft hover:shadow-4xl transition-all duration-700 flex items-center gap-10 group cursor-pointer relative overflow-hidden">
@@ -52,7 +52,7 @@ export default function HelpCenter() {
                <div className="flex items-center gap-4 text-brand-teal font-syne font-black text-sm uppercase italic">
                   <ShieldCheck size={24} /> MISSION_SECURITY_PROTOCOL
                </div>
-               <p className="text-[#0a1628]/60 font-dm italic font-bold">MediReach Command Center operates 24/7 for emergency logistics and district synchronization.</p>
+               <p className="text-[#0a1628]/60 font-dm italic font-bold">MediPharm Command Center operates 24/7 for emergency logistics and district synchronization.</p>
             </div>
          </div>
       </div>

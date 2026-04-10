@@ -365,9 +365,9 @@ export function Testimonials() {
    const { t } = useLanguage();
    const REVIEWS = [
       { name: 'Ramesh Kumar', area: 'New Colony, Karaikal', text: 'Got my blood pressure medicines delivered in just 22 minutes! The live tracking on the app is super convenient. No more standing in queues in the Karaikal heat.', img: patientImg },
-      { name: 'Lalitha Subramaniam', area: 'Market Road, Karaikal', text: 'As a diabetic patient, I need insulin monthly. MediReach set up auto-reminders and delivers from Central Pharmacy every month. Such a blessing for patients like me.', img: familyImg },
-      { name: 'Priya Krishnan', area: 'Bus Stand Area, Karaikal', text: 'My son had fever at midnight. Apollo Pharmacy was open and MediReach delivered Dolo 650 in 30 minutes. Amazing service for emergency situations!', img: familyImg },
-      { name: 'Murugan Pillai', area: 'Nagore Road, Karaikal', text: 'Finding medicines was always a problem in Nagore. Now Grace Pharmacy delivers to my home via MediReach architecture. Life changed for our family!', img: patientImg },
+      { name: 'Lalitha Subramaniam', area: 'Market Road, Karaikal', text: 'As a diabetic patient, I need insulin monthly. MediPharm set up auto-reminders and delivers from Central Pharmacy every month. Such a blessing for patients like me.', img: familyImg },
+      { name: 'Priya Krishnan', area: 'Bus Stand Area, Karaikal', text: 'My son had fever at midnight. Apollo Pharmacy was open and MediPharm delivered Dolo 650 in 30 minutes. Amazing service for emergency situations!', img: familyImg },
+      { name: 'Murugan Pillai', area: 'Nagore Road, Karaikal', text: 'Finding medicines was always a problem in Nagore. Now Grace Pharmacy delivers to my home via MediPharm architecture. Life changed for our family!', img: patientImg },
       { name: 'Anitha Rajan', area: 'Poompuhar Street', text: 'Uploaded my prescription photo from JIPMER and the pharmacist verified it in 8 minutes. Medicines came in 25 mins. Superb service for Karaikal people!', img: patientImg },
       { name: 'Venkatesan M.', area: 'Keezhavur, Karaikal', text: 'The doctors consultation feature is brilliant. Consulted Dr. Priya Raman online and got prescription in 10 minutes. No need to travel to hospital!', img: patientImg }
    ];
@@ -468,7 +468,7 @@ export function BlogPreview() {
    const BLOGS = [
       { id: 1, title: 'Managing Diabetes in Karaikal Summer', img: '/assets/hospital_pro.png', author: 'Dr. K. Anand Kumar', tag: 'Health Tips' },
       { id: 2, title: '5 Medicines Every Home Should Have', img: '/assets/medicine_default.png', author: 'Dr. S. Priya Raman', tag: 'Medicine Guide' },
-      { id: 3, title: 'Visiting JIPMER vs Online Consult', img: '/assets/hospital_pro.png', author: 'MediReach Team', tag: 'Healthcare' }
+      { id: 3, title: 'Visiting JIPMER vs Online Consult', img: '/assets/hospital_pro.png', author: 'MediPharm Team', tag: 'Healthcare' }
    ];
 
    return (
@@ -516,7 +516,7 @@ export function AppDownload() {
                   <h2 className="font-syne font-black text-6xl md:text-8xl leading-none text-white uppercase italic tracking-tighter">
                      Your Health. <br /> Your Pocket.
                   </h2>
-                  <p className="text-white/30 font-dm text-2xl italic font-bold leading-relaxed max-w-xl">Download the MediReach app for faster checkout, live order telemetry, and emergency medical signals.</p>
+                  <p className="text-white/30 font-dm text-2xl italic font-bold leading-relaxed max-w-xl">Download the MediPharm app for faster checkout, live order telemetry, and emergency medical signals.</p>
                </div>
                
                <div className="flex flex-wrap gap-8">

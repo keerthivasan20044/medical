@@ -133,7 +133,7 @@ export default function Register() {
              <div className="space-y-4">
                 <Link to="/" className="flex items-center gap-3">
                    <div className="h-10 w-10 bg-[#0a1628] rounded-xl flex items-center justify-center -rotate-[5deg]"><ShieldCheck className="text-[#02C39A]" size={24} /></div>
-                   <span className="font-syne font-black text-2xl text-[#0a1628] tracking-tighter">MediReach.</span>
+                   <span className="font-syne font-black text-2xl text-[#0a1628] tracking-tighter">MediPharm.</span>
                 </Link>
              </div>
 
@@ -168,7 +168,7 @@ export default function Register() {
                    <div className="h-8 w-8 bg-[#0a1628] rounded-lg flex items-center justify-center -rotate-[5deg] shadow-lg shadow-[#02C39A]/20">
                       <ShieldCheck className="text-[#02C39A]" size={16} />
                    </div>
-                   <span className="font-syne font-black text-lg text-[#0a1628] tracking-tighter">MediReach.</span>
+                   <span className="font-syne font-black text-lg text-[#0a1628] tracking-tighter">MediPharm.</span>
                 </Link>
                 <div className="px-4 py-1.5 bg-gray-50 border border-gray-200 rounded-full text-[9px] font-black text-[#028090] uppercase tracking-widest">
                    {t('step') || 'Step'} {step}/5

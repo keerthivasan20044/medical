@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 
 /**
- * Standard button architecture for MediReach.
+ * Standard button architecture for MediPharm.
  * @param {string} variant - primary | outline | ghost | danger
  * @param {boolean} loading - spinner inside button
  * @param {ReactNode} icon - icon left of text

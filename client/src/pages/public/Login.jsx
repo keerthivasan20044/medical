@@ -108,7 +108,7 @@ export default function Login() {
                   <Heart className="text-white w-8 h-8 rotate-[25deg] group-hover:rotate-0 transition duration-700" />
                </div>
                <div className="flex flex-col">
-                  <span className="font-syne font-black text-4xl text-white tracking-tighter leading-none">MediReach.</span>
+                  <span className="font-syne font-black text-4xl text-white tracking-tighter leading-none">MediPharm.</span>
                   <span className="text-[10px] text-[#02C39A] font-black uppercase tracking-[0.4em] italic shadow-mint">{t('servingSince')}</span>
                </div>
             </Link>

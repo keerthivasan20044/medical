@@ -30,7 +30,7 @@ const LogoZone = () => {
       {/* Wordmark */}
       <div className="flex items-baseline leading-none gap-0.5 overflow-hidden">
         <span className="font-syne font-black text-xl text-[#0a1628] tracking-tight">Medi</span>
-        <span className="font-syne font-black text-xl tracking-tight text-brand-teal">Reach</span>
+        <span className="font-syne font-black text-xl tracking-tight text-brand-teal">Pharm</span>
       </div>
     </Link>
   );

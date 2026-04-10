@@ -2,7 +2,7 @@ import { FileText, Shield, Truck, Wallet } from 'lucide-react';
 
 const SECTIONS = [
   {
-    title: 'Using MediReach',
+    title: 'Using MediPharm',
     icon: FileText,
     text: 'You must be 18+ or have guardian consent to create an account and place orders.'
   },
@@ -43,7 +43,7 @@ const DETAILS = [
   {
     title: 'Limitations',
     items: [
-      'MediReach is not responsible for delays caused by external factors.',
+      'MediPharm is not responsible for delays caused by external factors.',
       'We are not liable for misuse of medicines purchased on the platform.',
       'Service availability may vary by location and partner pharmacy.'
     ]
@@ -60,7 +60,7 @@ export default function Terms() {
           </div>
           <h1 className="font-heading text-3xl md:text-4xl text-brand-navy mt-3">Clear terms, trusted care.</h1>
           <p className="text-brand-muted mt-3">
-            These terms outline how MediReach works, what you can expect from us, and what we expect from you.
+            These terms outline how MediPharm works, what you can expect from us, and what we expect from you.
           </p>
           <p className="text-xs text-brand-muted mt-3">Effective date: March 24, 2026</p>
         </div>
