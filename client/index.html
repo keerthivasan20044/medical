@@ -33,6 +33,37 @@
   </head>
   <body class="bg-white text-brand-navy font-body">
     <div id="root"></div>
+    
+    <!-- Diagnostic Rescue Node -->
+    <div id="no-js-rescue" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #0a1628; color: white; font-family: sans-serif; text-align: center; padding: 20px;">
+        <div style="font-size: 40px; margin-bottom: 20px;">🛰️</div>
+        <h2 style="font-size: 20px; font-weight: 800; letter-spacing: 0.1em; color: #02C39A;">DISTRICT SYNC ERROR</h2>
+        <p style="opacity: 0.5; max-width: 300px; line-height: 1.6;">The MediPharm terminal failed to initialize its clinical architecture. Check your connection or terminal protocols.</p>
+        <div style="margin-top: 20px; font-size: 10px; color: #ff4d4d;" id="error-log"></div>
+    </div>
+
+    <script>
+      // If root gets content, hide the rescue node
+      const observer = new MutationObserver(function(mutations) {
+        if (document.getElementById('root').innerHTML.length > 0) {
+          document.getElementById('no-js-rescue').style.display = 'none';
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.getElementById('root'), { childList: true });
+      
+      // Global error logger for debugging
+      window.onerror = function(msg, url, line) {
+        document.getElementById('error-log').innerText = "FATAL: " + msg + " @ " + line;
+      };
+      
+      // Check for bundle load failure after 10s
+      setTimeout(() => {
+        if (document.getElementById('root').innerHTML.length === 0) {
+            document.getElementById('error-log').innerText += " (Bundle handshake timeout)";
+        }
+      }, 10000);
+    </script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script type="module" src="/src/main.jsx"></script>
   </body>

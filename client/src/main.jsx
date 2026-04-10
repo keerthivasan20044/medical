@@ -20,16 +20,58 @@ if (import.meta.env.DEV && 'serviceWorker' in navigator) {
   }
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+
+// Basic Error Boundary for Production Debugging
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error("CRITICAL APP ERROR:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '40px', background: '#0a1628', color: '#ff4d4d', minHeight: '100vh', fontFamily: 'sans-serif' }}>
+          <h1 style={{ fontSize: '24px', marginBottom: '20px' }}>System Architecture Failure</h1>
+          <p style={{ color: '#fff', opacity: 0.6 }}>The application encountered a terminal runtime error.</p>
+          <pre style={{ background: 'rgba(255,255,255,0.05)', padding: '20px', borderRadius: '12px', overflow: 'auto', marginTop: '20px' }}>
+            {this.state.error?.toString()}
+          </pre>
+          <button 
+            onClick={() => window.location.reload()}
+            style={{ marginTop: '20px', padding: '12px 24px', background: '#02C39A', border: 'none', borderRadius: '8px', color: '#0a1628', fontWeight: 'bold', cursor: 'pointer' }}
+          >
+            Retry System Sync
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+console.log("MediPharm Hub: Initializing Telemetry...");
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <SocketProvider>
-          <LanguageProvider>
-            <App />
-          </LanguageProvider>
-        </SocketProvider>
-      </BrowserRouter>
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <SocketProvider>
+            <LanguageProvider>
+              <App />
+            </LanguageProvider>
+          </SocketProvider>
+        </BrowserRouter>
+      </Provider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
+
+console.log("MediPharm Hub: Mount Protocol Successful.");

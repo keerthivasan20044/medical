@@ -1400,19 +1400,35 @@ const translations = {
 
 const LanguageContext = createContext();
 
+const getSafeLang = () => {
+  try {
+    return localStorage.getItem('medipharm_lang') || localStorage.getItem('medireach_lang') || 'en';
+  } catch (e) {
+    return 'en';
+  }
+};
+
 export const LanguageProvider = ({ children }) => {
-  const [lang, setLang] = useState(localStorage.getItem('medireach_lang') || 'en');
+  const [lang, setLang] = useState(getSafeLang());
 
   useEffect(() => {
-    localStorage.setItem('medireach_lang', lang);
+    try {
+      localStorage.setItem('medipharm_lang', lang);
+    } catch (e) {}
   }, [lang]);
 
   const t = (key, params = {}) => {
-    let str = translations[lang][key] || key;
-    Object.entries(params).forEach(([k, v]) => {
-      str = str.replace(`{${k}}`, v);
-    });
-    return str;
+    try {
+      if (!translations[lang]) return key;
+      let str = translations[lang][key] || key;
+      Object.entries(params).forEach(([k, v]) => {
+        str = str.replace(`{${k}}`, v);
+      });
+      return str;
+    } catch (e) {
+      console.error('Translation error:', e);
+      return key;
+    }
   };
 
   return (
