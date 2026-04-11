@@ -324,7 +324,7 @@ export default function MedicinesListPage() {
                    {/* Results Terminal Grid */}
                    <motion.div 
                      layout
-                     className={`grid gap-6 md:gap-12 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4' : 'grid-cols-1'}`}
+                     className={`grid gap-4 md:gap-12 ${viewMode === 'grid' ? 'grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4' : 'grid-cols-1'}`}
                    >
                   <AnimatePresence mode="popLayout">
                     {filteredMedicines.map((m, idx) => (

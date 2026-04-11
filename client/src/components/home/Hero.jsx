@@ -85,15 +85,19 @@ export default function Hero() {
              </span>
           </div>
 
-          <div className="space-y-6">
-             <h1 className="font-syne font-black text-white text-[clamp(2rem,10vw,8rem)] leading-[0.9] uppercase italic tracking-tighter text-center lg:text-left transition-all">
+          <div className="space-y-4 md:space-y-6">
+             <h1 className="font-syne font-black text-white text-[clamp(1.3rem,8vw,4rem)] md:text-[clamp(3.5rem,10vw,8rem)] leading-[0.82] md:leading-[0.9] uppercase italic tracking-tighter text-center lg:text-left transition-all">
                 {t('heroTitle').split(' ').slice(0, -1).join(' ')} <br />
-                <span className="text-brand-teal drop-shadow-[0_0_30px_rgba(2,195,154,0.3)]">
+                <span className="text-brand-teal drop-shadow-[0_0_20px_rgba(2,195,154,0.3)]">
                    {t('heroTitle').split(' ').slice(-1)}
                 </span> <br />
-                <span className="text-white/40">{t('heroSubtitle')}</span>
+                <span className="text-white/40 text-[0.38em] md:text-[0.45em] tracking-normal lowercase opacity-70 leading-tight block mt-4 md:mt-2 px-10 lg:px-0">
+                   {t('heroSubtitle')}
+                </span>
              </h1>
           </div>
+
+
 
           <p className="text-gray-300 font-dm text-lg md:text-xl lg:text-2xl max-w-xl leading-[1.6] italic font-bold text-center lg:text-left mx-auto lg:mx-0 transition-colors hover:text-white duration-500">
              {t('heroDesc')}

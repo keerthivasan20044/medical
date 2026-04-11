@@ -9,7 +9,7 @@ export default function AppLayout() {
       <Navbar variant="app" />
       <div className="flex">
         <Sidebar />
-        <main className="flex-1 p-4 md:p-8 pb-32 md:pb-8 page-fade-up">
+        <main className="flex-1 pt-[72px] p-4 md:p-8 pb-32 md:pb-8 page-fade-up">
           <Outlet />
         </main>
       </div>

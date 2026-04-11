@@ -21,21 +21,19 @@ import CartDrawer from '../cart/CartDrawer.jsx';
 
 const LogoZone = () => {
   return (
-    <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
-      {/* Icon mark */}
-      <div className="h-10 w-10 bg-[#0a1628] rounded-xl flex items-center justify-center shrink-0
+    <Link to="/" className="flex items-center gap-2 md:gap-2.5 shrink-0 group">
+      <div className="h-8 w-8 md:h-10 md:w-10 bg-[#0a1628] rounded-xl flex items-center justify-center shrink-0
                       group-hover:bg-brand-teal transition-all duration-500 shadow-lg group-hover:shadow-brand-teal/30">
-        <Pill className="text-brand-teal w-5 h-5 rotate-45 group-hover:text-[#0a1628] transition-colors" />
+        <Pill className="text-brand-teal w-4 h-4 md:w-5 md:h-5 rotate-45 group-hover:text-[#0a1628] transition-colors" />
       </div>
-
-      {/* Wordmark */}
       <div className="flex items-baseline leading-none gap-0.5 overflow-hidden">
-        <span className="font-syne font-black text-xl text-[#0a1628] tracking-tight">Medi</span>
-        <span className="font-syne font-black text-xl tracking-tight text-brand-teal">Pharm</span>
+        <span className="font-syne font-black text-lg md:text-xl text-[#0a1628] tracking-tight">Medi</span>
+        <span className="font-syne font-black text-lg md:text-xl tracking-tight text-brand-teal">Pharm</span>
       </div>
     </Link>
   );
 };
+
 
 const StatusIndicator = () => {
   const { isConnected } = useSocket();
@@ -495,11 +493,11 @@ export default function Navbar() {
 
   return (
     <>
-      <header
-        className={`sticky top-0 z-[1000] w-full transition-all duration-500
-          ${isScrolled
-            ? 'h-[64px] bg-white/95 backdrop-blur-xl shadow-[0_1px_24px_rgba(10,22,40,0.08)] border-b border-black/[0.06]'
-            : 'h-[72px] bg-white border-b border-black/[0.05]'}`}
+      <header 
+        className={`fixed top-0 left-0 right-0 z-[2000] w-full transition-all duration-500
+                   ${isScrolled 
+                     ? 'bg-white/90 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] py-3 border-b border-black/[0.04]' 
+                     : 'bg-white py-4 md:py-5 border-b border-transparent'}`}
       >
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 h-full flex items-center gap-4 xl:gap-12">
 
@@ -512,22 +510,21 @@ export default function Navbar() {
           <div className="flex-1" />
 
           {/* Right Action Zone */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
 
             {/* Status Dot First - As requested [●] */}
-            <StatusIndicator />
-
-            {/* Divider */}
-            <div className="h-4 w-px bg-black/[0.06] hidden lg:block mx-1" />
+            <div className="mr-1">
+              <StatusIndicator />
+            </div>
 
             {/* Search */}
             <div className="hidden lg:block relative group">
               <button 
                 onClick={() => setShowSearch(true)}
-                className="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50/80 border border-black/[0.04] text-gray-400 hover:text-brand-teal hover:border-brand-teal/20 transition-all"
+                className="h-9 w-9 md:h-10 md:w-10 flex items-center justify-center rounded-xl bg-gray-50/80 border border-black/[0.04] text-gray-400 hover:text-brand-teal hover:border-brand-teal/20 transition-all"
                 title={t('searchMedicines')}
               >
-                <Search size={18} />
+                <Search size={16} className="md:w-4.5 md:h-4.5" />
               </button>
             </div>
 
@@ -535,16 +532,16 @@ export default function Navbar() {
             <button
               id="nav-cart-btn"
               onClick={() => dispatch(setCartOpen(true))}
-              className="relative h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50/80 border border-black/[0.04] text-gray-400 hover:text-brand-teal hover:border-brand-teal/20 transition-all group shrink-0"
+              className="relative h-9 w-9 md:h-10 md:w-10 flex items-center justify-center rounded-xl bg-gray-50/80 border border-black/[0.04] text-gray-400 hover:text-brand-teal hover:border-brand-teal/20 transition-all group shrink-0"
               title={t('viewCart')}
             >
-              <ShoppingCart size={18} className="group-hover:scale-110 transition-transform" />
+              <ShoppingCart size={16} className="md:w-4.5 md:h-4.5 group-hover:scale-110 transition-transform" />
               {totalQty > 0 && (
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute -top-1.5 -right-1.5 h-4.5 w-4.5 bg-brand-teal text-[#0a1628] rounded-full
-                             flex items-center justify-center text-[9px] font-black ring-2 ring-white shadow-sm"
+                  className="absolute -top-1 -right-1 h-3.5 w-3.5 md:h-4.5 md:w-4.5 bg-brand-teal text-[#0a1628] rounded-full
+                             flex items-center justify-center text-[7px] md:text-[9px] font-black ring-2 ring-white shadow-sm"
                 >
                   {totalQty}
                 </motion.span>
@@ -556,12 +553,12 @@ export default function Navbar() {
               <button
                 id="nav-user-btn"
                 onClick={() => setActiveDropdown(activeDropdown === 'user' ? null : 'user')}
-                className={`h-10 w-10 rounded-xl flex items-center justify-center transition-all duration-300 border
+                className={`h-9 w-9 md:h-10 md:w-10 rounded-xl flex items-center justify-center transition-all duration-300 border
                             ${activeDropdown === 'user'
                               ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-lg shadow-[#0a1628]/20'
                               : 'bg-gray-50/80 border border-black/[0.04] text-gray-400 hover:text-brand-teal hover:border-brand-teal/20'}`}
               >
-                <User size={20} className={activeDropdown === 'user' ? 'scale-110' : ''} />
+                <User size={18} className={activeDropdown === 'user' ? 'scale-110 md:w-5 md:h-5' : 'md:w-5 md:h-5'} />
                 {isAuthenticated && (
                    <span className="absolute bottom-1.5 right-1.5 h-1.5 w-1.5 bg-brand-teal rounded-full border border-white" />
                 )}
@@ -574,24 +571,17 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            {/* Divider */}
-            <div className="h-4 w-px bg-black/[0.06] hidden lg:block mx-1" />
-
-            {/* Status Dot */}
-            <div className="hidden lg:block">
-              <StatusIndicator />
-            </div>
-
-            {/* Hamburger (Mobile Menu Toggle) */}
+            {/* Hamburger (Mobile Menu Toggle) - Integrated better */}
             <button
-              className="lg:hidden h-10 w-10 rounded-xl bg-[#0a1628] text-brand-teal
-                         flex items-center justify-center shadow-lg active:scale-95 transition-all"
-              onClick={() => setMobileMenuOpen(true)}
+               className="lg:hidden h-9 w-9 rounded-xl bg-[#0a1628] text-brand-teal
+                          flex items-center justify-center shadow-lg active:scale-95 transition-all ml-1"
+               onClick={() => setMobileMenuOpen(true)}
             >
-              <Menu size={20} />
+               <Menu size={18} />
             </button>
 
           </div>
+
         </div>
       </header>
 

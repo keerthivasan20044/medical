@@ -50,47 +50,47 @@ export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) 
       </div>
 
       {/* Node Data Matrix */}
-      <div className="p-6 flex-1 flex flex-col justify-between">
-         <div className="space-y-3">
-            <div className="flex flex-wrap items-center gap-2">
-               <span className="text-[8px] font-black text-brand-teal bg-brand-teal/5 px-3 py-1 rounded-lg uppercase tracking-widest italic border border-brand-teal/10">{category}</span>
+      <div className="p-4 md:p-6 flex-1 flex flex-col justify-between">
+         <div className="space-y-2 md:space-y-3">
+            <div className="flex flex-wrap items-center gap-1.5 md:gap-2">
+               <span className="text-[7px] md:text-[8px] font-black text-brand-teal bg-brand-teal/5 px-2.5 py-1 rounded-lg uppercase tracking-widest italic border border-brand-teal/10">{category}</span>
                {requiresRx && (
-                 <span className="text-[8px] font-black text-purple-600 bg-purple-50 px-3 py-1 rounded-lg uppercase tracking-widest flex items-center gap-2 italic border border-purple-100">
-                    <FileText size={12} /> RX Req.
+                 <span className="text-[7px] md:text-[8px] font-black text-purple-600 bg-purple-50 px-2.5 py-1 rounded-lg uppercase tracking-widest flex items-center gap-2 italic border border-purple-100">
+                    <FileText size={10} className="md:w-3 md:h-3" /> RX
                  </span>
                )}
             </div>
             
             <div className="space-y-1">
                <Link to={`/medicines/${id}`}>
-                  <h3 className="font-syne font-black text-[#0a1628] text-lg leading-tight group-hover:text-brand-teal transition-colors uppercase tracking-tighter italic line-clamp-1">{name}</h3>
+                  <h3 className="font-syne font-black text-[#0a1628] text-sm md:text-lg leading-tight group-hover:text-brand-teal transition-colors uppercase tracking-tighter italic line-clamp-1">{name}</h3>
                </Link>
-               <div className="text-[10px] text-gray-400 font-dm font-bold italic truncate tracking-tight">{brand} • {generic}</div>
+               <div className="text-[8px] md:text-[10px] text-gray-400 font-dm font-bold italic truncate tracking-tight">{brand}</div>
             </div>
 
-            <div className="flex items-center gap-4 pt-2">
-               <div className="font-syne font-black text-[#0a1628] text-2xl tracking-tighter italic">₹{price}</div>
+            <div className="flex items-center gap-2 md:gap-4 pt-1 md:pt-2">
+               <div className="font-syne font-black text-[#0a1628] text-lg md:text-2xl tracking-tighter italic">₹{price}</div>
                {mrp > price && (
-                 <div className="text-sm text-gray-300 line-through italic font-dm">₹{mrp}</div>
+                 <div className="text-[10px] md:text-sm text-gray-300 line-through italic font-dm">₹{mrp}</div>
                )}
             </div>
          </div>
 
-         <div className="space-y-5 pt-6 mt-auto">
-            <div className="flex items-center justify-between border-t border-black/[0.03] pt-4">
-               <div className={`flex items-center gap-2 text-[8px] font-black uppercase tracking-widest italic ${isOutOfStock ? 'text-red-500' : isLowStock ? 'text-orange-500' : 'text-emerald-500'}`}>
-                  <div className={`h-1.5 w-1.5 rounded-full animate-pulse ${isOutOfStock ? 'bg-red-500' : isLowStock ? 'bg-orange-500' : 'bg-emerald-500'}`} />
-                  {isOutOfStock ? 'Out of Stock' : isLowStock ? 'Low Stock' : 'In Stock'}
+         <div className="space-y-3 md:space-y-5 pt-4 md:pt-6 mt-auto">
+            <div className="flex items-center justify-between border-t border-black/[0.03] pt-3 md:pt-4">
+               <div className={`flex items-center gap-1.5 md:gap-2 text-[7px] md:text-[8px] font-black uppercase tracking-widest italic ${isOutOfStock ? 'text-red-500' : isLowStock ? 'text-orange-500' : 'text-emerald-500'}`}>
+                  <div className={`h-1 w-1 md:h-1.5 md:w-1.5 rounded-full animate-pulse ${isOutOfStock ? 'bg-red-500' : isLowStock ? 'bg-orange-500' : 'bg-emerald-500'}`} />
+                  {isOutOfStock ? 'OUT' : isLowStock ? 'LOW' : 'IN'}
                </div>
-               <div className="text-[8px] text-gray-300 font-black uppercase tracking-widest flex items-center gap-2 italic">
-                  <Store size={12} className="text-brand-teal" /> {pharmacyName}
+               <div className="text-[7px] md:text-[8px] text-gray-300 font-black uppercase tracking-widest flex items-center gap-1.5 md:gap-2 italic">
+                  <Store size={10} className="text-brand-teal" /> {pharmacyName?.split(' ')[0]}
                </div>
             </div>
 
             <button
                onClick={(e) => { e.preventDefault(); onAdd && onAdd(item); }}
                disabled={isOutOfStock}
-               className={`w-full h-12 rounded-xl font-syne font-black text-[9px] flex items-center justify-center gap-3 transition-all duration-500 uppercase tracking-widest shadow-soft hover:shadow-4xl ${
+               className={`w-full h-10 md:h-12 rounded-lg md:rounded-xl font-syne font-black text-[8px] md:text-[9px] flex items-center justify-center gap-2 md:gap-3 transition-all duration-500 uppercase tracking-widest shadow-soft hover:shadow-4xl ${
                   isAdded 
                   ? 'bg-emerald-500 text-white' 
                   : isOutOfStock 
@@ -99,15 +99,16 @@ export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) 
                }`}
             >
                {isAdded ? (
-                 <> <CheckCircle2 size={16} /> Synchronized </>
+                 <> <CheckCircle2 size={14} className="md:w-4 md:h-4" /> SYNCED </>
                ) : isOutOfStock ? (
-                 'Node Offline'
+                 'OFFLINE'
                ) : (
-                 <> <ShoppingBag size={16} /> Add to Payload </>
+                 <> <ShoppingBag size={14} className="md:w-4 md:h-4" /> ADD </>
                )}
             </button>
          </div>
       </div>
+
     </motion.div>
   );
 }

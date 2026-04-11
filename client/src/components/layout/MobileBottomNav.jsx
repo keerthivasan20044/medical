@@ -41,6 +41,7 @@ const NAV = (t) => ({
 });
 
 export default function MobileBottomNav() {
+  const { t } = useLanguage();
   const dispatch = useDispatch();
   const { role } = useSelector((s) => s.auth);
   const { items } = useSelector((s) => s.notifications);
@@ -50,7 +51,7 @@ export default function MobileBottomNav() {
   const items_to_render = NAV(t)[role] || NAV(t)['guest'];
 
   return (
-    <nav className="lg:hidden fixed bottom-6 left-6 right-6 bg-[#0a1628]/95 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 z-[2000] shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden">
+    <nav className="lg:hidden fixed bottom-6 left-5 right-5 bg-[#0a1628]/95 backdrop-blur-3xl rounded-3xl border border-white/10 z-[2000] shadow-[0_20px_80px_rgba(0,0,0,0.6)] overflow-hidden">
       <div className="grid grid-cols-5 h-20">
         {items_to_render.map((item, idx) => {
           const Icon = item.icon;
@@ -61,17 +62,17 @@ export default function MobileBottomNav() {
                 onClick={() => {
                   if (item.action === 'cart') dispatch(setCartOpen(true));
                 }}
-                className="flex flex-col items-center justify-center transition-all duration-500 relative text-white/40 hover:text-[#02C39A]"
+                className="flex flex-col items-center justify-center transition-all duration-500 relative text-white/40 hover:text-brand-teal"
               >
-                <div className="relative z-10 transition-transform duration-500 hover:-translate-y-2">
-                  <Icon size={20} />
+                <div className="relative z-10 transition-transform duration-500 group">
+                  <Icon size={22} className="group-hover:scale-110" />
                   {item.action === 'cart' && totalQty > 0 && (
-                    <span className="absolute -top-2 -right-3 h-[18px] min-w-[18px] px-1 rounded-full bg-brand-teal text-[#0a1628] text-[9px] font-black flex items-center justify-center shadow-lg border-2 border-[#0a1628]">
+                    <span className="absolute -top-2.5 -right-3.5 h-5 min-w-[20px] px-1 rounded-full bg-brand-teal text-[#0a1628] text-[10px] font-black flex items-center justify-center shadow-lg border-2 border-[#0a1628]">
                       {totalQty}
                     </span>
                   )}
                 </div>
-                <span className="text-[7px] font-black uppercase tracking-[0.1em] mt-2">{item.label?.split(' ')[0]}</span>
+                <span className="text-[9px] font-black uppercase tracking-wider mt-1.5">{item.label?.split(' ')[0]}</span>
               </button>
             );
           }
@@ -81,26 +82,26 @@ export default function MobileBottomNav() {
               key={item.to}
               to={item.to}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center transition-all duration-500 relative ${isActive ? 'text-[#02C39A]' : 'text-white/40'}`
+                `flex flex-col items-center justify-center transition-all duration-500 relative ${isActive ? 'text-brand-teal' : 'text-white/30 hover:text-white/60'}`
               }
             >
               {({ isActive }) => (
                 <>
-                  <div className={`relative z-10 transition-transform duration-500 ${isActive ? '-translate-y-2' : ''}`}>
-                    <Icon size={20} className={isActive ? 'animate-pulse-ring' : ''} />
+                  <div className={`relative z-10 transition-all duration-500 ${isActive ? 'scale-110' : ''}`}>
+                    <Icon size={22} />
                     {(item.to === '/notifications' || item.to === '/alerts') && unread > 0 && (
-                      <span className="absolute -top-2 -right-3 h-[18px] min-w-[18px] px-1 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center shadow-lg border-2 border-[#0a1628]">
+                      <span className="absolute -top-2.5 -right-3.5 h-5 min-w-[20px] px-1 rounded-full bg-red-500 text-white text-[10px] font-black flex items-center justify-center shadow-lg border-2 border-[#0a1628]">
                         {unread}
                       </span>
                     )}
                   </div>
-                  <span className={`text-[7px] font-black uppercase tracking-[0.1em] mt-2 transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-0 scale-50'}`}>
+                  <span className={`text-[9px] font-black uppercase tracking-wider mt-1.5 transition-all duration-500 ${isActive ? 'opacity-100 translate-y-0 text-brand-teal' : 'opacity-80 translate-y-0.5'}`}>
                     {item.label?.split(' ')[0]}
                   </span>
                   {isActive && (
                     <motion.div 
                       layoutId="nav-active"
-                      className="absolute inset-0 bg-white/5 z-0"
+                      className="absolute inset-0 bg-white/5 border-b-4 border-brand-teal z-0"
                       transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                     />
                   )}
@@ -111,5 +112,6 @@ export default function MobileBottomNav() {
         })}
       </div>
     </nav>
+
   );
 }

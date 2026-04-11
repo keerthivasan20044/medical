@@ -38,29 +38,30 @@ export default function Doctors() {
             <div className="px-5 py-2 bg-brand-teal/10 border border-brand-teal/20 rounded-2xl w-fit flex items-center gap-2 text-[10px] font-black text-brand-teal uppercase tracking-[0.3em] italic">
               <Verified className="animate-pulse" size={14} /> {t('personnelRegistry')} v4.2
             </div>
-            <h1 className="font-syne font-black text-7xl lg:text-9xl text-white leading-none tracking-tighter uppercase italic">
-              {t('consultDoctorsTitle')}
+            <h1 className="font-syne font-black text-4xl sm:text-5xl md:text-7xl lg:text-9xl text-white leading-[0.9] tracking-tighter uppercase italic px-4">
+               {t('consultDoctorsTitle')}
             </h1>
-            <p className="text-white/40 font-dm text-2xl italic max-w-3xl leading-relaxed">
-              {t('consultDoctorsSubtitle')}
+            <p className="text-white/40 font-dm text-lg md:text-2xl italic max-w-3xl leading-relaxed px-6">
+               {t('consultDoctorsSubtitle')}
             </p>
           </div>
           
-          <div className="max-w-4xl mx-auto relative group mt-16">
-             <div className="absolute left-10 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#028090] transition">
-                <Search size={32} />
+          <div className="max-w-4xl mx-auto relative group mt-12 md:mt-16 px-6">
+             <div className="absolute left-12 md:left-10 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#028090] transition">
+                <Search size={24} className="md:w-8 md:h-8" />
              </div>
              <input 
                 type="text" 
                 placeholder={t('searchDoctorsPlaceholder')} 
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-24 pl-24 pr-64 rounded-[3rem] border border-white/10 bg-white/5 backdrop-blur-3xl font-dm text-2xl italic text-white shadow-4xl focus:outline-none focus:ring-4 focus:ring-[#028090]/20 transition-all placeholder-white/20"
+                className="w-full h-16 md:h-24 pl-16 md:pl-24 pr-10 md:pr-64 rounded-2xl md:rounded-[3rem] border border-white/10 bg-white/5 backdrop-blur-3xl font-dm text-lg md:text-2xl italic text-white shadow-4xl focus:outline-none focus:ring-4 focus:ring-[#028090]/20 transition-all placeholder:text-[12px] md:placeholder:text-2xl placeholder:italic placeholder-white/20"
              />
              <div className="absolute right-3 top-3 bottom-3 hidden md:flex items-center gap-4 bg-white/5 border border-white/10 px-8 rounded-[2rem] text-white font-syne font-black text-[10px] uppercase tracking-widest italic backdrop-blur-3xl group-focus-within:bg-white group-focus-within:text-[#0a1628] transition-all">
                 <MapPin size={18} className="text-[#02C39A]" /> {t('karaikalNode')}
              </div>
           </div>
+
         </div>
       </section>
 

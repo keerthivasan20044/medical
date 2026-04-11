@@ -53,11 +53,12 @@ export default function DistrictCommandBar() {
         whileHover={{ scale: 1.1, rotate: 5 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-24 right-8 h-16 w-16 bg-[#0a1628] text-brand-teal rounded-3xl shadow-4xl flex items-center justify-center z-[90] border-2 border-brand-teal/20 group overflow-hidden"
+        className="fixed bottom-32 md:bottom-24 right-6 md:right-8 h-14 w-14 md:h-16 md:w-16 bg-[#0a1628] text-brand-teal rounded-2xl md:rounded-3xl shadow-4xl flex items-center justify-center z-[150] border-2 border-brand-teal/20 group overflow-hidden"
       >
         <div className="absolute inset-0 bg-brand-teal/5 animate-pulse" />
-        <Command size={28} className="relative z-10 group-hover:rotate-12 transition-transform duration-500" />
+        <Command size={24} className="relative z-10 md:w-7 md:h-7 group-hover:rotate-12 transition-transform duration-500" />
       </motion.button>
+
 
       <AnimatePresence>
         {isOpen && (

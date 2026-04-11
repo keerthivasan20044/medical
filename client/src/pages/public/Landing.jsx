@@ -31,7 +31,7 @@ export default function Landing() {
   });
 
   return (
-    <div className="relative overflow-x-hidden pt-20 flex flex-col min-h-screen">
+    <div className="relative overflow-x-hidden flex flex-col min-h-screen">
       {/* Scroll Progress Bar */}
       <motion.div 
         className="fixed top-20 left-0 right-0 h-1 bg-gradient-to-r from-[#02C39A] to-[#028090] origin-left z-[100]" 
