@@ -1,3 +1,11 @@
+import { useState, useMemo, useEffect } from 'react';
+import { 
+  Search, Filter, Plus, RotateCw, ArrowUpDown, 
+  Trash2, Edit2, AlertCircle, Package, Zap, 
+  Activity, IndianRupee, X, CheckCircle, ArrowRight 
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'react-hot-toast';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 
 const MOCK_MEDICINES = [

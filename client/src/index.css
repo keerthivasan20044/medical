@@ -184,11 +184,13 @@
 
 * { box-sizing: border-box; }
 
-body {
+html, body {
   background: #ffffff;
   color: var(--navy);
-  overflow-x: hidden;
+  overflow-x: hidden !important;
   width: 100%;
+  position: relative;
+  max-width: 100%;
 }
 
 @layer base {
@@ -225,14 +227,10 @@ body {
 /* Mobile-First Layout Optimizations */
 @media (max-width: 768px) {
   .font-syne {
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
   }
   .grid {
-    gap: 1.5rem !important;
-  }
-  section {
-    padding-left: 1.25rem !important;
-    padding-right: 1.25rem !important;
+    gap: 1rem !important;
   }
 }
 

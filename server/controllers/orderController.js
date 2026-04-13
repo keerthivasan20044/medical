@@ -5,7 +5,7 @@ import { getIO } from '../config/socket.js';
 import { sendEmail, sendSMS } from '../utils/notify.js';
 
 export async function placeOrder(req, res) {
-  const { pharmacy, items = [], deliveryAddress, paymentMethod, note } = req.body;
+  const { pharmacy, items = [], deliveryAddress, paymentMethod, note, prescription } = req.body;
   if (!items.length) return res.status(400).json({ message: 'No items' });
   const totalAmount = items.reduce((sum, i) => sum + (i.price || 0) * (i.qty || 1), 0);
   const orderNumber = `MED-${Date.now()}`;
@@ -18,6 +18,7 @@ export async function placeOrder(req, res) {
     paymentMethod,
     deliveryAddress,
     note,
+    prescription,
     status: 'placed'
   });
 

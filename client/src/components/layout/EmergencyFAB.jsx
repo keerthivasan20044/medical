@@ -2,10 +2,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { Phone, AlertTriangle, Shield, Heart, Zap, X, ArrowRight, MessageCircle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext.jsx';
+import useScrollDirection from '../../hooks/useScrollDirection.js';
 
 export default function EmergencyFAB() {
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
+  const scrollDirection = useScrollDirection();
 
   const ACTIONS = [
     { label: t('call108Emergency'), icon: Phone, color: 'bg-red-500', sub: t('instantAmbulanceSync'), tel: '108' },
@@ -15,14 +17,22 @@ export default function EmergencyFAB() {
   ];
 
   return (
-    <div className="fixed bottom-32 md:bottom-24 left-6 md:left-8 z-[150]">
+    <motion.div 
+      initial={false}
+      animate={{ 
+        y: scrollDirection === 'down' && !isOpen ? 120 : 0,
+        opacity: scrollDirection === 'down' && !isOpen ? 0 : 1
+      }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+      className="fixed bottom-28 md:bottom-28 left-4 md:left-10 z-[3000]"
+    >
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8, x: -20, y: 20 }}
             animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, x: -20, y: 20 }}
-            className="absolute bottom-20 md:bottom-24 left-0 w-[calc(100vw-3rem)] md:w-80 bg-[#0a1628] rounded-[3rem] md:rounded-[3.5rem] border-4 border-white shadow-[0_80px_160px_rgba(255,0,0,0.2)] overflow-hidden"
+            className="absolute bottom-16 md:bottom-24 left-0 w-[calc(100vw-2rem)] md:w-80 bg-[#0a1628] rounded-[2.5rem] md:rounded-[3.5rem] border-4 border-white shadow-[0_80px_160px_rgba(255,0,0,0.2)] overflow-hidden"
           >
             <div className="p-6 md:p-8 bg-red-600 text-white flex items-center justify-between">
                <div className="space-y-1">
@@ -65,19 +75,20 @@ export default function EmergencyFAB() {
         whileHover={{ scale: 1.1, rotate: -5 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className={`h-14 md:h-16 px-5 md:px-6 rounded-[1.8rem] md:rounded-[2rem] shadow-4xl flex items-center justify-center gap-3 md:gap-4 z-[100] border-2 transition-all duration-700 relative overflow-hidden ${isOpen ? 'bg-white border-red-500 text-red-500' : 'bg-red-600 border-red-500/20 text-white'}`}
+        className={`h-12 w-12 md:h-16 md:px-6 md:w-auto rounded-full md:rounded-[2rem] shadow-4xl flex items-center justify-center gap-4 z-[100] border-2 transition-all duration-700 relative overflow-hidden ${isOpen ? 'bg-white border-red-500 text-red-500' : 'bg-red-600 border-red-500/20 text-white'}`}
       >
         <div className="absolute inset-0 bg-white/10 animate-pulse pointer-events-none" />
         {isOpen ? (
-          <X size={24} />
+          <X size={20} />
         ) : (
           <>
-            <Phone size={20} className="relative z-10 animate-shake" />
-            <span className="font-syne font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] italic">{t('emergency')}</span>
+            <Phone size={18} className="relative z-10 animate-shake" />
+            <span className="hidden lg:block font-syne font-black text-[10px] uppercase tracking-[0.2em] italic">{t('emergency')}</span>
           </>
         )}
       </motion.button>
-    </div>
+    </motion.div>
 
   );
 }
+

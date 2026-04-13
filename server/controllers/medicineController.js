@@ -36,13 +36,35 @@ export async function getMedicineById(req, res) {
 }
 
 export async function createMedicine(req, res) {
-  const item = await Medicine.create(req.body);
-  res.status(201).json({ item });
+  try {
+    const data = { ...req.body };
+    if (req.files && req.files.length > 0) {
+      data.images = req.files.map(f => ({
+        url: f.path,
+        publicId: f.filename
+      }));
+    }
+    const item = await Medicine.create(data);
+    res.status(201).json({ item });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to create therapeutic node.', error: err.message });
+  }
 }
 
 export async function updateMedicine(req, res) {
-  const item = await Medicine.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json({ item });
+  try {
+    const data = { ...req.body };
+    if (req.files && req.files.length > 0) {
+      data.images = req.files.map(f => ({
+        url: f.path,
+        publicId: f.filename
+      }));
+    }
+    const item = await Medicine.findByIdAndUpdate(req.params.id, data, { new: true });
+    res.json({ item });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to update medicine node.', error: err.message });
+  }
 }
 
 export async function deleteMedicine(req, res) {

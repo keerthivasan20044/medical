@@ -95,7 +95,7 @@ export default function Login() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-white">
+    <div className="min-h-screen flex flex-col md:flex-row bg-white overflow-x-hidden">
       {/* Left: Karaikal Themed Image Panel */}
       <section className="hidden md:flex md:w-1/2 bg-[#0a1628] relative overflow-hidden items-center justify-center p-20">
          <div className="absolute inset-0 bg-[url('/assets/hospital_pro.png')] bg-cover bg-center grayscale opacity-20 contrast-125" />
@@ -145,27 +145,28 @@ export default function Login() {
 
       {/* Right: Login Form Panel */}
       <section className="flex-1 flex flex-col items-center justify-center p-8 md:p-16 space-y-12">
-         <div className="w-full max-w-lg space-y-12">
+         <div className="w-full max-w-lg space-y-8 md:space-y-12 px-4 md:px-0">
             <div className="space-y-4">
-               <h2 className="font-syne font-black text-5xl text-[#0a1628] leading-tight select-none">{t('welcomeBack')}</h2>
-               <p className="text-gray-400 font-dm text-lg italic tracking-wide">{t('selectRoleDesc')}</p>
+               <h2 className="font-syne font-black text-4xl md:text-5xl text-[#0a1628] leading-tight select-none">{t('welcomeBack')}</h2>
+               <p className="text-gray-400 font-dm text-sm md:text-lg italic tracking-wide">{t('selectRoleDesc')}</p>
             </div>
 
             <form onSubmit={method === 'email' ? handleLogin : (otpStep === 'request' ? handleRequestOtp : handleLogin)} className="space-y-10">
                {/* Role Selector */}
-               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+               <div className="grid grid-cols-2 gap-3 md:gap-4">
                   {ROLES.map(r => (
                     <button
                       key={r.id}
                       type="button"
                       onClick={() => setRole(r.id)}
-                      className={`flex flex-col items-center justify-center gap-3 md:gap-4 p-6 md:p-8 rounded-3xl md:rounded-[2rem] border transition-all duration-500 group ${role === r.id ? 'bg-[#0a1628] border-transparent text-white shadow-3xl' : 'bg-gray-50 border-transparent text-gray-400 hover:bg-white hover:border-gray-100'}`}
+                      className={`flex flex-col items-center justify-center gap-2 md:gap-4 p-4 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border transition-all duration-500 group ${role === r.id ? 'bg-[#0a1628] border-transparent text-white shadow-3xl' : 'bg-gray-50 border-transparent text-gray-400 hover:bg-white hover:border-gray-100'}`}
                     >
-                       <r.icon size={24} className={role === r.id ? 'text-[#02C39A]' : 'group-hover:text-[#028090]'} />
-                       <span className="font-syne font-black text-[9px] uppercase tracking-widest">{r.label}</span>
+                       <r.icon size={role === r.id ? 20 : 18} className={role === r.id ? 'text-[#02C39A]' : 'group-hover:text-[#028090]'} />
+                       <span className="font-syne font-black text-[9px] md:text-[10px] uppercase tracking-widest text-center">{r.label}</span>
                     </button>
                   ))}
                </div>
+
 
                <AnimatePresence mode="wait">
                  {method === 'email' ? (
@@ -287,9 +288,14 @@ export default function Login() {
                </button>
             </div>
 
-            <p className="text-center text-[10px] font-black uppercase tracking-widest text-gray-300">
-               {t('newNode')} <Link to="/register" className="text-[#028090] ml-2 hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">{t('initReg')} &rarr;</Link>
-            </p>
+               <div className="text-center px-4 w-full">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-300 flex flex-wrap items-center justify-center gap-2">
+                     <span>{t('newNode')}</span>
+                     <Link to="/register" className="text-[#028090] font-bold hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">
+                        {t('initReg')} &rarr;
+                     </Link>
+                  </p>
+               </div>
 
             <div className="p-8 bg-gray-50/50 rounded-[2.5rem] border border-gray-100 space-y-4">
                <div className="text-[9px] text-gray-300 font-black uppercase tracking-[0.2em] flex items-center gap-4"> 

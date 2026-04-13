@@ -11,6 +11,7 @@ import {
 import { toast } from 'react-hot-toast';
 import { setPrescription } from '../../store/cartSlice.js';
 import { pharmacies } from '../../utils/data.js';
+import { prescriptionService } from '../../services/apiServices';
 
 export default function PrescriptionUploadFlow() {
   const { pharmacyId } = useParams();
@@ -21,7 +22,7 @@ export default function PrescriptionUploadFlow() {
   const { items, prescription } = useSelector(s => s.cart);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState(prescription);
+  const [previewUrl, setPreviewUrl] = useState(prescription?.url || null);
   const [activeAccordion, setActiveAccordion] = useState(null);
 
   const pharmacy = useMemo(() => pharmacies.find(p => p.id === pharmacyId) || pharmacies[0], [pharmacyId]);
@@ -34,30 +35,52 @@ export default function PrescriptionUploadFlow() {
     if (rxItems.length === 0) navigate('/checkout');
   }, [items, rxItems, navigate]);
 
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      simulateUpload(file);
+  const performRealUpload = async (file) => {
+    setIsUploading(true);
+    setUploadProgress(0);
+    
+    // Progress interval for UX (API progress not natively supported by all axios configs)
+    const interval = setInterval(() => {
+      setUploadProgress(prev => (prev < 90 ? prev + 5 : prev));
+    }, 150);
+
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('notes', `Order Linkage Protocol: ${pharmacyId}`);
+      
+      const res = await prescriptionService.upload(formData);
+      
+      clearInterval(interval);
+      setUploadProgress(100);
+      
+      const uploadData = {
+        url: res.item.imageUrl,
+        publicId: res.item.publicId,
+        id: res.item._id,
+        name: file.name
+      };
+
+      setPreviewUrl(uploadData.url);
+      dispatch(setPrescription(uploadData));
+      
+      setTimeout(() => {
+        setIsUploading(false);
+        toast.success('Clinical Manifest Synchronized ✓');
+      }, 500);
+    } catch (err) {
+      clearInterval(interval);
+      setIsUploading(false);
+      toast.error('Manifest Sync Failed — Protocol Error');
+      console.error('Upload error:', err);
     }
   };
 
-  const simulateUpload = (file) => {
-    setIsUploading(true);
-    setUploadProgress(0);
-    const interval = setInterval(() => {
-      setUploadProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          const url = URL.createObjectURL(file);
-          setPreviewUrl(url);
-          dispatch(setPrescription(url));
-          setIsUploading(false);
-          toast.success('Clinical Manifest Synchronized ✓');
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 200);
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      performRealUpload(file);
+    }
   };
 
   const handleRemove = () => {
@@ -76,29 +99,29 @@ export default function PrescriptionUploadFlow() {
       <div className="max-w-6xl mx-auto space-y-12">
         
         {/* Progress Navigation */}
-        <div className="flex items-center gap-6 mb-8">
+        <div className="flex items-center gap-2 md:gap-6 mb-8 overflow-x-auto no-scrollbar pointer-events-none">
            {[1, 2, 3, 4].map(s => (
-             <div key={s} className="flex items-center gap-4">
-               <div className={`h-10 w-10 rounded-xl flex items-center justify-center font-syne font-black text-xs ${s === 3 ? 'bg-[#0a1628] text-white shadow-4xl' : s < 3 ? 'bg-brand-teal text-white' : 'bg-gray-100 text-gray-300'}`}>0{s}</div>
-               {s < 4 && <div className={`h-1 w-12 rounded-full ${s < 3 ? 'bg-brand-teal' : 'bg-gray-100'}`} />}
+             <div key={s} className="flex items-center gap-2 md:gap-4 shrink-0">
+               <div className={`h-8 w-8 md:h-10 md:w-10 rounded-xl flex items-center justify-center font-syne font-black text-[10px] md:text-xs ${s === 3 ? 'bg-[#0a1628] text-white shadow-4xl' : s < 3 ? 'bg-brand-teal text-white' : 'bg-gray-100 text-gray-300'}`}>0{s}</div>
+               {s < 4 && <div className={`h-1 w-6 md:w-12 rounded-full ${s < 3 ? 'bg-brand-teal' : 'bg-gray-100'}`} />}
              </div>
            ))}
         </div>
 
         {/* Hero Header */}
-        <div className="space-y-6">
-           <h1 className="font-syne font-black text-5xl text-[#0a1628] uppercase italic leading-none tracking-tighter">Upload <span className="text-brand-teal text-6xl block transform translate-y-2">Prescription</span></h1>
-           <p className="text-gray-400 font-dm text-lg font-bold italic">Clinical authorization required for {rxItems.length} medicinal nodes in your payload.</p>
+        <div className="space-y-4 md:space-y-6">
+           <h1 className="font-syne font-black text-4xl md:text-5xl lg:text-7xl text-[#0a1628] uppercase italic leading-none tracking-tighter">Upload <span className="text-brand-teal text-5xl md:text-6xl block transform translate-y-1">Prescription</span></h1>
+           <p className="text-gray-400 font-dm text-sm md:text-lg font-bold italic">Clinical authorization required for {rxItems.length} medicinal nodes in your payload.</p>
         </div>
 
         <div className="grid lg:grid-cols-[1.3fr_1fr] gap-16 items-start">
            <div className="space-y-12">
               
               {/* Rx Items Summary Panel */}
-              <div className="bg-[#f4f2ff] border border-brand-teal/10 rounded-[4rem] p-12 space-y-8 relative overflow-hidden group">
+              <div className="bg-brand-teal/5 border border-brand-teal/10 rounded-[4rem] p-12 space-y-8 relative overflow-hidden group">
                  <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-5 rounded-full blur-[60px]" />
                  
-                 <div className="flex items-center gap-4 text-[#7c3aed]">
+                 <div className="flex items-center gap-4 text-brand-teal">
                     <Activity size={20} className="animate-pulse" />
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] italic">Authorized Medicine Registry</span>
                  </div>
@@ -106,9 +129,9 @@ export default function PrescriptionUploadFlow() {
                  <div className="space-y-4">
                     <p className="font-dm text-sm font-black text-[#0a1628] opacity-60 uppercase italic">These medicines require a valid prescription:</p>
                     {rxItems.map((item, id) => (
-                       <div key={id} className="flex items-center justify-between text-xs font-dm font-black text-[#0a1628] uppercase italic tracking-widest pl-6 border-l-2 border-[#7c3aed]/20">
+                       <div key={id} className="flex items-center justify-between text-xs font-dm font-black text-[#0a1628] uppercase italic tracking-widest pl-6 border-l-2 border-brand-teal/20">
                           <div className="flex items-center gap-4">
-                             <ClipboardList size={14} className="text-[#7c3aed]" />
+                             <ClipboardList size={14} className="text-brand-teal" />
                              <span>{item.name} &times; {item.qty}</span>
                           </div>
                           <span>₹{item.price * item.qty}</span>
@@ -116,10 +139,10 @@ export default function PrescriptionUploadFlow() {
                     ))}
                  </div>
 
-                 <div className="pt-8 border-t border-[#7c3aed]/10 flex items-center gap-6">
-                    <div className="h-16 w-16 bg-white rounded-2xl shadow-soft flex items-center justify-center shrink-0 border border-[#7c3aed]/10"><Info size={28} className="text-[#7c3aed]"/></div>
-                    <p className="font-dm text-sm font-bold text-[#0a1628]/60 italic italic leading-relaxed">
-                       Prescription will be verified by <span className="text-[#0a1628]">{pharmacy.name}</span> pharmacist within 15 minutes.
+                 <div className="pt-8 border-t border-brand-teal/10 flex items-center gap-6">
+                    <div className="h-16 w-16 bg-white rounded-2xl shadow-soft flex items-center justify-center shrink-0 border border-brand-teal/10"><Info size={28} className="text-brand-teal"/></div>
+                    <p className="font-dm text-sm font-bold text-[#0a1628]/60 italic leading-relaxed">
+                       Prescription will be verified by <span className="text-[#0a1628] font-black">{pharmacy.name}</span> pharmacist within 15 minutes.
                     </p>
                  </div>
               </div>
@@ -144,7 +167,10 @@ export default function PrescriptionUploadFlow() {
                  </button>
 
                  {/* CAMERA PROTOCOL */}
-                 <button className="bg-white border-4 border-dashed border-gray-100 rounded-[4rem] p-12 text-center space-y-8 group/camera hover:border-brand-teal transition-all duration-700 hover:shadow-4xl relative overflow-hidden">
+                 <button 
+                   onClick={() => toast.error('Camera Hardware Handshake Failed - Manual Upload Recommended')}
+                   className="bg-white border-4 border-dashed border-gray-100 rounded-[4rem] p-12 text-center space-y-8 group/camera hover:border-brand-teal transition-all duration-700 hover:shadow-4xl relative overflow-hidden"
+                 >
                     <div className="absolute top-0 right-0 h-24 w-24 bg-brand-teal/5 rounded-full blur-[40px] opacity-0 group-hover/camera:opacity-100 transition" />
                     <div className="h-24 w-24 bg-gray-50 rounded-[2.5rem] border border-black/[0.03] flex items-center justify-center mx-auto text-brand-teal shadow-inner group-hover/camera:bg-[#0a1628] group-hover/camera:text-white transition-all duration-700 group-hover/camera:scale-110">
                        <Camera size={40} className="group-hover/camera:rotate-12 transition-transform duration-500" />
@@ -153,7 +179,7 @@ export default function PrescriptionUploadFlow() {
                        <h3 className="font-syne font-black text-[13px] text-[#0a1628] uppercase italic tracking-widest leading-none">Take Photo</h3>
                        <p className="text-[9px] text-gray-300 font-bold uppercase tracking-[0.2em] italic">Instant Mobile Sync</p>
                     </div>
-                    <div className="h-12 w-fit px-8 border border-[#0a1628]/10 text-[#0a1628]/40 rounded-xl mx-auto flex items-center justify-center font-syne font-black text-[9px] uppercase tracking-widest group-hover/camera:bg-[#0a1628] group-hover/camera:text-white transition-all italic">Open Camera</div>
+                    <div className="h-12 w-fit px-8 border border-brand-teal/20 text-brand-teal rounded-xl mx-auto flex items-center justify-center font-syne font-black text-[9px] uppercase tracking-widest group-hover/camera:bg-[#0a1628] group-hover/camera:text-white transition-all italic">Open Camera</div>
                  </button>
               </div>
 

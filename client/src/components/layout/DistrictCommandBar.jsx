@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext.jsx';
+import useScrollDirection from '../../hooks/useScrollDirection.js';
 
 export default function DistrictCommandBar() {
   const { t } = useLanguage();
@@ -14,6 +15,7 @@ export default function DistrictCommandBar() {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
   const inputRef = useRef(null);
+  const scrollDirection = useScrollDirection();
 
   useEffect(() => {
     const down = (e) => {
@@ -49,15 +51,25 @@ export default function DistrictCommandBar() {
   return (
     <>
       {/* Floating Trigger Macro */}
-      <motion.button
-        whileHover={{ scale: 1.1, rotate: 5 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-32 md:bottom-24 right-6 md:right-8 h-14 w-14 md:h-16 md:w-16 bg-[#0a1628] text-brand-teal rounded-2xl md:rounded-3xl shadow-4xl flex items-center justify-center z-[150] border-2 border-brand-teal/20 group overflow-hidden"
+      <motion.div
+        initial={false}
+        animate={{ 
+          y: scrollDirection === 'down' && !isOpen ? 120 : 0,
+          opacity: scrollDirection === 'down' && !isOpen ? 0 : 1
+        }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
+        className="fixed bottom-28 md:bottom-24 right-4 md:right-8 z-[150]"
       >
-        <div className="absolute inset-0 bg-brand-teal/5 animate-pulse" />
-        <Command size={24} className="relative z-10 md:w-7 md:h-7 group-hover:rotate-12 transition-transform duration-500" />
-      </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setIsOpen(true)}
+          className="h-10 w-10 md:h-16 md:w-16 bg-[#0a1628] text-brand-teal rounded-full md:rounded-3xl shadow-4xl flex items-center justify-center border-2 border-brand-teal/20 group overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-brand-teal/5 animate-pulse" />
+          <Command size={18} className="relative z-10 md:w-7 md:h-7 group-hover:rotate-12 transition-transform duration-500" />
+        </motion.button>
+      </motion.div>
 
 
       <AnimatePresence>

@@ -9,7 +9,7 @@ export default function Footer() {
   const { t, language } = useLanguage();
 
   return (
-    <footer className="bg-[#0a1628] text-white pt-48 pb-20 relative overflow-hidden border-t border-white/5">
+    <footer className="bg-[#0a1628] text-white pt-48 pb-32 lg:pb-20 relative overflow-hidden border-t border-white/5">
       {/* HUD Background elements */}
       <div className="absolute top-0 right-0 h-[1000px] w-[1000px] bg-brand-teal opacity-[0.03] rounded-full blur-[200px] translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 h-[800px] w-[800px] bg-brand-teal opacity-[0.02] rounded-full blur-[150px] -translate-x-1/2 translate-y-1/2" />

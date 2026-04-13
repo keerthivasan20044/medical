@@ -15,8 +15,8 @@ function getTransporter() {
 }
 
 function getTwilioClient() {
-  if (!process.env.TWILIO_SID || !process.env.TWILIO_TOKEN) return null;
-  return twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+  if (!process.env.TWILIO_SID || !process.env.TWILIO_AUTH_TOKEN) return null;
+  return twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 }
 
 export async function sendEmail(to, subject, body, attachments) {
@@ -40,5 +40,5 @@ export async function sendSMS(to, message) {
     console.log(`[sms] to=${to} message=${message}`);
     return;
   }
-  await client.messages.create({ from: process.env.TWILIO_FROM, to, body: message });
+  await client.messages.create({ from: process.env.TWILIO_PHONE_NUMBER, to, body: message });
 }

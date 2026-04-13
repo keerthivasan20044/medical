@@ -105,7 +105,7 @@ export function PharmacyCard({ pharmacy, showDistance = true }) {
  */
 export function DoctorCard({ doctor, onBook }) {
   return (
-    <div className="bg-white rounded-[3.5rem] p-8 md:p-12 border border-gray-50 space-y-10 hover:shadow-3xl hover:-translate-y-2 transition-all duration-500 group relative">
+    <div className="bg-white rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-12 border border-gray-50 space-y-10 hover:shadow-3xl hover:-translate-y-2 transition-all duration-500 group relative">
        <div className="absolute top-0 right-0 h-40 w-40 bg-[#02C39A] rounded-full blur-[80px] opacity-0 group-hover:opacity-10 transition duration-1000" />
        
        <div className="flex flex-col items-center text-center space-y-6">
@@ -150,7 +150,7 @@ export function OrderCard({ order, showTrack = true }) {
   };
 
   return (
-    <div className="bg-white rounded-[3rem] border border-gray-100 p-10 space-y-10 hover:shadow-2xl transition duration-500 relative overflow-hidden group">
+    <div className="bg-white rounded-[2.5rem] md:rounded-[3rem] border border-gray-100 p-6 md:p-10 space-y-10 hover:shadow-2xl transition duration-500 relative overflow-hidden group">
        <div className="flex items-start justify-between">
           <div className="space-y-1">
              <h4 className="font-syne font-black text-2xl text-[#0a1628]">Order #{order.id}</h4>

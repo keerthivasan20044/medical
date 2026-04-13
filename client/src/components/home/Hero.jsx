@@ -86,12 +86,12 @@ export default function Hero() {
           </div>
 
           <div className="space-y-4 md:space-y-6">
-             <h1 className="font-syne font-black text-white text-[clamp(1.3rem,8vw,4rem)] md:text-[clamp(3.5rem,10vw,8rem)] leading-[0.82] md:leading-[0.9] uppercase italic tracking-tighter text-center lg:text-left transition-all">
+             <h1 className="font-syne font-black text-white text-[clamp(2.5rem,10vw,4rem)] md:text-[clamp(3.5rem,10vw,8rem)] leading-[1.1] md:leading-[0.95] uppercase italic tracking-tighter text-center lg:text-left transition-all">
                 {t('heroTitle').split(' ').slice(0, -1).join(' ')} <br />
                 <span className="text-brand-teal drop-shadow-[0_0_20px_rgba(2,195,154,0.3)]">
                    {t('heroTitle').split(' ').slice(-1)}
                 </span> <br />
-                <span className="text-white/40 text-[0.38em] md:text-[0.45em] tracking-normal lowercase opacity-70 leading-tight block mt-4 md:mt-2 px-10 lg:px-0">
+                <span className="text-white/40 text-[0.3em] md:text-[0.45em] tracking-normal lowercase opacity-70 leading-tight block mt-6 md:mt-2 px-6 lg:px-0">
                    {t('heroSubtitle')}
                 </span>
              </h1>

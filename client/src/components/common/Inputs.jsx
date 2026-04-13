@@ -33,7 +33,7 @@ export function OTPInput({ length = 6, onComplete }) {
         <input 
           key={i}
           ref={el => inputs.current[i] = el}
-          className="h-20 w-16 bg-gray-50 border-2 border-transparent rounded-2xl text-center font-syne font-black text-2xl text-[#0a1628] focus:bg-white focus:border-[#02C39A]/20 outline-none transition-all shadow-inner"
+          className="h-14 w-11 md:h-20 md:w-16 bg-gray-50 border-2 border-transparent rounded-xl md:rounded-2xl text-center font-syne font-black text-xl md:text-2xl text-[#0a1628] focus:bg-white focus:border-[#02C39A]/20 outline-none transition-all shadow-inner"
           value={digit}
           onChange={e => handleChange(e, i)}
           onKeyDown={e => handleKeyDown(e, i)}

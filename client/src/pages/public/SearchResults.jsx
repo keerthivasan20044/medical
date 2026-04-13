@@ -49,17 +49,17 @@ export default function SearchResults() {
   return (
     <div className="bg-white min-h-screen pb-40">
       {/* Search Header */}
-      <section className="bg-gray-50 pt-32 pb-16 border-b border-gray-100">
+      <section className="bg-gray-50 pt-32 pb-16 border-b border-gray-100 overflow-hidden">
          <div className="max-w-4xl mx-auto px-6 space-y-12">
             <div className="relative group">
                <div className="absolute -inset-1 bg-gradient-to-r from-[#02C39A] to-[#028090] rounded-[3.5rem] blur opacity-25 group-focus-within:opacity-50 transition duration-1000"></div>
-               <div className="relative bg-white border border-gray-100 rounded-[3rem] p-6 md:p-8 flex items-center gap-6 shadow-2xl transition-all">
-                  <div className="h-14 w-14 bg-[#0a1628] text-[#02C39A] rounded-[2rem] flex items-center justify-center shadow-lg"><SearchIcon size={26} /></div>
+               <div className="relative bg-white border border-gray-100 rounded-3xl md:rounded-[3rem] p-4 md:p-8 flex items-center gap-4 md:gap-6 shadow-2xl transition-all">
+                  <div className="h-12 w-12 md:h-14 md:w-14 bg-[#0a1628] text-[#02C39A] rounded-2xl md:rounded-[2rem] flex items-center justify-center shadow-lg shrink-0"><SearchIcon size={20} className="md:w-6 md:h-6" /></div>
                   <input 
                     autoFocus
                     type="text" 
                     placeholder={t('searchPlaceholder')} 
-                    className="bg-transparent border-none outline-none font-syne font-black text-2xl md:text-3xl placeholder-gray-200 text-[#0a1628] w-full"
+                    className="bg-transparent border-none outline-none font-syne font-black text-lg md:text-3xl placeholder-gray-200 text-[#0a1628] w-full"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                   />
@@ -69,17 +69,19 @@ export default function SearchResults() {
                </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-4">
+            <div className="flex gap-3 md:gap-4 overflow-x-auto no-scrollbar pb-6 md:pb-0 px-4 justify-start md:justify-center snap-x snap-mandatory scroll-smooth relative z-10">
                {['All', 'Medicines', 'Pharmacies', 'Doctors', 'Blog'].map(tab => (
                   <button
                      key={tab}
                      onClick={() => setActiveTab(tab)}
-                     className={`px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-[#0a1628] text-white shadow-xl scale-105' : 'bg-white text-gray-400 border border-gray-100 hover:bg-gray-50'}`}
+                     className={`px-6 md:px-10 py-3 md:py-4 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'bg-[#0a1628] text-white shadow-xl scale-105' : 'bg-white text-gray-400 border border-gray-100 hover:bg-gray-50'}`}
                   >
-                     {t(tab.toLowerCase()) || tab} ({counts[tab]})
+                     {t(tab.toLowerCase()) || tab} 
+                     {counts[tab] > 0 && <span className="ml-2 opacity-40">({counts[tab]})</span>}
                   </button>
                ))}
             </div>
+
          </div>
       </section>
 
@@ -125,7 +127,7 @@ export default function SearchResults() {
                      </div>
                      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {results.medicines.slice(0, 8).map(m => (
-                           <Link to={`/medicines/${m.id}`} key={m.id} className="bg-white rounded-[2.5rem] border border-gray-100 p-8 space-y-6 hover:shadow-2xl transition duration-500 group">
+                           <Link to={`/medicines/${m.id}`} key={m.id} className="bg-white rounded-[2.5rem] border border-gray-100 p-6 md:p-8 space-y-6 hover:shadow-2xl transition duration-500 group">
                               <div className="h-44 bg-gray-50 rounded-3xl overflow-hidden relative">
                                  <img src={m.image} className="h-full w-full object-cover group-hover:scale-110 transition duration-700" />
                                  {m.requiresRx && <div className="absolute top-4 right-4 bg-orange-500 text-white px-4 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest shadow-lg">Rx Only</div>}
@@ -153,7 +155,7 @@ export default function SearchResults() {
                      </div>
                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {results.pharmacies.map(p => (
-                           <Link to={`/pharmacies/${p.id}`} key={p.id} className="p-10 bg-[#0a1628] rounded-[3.5rem] text-white space-y-8 group hover:-translate-y-2 transition duration-500 shadow-3xl shadow-[#0a1628]/20 relative overflow-hidden">
+                           <Link to={`/pharmacies/${p.id}`} key={p.id} className="p-8 md:p-10 bg-[#0a1628] rounded-[3rem] md:rounded-[3.5rem] text-white space-y-8 group hover:-translate-y-2 transition duration-500 shadow-3xl shadow-[#0a1628]/20 relative overflow-hidden">
                               <div className="absolute top-0 right-0 h-40 w-40 bg-[#028090] rounded-full blur-[80px] opacity-20" />
                               <div className="flex items-start justify-between relative z-10">
                                  <div className="h-16 w-16 bg-white/10 rounded-2xl flex items-center justify-center border border-white/5"><Store size={30} className="text-[#02C39A]"/></div>

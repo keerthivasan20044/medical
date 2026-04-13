@@ -5,8 +5,10 @@ import { useDispatch } from 'react-redux';
 import AppRouter from './routes/AppRouter.jsx';
 import DistrictCommandBar from './components/layout/DistrictCommandBar.jsx';
 import EmergencyFAB from './components/layout/EmergencyFAB.jsx';
+import MobileBottomNav from './components/layout/MobileBottomNav.jsx';
 import SocketListener from './components/layout/SocketListener.jsx';
 import { fetchMe } from './store/authSlice.js';
+import ErrorBoundary from './components/common/ErrorBoundary.jsx';
 
 export default function App() {
   const location = useLocation();
@@ -19,13 +21,14 @@ export default function App() {
   }, [dispatch]);
 
   return (
-    <>
+    <ErrorBoundary>
       <SocketListener />
       <AppRouter />
       {!hideBars && (
         <>
           <DistrictCommandBar />
           <EmergencyFAB />
+          <MobileBottomNav />
         </>
       )}
       <Toaster
@@ -41,6 +44,6 @@ export default function App() {
           }
         }}
       />
-    </>
+    </ErrorBoundary>
   );
 }

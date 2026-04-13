@@ -183,22 +183,23 @@ export default function Register() {
                            <h2 className="font-syne font-black text-3xl md:text-4xl text-[#0a1628]">{t('chooseNode')}</h2>
                            <p className="text-gray-400 font-dm italic text-base md:text-lg opacity-60">{t('identityFoundation')}</p>
                         </div>
-                        <div className="grid grid-cols-1 gap-3 md:gap-4">
+                        <div className="grid grid-cols-2 gap-3 md:gap-4">
                            {ROLES.map(r => (
                              <button
                                key={r.id}
                                onClick={() => { setFormData({ ...formData, role: r.id }); handleNext(); }}
-                               className="p-8 bg-gray-50 rounded-[2.5rem] border-2 border-transparent hover:border-[#02C39A] hover:bg-white transition-all duration-500 flex items-center gap-8 group text-left"
+                               className="p-4 md:p-8 bg-gray-50 rounded-[2rem] border-2 border-transparent hover:border-[#02C39A] hover:bg-white transition-all duration-500 flex flex-col md:flex-row items-center gap-3 md:gap-8 group text-center md:text-left"
                              >
-                                <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center text-[#0a1628] group-hover:bg-[#0a1628] group-hover:text-[#02C39A] transition duration-500 shadow-sm"><r.icon size={28}/></div>
-                                <div>
-                                   <div className="font-syne font-black text-lg text-[#0a1628] uppercase tracking-tighter">{r.label} Protocol</div>
-                                   <div className="text-xs font-dm text-gray-400 italic">{r.desc}</div>
+                                <div className="h-12 w-12 md:h-16 md:w-16 bg-white rounded-2xl flex items-center justify-center text-[#0a1628] group-hover:bg-[#0a1628] group-hover:text-[#02C39A] transition duration-500 shadow-sm shrink-0"><r.icon size={20} className="md:w-7 md:h-7"/></div>
+                                <div className="flex-1">
+                                   <div className="font-syne font-black text-[10px] md:text-lg text-[#0a1628] uppercase tracking-tighter leading-none">{r.label}</div>
+                                   <div className="hidden md:block text-xs font-dm text-gray-400 italic mt-1">{r.desc}</div>
                                 </div>
-                                <ArrowRight className="ml-auto opacity-0 group-hover:opacity-100 transition duration-500 text-[#02C39A]" size={24} />
+                                <ArrowRight className="hidden md:block ml-auto opacity-0 group-hover:opacity-100 transition duration-500 text-[#02C39A]" size={20} />
                              </button>
                            ))}
                         </div>
+
                      </motion.div>
                    )}
 
@@ -353,6 +354,7 @@ export default function Register() {
                                 </button>
                             </div>
                          </div>
+
                          <div className="pt-16">
                             <Button 
                               onClick={handleRegister} 
