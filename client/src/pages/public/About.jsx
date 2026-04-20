@@ -8,9 +8,10 @@ import {
 } from 'lucide-react';
 import { pharmacies } from '../../utils/data';
 import { useLanguage } from '../../context/LanguageContext.jsx';
+import { Stethoscope, Store } from 'lucide-react';
 
 export default function About() {
-   const { t, language } = useLanguage();
+   const { t, lang } = useLanguage();
  
    const TEAM = [
      { name: 'Senthil Kumar', role: t('roleCeo'), image: '/assets/team_member_pro.png' },
@@ -36,7 +37,7 @@ export default function About() {
   ];
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-48">
+    <div className="bg-[#f8fafc] min-h-screen pb-48 font-dm">
       {/* Hero Section */}
       <section className="bg-[#0a1628] py-48 md:py-72 relative overflow-hidden flex items-center justify-center text-center">
          <div className="absolute inset-0 bg-[url('/assets/hospital_pro.png')] bg-cover bg-center opacity-10 filter grayscale brightness-125" />
@@ -52,6 +53,99 @@ export default function About() {
                   {t('about')} <br /><span className="text-brand-teal drop-shadow-[0_0_80px_rgba(2,195,154,0.3)]">{t('medireach')}</span>
                </h1>
             </motion.div>
+         </div>
+      </section>
+
+      {/* Clinical Infrastructure Section — NEW ADDITION */}
+      <section className="max-w-7xl mx-auto px-10 py-56 space-y-40">
+         <div className="grid lg:grid-cols-2 gap-24 items-center">
+            <div className="space-y-12">
+               <div className="px-6 py-2 bg-brand-teal/5 border border-brand-teal/10 rounded-xl inline-flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-widest italic">
+                  <Stethoscope size={16} /> Clinical Handshake Network
+               </div>
+               <h2 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic tracking-tighter leading-tight">
+                  World-Class <span className="text-brand-teal">Practitioners</span>, <br />Local Care.
+               </h2>
+               <p className="text-gray-400 font-dm italic font-bold text-xl leading-relaxed">
+                  Our medical network consists of 50+ verified consultants from top institutions like JIPMER and Govt. General Hospital Karaikal. Each practitioner node is synchronized with our terminal to provide real-time consultations and digital clinical logs.
+               </p>
+               <div className="grid grid-cols-2 gap-8 pt-6">
+                  <div className="space-y-2">
+                     <div className="text-brand-teal font-syne font-black text-3xl italic">12+</div>
+                     <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Specialties Active</div>
+                  </div>
+                  <div className="space-y-2">
+                     <div className="text-brand-teal font-syne font-black text-3xl italic">4.9/5</div>
+                     <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Clinical Rating</div>
+                  </div>
+               </div>
+            </div>
+            <div className="relative group">
+               <div className="absolute -inset-6 bg-[#0a1628] rounded-[4rem] rotate-3 group-hover:rotate-0 transition-transform duration-700" />
+               <img src="/assets/doctor_pro.png" className="relative h-[600px] w-full object-cover rounded-[3.5rem] border-8 border-white/5 grayscale group-hover:grayscale-0 transition-all duration-1000" alt="Consultants" />
+            </div>
+         </div>
+
+         <div className="grid lg:grid-cols-2 gap-24 items-center">
+            <div className="order-2 lg:order-1 relative group">
+               <div className="absolute -inset-6 bg-brand-teal rounded-[4rem] -rotate-3 group-hover:rotate-0 transition-transform duration-700" />
+               <img src="/assets/pharmacy_pro.png" className="relative h-[600px] w-full object-cover rounded-[3.5rem] border-8 border-white/5 grayscale group-hover:grayscale-0 transition-all duration-1000" alt="Pharmacies" />
+            </div>
+            <div className="order-1 lg:order-2 space-y-12">
+               <div className="px-6 py-2 bg-[#0a1628] rounded-xl inline-flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-widest italic shadow-lg">
+                  <Store size={16} /> Distribution Enclaves
+               </div>
+               <h2 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic tracking-tighter leading-tight">
+                  Hyper-Local <br /><span className="text-brand-teal">Surgical Nodes</span>.
+               </h2>
+               <p className="text-gray-400 font-dm italic font-bold text-xl leading-relaxed">
+                  Our distribution matrix spans every enclave of Karaikal. From Market Road to Nagore, every pharmacy is a verified node offering cold-chain logistics, zero-lag inventory updates, and multi-service protocols (Vaccines, Diabetic Care, Baby Care).
+               </p>
+               <div className="space-y-6">
+                  <div className="flex items-center gap-6">
+                     <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center shadow-soft text-brand-teal"><Truck size={24}/></div>
+                     <div className="space-y-1">
+                        <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest">Rapid Response Logistics</div>
+                        <p className="text-gray-300 text-sm font-bold italic">Sub-30 minute delivery from local enclave nodes.</p>
+                     </div>
+                  </div>
+                  <div className="flex items-center gap-6">
+                     <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center shadow-soft text-brand-teal"><Biohazard size={24}/></div>
+                     <div className="space-y-1">
+                        <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest">Cold Chain Integrity</div>
+                        <p className="text-gray-300 text-sm font-bold italic">Temperature-controlled transport for vaccines and insulin.</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         {/* Quality Assurance Section — NEW ADDITION */}
+         <div className="bg-[#0a1628] rounded-[5rem] p-16 md:p-24 text-white relative overflow-hidden shadow-4xl border-t-[20px] border-brand-teal">
+            <div className="absolute bottom-0 right-0 h-[600px] w-[600px] bg-brand-teal opacity-5 rounded-full blur-[150px] translate-x-1/2 translate-y-1/2" />
+            <div className="max-w-4xl space-y-12 relative z-10">
+               <div className="flex items-center gap-6">
+                  <ShieldCheck size={48} className="text-brand-teal animate-pulse" />
+                  <h3 className="font-syne font-black text-4xl md:text-6xl uppercase italic tracking-tighter leading-none">Clinical Integrity <br /><span className="text-brand-teal">Safeguard Protocol</span></h3>
+               </div>
+               <p className="text-white/40 font-dm text-2xl italic font-bold leading-relaxed">
+                  Every medicine, practitioner, and pharmacy on our terminal goes through a multi-factor verification sync. We ensure that your healthcare Handshake is secure, clinical, and absolute.
+               </p>
+               <div className="grid md:grid-cols-3 gap-10">
+                  <div className="space-y-3">
+                     <div className="text-brand-teal font-syne font-black text-2xl italic">100%</div>
+                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Verified Stock</div>
+                  </div>
+                  <div className="space-y-3">
+                     <div className="text-brand-teal font-syne font-black text-2xl italic">Encrypted</div>
+                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Medical Logs</div>
+                  </div>
+                  <div className="space-y-3">
+                     <div className="text-brand-teal font-syne font-black text-2xl italic">Immediate</div>
+                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Status Mapping</div>
+                  </div>
+               </div>
+            </div>
          </div>
       </section>
 

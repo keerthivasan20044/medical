@@ -56,6 +56,44 @@ const DEMO_USERS = [
     isActive: true
   },
   {
+    name: 'Dr. Ramesh Kumar',
+    email: 'ramesh@demo.in',
+    phone: '9000000006',
+    role: 'doctor',
+    isVerified: true,
+    isActive: true,
+    doctorProfile: {
+      specialization: 'Cardiologist',
+      qualification: 'MD, DM',
+      hospital: 'Karaikal Heart Center',
+      experience: 15,
+      fee: 500,
+      status: 'online',
+      rating: 4.9,
+      tags: ['Heart Specialist', 'Emergency']
+    },
+    address: { street: 'Church Street', city: 'Karaikal', state: 'Puducherry', pincode: '609602' }
+  },
+  {
+    name: 'Dr. Priya Mani',
+    email: 'priya@demo.in',
+    phone: '9000000007',
+    role: 'doctor',
+    isVerified: true,
+    isActive: true,
+    doctorProfile: {
+      specialization: 'Pediatrician',
+      qualification: 'MBBS, DCH',
+      hospital: 'Kids Care Clinic Karaikal',
+      experience: 10,
+      fee: 300,
+      status: 'online',
+      rating: 4.8,
+      tags: ['Child Care', 'Vaccination']
+    },
+    address: { street: 'Nagore Road', city: 'Karaikal', state: 'Puducherry', pincode: '609605' }
+  },
+  {
     name: 'Admin User',
     email: 'admin@demo.in',
     phone: '9000000005',

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, Star, MapPin, Video, Phone, Calendar, 
@@ -6,8 +6,10 @@ import {
   Heart, CheckCircle, Verified, ShieldCheck, Activity, Globe, Info, Zap, Store
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { doctors } from '../../utils/data.js';
+import { doctors as mockDoctors } from '../../utils/data.js';
 import { useLanguage } from '../../context/LanguageContext.jsx';
+import { doctorService } from '../../services/apiServices';
+import { Loader2 } from 'lucide-react';
 
 const SPECIALTIES = [
   'All', 'General Physician', 'Cardiologist', 'Paediatrician', 'Gynaecologist',
@@ -19,14 +21,36 @@ export default function Doctors() {
   const [activeSpec, setActiveSpec] = useState('All');
   const [search, setSearch] = useState('');
 
+  const [doctorsList, setDoctorsList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
+
+  const fetchDoctors = async () => {
+    try {
+      setLoading(true);
+      const data = await doctorService.getAll();
+      setDoctorsList(data.items || data.doctors || data || []);
+    } catch (err) {
+      console.warn('Doctor sync failed, using mock registry...', err);
+      setDoctorsList(mockDoctors);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const filteredDocs = useMemo(() => {
-    return doctors.filter(doc => {
-      const matchesSpec = activeSpec === 'All' || doc.spec === activeSpec;
-      const matchesSearch = doc.name.toLowerCase().includes(search.toLowerCase()) || 
-                           doc.spec.toLowerCase().includes(search.toLowerCase());
+    return (doctorsList.length > 0 ? doctorsList : mockDoctors).filter(doc => {
+      const spec = doc.spec || doc.specialization || 'General Physician';
+      const name = doc.name || 'Anonymous Practitioner';
+      const matchesSpec = activeSpec === 'All' || spec === activeSpec;
+      const matchesSearch = name.toLowerCase().includes(search.toLowerCase()) || 
+                           spec.toLowerCase().includes(search.toLowerCase());
       return matchesSpec && matchesSearch;
     });
-  }, [activeSpec, search]);
+  }, [activeSpec, search, doctorsList]);
 
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-40">
@@ -140,7 +164,7 @@ export default function Doctors() {
                                   <div className="h-8 w-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-400"><Store size={16}/></div>
                                   <div className="text-[10px] font-black text-gray-400 uppercase italic">Clinical Node</div>
                                </div>
-                               <div className="text-[10px] font-black text-[#0a1628] uppercase italic truncate max-w-[120px]">{doc.hospital.split(',')[0]}</div>
+                               <div className="text-[10px] font-black text-[#0a1628] uppercase italic truncate max-w-[120px]">{(doc.hospital || doc.clinic || 'Karaikal Enclave').split(',')[0]}</div>
                             </div>
                          </div>
 

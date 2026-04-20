@@ -4,49 +4,46 @@ import { Star, MapPin, Phone, Clock, Truck, ShieldCheck, Heart, ChevronRight, Sh
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { medicines, pharmacies } from '../../utils/data.js';
+import { medicines as mockMedicines, pharmacies as mockPharmacies } from '../../utils/data.js';
 import { addItem } from '../../store/cartSlice.js';
 import MedicineCard from '../../components/medicine/MedicineCard.jsx';
 import { useLanguage } from '../../context/LanguageContext.jsx';
+import { medicineService } from '../../services/apiServices';
+import { normalizeUrl } from '../../utils/url';
+import { Loader2 } from 'lucide-react';
 
 export default function MedicineDetailPage() {
   const { t } = useLanguage();
   const { id } = useParams();
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [medicine, setMedicine] = useState(null);
   const [openAccordions, setOpenAccordions] = useState(['Description']);
   const [isFavorite, setIsFavorite] = useState(false);
   const { items: cartItems } = useSelector(state => state.cart);
   const dispatch = useDispatch();
 
-  const medicine = useMemo(() => medicines.find(m => m.id === id), [id]);
-  const pharmacy = useMemo(() => pharmacies.find(p => p.id === (medicine?.pharmacyId || '')), [medicine]);
-  const similarMedicines = useMemo(() => 
-    medicines.filter(m => m.category === medicine?.category && m.id !== id).slice(0, 4), 
-    [medicine, id]
-  );
-
   useEffect(() => {
+    fetchMedicineDetails();
     window.scrollTo(0, 0);
     setQty(1);
     setActiveImg(0);
   }, [id]);
 
-  if (!medicine) {
-    return (
-      <div className="min-h-screen bg-[#0a1628] flex items-center justify-center p-6">
-         <div className="text-center space-y-8 max-w-xl">
-            <div className="h-24 w-24 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto text-brand-teal animate-pulse"><Pill size={40}/></div>
-            <h2 className="font-syne font-black text-3xl md:text-5xl text-white uppercase italic tracking-tighter">SKU NOT FOUND</h2>
-            <Link to="/medicines">
-               <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase tracking-widest rounded-xl italic flex items-center gap-4 mx-auto">
-                  <ChevronRight size={18} className="rotate-180"/> RETURN TO REGISTRY
-               </button>
-            </Link>
-         </div>
-      </div>
-    );
-  }
+  const fetchMedicineDetails = async () => {
+    try {
+      setLoading(true);
+      const data = await medicineService.getById(id);
+      setMedicine(data);
+    } catch (err) {
+      console.warn('Node fetch failed, attempting fallback protocol...', err);
+      const fallback = mockMedicines.find(m => m.id === id || m._id === id);
+      setMedicine(fallback);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const toggleAccordion = (title) => {
     setOpenAccordions(prev => 
@@ -56,18 +53,41 @@ export default function MedicineDetailPage() {
 
   const handleAddToCart = () => {
     dispatch(addItem({
-      id: medicine._id || medicine.id,
-      name: medicine.name,
-      price: medicine.price,
-      image: medicine.images?.[0] || '/assets/medicine_default.png',
-      brand: medicine.brand,
+      id: medicine?._id || medicine?.id,
+      name: medicine?.name,
+      price: medicine?.price,
+      image: normalizeUrl(medicine?.images?.[0] || '/assets/medicine_default.png'),
+      brand: medicine?.brand,
       qty
     }));
     toast.success(`${qty} units added to payload.`);
   };
 
+  if (loading) return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] space-y-6">
+      <Loader2 className="animate-spin text-brand-teal" size={48}/>
+      <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-widest">Synchronizing Medicine Node...</p>
+    </div>
+  );
+
+  if (!medicine) return (
+    <div className="min-h-screen bg-[#0a1628] flex items-center justify-center p-6">
+       <div className="text-center space-y-8 max-w-xl">
+          <div className="h-24 w-24 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto text-brand-teal animate-pulse"><Pill size={40}/></div>
+          <h2 className="font-syne font-black text-3xl md:text-5xl text-white uppercase italic tracking-tighter">SKU NOT FOUND</h2>
+          <Link to="/medicines">
+             <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase tracking-widest rounded-xl italic flex items-center gap-4 mx-auto">
+                <ChevronRight size={18} className="rotate-180"/> RETURN TO REGISTRY
+             </button>
+          </Link>
+       </div>
+    </div>
+  );
+
+  const pharmacyId = medicine.pharmacyId || medicine.pharmacy;
+
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-64">
+    <div className="bg-[#f8fafc] min-h-screen pb-64 font-dm">
       {/* Breadcrumb Terminal */}
       <section className="bg-[#f8fafc] pt-24 pb-6 md:pt-32 md:pb-12">
          <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -87,7 +107,7 @@ export default function MedicineDetailPage() {
          <div className="lg:col-span-6 space-y-6 md:space-y-10">
             <div className="relative aspect-square rounded-[2.5rem] md:rounded-[4rem] bg-white border border-black/[0.03] shadow-soft overflow-hidden group">
                <img 
-                 src={medicine.images[activeImg] || medicine.images[0]} 
+                 src={normalizeUrl(medicine.images?.[activeImg] || medicine.images?.[0] || '/assets/medicine_default.png')} 
                  alt={medicine.name} 
                  className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-1000 hover:scale-110"
                />
@@ -105,7 +125,7 @@ export default function MedicineDetailPage() {
                    onClick={() => setActiveImg(i)}
                    className={`h-16 w-16 md:h-24 md:w-24 rounded-2xl md:rounded-3xl overflow-hidden border-2 transition-all duration-500 p-1 bg-white ${activeImg === i ? 'border-brand-teal shadow-mint scale-105' : 'border-transparent grayscale opacity-40'}`}
                  >
-                    <img src={img} className="w-full h-full object-cover rounded-xl" alt="thumbnail" />
+                    <img src={normalizeUrl(img)} className="w-full h-full object-cover rounded-xl" alt="thumbnail" />
                  </button>
                ))}
             </div>
@@ -152,7 +172,7 @@ export default function MedicineDetailPage() {
                   </div>
                </div>
 
-               <Link to={`/pharmacies/${pharmacy?.id}`} className="block">
+               <Link to={`/pharmacies/${pharmacyId}`} className="block">
                   <div className="flex items-center gap-4 md:gap-6 p-6 md:p-8 bg-gray-50/50 rounded-[2rem] border border-black/[0.02] group transition-all duration-700">
                      <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-inner text-brand-teal group-hover:bg-[#0a1628] transition-all shrink-0">
                         <Store size={20}/>
@@ -190,7 +210,7 @@ export default function MedicineDetailPage() {
                </div>
                <div className="space-y-4 relative z-10">
                   <p className="text-white/60 font-dm font-bold italic text-base md:text-lg leading-relaxed">
-                     Delivery from <span className="text-brand-teal">{pharmacy?.name}</span> Node confirmed for <span className="text-white">TODAY 6PM</span> via District Transport.
+                     Delivery from <span className="text-brand-teal">{medicine.pharmacyName}</span> Node confirmed for <span className="text-white">TODAY 6PM</span> via District Transport.
                   </p>
                </div>
             </div>
@@ -204,29 +224,29 @@ export default function MedicineDetailPage() {
             { title: 'DOSAGE_NODE', content: medicine.dosage, icon: Zap },
             { title: 'SAFEGUARD_STORAGE', content: medicine.storage, icon: ShieldCheck }
          ].map(section => (
-           <div key={section.title} className="bg-white border border-black/[0.03] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-soft">
-              <button 
-                onClick={() => toggleAccordion(section.title)}
-                className="w-full h-20 md:h-24 px-8 md:px-12 flex items-center justify-between group"
-              >
-                 <div className="flex items-center gap-4 md:gap-6">
-                    <div className="h-10 w-10 md:h-12 md:w-12 bg-gray-50 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all"><section.icon size={18}/></div>
-                    <span className="font-syne font-black text-base md:text-xl text-[#0a1628] uppercase italic tracking-tighter">{section.title}</span>
-                 </div>
-                 <ChevronRight size={20} className={`text-gray-200 transition-all transform ${openAccordions.includes(section.title) ? 'rotate-90 text-brand-teal' : ''}`} />
-              </button>
-              <AnimatePresence>
-                 {openAccordions.includes(section.title) && (
-                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                      <div className="px-8 md:px-12 pb-8 md:pb-12 pt-2 text-gray-400 font-dm font-bold italic text-lg leading-relaxed">{section.content}</div>
-                   </motion.div>
-                 )}
-              </AnimatePresence>
-           </div>
+            <div key={section.title} className="bg-white border border-black/[0.03] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-soft">
+               <button 
+                 onClick={() => toggleAccordion(section.title)}
+                 className="w-full h-20 md:h-24 px-8 md:px-12 flex items-center justify-between group"
+               >
+                  <div className="flex items-center gap-4 md:gap-6">
+                     <div className="h-10 w-10 md:h-12 md:w-12 bg-gray-50 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all"><section.icon size={18}/></div>
+                     <span className="font-syne font-black text-base md:text-xl text-[#0a1628] uppercase italic tracking-tighter">{section.title}</span>
+                  </div>
+                  <ChevronRight size={20} className={`text-gray-200 transition-all transform ${openAccordions.includes(section.title) ? 'rotate-90 text-brand-teal' : ''}`} />
+               </button>
+               <AnimatePresence>
+                  {openAccordions.includes(section.title) && (
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                       <div className="px-8 md:px-12 pb-8 md:pb-12 pt-2 text-gray-400 font-dm font-bold italic text-lg leading-relaxed">{section.content}</div>
+                    </motion.div>
+                  )}
+               </AnimatePresence>
+            </div>
          ))}
       </section>
 
-      {/* Sticky Quick-Action Bar Node — FLATTENED AND REPOSITIONED FOR MOBILE */}
+      {/* Sticky Quick-Action Bar Node */}
       <AnimatePresence>
          <motion.div 
            initial={{ y: 200 }}

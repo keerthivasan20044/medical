@@ -1,10 +1,15 @@
 import './config/env.js';
+import { checkEnvKeys } from './config/keyChecks.js';
+
+// Perform health checks on environment variables
+checkEnvKeys();
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import http from 'http';
+import mongoose from 'mongoose';
 
 import { connectDB } from './config/db.js';
 import { initSocket } from './config/socket.js';
@@ -53,7 +58,15 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 
 app.get('/', (req, res) => res.json({ status: 'MediPharm API running' }));
-app.get('/api/health', (req, res) => res.json({ status: 'OK', message: 'MediPharm API Synchronized' }));
+app.get('/api/health', (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
+  res.json({ 
+    status: 'OK', 
+    message: 'MediPharm API Synchronized',
+    database: dbStatus,
+    timestamp: new Date().toISOString()
+  });
+});
 app.get('/api/public/stats', getPublicStats);
 
 app.use('/api/auth', authRoutes);

@@ -7,10 +7,11 @@ import {
   MapPin,
   Search as SearchIcon,
   SlidersHorizontal,
-  X
+  X,
+  Stethoscope
 } from 'lucide-react';
 import { fetchMedicines } from '../../store/medicinesSlice.js';
-import { pharmacies, doctors } from '../../utils/data.js';
+import { pharmacyService, doctorService } from '../../services/apiServices.js';
 import MedicineCard from '../../components/medicine/MedicineCard.jsx';
 import { SkeletonBox } from '../../components/common/Skeleton.jsx';
 
@@ -18,24 +19,45 @@ const TABS = ['All', 'Medicines', 'Pharmacies', 'Doctors'];
 
 export default function Search() {
   const dispatch = useDispatch();
-  const { items, status, error } = useSelector((s) => s.medicines);
+  const { items: medicines, status: medStatus, error: medError } = useSelector((s) => s.medicines);
   const [query, setQuery] = useState('');
   const [activeTab, setActiveTab] = useState('All');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [category, setCategory] = useState('All');
   const [inStockOnly, setInStockOnly] = useState(false);
 
+  const [pharmacies, setPharmacies] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [loadingExtras, setLoadingExtras] = useState(false);
+
   useEffect(() => {
-    if (status === 'idle') dispatch(fetchMedicines());
-  }, [status, dispatch]);
+    if (medStatus === 'idle') dispatch(fetchMedicines());
+    
+    const fetchExtras = async () => {
+      setLoadingExtras(true);
+      try {
+        const [pData, dData] = await Promise.all([
+          pharmacyService.getAll(),
+          doctorService.getAll()
+        ]);
+        setPharmacies(pData.items || pData || []);
+        setDoctors(dData.items || dData.users || dData || []);
+      } catch (err) {
+        console.error('Failed to fetch extras:', err);
+      } finally {
+        setLoadingExtras(false);
+      }
+    };
+    fetchExtras();
+  }, [medStatus, dispatch]);
 
   const categories = useMemo(() => {
-    const set = new Set(items.map((m) => m.category || m.type || 'Other'));
+    const set = new Set(medicines.map((m) => m.category || m.type || 'Other'));
     return ['All', ...Array.from(set)];
-  }, [items]);
+  }, [medicines]);
 
   const filteredMeds = useMemo(() => {
-    return items.filter((m) => {
+    return medicines.filter((m) => {
       const hay = `${m.name || ''} ${m.brand || ''} ${m.generic || ''}`.toLowerCase();
       if (query && !hay.includes(query.toLowerCase())) return false;
       if (category !== 'All' && (m.category || m.type) !== category) return false;
@@ -43,21 +65,21 @@ export default function Search() {
       if (inStockOnly && stock === 'out') return false;
       return true;
     });
-  }, [items, query, category, inStockOnly]);
+  }, [medicines, query, category, inStockOnly]);
 
   const filteredPharmacies = useMemo(() => {
     return pharmacies.filter((p) => {
       if (!query) return true;
       return p.name.toLowerCase().includes(query.toLowerCase());
     });
-  }, [query]);
+  }, [pharmacies, query]);
 
   const filteredDoctors = useMemo(() => {
     return doctors.filter((d) => {
       if (!query) return true;
-      return `${d.name} ${d.spec}`.toLowerCase().includes(query.toLowerCase());
+      return `${d.name} ${d.doctorProfile?.specialization || ''}`.toLowerCase().includes(query.toLowerCase());
     });
-  }, [query]);
+  }, [doctors, query]);
 
   const renderFilterPanel = (isMobile) => (
     <div className="h-full flex flex-col">
@@ -176,7 +198,7 @@ export default function Search() {
                   <h2 className="font-heading text-xl text-brand-navy">Medicines</h2>
                   <span className="text-sm text-brand-muted">{filteredMeds.length} results</span>
                 </div>
-                {status === 'loading' && (
+                {medStatus === 'loading' && (
                   <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {Array.from({ length: 6 }).map((_, idx) => (
                       <div key={idx} className="bg-white border border-brand-border rounded-2xl p-4">
@@ -188,12 +210,12 @@ export default function Search() {
                     ))}
                   </div>
                 )}
-                {status === 'failed' && (
+                {medStatus === 'failed' && (
                   <div className="mt-4 text-sm text-red-500 flex items-center gap-2">
-                    <AlertCircle size={16} /> {error || 'Failed to load medicines.'}
+                    <AlertCircle size={16} /> {medError || 'Failed to load medicines.'}
                   </div>
                 )}
-                {status !== 'loading' && status !== 'failed' && (
+                {medStatus !== 'loading' && medStatus !== 'failed' && (
                   <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {filteredMeds.map((m) => (
                       <MedicineCard key={m.id} item={m} onAdd={() => {}} onView={() => {}} />
@@ -214,20 +236,22 @@ export default function Search() {
                 </div>
                 <div className="mt-4 grid sm:grid-cols-2 gap-5">
                   {filteredPharmacies.map((p) => (
-                    <div key={p.id} className="bg-white border border-brand-border rounded-2xl p-5 card-hover">
-                      <div className="flex items-center gap-3">
-                        <div className="h-12 w-12 rounded-xl bg-brand-teal/10 text-brand-teal flex items-center justify-center">
-                          <Building2 size={18} />
+                    <div key={p._id || p.id} className="bg-white border border-black/[0.03] rounded-[2.5rem] p-8 shadow-soft hover:shadow-4xl transition-all duration-700">
+                      <div className="flex items-center gap-6">
+                        <div className="h-16 w-16 rounded-2xl bg-brand-teal/10 text-brand-teal flex items-center justify-center shrink-0 border border-brand-teal/5">
+                          <Building2 size={24} />
                         </div>
-                        <div>
-                          <div className="font-heading text-sm text-brand-navy">{p.name}</div>
-                          <div className="text-xs text-brand-muted">{p.location}</div>
+                        <div className="flex-1">
+                          <div className="font-syne font-black text-lg text-[#0a1628] uppercase italic leading-none">{p.name}</div>
+                          <div className="text-[10px] text-gray-400 font-bold italic mt-2 uppercase tracking-widest">{p.address?.city || 'Karaikal'}</div>
                         </div>
                       </div>
-                      <div className="mt-3 flex items-center gap-2 text-xs text-brand-muted">
-                        <CheckCircle size={12} className="text-brand-mint" /> {p.distance} away
+                      <div className="mt-6 flex items-center gap-2 text-[10px] font-black text-brand-teal uppercase tracking-widest italic">
+                        <CheckCircle size={14} className="text-emerald-500" /> {p.isVerified ? 'VERIFIED NODE' : 'STANDARD NODE'} 
                       </div>
-                      <button className="mt-4 px-4 py-2 rounded-xl border border-brand-teal text-brand-teal text-xs btn-hover">View Pharmacy</button>
+                      <Link to={`/pharmacies/${p._id || p.id}`}>
+                        <button className="mt-8 w-full h-12 rounded-xl bg-[#0a1628] text-brand-teal font-syne font-bold text-[10px] uppercase tracking-widest hover:bg-brand-teal hover:text-white transition-all italic">VIEW_NODE</button>
+                      </Link>
                     </div>
                   ))}
                   {filteredPharmacies.length === 0 && (
@@ -245,18 +269,26 @@ export default function Search() {
                 </div>
                 <div className="mt-4 grid sm:grid-cols-2 gap-5">
                   {filteredDoctors.map((d) => (
-                    <div key={d.id} className="bg-white border border-brand-border rounded-2xl p-5 card-hover">
-                      <div className="flex items-center gap-3">
-                        <img src={d.image} alt={d.name} className="h-12 w-12 rounded-xl object-cover" />
-                        <div>
-                          <div className="font-heading text-sm text-brand-navy">{d.name}</div>
-                          <div className="text-xs text-brand-muted">{d.spec}</div>
+                    <div key={d._id || d.id} className="bg-white border border-black/[0.03] rounded-[2.5rem] p-8 shadow-soft hover:shadow-4xl transition-all duration-700">
+                      <div className="flex items-center gap-6">
+                         <div className="h-20 w-16 bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 flex items-center justify-center">
+                            {d.avatar?.url ? (
+                               <img src={d.avatar.url} alt={d.name} className="h-full w-full object-cover" />
+                            ) : (
+                               <Stethoscope size={32} className="text-brand-teal opacity-20" />
+                            )}
+                         </div>
+                        <div className="flex-1">
+                          <div className="font-syne font-black text-lg text-[#0a1628] uppercase italic leading-none">{d.name}</div>
+                          <div className="text-[10px] text-brand-teal font-bold italic mt-2 uppercase tracking-widest">{d.doctorProfile?.specialization || 'General Physician'}</div>
                         </div>
                       </div>
-                      <div className="mt-3 flex items-center gap-2 text-xs text-brand-muted">
-                        <MapPin size={12} /> Karaikal
+                      <div className="mt-6 flex items-center gap-2 text-[10px] font-black text-gray-300 uppercase tracking-widest italic">
+                        <MapPin size={14} /> {d.address?.city || 'Karaikal'} SYNCED
                       </div>
-                      <button className="mt-4 px-4 py-2 rounded-xl border border-brand-teal text-brand-teal text-xs btn-hover">Book Appointment</button>
+                      <Link to={`/doctors/${d._id || d.id}`}>
+                        <button className="mt-8 w-full h-12 rounded-xl bg-[#0a1628] text-white font-syne font-bold text-[10px] uppercase tracking-widest hover:bg-brand-teal transition-all italic">CONSULT_NODE</button>
+                      </Link>
                     </div>
                   ))}
                   {filteredDoctors.length === 0 && (

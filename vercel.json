@@ -3,7 +3,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-    "server/index.js": {
+    "api/index.js": {
       "runtime": "@vercel/node",
       "includeFiles": "server/**"
     }
@@ -11,11 +11,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/server/index.js"
+      "destination": "/api/index.js"
     },
     {
       "source": "/socket.io/(.*)",
-      "destination": "/server/index.js"
+      "destination": "/api/index.js"
     },
     {
       "source": "/assets/(.*)",

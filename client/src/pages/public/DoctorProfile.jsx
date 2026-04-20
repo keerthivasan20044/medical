@@ -1,9 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Star, MapPin, Heart, ChevronRight, Zap, Activity, Calendar, GraduationCap, X, Clock, Video, ShieldCheck, Briefcase } from 'lucide-react';
+import { Star, MapPin, Heart, ChevronRight, Zap, Activity, Calendar, GraduationCap, X, Clock, Video, ShieldCheck, Briefcase, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { doctors } from '../../utils/data.js';
+import { doctors as mockDoctors } from '../../utils/data.js';
+import { doctorService } from '../../services/apiServices';
+import { normalizeUrl } from '../../utils/url';
 import { toast } from 'react-hot-toast';
+import { Loader2 } from 'lucide-react';
 
 export default function DoctorProfilePage() {
   const { id } = useParams();
@@ -12,12 +15,34 @@ export default function DoctorProfilePage() {
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedSlot, setSelectedSlot] = useState(null);
-
-  const doctor = useMemo(() => doctors.find(dr => dr.id === id), [id]);
+  const [doctor, setDoctor] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    fetchDoctorNode();
     window.scrollTo(0, 0);
   }, [id]);
+
+  const fetchDoctorNode = async () => {
+    try {
+      setLoading(true);
+      const data = await doctorService.getById(id);
+      setDoctor(data);
+    } catch (err) {
+      console.warn('Clinical node fetch failed, attempting fallback...', err);
+      const fallback = mockDoctors.find(dr => dr.id === id || dr._id === id);
+      setDoctor(fallback);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] space-y-6">
+      <Loader2 className="animate-spin text-brand-teal" size={48}/>
+      <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-widest">Synchronizing Practitioner Node...</p>
+    </div>
+  );
 
   if (!doctor) {
     return (
@@ -36,7 +61,7 @@ export default function DoctorProfilePage() {
   const tabs = ['About', 'Schedule', 'Reviews'];
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-64">
+    <div className="bg-[#f8fafc] min-h-screen pb-64 font-dm">
       {/* Profile Clinical Header Terminal */}
       <section className="bg-gradient-to-br from-[#0a1628] to-[#1a3a4a] pt-24 pb-32 md:pt-32 md:pb-48 relative overflow-hidden">
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#f8fafc] to-transparent z-0" />
@@ -51,7 +76,7 @@ export default function DoctorProfilePage() {
            <div className="flex flex-col lg:flex-row items-center lg:items-end gap-8 md:gap-16">
               <div className="relative group shrink-0">
                  <div className="h-48 w-48 md:h-64 md:w-64 rounded-full overflow-hidden border-4 md:border-8 border-white/5 shadow-4xl relative z-10">
-                    <img src={doctor.image} alt={doctor.name} className="h-full w-full object-cover grayscale-[0.2] transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110" />
+                    <img src={normalizeUrl(doctor.image)} alt={doctor.name} className="h-full w-full object-cover grayscale-[0.2] transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110" />
                  </div>
                  <div className={`absolute bottom-2 right-2 md:bottom-4 md:right-4 h-10 w-10 md:h-14 md:w-14 border-4 md:border-[6px] border-[#0a1628] rounded-full flex items-center justify-center shadow-lg z-20 ${doctor.status === 'online' ? 'bg-emerald-500' : 'bg-gray-400'}`}>
                     <Activity size={18} className="text-white animate-pulse" />
@@ -131,7 +156,7 @@ export default function DoctorProfilePage() {
                               <div className="space-y-6">
                                  <h4 className="font-syne font-black text-base md:text-lg text-[#0a1628] uppercase italic flex items-center gap-3"><GraduationCap className="text-brand-teal" size={20}/> Qualification</h4>
                                  <div className="space-y-4">
-                                    {doctor.education.map((edu, idx) => (
+                                    {doctor.education?.map((edu, idx) => (
                                        <div key={idx} className="flex gap-4">
                                           <div className="h-2 w-2 rounded-full bg-brand-teal mt-1.5" />
                                           <div className="space-y-1">
@@ -145,7 +170,7 @@ export default function DoctorProfilePage() {
                               <div className="space-y-6">
                                  <h4 className="font-syne font-black text-base md:text-lg text-[#0a1628] uppercase italic flex items-center gap-3"><Globe className="text-brand-teal" size={20}/> Languages</h4>
                                  <div className="flex flex-wrap gap-2">
-                                    {doctor.languages.map(lang => (
+                                    {(doctor.languages || ['Tamil', 'English']).map(lang => (
                                        <span key={lang} className="h-10 px-6 bg-gray-50 border border-black/[0.03] rounded-xl text-[9px] font-black text-gray-400 uppercase italic tracking-widest flex items-center">{lang}</span>
                                     ))}
                                  </div>
@@ -160,7 +185,7 @@ export default function DoctorProfilePage() {
                               <div className="h-1.5 w-12 bg-brand-teal rounded-full" /> Temporal Slots
                            </h3>
                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                              {doctor.schedule.slots.map((slot, idx) => (
+                              {(doctor.schedule?.slots || ['09:00 AM', '11:00 AM', '04:00 PM']).map((slot, idx) => (
                                  <button key={idx} onClick={() => setSelectedSlot(slot)} className={`h-20 rounded-2xl border transition-all duration-700 flex items-center justify-center gap-3 ${selectedSlot === slot ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-lg' : 'bg-gray-50 border-black/[0.03] text-gray-400'}`}>
                                     <Clock size={16} />
                                     <span className="font-syne font-black text-xs uppercase italic tracking-tighter">{slot}</span>
@@ -199,11 +224,11 @@ export default function DoctorProfilePage() {
                      <div className="space-y-4 pt-6 border-t border-white/5">
                         <div className="flex justify-between items-center">
                            <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">Enclave Node</span>
-                           <span className="text-brand-teal font-syne font-black text-sm italic uppercase">{doctor.hospital.split(' ')[0]}</span>
+                           <span className="text-brand-teal font-syne font-black text-sm italic uppercase">{doctor.hospital?.split(' ')[0]}</span>
                         </div>
                         <div className="flex justify-between items-center">
                            <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">Node State</span>
-                           <span className="text-emerald-500 font-syne font-black text-sm italic uppercase tracking-widest">ONLINE</span>
+                           <span className="text-emerald-500 font-syne font-black text-sm italic uppercase tracking-widest">{doctor.status?.toUpperCase() || 'ONLINE'}</span>
                         </div>
                      </div>
                   </div>
@@ -213,22 +238,22 @@ export default function DoctorProfilePage() {
          </div>
       </div>
 
-      {/* Booking Modal Node Terminal — COMPLETELY RE-ENGINEERED FOR MOBILE */}
+      {/* Booking Modal Node Terminal */}
       <AnimatePresence>
          {showBookingModal && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] bg-[#0a1628]/95 backdrop-blur-3xl flex items-end md:items-center justify-center md:p-10">
                <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} className="w-full max-w-4xl bg-white rounded-t-[3rem] md:rounded-[4rem] overflow-hidden shadow-4xl flex flex-col md:flex-row relative max-h-[90vh] md:max-h-none">
                   <button onClick={() => setShowBookingModal(false)} className="absolute top-6 right-6 h-12 w-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 z-50"><X size={24}/></button>
                   
-                  <div className="md:w-72 lg:w-96 bg-[#0a1628] p-8 md:p-12 text-white space-y-6 md:shrink-0 hidden md:block">
-                     <div className="h-20 w-20 rounded-2xl overflow-hidden border-2 border-white/10 mb-6"><img src={doctor.image} alt="dr" className="h-full w-full object-cover" /></div>
+                  <div className="md:w-72 lg:w-96 bg-[#0a1628] p-8 md:p-12 text-white space-y-6 md:shrink-0 hidden md:block font-dm">
+                     <div className="h-20 w-20 rounded-2xl overflow-hidden border-2 border-white/10 mb-6"><img src={normalizeUrl(doctor.image)} alt="dr" className="h-full w-full object-cover" /></div>
                      <div className="space-y-1">
                         <div className="text-[8px] font-black text-brand-teal uppercase italic tracking-widest">{doctor.spec}</div>
                         <h3 className="font-syne font-black text-2xl uppercase italic tracking-tighter leading-none">{doctor.name}</h3>
                      </div>
                   </div>
 
-                  <div className="flex-1 p-8 md:p-16 space-y-10 overflow-y-auto no-scrollbar">
+                  <div className="flex-1 p-8 md:p-16 space-y-10 overflow-y-auto no-scrollbar font-dm">
                      <div className="space-y-2">
                         <h2 className="font-syne font-black text-3xl md:text-5xl text-[#0a1628] uppercase italic tracking-tighter">Sync Protocol</h2>
                         <p className="text-gray-300 font-dm italic font-bold text-base md:text-lg uppercase tracking-widest italic">Clinical Handshake Configuration</p>

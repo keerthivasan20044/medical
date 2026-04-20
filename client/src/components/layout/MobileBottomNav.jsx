@@ -19,25 +19,25 @@ const NAV = (t) => ({
     { to: '/login', icon: User, label: t('login') || 'Login' }
   ],
   customer: [
-    { to: '/home', icon: Home, label: t('sidebarDashboard') },
-    { to: '/medicines', icon: Pill, label: t('sidebarMedicines') },
-    { type: 'button', icon: ShoppingBag, label: t('sidebarCart') || 'Cart', action: 'cart' },
-    { to: '/notifications', icon: Bell, label: t('sidebarAlerts') },
-    { to: '/profile', icon: User, label: t('sidebarProfile') }
+    { to: '/home', icon: Home, label: t('sidebarDashboard') || 'Home' },
+    { to: '/medicines', icon: Pill, label: t('sidebarMedicines') || 'Buy' },
+    { to: '/doctors', icon: Stethoscope, label: t('doctors') || 'Doctor' },
+    { type: 'button', icon: ShoppingBag, label: t('cart') || 'Cart', action: 'cart' },
+    { to: '/profile', icon: User, label: t('profile') || 'Node' }
   ],
   pharmacist: [
-    { to: '/pharmacist/dashboard', icon: LayoutDashboard, label: t('sidebarOps') },
-    { to: '/pharmacist/orders', icon: ShoppingBag, label: t('sidebarStream') },
-    { to: '/pharmacist/inventory', icon: Pill, label: t('sidebarInv') },
-    { to: '/notifications', icon: Bell, label: t('sidebarAlerts') },
-    { to: '/profile', icon: User, label: t('sidebarNode') }
+    { to: '/pharmacist/dashboard', icon: LayoutDashboard, label: t('sidebarOperations') || 'Ops' },
+    { to: '/pharmacist/orders', icon: ShoppingBag, label: t('sidebarOrderStream') || 'Stream' },
+    { to: '/pharmacist/inventory', icon: Pill, label: t('sidebarInventory') || 'Inventory' },
+    { to: '/notifications', icon: Bell, label: t('notifications') || 'Alerts' },
+    { to: '/profile', icon: User, label: t('profile') || 'Node' }
   ],
   delivery: [
-    { to: '/delivery/dashboard', icon: LayoutDashboard, label: t('sidebarNav') },
-    { to: '/delivery/active', icon: MapPinned, label: t('sidebarLive') },
-    { to: '/delivery/history', icon: Package, label: t('sidebarLogs') },
-    { to: '/notifications', icon: Bell, label: t('sidebarAlerts') },
-    { to: '/profile', icon: User, label: t('sidebarNode') }
+    { to: '/delivery/dashboard', icon: LayoutDashboard, label: t('sidebarNavigation') || 'Nav' },
+    { to: '/delivery/active', icon: MapPinned, label: t('sidebarLiveNode') || 'Live' },
+    { to: '/delivery/history', icon: Package, label: t('sidebarProtocolLog') || 'Logs' },
+    { to: '/notifications', icon: Bell, label: t('notifications') || 'Alerts' },
+    { to: '/profile', icon: User, label: t('profile') || 'Node' }
   ]
 });
 

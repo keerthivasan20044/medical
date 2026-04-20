@@ -7,51 +7,103 @@ dotenv.config();
 const PHARMACIES = [
   {
     name: 'Apollo Pharmacy Central',
-    location: 'Market Road Hub, Karaikal',
-    address: 'No. 24, Market Road, Karaikal - 609602',
+    ownerName: 'Apollo Hospitals Group',
+    licenseNumber: 'TN-KKL-2024-001',
+    address: {
+      street: 'No. 24, Market Road',
+      city: 'Karaikal',
+      pincode: '609602',
+      coordinates: { lat: 10.9254, lng: 79.8385 }
+    },
     phone: '+91 94432 10001',
-    coordinates: { lat: 10.9254, lng: 79.8385 },
+    email: 'apollo.kkl@medireach.in',
+    timings: '24/7 Open',
     rating: 4.8,
+    totalReviews: 1240,
     isVerified: true,
-    image: 'https://images.unsplash.com/photo-1586015555751-63bb77f4322a?auto=format&fit=crop&w=800&q=80',
-    tags: ['24/7', 'Home Delivery', 'Insurance Sync'],
-    stats: { orders: 1240, fulfillment: 98 }
+    isOpen: true,
+    images: [{ url: 'https://images.unsplash.com/photo-1586015555751-63bb77f4322a?auto=format&fit=crop&w=800&q=80' }],
+    deliveryRadius: 10
   },
   {
     name: 'Sri Murugan Medicals',
-    location: 'Nagore Road Enclave',
-    address: 'No. 88, Nagore Main Road, Karaikal - 609605',
+    ownerName: 'V. Murugan',
+    licenseNumber: 'TN-KKL-2024-002',
+    address: {
+      street: 'No. 88, Nagore Main Road',
+      city: 'Karaikal',
+      pincode: '609605',
+      coordinates: { lat: 10.9123, lng: 79.8456 }
+    },
     phone: '+91 94432 20002',
-    coordinates: { lat: 10.9123, lng: 79.8456 },
+    email: 'murugan.med@medireach.in',
+    timings: '8:00 AM - 11:00 PM',
     rating: 4.9,
+    totalReviews: 856,
     isVerified: true,
-    image: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&w=800&q=80',
-    tags: ['Cold Chain', 'Home Delivery'],
-    stats: { orders: 856, fulfillment: 99 }
+    isOpen: true,
+    images: [{ url: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&w=800&q=80' }],
+    deliveryRadius: 5
   },
   {
     name: 'MedPlus Pharmacy Node',
-    location: 'Poompuhar Street',
-    address: 'No. 15, Poompuhar Street, Karaikal - 609602',
+    ownerName: 'MedPlus Health',
+    licenseNumber: 'TN-KKL-2024-003',
+    address: {
+      street: 'No. 15, Poompuhar Street',
+      city: 'Karaikal',
+      pincode: '609602',
+      coordinates: { lat: 10.9301, lng: 79.8290 }
+    },
     phone: '+91 94432 30003',
-    coordinates: { lat: 10.9301, lng: 79.8290 },
+    email: 'medplus.node@medireach.in',
+    timings: '24/7 Open',
     rating: 4.6,
+    totalReviews: 2101,
     isVerified: true,
-    image: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=800&q=80',
-    tags: ['24/7', 'Digital Rx Hub'],
-    stats: { orders: 2101, fulfillment: 97 }
+    isOpen: true,
+    images: [{ url: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=800&q=80' }],
+    deliveryRadius: 8
   },
   {
-    name: 'Life Care Medical Center',
-    location: 'Colony Street Node',
-    address: 'No. 3, New Colony, Karaikal - 609602',
-    phone: '+91 94432 40004',
-    coordinates: { lat: 10.9350, lng: 79.8350 },
-    rating: 4.7,
+    name: 'Karaikal Govt Hospital Pharmacy',
+    ownerName: 'Health Department, Puducherry',
+    licenseNumber: 'GOVT-KKL-PHY-001',
+    address: {
+      street: 'Hospital Road, Bharathiyar Road',
+      city: 'Karaikal',
+      pincode: '609602',
+      coordinates: { lat: 10.9280, lng: 79.8320 }
+    },
+    phone: '+91 4368 222401',
+    email: 'gh.kkl@puducherry.gov.in',
+    timings: '24/7 Open',
+    rating: 4.5,
+    totalReviews: 450,
     isVerified: true,
-    image: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&w=800&q=80',
-    tags: ['Home Delivery', 'Baby Care Sync'],
-    stats: { orders: 540, fulfillment: 95 }
+    isOpen: true,
+    images: [{ url: 'https://images.unsplash.com/photo-1519494140681-8917d169efdf?auto=format&fit=crop&w=800&q=80' }],
+    deliveryRadius: 15
+  },
+  {
+    name: 'City Medicals Karaikal',
+    ownerName: 'S. K. Rajan',
+    licenseNumber: 'TN-KKL-2024-005',
+    address: {
+      street: 'Church Street Enclave',
+      city: 'Karaikal',
+      pincode: '609602',
+      coordinates: { lat: 10.9240, lng: 79.8400 }
+    },
+    phone: '+91 94432 50005',
+    email: 'city.medicals@medireach.in',
+    timings: '9:00 AM - 10:00 PM',
+    rating: 4.7,
+    totalReviews: 320,
+    isVerified: true,
+    isOpen: true,
+    images: [{ url: 'https://images.unsplash.com/photo-1587854236518-7dee1c93a7d7?auto=format&fit=crop&w=800&q=80' }],
+    deliveryRadius: 3
   }
 ];
 

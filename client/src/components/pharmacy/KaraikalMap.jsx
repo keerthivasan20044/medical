@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { MapPin, Star, Navigation, Clock, Activity, ShieldCheck, ChevronRight, X, Pill } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { normalizeUrl } from '../../utils/url';
 
 export default function KaraikalMap({ pharmacies }) {
   const [activePin, setActivePin] = useState(null);
@@ -63,7 +64,8 @@ export default function KaraikalMap({ pharmacies }) {
 
       {/* Pharmacy Pins Matrix */}
       {pharmacies.map((p, i) => {
-         const pos = calculatePosition(p.gps.lat, p.gps.lng);
+      const coords = p.gps || p.coordinates || { lat: 10.9254, lng: 79.8386 };
+         const pos = calculatePosition(coords.lat, coords.lng);
          const isActive = activePin?.id === p.id;
 
          return (
@@ -99,7 +101,7 @@ export default function KaraikalMap({ pharmacies }) {
                         ><X size={20}/></button>
 
                         <div className="h-32 w-full relative">
-                           <img src={p.images[0]} alt={p.name} className="h-full w-full object-cover grayscale-[0.2]" />
+                           <img src={normalizeUrl(p.images?.[0] || p.image || '/assets/pharmacy_pro.png')} alt={p.name} className="h-full w-full object-cover grayscale-[0.2]" />
                            <div className="absolute inset-x-4 bottom-4 flex justify-between items-center z-10">
                               <div className="px-3 py-1 bg-[#0a1628]/80 backdrop-blur-md rounded-lg text-[8px] font-black text-white uppercase italic tracking-widest">{p.area} Node</div>
                               <div className={`px-2 py-1 rounded text-[8px] font-black uppercase italic ${p.status.includes('OPEN') ? 'bg-emerald-500/80 text-white' : 'bg-red-500/80 text-white'}`}>{p.status}</div>
@@ -120,7 +122,7 @@ export default function KaraikalMap({ pharmacies }) {
                            <div className="flex items-center justify-between py-4 border-y border-black/[0.03]">
                               <div className="flex items-center gap-3">
                                  <div className="h-8 w-8 bg-gray-50 rounded-lg flex items-center justify-center text-brand-teal"><Clock size={14}/></div>
-                                 <div className="text-[9px] font-black text-gray-400 uppercase italic tracking-widest">{p.timings}</div>
+                                 <div className="text-[9px] font-black text-gray-400 uppercase italic tracking-widest">{p.timings || '8:00 AM - 10:00 PM'}</div>
                               </div>
                               <div className="flex items-center gap-3">
                                  <div className="h-8 w-8 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-500"><Navigation size={14}/></div>

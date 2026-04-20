@@ -29,10 +29,23 @@ export default function SearchResults() {
     const q = debouncedQuery.toLowerCase();
     
     return {
-      medicines: medicines.filter(m => m.name.toLowerCase().includes(q) || m.generic.toLowerCase().includes(q) || m.brand.toLowerCase().includes(q)),
-      pharmacies: pharmacies.filter(p => p.name.toLowerCase().includes(q) || p.location.toLowerCase().includes(q)),
-      doctors: doctors.filter(d => d.name.toLowerCase().includes(q) || d.spec.toLowerCase().includes(q)),
-      blog: blogPosts.filter(b => b.title.toLowerCase().includes(q) || b.excerpt.toLowerCase().includes(q))
+      medicines: medicines.filter(m => 
+        (m.name || '').toLowerCase().includes(q) || 
+        (m.generic || '').toLowerCase().includes(q) || 
+        (m.brand || '').toLowerCase().includes(q)
+      ),
+      pharmacies: pharmacies.filter(p => 
+        (p.name || '').toLowerCase().includes(q) || 
+        (p.location || '').toLowerCase().includes(q)
+      ),
+      doctors: doctors.filter(d => 
+        (d.name || '').toLowerCase().includes(q) || 
+        (d.spec || '').toLowerCase().includes(q)
+      ),
+      blog: blogPosts.filter(b => 
+        (b.title || '').toLowerCase().includes(q) || 
+        (b.excerpt || '').toLowerCase().includes(q)
+      )
     };
   }, [debouncedQuery]);
 

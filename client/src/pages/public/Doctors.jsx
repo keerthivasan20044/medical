@@ -3,6 +3,7 @@ import { Search, Filter, Star, Clock, MapPin, CheckCircle2, Video, Phone, Shield
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { doctorService } from '../../services/apiServices';
+import { normalizeUrl } from '../../utils/url';
 
 export default function DoctorsListPage() {
   const [doctors, setDoctors] = useState([]);

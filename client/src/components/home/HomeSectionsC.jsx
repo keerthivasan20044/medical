@@ -10,6 +10,8 @@ import {
 import { Link } from 'react-router-dom';
 import { doctors } from '../../utils/data.js';
 import { useLanguage } from '../../context/LanguageContext.jsx';
+import { medicineService } from '../../services/apiServices';
+import { normalizeUrl } from '../../utils/url';
 const vaccineImg = '/assets/vaccine_pro.png';
 const prescriptionImg = '/assets/medicine_default.png';
 const doctorImg = '/assets/doctor_pro.png';
@@ -18,19 +20,27 @@ const familyImg = '/assets/medicine_default.png';
 
 export function VaccineShowcase() {
    const { t } = useLanguage();
-   const VACCINES = [
-      { name: 'COVID-19 Booster (Covishield)', img: vaccineImg, dose: 'Single booster', price: '₹0 (Govt) / ₹780 (Private)', store: 'Apollo Pharmacy, Karaikal Central', avail: true },
-      { name: 'Hepatitis B (3-dose)', img: vaccineImg, dose: '3 doses', price: '₹200/dose', store: 'MedPlus, Sri Murugan Medical', avail: true },
-      { name: 'Typhoid Vi (Single dose)', img: vaccineImg, price: '₹250', store: 'Grace Pharmacy', avail: true },
-      { name: 'MMR (Children)', img: vaccineImg, price: '₹350', store: 'Life Care Medicals', avail: true },
-      { name: 'Flu Vaccine (Seasonal)', img: vaccineImg, price: '₹450', store: 'N/A', avail: false },
-      { name: 'Rabies (Post-exposure)', img: vaccineImg, price: '₹350/dose', store: 'Govt Hospital Karaikal', avail: true }
-   ];
+   const [vaccines, setVaccines] = useState([]);
+   const [loading, setLoading] = useState(true);
+
+   useEffect(() => {
+     const fetchVaccines = async () => {
+        try {
+           const data = await medicineService.getAll({ isVaccine: true, limit: 6 });
+           setVaccines(data.items || []);
+        } catch (err) {
+           console.error('Vaccine Sync Error:', err);
+        } finally {
+           setLoading(false);
+        }
+     };
+     fetchVaccines();
+   }, []);
 
    return (
       <section className="py-16 md:py-32 bg-[#028090]/5 relative overflow-hidden">
          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-teal/5 rounded-full blur-[150px]" />
-         <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
+         <div className="max-w-7xl mx-auto px-4 md:px-10 relative z-10">
             <div className="flex items-center justify-between mb-12 md:mb-20 border-l-8 border-brand-teal pl-6 md:pl-10">
                <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-6xl leading-[0.9] uppercase italic tracking-tighter">
                   {t('vaccinesAvailable')}
@@ -41,42 +51,49 @@ export function VaccineShowcase() {
                </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-               {VACCINES.map((v, i) => (
-                  <motion.div 
-                     key={i}
-                     initial={{ opacity: 0, y: 30 }}
-                     whileInView={{ opacity: 1, y: 0 }}
-                     transition={{ delay: i * 0.1, duration: 0.8 }}
-                     className={`group bg-white rounded-[3.5rem] border-4 border-white shadow-3xl overflow-hidden flex flex-col h-full transition-all duration-700 hover:shadow-4xl hover:border-brand-teal/20 ${v.avail ? '' : 'opacity-40 grayscale pointer-events-none'}`}
-                  >
-                     <div className="h-64 overflow-hidden shrink-0 relative shadow-inner">
-                        <img src={v.img} alt={v.name} className="h-full w-full object-cover group-hover:scale-125 transition duration-1000" />
-                        <div className={`absolute bottom-6 left-6 text-[9px] font-black px-5 py-2.5 rounded-xl shadow-4xl uppercase italic tracking-[0.2em] border ${v.avail ? 'bg-brand-teal text-[#0a1628] border-brand-teal/20' : 'bg-gray-400 text-white border-transparent'}`}>
-                           {v.avail ? `✓ ${t('available')}` : `✗ ${t('outOfStock')}`}
-                        </div>
-                     </div>
+               {loading ? (
+                  Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="h-96 bg-white/20 animate-pulse rounded-[3.5rem] border-4 border-white" />
+                  ))
+               ) : vaccines.length > 0 ? (
+                 vaccines.map((v, i) => (
+                   <motion.div 
+                      key={v._id}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1, duration: 0.8 }}
+                      className={`group bg-white rounded-[3.5rem] border-4 border-white shadow-3xl overflow-hidden flex flex-col h-full transition-all duration-700 hover:shadow-4xl hover:border-brand-teal/20 ${v.stockCount > 0 ? '' : 'opacity-40 grayscale pointer-events-none'}`}
+                   >
+                      <div className="h-64 overflow-hidden shrink-0 relative shadow-inner">
+                         <img src={normalizeUrl(v.images?.[0]?.url || v.images?.[0]) || vaccineImg} alt={v.name} className="h-full w-full object-cover group-hover:scale-125 transition duration-1000" />
+                         <div className={`absolute bottom-6 left-6 text-[9px] font-black px-5 py-2.5 rounded-xl shadow-4xl uppercase italic tracking-[0.2em] border ${v.stockCount > 0 ? 'bg-brand-teal text-[#0a1628] border-brand-teal/20' : 'bg-gray-400 text-white border-transparent'}`}>
+                            {v.stockCount > 0 ? `✓ ${t('available')}` : `✗ ${t('outOfStock')}`}
+                         </div>
+                      </div>
                      <div className="p-10 flex-1 flex flex-col justify-between space-y-6 relative">
-                        <div className="space-y-3">
-                           <h3 className="font-syne font-black text-[#0a1628] text-xl uppercase italic tracking-tighter truncate">{v.name}</h3>
-                           <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em] italic">{t('dose')}: {v.dose || t('standardProtocol')}</div>
-                        </div>
-                        <div className="pt-8 border-t-2 border-dashed border-black/[0.05] flex items-center justify-between gap-6">
-                           <div className="grow">
-                              <div className="text-[9px] text-gray-300 uppercase tracking-widest font-black italic mb-1">{t('storeLocation')}</div>
-                              <div className="text-xs font-black text-[#0a1628] uppercase italic truncate tracking-tight">{v.store}</div>
-                           </div>
-                           <div className="text-right shrink-0">
-                              <div className="text-[9px] text-gray-300 uppercase tracking-widest font-black italic mb-1">{t('priceCard')}</div>
-                              <div className="text-xs font-black text-brand-teal leading-none italic">{v.price}</div>
-                           </div>
-                        </div>
-                        {/* Biometric Icon */}
-                        <div className="absolute right-6 top-6 h-12 w-12 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-200 group-hover:text-brand-teal group-hover:rotate-12 transition-all duration-500">
-                           <Zap size={20} />
-                        </div>
-                     </div>
-                  </motion.div>
-               ))}
+                         <div className="space-y-3">
+                            <h3 className="font-syne font-black text-[#0a1628] text-xl uppercase italic tracking-tighter truncate">{v.name}</h3>
+                            <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em] italic">{t('dose')}: {v.generic || t('standardProtocol')}</div>
+                         </div>
+                         <div className="pt-8 border-t-2 border-dashed border-black/[0.05] flex items-center justify-between gap-6">
+                            <div className="grow">
+                               <div className="text-[9px] text-gray-300 uppercase tracking-widest font-black italic mb-1">{t('storeLocation')}</div>
+                               <div className="text-xs font-black text-[#0a1628] uppercase italic truncate tracking-tight">{v.brand || t('centralHub')}</div>
+                            </div>
+                            <div className="text-right shrink-0">
+                               <div className="text-[9px] text-gray-300 uppercase tracking-widest font-black italic mb-1">{t('priceCard')}</div>
+                               <div className="text-xs font-black text-brand-teal leading-none italic">₹{v.price}</div>
+                            </div>
+                         </div>
+                      </div>
+                   </motion.div>
+                 ))
+               ) : (
+                 <div className="col-span-full py-20 text-center opacity-30">
+                    <Activity size={48} className="mx-auto mb-4" />
+                    <div className="font-syne font-black text-xl uppercase italic tracking-widest">{t('noVaccinesNodes')}</div>
+                 </div>
+               )}
             </div>
          </div>
       </section>
@@ -98,7 +115,7 @@ export function HowItWorks() {
          <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(2,195,154,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(2,195,154,0.1) 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[600px] bg-brand-teal/5 rounded-full blur-[250px] opacity-20" />
          
-         <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
+         <div className="max-w-7xl mx-auto px-4 md:px-10 relative z-10">
             <div className="text-center space-y-8 mb-16 md:mb-32">
                <div className="inline-flex items-center gap-4 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-brand-teal font-syne font-black text-[10px] uppercase tracking-[0.4em] italic shadow-2xl">
                   <Cpu size={14} className="animate-spin-slow" /> {t('seamlessLogistics')}
@@ -151,7 +168,7 @@ export function DoctorsConsultation() {
 
    return (
       <section className="py-16 md:py-32 bg-[#f8fafc] relative overflow-hidden">
-         <div className="max-w-7xl mx-auto px-6 md:px-10">
+         <div className="max-w-7xl mx-auto px-4 md:px-10">
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-16 md:mb-24 border-l-8 border-brand-teal pl-6 md:pl-10">
                <div className="space-y-6 text-center lg:text-left grow">
                   <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-7xl leading-[0.9] uppercase italic tracking-tighter">{t('consultOnline')}</h2>
@@ -210,7 +227,7 @@ export function GPSTracking() {
    const { t } = useLanguage();
    return (
       <section className="py-16 md:py-40 bg-white relative overflow-hidden">
-         <div className="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-16 lg:gap-32 items-center">
+         <div className="max-w-7xl mx-auto px-4 md:px-10 grid lg:grid-cols-2 gap-16 lg:gap-32 items-center">
             <div className="space-y-12 text-center lg:text-left">
                <div className="space-y-8">
                   <div className="h-16 w-16 md:h-20 md:w-20 bg-brand-teal/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-brand-teal shadow-inner mx-auto lg:mx-0">
@@ -237,9 +254,9 @@ export function GPSTracking() {
                </div>
             </div>
 
-            <div className="relative w-full overflow-hidden">
+            <div className="relative w-full">
                <div className="absolute inset-0 bg-[#028090] rounded-full blur-[150px] md:blur-[250px] opacity-10" />
-               <div className="relative bg-[#0a1628] border-8 border-white shadow-4xl rounded-[2.5rem] md:rounded-[5rem] p-8 md:p-16 h-[400px] md:h-[700px] overflow-hidden group">
+               <div className="relative bg-[#0a1628] border-4 md:border-8 border-white shadow-4xl rounded-[2.5rem] md:rounded-[5rem] p-6 md:p-16 h-[380px] md:h-[700px] overflow-hidden group">
                   {/* HUD Grid Layout */}
                   <div className="absolute inset-0 bg-[linear-gradient(white/5_1px,transparent_1px),linear-gradient(90deg,white/5_1px,transparent_1px)] bg-[size:40px_40px] opacity-20" />
                   
@@ -279,10 +296,10 @@ export function GPSTracking() {
                   </motion.div>
 
                   {/* Telemetry Status HUD */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0a1628] p-12 rounded-[4rem] border-2 border-white/10 shadow-4xl text-center space-y-4 w-80 transform group-hover:scale-110 transition duration-1000 z-30 backdrop-blur-3xl">
-                     <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em] leading-none italic">Logistics_Telemetry</div>
-                     <div className="font-syne font-black text-6xl text-brand-teal tracking-tighter italic">04:12 <span className="text-white/10 text-xl font-normal">MIN</span></div>
-                     <div className="text-[10px] font-black text-emerald-400 uppercase tracking-widest border-2 border-emerald-500/20 rounded-full py-2 px-6 inline-block italic shadow-inner bg-emerald-500/5 animate-pulse">Rider_Pulse_Locked</div>
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0a1628] p-8 md:p-12 rounded-[3rem] md:rounded-[4rem] border-2 border-white/10 shadow-4xl text-center space-y-4 w-[260px] md:w-80 transform group-hover:scale-110 transition duration-1000 z-30 backdrop-blur-3xl">
+                     <div className="text-[8px] md:text-[10px] font-black text-white/40 uppercase tracking-[0.4em] leading-none italic">Logistics_Telemetry</div>
+                     <div className="font-syne font-black text-4xl md:text-6xl text-brand-teal tracking-tighter italic">04:12 <span className="text-white/10 text-base md:text-xl font-normal">MIN</span></div>
+                     <div className="text-[8px] md:text-[10px] font-black text-emerald-400 uppercase tracking-widest border-2 border-emerald-500/20 rounded-full py-2 px-6 inline-block italic shadow-inner bg-emerald-500/5 animate-pulse">Rider_Pulse_Locked</div>
                   </div>
                </div>
             </div>
@@ -298,7 +315,7 @@ export function PrescriptionUpload() {
          {/* Moving Mesh Background */}
          <div className="absolute top-[-10%] right-[-10%] h-[600px] w-[600px] bg-white rounded-full blur-[180px] opacity-10 animate-pulse" />
          
-         <div className="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-16 lg:gap-24 items-center relative z-10">
+         <div className="max-w-7xl mx-auto px-4 md:px-10 grid lg:grid-cols-2 gap-16 lg:gap-24 items-center relative z-10">
             <div className="space-y-12 text-white text-center lg:text-left">
                <div className="space-y-6">
                   <div className="inline-flex items-center gap-4 px-6 py-2 bg-white/10 border border-white/20 rounded-full text-white font-syne font-black text-[10px] uppercase tracking-[0.4em] italic backdrop-blur-3xl shadow-2xl mx-auto lg:mx-0">
@@ -342,17 +359,17 @@ export function PrescriptionUpload() {
                <div className="absolute bottom-10 left-10 h-10 w-10 border-b-4 border-l-4 border-white/20 rounded-bl-3xl" />
                <div className="absolute bottom-10 right-10 h-10 w-10 border-b-4 border-r-4 border-white/20 rounded-br-3xl" />
 
-               <div className="h-32 w-32 bg-white rounded-[3rem] mx-auto flex items-center justify-center text-brand-teal shadow-4xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 relative overflow-hidden">
+               <div className="h-24 w-24 md:h-32 md:w-32 bg-white rounded-[3rem] mx-auto flex items-center justify-center text-brand-teal shadow-4xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 relative overflow-hidden">
                   <div className="absolute inset-0 bg-brand-teal/5 animate-pulse" />
                   <img src={prescriptionImg} className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 transition-opacity" alt="Scan HUD" />
-                  <Upload size={56} className="relative z-10 group-hover:translate-y-[-4px] transition-transform duration-500" />
+                  <Upload size={40} className="md:w-14 md:h-14 relative z-10 group-hover:translate-y-[-4px] transition-transform duration-500" />
                </div>
                <div className="space-y-6">
-                  <h3 className="font-syne font-black text-white text-4xl uppercase italic tracking-tighter">{t('dropImage')}</h3>
+                  <h3 className="font-syne font-black text-white text-3xl md:text-4xl uppercase italic tracking-tighter">{t('dropImage')}</h3>
                   <div className="h-1.5 w-24 bg-white/20 rounded-full mx-auto overflow-hidden">
                      <motion.div animate={{ x: ['-100%', '100%'] }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }} className="h-full w-12 bg-white shadow-[0_0_15px_white]" />
                   </div>
-                  <p className="text-white/40 font-dm text-sm leading-relaxed px-16 italic font-bold uppercase tracking-widest">{t('acceptedFiles')}</p>
+                  <p className="text-white/40 font-dm text-[10px] md:text-sm leading-relaxed px-6 md:px-16 italic font-bold uppercase tracking-widest">{t('acceptedFiles')}</p>
                </div>
                
             </motion.div>
@@ -374,7 +391,7 @@ export function Testimonials() {
 
    return (
       <section className="py-16 md:py-32 bg-white relative overflow-hidden">
-         <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
+         <div className="max-w-7xl mx-auto px-4 md:px-10 relative z-10">
             <div className="text-center space-y-8 mb-16 md:mb-24 max-w-4xl mx-auto">
                <div className="inline-flex items-center gap-3 px-6 py-2 bg-[#0a1628] text-brand-teal rounded-full font-syne font-black text-[10px] uppercase tracking-[0.4em] italic shadow-2xl">
                   {t('districtTrusted')}
@@ -507,7 +524,7 @@ export function AppDownload() {
       <section className="py-40 bg-gradient-to-br from-[#0a1628] via-[#112240] to-[#0a1628] relative overflow-hidden">
          <div className="absolute top-[-10%] left-[-10%] h-[800px] w-[800px] bg-brand-teal/5 rounded-full blur-[250px] opacity-20" />
          
-         <div className="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-32 items-center relative z-10">
+         <div className="max-w-7xl mx-auto px-4 md:px-10 grid lg:grid-cols-2 gap-32 items-center relative z-10">
             <div className="space-y-12 text-white">
                <div className="space-y-8">
                   <div className="inline-flex items-center gap-4 px-6 py-2 bg-brand-teal text-[#0a1628] rounded-xl font-syne font-black text-[10px] uppercase tracking-[0.4em] italic shadow-4xl rotate-3">
@@ -541,7 +558,7 @@ export function AppDownload() {
                <div className="absolute inset-0 bg-brand-teal rounded-full blur-[300px] opacity-10 animate-pulse" />
                
                {/* Phone Mockup Housing */}
-               <div className="relative h-[750px] w-[360px] mx-auto bg-[#0a1628] rounded-[5rem] border-[14px] border-[#0a1628] shadow-[0_60px_120px_rgba(0,0,0,0.8)] overflow-hidden scale-90 md:scale-100 transition-transform duration-1000 group-hover:rotate-[-5deg] group-hover:scale-105">
+               <div className="relative h-[650px] md:h-[750px] w-full max-w-[360px] mx-auto bg-[#0a1628] rounded-[5rem] border-[10px] md:border-[14px] border-[#0a1628] shadow-[0_60px_120px_rgba(0,0,0,0.8)] overflow-hidden scale-90 md:scale-100 transition-transform duration-1000 group-hover:rotate-[-5deg] group-hover:scale-105">
                   <div className="h-full w-full bg-slate-900/50 backdrop-blur-3xl relative">
                      {/* Dynamic HUD Interface */}
                      <div className="absolute top-0 left-0 right-0 h-14 bg-[#0a1628] flex items-center justify-center z-50">
@@ -590,7 +607,7 @@ export function EmergencyBanner() {
          {/* Moving Hazard Pulse */}
          <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(0,0,0,0.1)_25%,rgba(0,0,0,0.1)_50%,transparent_50%,transparent_75%,rgba(0,0,0,0.1)_75%,rgba(0,0,0,0.1))] bg-[size:40px_40px] animate-marquee pointer-events-none" />
          
-         <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row items-center justify-center gap-6 text-center relative z-10">
+         <div className="max-w-7xl mx-auto px-4 md:px-10 flex flex-col lg:flex-row items-center justify-center gap-6 text-center relative z-10">
             <div className="flex items-center gap-4">
                <div className="relative">
                   <div className="h-4 w-4 bg-white rounded-full animate-ping" />

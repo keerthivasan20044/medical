@@ -9,6 +9,7 @@ import { addItem } from '../../store/cartSlice.js';
 import { medicines as mockMedicines, pharmacies } from '../../utils/data.js';
 import MedicineCard from '../medicine/MedicineCard.jsx';
 import { medicineService } from '../../services/apiServices';
+import { normalizeUrl } from '../../utils/url';
 
 export function FeaturedMedicines() {
   const { t } = useLanguage();
@@ -81,7 +82,7 @@ export function FeaturedMedicines() {
                  <span className="text-[12px] font-black text-brand-teal uppercase tracking-[0.4em] italic">{t('liveSync')}</span>
               </div>
               <h2 className="font-syne font-black text-[#0a1628] text-5xl md:text-7xl leading-[0.9] uppercase italic tracking-tighter">
-                {t('popularMeds').split('.').slice(0, -1).join('.')} <span className="text-brand-teal">.</span>
+                {(t('popularMeds') || '').includes('.') ? t('popularMeds').split('.').slice(0, -1).join('.') : t('popularMeds')} <span className="text-brand-teal">.</span>
               </h2>
               <p className="text-gray-400 font-dm text-xl max-w-xl italic font-bold leading-relaxed">{t('verifiedHealthArchitecture')}</p>
            </div>
@@ -197,7 +198,7 @@ export function KaraikalPharmacies() {
                >
                   {/* Status Overlay */}
                   <div className="h-64 relative overflow-hidden shrink-0 shadow-inner">
-                     <img src={p.images[0] || p.image} alt={p.name} className="h-full w-full object-cover group-hover:scale-125 transition duration-1000 grayscale group-hover:grayscale-0" />
+                     <img src={normalizeUrl(p.images?.[0] || p.image || '/assets/pharmacy_pro.png')} alt={p.name} className="h-full w-full object-cover group-hover:scale-125 transition duration-1000 grayscale group-hover:grayscale-0" />
                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                      
                      <div className="absolute top-6 right-6 flex flex-col gap-3">
@@ -215,7 +216,7 @@ export function KaraikalPharmacies() {
                            </div>
                         </div>
                         <div className="flex items-center gap-3 text-xs text-gray-400 font-syne font-black uppercase italic tracking-widest leading-none">
-                           <MapPin size={16} className="text-brand-teal animate-bounce" /> {p.location} · <span className="text-brand-teal">{p.distance}</span>
+                           <MapPin size={16} className="text-brand-teal animate-bounce" /> {p.location || 'Karaikal Node'} · <span className="text-brand-teal">{p.distance || '0.5'} KM</span>
                         </div>
                         <div className="flex flex-wrap gap-2 pt-2">
                            {['Verified_Node', 'Licensed_Terminal', '24/7_Pulse'].map(tag => (

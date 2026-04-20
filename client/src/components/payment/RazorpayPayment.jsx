@@ -17,7 +17,7 @@ export const RazorpayPayment = ({ order, onPaymentSuccess, onPaymentError }) => 
       });
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_KKL_KEY',
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_KKL_ARCH_NODE',
         amount: data.intent.amount,
         currency: data.intent.currency,
         name: 'MediReach Pharmacy',

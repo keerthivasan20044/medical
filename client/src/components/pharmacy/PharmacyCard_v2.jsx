@@ -2,17 +2,33 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Star, Clock, Phone, Navigation, Truck, Timer, Heart, ShieldCheck, Pill, ShoppingCart, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { normalizeUrl } from '../../utils/url';
 
 export default function PharmacyCard_v2({ item, layout = 'grid' }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const { 
-    id, name, location, phone, rating, reviewsCount, is24hr, images, 
-    status, distance, eta, deliveryFee, freeThreshold, stock, alerts, 
-    isTopRated, isFastest, isAyurvedicSpecialist, isBabyCareSpecialist, services 
+    id, name, is24hr,
+    status = 'OPEN NOW', distance = 1.2, eta = '12 MINS',
+    deliveryFee = 0, freeThreshold = 300,
+    isTopRated = false, isFastest = false,
+    isAyurvedicSpecialist = false, isBabyCareSpecialist = false,
+    services = []
   } = item;
 
+  // Safe field access with fallbacks
+  const location = item.location || item.address || 'Karaikal';
+  const phone = item.phone || '04368-222288';
+  const rating = item.rating || 4.2;
+  const reviewsCount = item.reviewsCount || item.totalReviews || 120;
+  const images = item.images || (item.image ? [item.image] : ['/assets/pharmacy_pro.png']);
+  const alerts = item.alerts || [];
+
+  // Safe stock with guaranteed defaults
+  const stock = item.stock || { tablets: 75, syrups: 60, vaccines: 45, injections: 50, baby: 40, ayurvedic: 30 };
+
   // Calculate stock level visual
-  const avgStock = Object.values(stock).reduce((a, b) => a + b, 0) / 6;
+  const stockValues = Object.values(stock);
+  const avgStock = stockValues.length > 0 ? stockValues.reduce((a, b) => a + b, 0) / stockValues.length : 60;
   const stockColor = avgStock > 80 ? 'bg-emerald-500' : avgStock > 40 ? 'bg-orange-500' : 'bg-red-500';
   const stockLabel = avgStock > 80 ? 'High' : avgStock > 40 ? 'Medium' : 'Low';
 
@@ -34,7 +50,7 @@ export default function PharmacyCard_v2({ item, layout = 'grid' }) {
         className="bg-white rounded-[3rem] overflow-hidden shadow-soft hover:shadow-4xl transition-all duration-700 border border-black/[0.03] group flex flex-col md:flex-row h-auto lg:h-80"
       >
         <div className="md:w-80 h-64 md:h-full relative overflow-hidden shrink-0">
-          <img src={images[0]} alt={name} className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
+          <img src={normalizeUrl(images?.[0] || '/assets/pharmacy_pro.png')} alt={name} className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
           <div className="absolute top-6 left-6 flex flex-col gap-2">
             <div className={`px-4 py-1.5 rounded-full text-[9px] font-black text-white uppercase tracking-widest italic ${status.includes('OPEN') ? 'bg-emerald-500' : 'bg-red-500'}`}>
                {status}
@@ -111,7 +127,7 @@ export default function PharmacyCard_v2({ item, layout = 'grid' }) {
     >
       {/* Top Image Section Protocol */}
       <div className="h-56 relative overflow-hidden shrink-0">
-         <img src={images[0]} alt={name} className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
+         <img src={normalizeUrl(images?.[0] || '/assets/pharmacy_pro.png')} alt={name} className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
          
          {/* Badges Overlay Matrix */}
          <div className="absolute top-6 left-6 flex flex-col gap-2">

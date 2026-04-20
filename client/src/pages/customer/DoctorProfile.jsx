@@ -7,9 +7,11 @@ import {
   Info, AlertCircle, Package, ArrowLeft, X 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { doctors } from '../../utils/data.js';
+import { doctors as mockDoctors } from '../../utils/data.js';
 import { toast } from 'react-hot-toast';
 import { useLanguage } from '../../context/LanguageContext.jsx';
+import { doctorService } from '../../services/apiServices';
+import { Loader2 } from 'lucide-react';
 
 
 export default function DoctorProfile() {
@@ -21,11 +23,27 @@ export default function DoctorProfile() {
   const [selectedDate, setSelectedDate] = useState(0);
   const [selectedTime, setSelectedTime] = useState(null);
 
-  const doc = useMemo(() => doctors.find(d => d.id === id) || doctors[0], [id]);
+  const [doc, setDoc] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    fetchDoctorDetails();
     window.scrollTo(0, 0);
   }, [id]);
+
+  const fetchDoctorDetails = async () => {
+    try {
+      setLoading(true);
+      const data = await doctorService.getById(id);
+      setDoc(data);
+    } catch (err) {
+      console.warn('Doctor sync failed, using fallback hub...', err);
+      const fallback = mockDoctors.find(d => d.id === id || d._id === id) || mockDoctors[0];
+      setDoc(fallback);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const DATES = useMemo(() => {
     const arr = [];
@@ -42,6 +60,13 @@ export default function DoctorProfile() {
   }, []);
 
   const SLOTS = ['09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM'];
+
+  if (loading) return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] space-y-6">
+       <Loader2 className="animate-spin text-brand-teal" size={48}/>
+       <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-widest animate-pulse">Establishing Clinical Handshake...</p>
+    </div>
+  );
 
   const handleBooking = () => {
     if (!selectedTime) {
@@ -94,7 +119,7 @@ export default function DoctorProfile() {
                   </div>
 
                   <div className="flex flex-wrap justify-center md:justify-start gap-3">
-                     {doc.tags?.map(t => (
+                     {(doc.tags || []).map(t => (
                         <span key={t} className="px-4 py-1.5 bg-[#028090]/5 text-[#028090] text-[10px] font-bold uppercase tracking-widest rounded-xl border border-[#028090]/10">{t}</span>
                      ))}
                   </div>

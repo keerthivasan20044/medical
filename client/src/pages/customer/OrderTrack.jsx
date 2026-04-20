@@ -31,9 +31,28 @@ const STEPS = [
 export default function OrderTrack() {
   const { id } = useParams();
   const { t } = useLanguage();
-  const { location, eta, statusText } = useOrderTracking(id || '');
+  const { location: realLocation, eta, statusText } = useOrderTracking(id || '');
   const [showOtp, setShowOtp] = useState(false);
   const [otp, setOtp] = useState(['5', '8', '2', '1']);
+
+  const [simCoords, setSimCoords] = useState({ x: 800, y: 150 });
+
+  useEffect(() => {
+    if (statusText === 'ON WAY' || true) { // Simulating for demo
+      const interval = setInterval(() => {
+        setSimCoords(prev => {
+           const targetX = 200;
+           const targetY = 500;
+           const dx = (targetX - prev.x) * 0.05;
+           const dy = (targetY - prev.y) * 0.05;
+           
+           if (Math.abs(targetX - prev.x) < 5) return prev;
+           return { x: prev.x + dx, y: prev.y + dy };
+        });
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [statusText]);
 
   const currentStep = useMemo(() => {
     const normalized = (statusText || '').toLowerCase();
@@ -58,31 +77,18 @@ export default function OrderTrack() {
         <motion.div 
           animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }}
           transition={{ duration: 3, repeat: Infinity }}
-          className="absolute left-[30%] top-[60%] h-40 w-40 bg-[#02C39A] rounded-full -translate-x-1/2 -translate-y-1/2 blur-2xl"
+          className="absolute left-[200px] top-[500px] h-40 w-40 bg-[#02C39A] rounded-full -translate-x-1/2 -translate-y-1/2 blur-2xl"
         />
 
         {/* Route Path SVG */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1000 600">
-           <motion.path 
-             initial={{ pathLength: 0 }}
-             animate={{ pathLength: 1 }}
-             transition={{ duration: 2, ease: "easeInOut" }}
+           <path 
              d="M800,150 Q750,300 500,320 T200,500" 
              fill="none" 
              stroke="#028090" 
              strokeWidth="3" 
              strokeDasharray="10,10"
              className="opacity-40"
-           />
-           <motion.path 
-             initial={{ pathLength: 0 }}
-             animate={{ pathLength: 1 }}
-             transition={{ duration: 2, ease: "easeInOut" }}
-             d="M800,150 Q750,300 500,320 T200,500" 
-             fill="none" 
-             stroke="#02C39A" 
-             strokeWidth="3" 
-             className="opacity-20"
            />
         </svg>
 
@@ -105,14 +111,14 @@ export default function OrderTrack() {
 
         {/* Agent Node (Moving) */}
         <motion.div 
-          animate={{ x: [800, 500, 480], y: [150, 320, 340] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          animate={{ x: simCoords.x, y: simCoords.y }}
+          transition={{ duration: 1.1, ease: "linear" }}
           className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 text-center group z-30"
         >
            <div className="h-14 w-14 bg-white rounded-3xl flex items-center justify-center text-[#0a1628] shadow-2xl ring-8 ring-[#02C39A]/10 animate-bounce-slow">
               <Truck size={24} />
            </div>
-           <div className="mt-2 text-[9px] font-black uppercase tracking-widest bg-white text-[#0a1628] px-3 py-1 rounded-full shadow-xl">Agent Moving</div>
+           <div className="mt-2 text-[9px] font-black uppercase tracking-widest bg-white text-[#0a1628] px-3 py-1 rounded-full shadow-xl">Agent Synchronizing</div>
         </motion.div>
 
         {/* Top Floating HUD */}

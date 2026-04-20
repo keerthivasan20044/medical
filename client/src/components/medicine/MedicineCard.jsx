@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye, Heart, ShoppingBag, Store, FileText, CheckCircle2, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { normalizeUrl } from '../../utils/url';
 
 export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -21,7 +22,7 @@ export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) 
       {/* Product Image Terminal */}
       <div className={`relative overflow-hidden shrink-0 bg-gray-50 ${layout === 'list' ? 'md:w-64 h-full' : 'h-44 w-full'}`}>
         <img 
-          src={images[0]} 
+          src={normalizeUrl(images?.[0]?.url || images?.[0] || '/assets/medicine_default.png')} 
           alt={name} 
           className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" 
         />

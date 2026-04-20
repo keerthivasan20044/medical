@@ -40,10 +40,10 @@ function renderReceipt(doc, order) {
   doc.moveDown(0.5);
   order.items.forEach((i) => {
     const name = i.medicine?.name || 'Medicine';
-    doc.text(`${name} x${i.qty} - ?${i.price}`);
+    doc.text(`${name} x${i.qty} - ₹${i.price}`);
   });
   doc.moveDown();
-  doc.fontSize(14).text(`Total: ?${order.totalAmount}`, { align: 'right' });
+  doc.fontSize(14).text(`Total: ₹${order.totalAmount}`, { align: 'right' });
 }
 
 function buildReceiptBuffer(order) {

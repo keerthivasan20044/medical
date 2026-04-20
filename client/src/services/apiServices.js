@@ -57,7 +57,7 @@ export const medicineService = {
   
   getById: async (id) => {
     const res = await api.get(`/api/medicines/${id}`);
-    return res.data;
+    return res.data.item || res.data;
   },
   
   getSuggestions: async (q) => {
@@ -79,7 +79,7 @@ export const pharmacyService = {
   
   getById: async (id) => {
     const res = await api.get(`/api/pharmacies/${id}`);
-    return res.data;
+    return res.data.item || res.data;
   },
   
   getNearby: async (lat, lng) => {
@@ -142,7 +142,7 @@ export const prescriptionService = {
 
   getById: async (id) => {
     const res = await api.get(`/api/prescriptions/${id}`);
-    return res.data;
+    return res.data.item || res.data;
   },
 
   delete: async (id) => {
@@ -174,8 +174,8 @@ export const doctorService = {
   
   getById: async (id) => {
     const res = await api.get(`/api/users/doctors/${id}`);
-    return res.data;
-  }
+    return res.data.user || res.data.item || res.data;
+  },
 };
 
 export const appointmentService = {
@@ -191,7 +191,7 @@ export const appointmentService = {
   
   getById: async (id) => {
     const res = await api.get(`/api/appointments/${id}`);
-    return res.data;
+    return res.data.item || res.data;
   },
 
   getDoctorAppointments: async () => {

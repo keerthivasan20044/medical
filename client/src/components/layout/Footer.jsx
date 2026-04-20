@@ -6,7 +6,7 @@ import { useLanguage } from '../../context/LanguageContext.jsx';
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const { isConnected, socket } = useSocket();
-  const { t, language } = useLanguage();
+  const { t, lang } = useLanguage();
 
   return (
     <footer className="bg-[#0a1628] text-white pt-48 pb-32 lg:pb-20 relative overflow-hidden border-t border-white/5">

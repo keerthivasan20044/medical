@@ -8,6 +8,10 @@ import './index.css';
 
 import { SocketProvider } from './context/SocketContext.jsx';
 import { LanguageProvider } from './context/LanguageContext.jsx';
+import { checkClientEnv } from './utils/envCheck.js';
+
+// Perform health checks on client environment
+checkClientEnv();
 
 if (import.meta.env.DEV && 'serviceWorker' in navigator) {
   // Clean up stale service workers/caches that can break Vite HMR and external scripts.

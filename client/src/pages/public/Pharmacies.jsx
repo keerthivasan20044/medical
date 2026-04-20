@@ -3,6 +3,7 @@ import { Search, MapPin, Filter as FilterIcon, Grid2X2, List, Map as MapIcon, Ch
 import { motion, AnimatePresence } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 import { pharmacyService } from '../../services/apiServices';
+import { normalizeUrl } from '../../utils/url';
 import PharmacyCard_v2 from '../../components/pharmacy/PharmacyCard_v2.jsx';
 import KaraikalMap from '../../components/pharmacy/KaraikalMap.jsx';
 
@@ -46,17 +47,30 @@ export default function PharmaciesListPage() {
         id: p._id,
         name: p.name,
         area: p.address?.city || 'Karaikal',
-        address: `${p.address?.street}, ${p.address?.city}`,
+        address: `${p.address?.street || ''}, ${p.address?.city || 'Karaikal'}`,
+        location: `${p.address?.street || ''}, ${p.address?.city || 'Karaikal'}`,
+        phone: p.phone || '04368-222288',
+        timings: p.timings || '8:00 AM - 10:00 PM',
         rating: p.rating || 4.2,
+        reviewsCount: p.totalReviews || p.reviewsCount || 120,
         totalReviews: p.totalReviews || 120,
         status: p.isOpen ? 'OPEN NOW' : 'CLOSED',
-        is24hr: p.timings?.includes('24'),
+        is24hr: !!(p.timings?.includes('24')),
         deliveryFee: p.deliveryFee || 0,
+        freeThreshold: p.freeThreshold || 300,
         eta: '12 MINS',
-        distance: 1.2, // Mock if no coords
-        image: p.images?.[0]?.url || `https://images.unsplash.com/photo-1587854692152-cbe660dbbb88?auto=format&fit=crop&q=80&w=800`,
-        services: ['Home Delivery', 'Prescription', 'Vaccines'],
-        coordinates: p.address?.coordinates || { lat: 10.9254, lng: 79.8386 }
+        distance: 1.2,
+        image: normalizeUrl(p.images?.[0]?.url || p.images?.[0] || '/assets/pharmacy_pro.png'),
+        images: [normalizeUrl(p.images?.[0]?.url || p.images?.[0] || '/assets/pharmacy_pro.png')],
+        services: p.services || ['Home Delivery', 'Prescription', 'Vaccines'],
+        coordinates: p.address?.coordinates || { lat: 10.9254, lng: 79.8386 },
+        gps: p.address?.coordinates || { lat: 10.9254 + (Math.random() * 0.02 - 0.01), lng: 79.8386 + (Math.random() * 0.02 - 0.01) },
+        stock: p.stock || { tablets: 75, syrups: 60, vaccines: 45, injections: 50, baby: 40, ayurvedic: 30 },
+        alerts: p.alerts || [],
+        isTopRated: (p.rating || 0) >= 4.7,
+        isFastest: false,
+        isAyurvedicSpecialist: false,
+        isBabyCareSpecialist: false,
       }));
       setPharmacies(mapped);
     } catch (err) {

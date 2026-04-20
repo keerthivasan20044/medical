@@ -8,9 +8,12 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-import { pharmacies, medicines } from '../../utils/data.js';
+import { pharmacies as mockPharmacies, medicines as mockMedicines } from '../../utils/data.js';
 import MedicineCard from '../../components/medicine/MedicineCard.jsx';
 import PageShell from '../../components/layout/PageShell.jsx';
+import { pharmacyService, medicineService } from '../../services/apiServices';
+import { normalizeUrl } from '../../utils/url';
+import { Loader2 } from 'lucide-react';
 
 import { useLanguage } from '../../context/LanguageContext.jsx';
 
@@ -21,9 +24,34 @@ export default function PharmacyDetailPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   
-  const pharmacy = useMemo(() => pharmacies.find(p => p.id === id), [id]);
-  const pharmacyMedicines = useMemo(() => medicines.filter(m => m.pharmacyId === id), [id]);
-  
+  const [pharmacy, setPharmacy] = useState(null);
+  const [pharmacyMedicines, setPharmacyMedicines] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchEnclaveNode();
+  }, [id]);
+
+  const fetchEnclaveNode = async () => {
+    try {
+      setLoading(true);
+      const [pharmData, medData] = await Promise.all([
+        pharmacyService.getById(id),
+        medicineService.getAll({ pharmacyId: id })
+      ]);
+      setPharmacy(pharmData);
+      setPharmacyMedicines(medData.items || []);
+    } catch (err) {
+      console.warn('Enclave sync failed, using mock data...', err);
+      const fallbackPharm = mockPharmacies.find(p => p.id === id || p._id === id);
+      const fallbackMeds = mockMedicines.filter(m => m.pharmacyId === id || m.pharmacyId === fallbackPharm?.id);
+      setPharmacy(fallbackPharm);
+      setPharmacyMedicines(fallbackMeds);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const filteredMedicines = useMemo(() => {
     return pharmacyMedicines.filter(m => {
       const matchesSearch = m.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -32,7 +60,14 @@ export default function PharmacyDetailPage() {
     });
   }, [pharmacyMedicines, searchQuery, selectedCategory]);
 
-  const categories = ['All', ...new Set(pharmacyMedicines.map(m => m.category))];
+  const categories = useMemo(() => ['All', ...new Set(pharmacyMedicines.map(m => m.category))], [pharmacyMedicines]);
+
+  if (loading) return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] space-y-6">
+       <Loader2 className="animate-spin text-brand-teal" size={48}/>
+       <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-[0.3em] animate-pulse">Synchronizing Distribution Node...</p>
+    </div>
+  );
 
   if (!pharmacy) {
     return (
@@ -62,9 +97,9 @@ export default function PharmacyDetailPage() {
            autoplay={{ delay: 5000 }}
            className="h-full w-full"
          >
-           {pharmacy.images.map((img, i) => (
+           {(pharmacy.images || ['/assets/pharmacy_pro.png']).map((img, i) => (
              <SwiperSlide key={i}>
-                <img src={img} alt={pharmacy.name} className="h-full w-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" />
+                <img src={normalizeUrl(img)} alt={pharmacy.name} className="h-full w-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" />
              </SwiperSlide>
            ))}
          </Swiper>
@@ -113,7 +148,7 @@ export default function PharmacyDetailPage() {
                   <div className="h-12 w-12 bg-gray-50 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all duration-500 shadow-inner"><MapPin size={20}/></div>
                   <div className="space-y-0.5">
                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">{pharmacy.area}</div>
-                     <div className="font-dm font-black text-[#0a1628] text-sm italic">{pharmacy.location.split(',')[0]}</div>
+                     <div className="font-dm font-black text-[#0a1628] text-sm italic">{(pharmacy.location || pharmacy.address || 'Karaikal Node').split(',')[0]}</div>
                   </div>
                </div>
                
@@ -135,7 +170,7 @@ export default function PharmacyDetailPage() {
             </div>
 
             <div className="flex items-center gap-6 shrink-0">
-               <a href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.gps.lat},${pharmacy.gps.lng}`} target="_blank" rel="noreferrer">
+               <a href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.gps?.lat || 10.9254},${pharmacy.gps?.lng || 79.8386}`} target="_blank" rel="noreferrer">
                   <button className="h-16 px-10 bg-gray-50 border border-black/[0.02] text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl hover:bg-[#0a1628] hover:text-white transition-all duration-500 flex items-center gap-3">
                      <Navigation size={18} /> Global Sync
                   </button>
@@ -241,7 +276,7 @@ export default function PharmacyDetailPage() {
                           <div className="h-2 w-16 bg-brand-teal rounded-full" /> Terminal Facilities
                        </h3>
                        <div className="flex flex-wrap gap-6">
-                          {pharmacy.facilities.map(f => (
+                          {(pharmacy.facilities || []).map(f => (
                             <div key={f} className="h-20 px-10 bg-white border border-black/[0.03] rounded-[2rem] flex items-center gap-4 text-xs font-black font-syne text-[#0a1628] uppercase italic shadow-soft">
                                <CheckCircle2 size={18} className="text-brand-teal" /> {f}
                             </div>
@@ -259,7 +294,7 @@ export default function PharmacyDetailPage() {
                              title="Pharmacy Geo Lock"
                              className="w-full h-full grayscale-[0.8] opacity-60 filter contrast-125 brightness-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000"
                              frameBorder="0" scrolling="no" marginHeight="0" marginWidth="0"
-                             src={`https://maps.google.com/maps?q=${pharmacy.gps.lat},${pharmacy.gps.lng}&z=16&output=embed`}
+                             src={`https://maps.google.com/maps?q=${pharmacy.gps?.lat || 10.9254},${pharmacy.gps?.lng || 79.8386}&z=16&output=embed`}
                           />
                           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
                              <div className="h-20 w-20 bg-brand-teal shadow-mint rounded-[2rem] flex items-center justify-center text-[#0a1628] animate-bounce-slow">
@@ -388,7 +423,7 @@ export default function PharmacyDetailPage() {
                   <h3 className="font-syne font-black text-3xl uppercase italic tracking-tighter leading-none">Emergency Sync</h3>
                   <p className="text-white/40 font-dm text-lg italic leading-relaxed">Need clinical support immediately? Initialize a direct bridge to this node.</p>
                </div>
-               <a href={`tel:${pharmacy.phone.replace(/\s+/g, '')}`} className="block">
+               <a href={`tel:${(pharmacy.phone || '').replace(/\s+/g, '')}`} className="block">
                   <button className="w-full h-20 bg-brand-teal text-[#0a1628] font-syne font-black text-xs uppercase tracking-[0.3em] shadow-mint hover:scale-[1.05] active:scale-95 transition-all italic flex items-center justify-center gap-4">
                      <Phone size={20}/> Call Enclave
                   </button>
@@ -399,8 +434,8 @@ export default function PharmacyDetailPage() {
 
       {/* Sticky Mobile Command Bar */}
       <div className="lg:hidden fixed bottom-10 left-10 right-10 z-[100] bg-[#0a1628] h-20 rounded-[2.5rem] shadow-4xl border border-white/10 backdrop-blur-3xl flex items-center justify-between px-6">
-         <a href={`tel:${pharmacy.phone.replace(/\s+/g, '')}`} className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal border border-white/5"><Phone size={20}/></a>
-         <a href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.gps.lat},${pharmacy.gps.lng}`} className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal border border-white/5"><Navigation size={20}/></a>
+         <a href={`tel:${(pharmacy.phone || '').replace(/\s+/g, '')}`} className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal border border-white/5"><Phone size={20}/></a>
+         <a href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.gps?.lat || 10.9254},${pharmacy.gps?.lng || 79.8386}`} className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal border border-white/5"><Navigation size={20}/></a>
          <button className="flex-1 h-14 mx-4 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-mint">Order Payload</button>
       </div>
     </div>

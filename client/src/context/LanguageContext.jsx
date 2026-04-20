@@ -1402,7 +1402,7 @@ const LanguageContext = createContext();
 
 const getSafeLang = () => {
   try {
-    return localStorage.getItem('medipharm_lang') || localStorage.getItem('medireach_lang') || 'en';
+    return localStorage.getItem('medireach_lang') || 'en';
   } catch (e) {
     return 'en';
   }
@@ -1413,7 +1413,7 @@ export const LanguageProvider = ({ children }) => {
 
   useEffect(() => {
     try {
-      localStorage.setItem('medipharm_lang', lang);
+      localStorage.setItem('medireach_lang', lang);
     } catch (e) {}
   }, [lang]);
 
