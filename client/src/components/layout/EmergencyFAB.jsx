@@ -24,15 +24,15 @@ export default function EmergencyFAB() {
         opacity: scrollDirection === 'down' && !isOpen ? 0 : 1
       }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
-      className="fixed bottom-28 md:bottom-28 left-4 md:left-10 z-[3000]"
+      className="fixed bottom-20 right-4 md:bottom-24 md:right-6 z-[3000]"
     >
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, x: -20, y: 20 }}
+            initial={{ opacity: 0, scale: 0.8, x: 20, y: 20 }}
             animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, x: -20, y: 20 }}
-            className="absolute bottom-16 md:bottom-24 left-0 w-[calc(100vw-2rem)] md:w-80 bg-[#0a1628] rounded-[2.5rem] md:rounded-[3.5rem] border-4 border-white shadow-[0_80px_160px_rgba(255,0,0,0.2)] overflow-hidden"
+            exit={{ opacity: 0, scale: 0.8, x: 20, y: 20 }}
+            className="absolute bottom-20 md:bottom-24 right-0 w-[calc(100vw-2rem)] md:w-80 bg-[#0a1628] rounded-[2.5rem] md:rounded-[3.5rem] border-4 border-white shadow-[0_80px_160px_rgba(255,0,0,0.2)] overflow-hidden"
           >
             <div className="p-6 md:p-8 bg-red-600 text-white flex items-center justify-between">
                <div className="space-y-1">

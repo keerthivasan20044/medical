@@ -161,6 +161,26 @@ export default function PharmaciesListPage() {
               </button>
            </div>
         </div>
+
+        {/* District Geo-Matrix Placeholder */}
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 mt-12 md:mt-20">
+           <div className="h-40 md:h-64 w-full bg-[#0a1628] rounded-[2.5rem] md:rounded-[4rem] border-4 border-white shadow-4xl relative overflow-hidden group">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(2,195,154,0.1),transparent_70%)]" />
+              <div className="absolute inset-0 bg-grid opacity-10" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4">
+                 <div className="h-12 w-12 bg-brand-teal/20 rounded-2xl flex items-center justify-center text-brand-teal animate-pulse">
+                    <MapIcon size={24} />
+                 </div>
+                 <div className="text-center">
+                    <div className="font-syne font-black text-white text-lg md:text-2xl uppercase italic tracking-tighter">District Grid Active</div>
+                    <div className="text-[10px] text-white/40 font-black uppercase tracking-[0.4em] italic">Showing {filteredPharmacies.length} Pharmacies</div>
+                 </div>
+              </div>
+              <div className="absolute bottom-6 right-6">
+                 <button onClick={() => setViewMode('map')} className="h-10 px-6 bg-white/5 border border-white/10 text-white font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl hover:bg-brand-teal hover:text-[#0a1628] transition-all">Expand Matrix</button>
+              </div>
+           </div>
+        </div>
       </section>
 
       <div className="sticky top-16 lg:top-[72px] z-40 bg-white/80 backdrop-blur-2xl border-b border-black/[0.03] shadow-soft py-4 px-6 lg:px-10 transition-all duration-300">
@@ -230,7 +250,7 @@ export default function PharmaciesListPage() {
                </div>
                <div className="flex flex-col gap-4 text-xs font-dm font-bold italic text-[#0a1628] opacity-40 uppercase tracking-widest">
                   <div className="flex items-center gap-3"><div className="h-1.5 w-1.5 rounded-full bg-brand-teal" /> Currently Synchronized</div>
-                  <div className="flex items-center gap-3"><div className="h-1.5 w-1.5 rounded-full bg-brand-teal" /> 8 Active Medical Enclaves</div>
+                  <div className="flex items-center gap-3"><div className="h-1.5 w-1.5 rounded-full bg-brand-teal" /> 8 Verified Local Pharmacies</div>
                </div>
             </div>
             <div className="flex-1 h-64 w-full relative min-h-[256px]">
@@ -253,7 +273,7 @@ export default function PharmaciesListPage() {
          <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
                <div className="h-2 w-16 bg-brand-teal rounded-full" />
-               <h2 className="font-dm font-bold text-gray-500 text-sm italic">Showing {filteredPharmacies.length} pharmacies in district enclaves</h2>
+               <h2 className="font-dm font-bold text-gray-500 text-sm italic">Showing {filteredPharmacies.length} pharmacies in Karaikal</h2>
             </div>
             <div className="px-5 py-2 bg-emerald-50 text-emerald-500 text-[10px] font-black uppercase italic tracking-widest rounded-xl border border-emerald-100 flex items-center gap-3"><div className="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-ping" />Stock data live</div>
          </div>
@@ -293,11 +313,12 @@ export default function PharmaciesListPage() {
                   <button onClick={() => setShowFilters(false)} className="absolute top-10 right-10 h-16 w-16 bg-gray-50 rounded-2xl flex items-center justify-center text-[#0a1628] hover:text-red-500 transition-all active:scale-95 shadow-soft"><X size={32}/></button>
                   <div className="flex-1 overflow-y-auto pr-6 no-scrollbar space-y-16">
                      <div className="space-y-4"><div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Matrix Config</div><h2 className="font-syne font-black text-5xl text-[#0a1628] uppercase italic tracking-tighter leading-none">Filter Nodes</h2></div>
-                     <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Target Enclave Territory</h4><div className="grid grid-cols-2 gap-4">{areas.map(area => (<button key={area} onClick={() => toggleArea(area)} className={`h-16 px-6 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${selectedAreas.includes(area) ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{area}</button>))}</div></div>
+                     <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Select Area</h4><div className="grid grid-cols-2 gap-4">{areas.map(area => (<button key={area} onClick={() => toggleArea(area)} className={`h-16 px-6 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${selectedAreas.includes(area) ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{area}</button>))}</div></div>
                      <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Node Operational Status</h4><div className="flex gap-4">{['Open Now', '24 Hours', 'All'].map(opt => (<button key={opt} onClick={() => setOpenStatus(opt)} className={`flex-1 h-16 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${openStatus === opt ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{opt}</button>))}</div></div>
+                     <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Proximity Matrix (Distance)</h4><div className="grid grid-cols-3 gap-4">{['1km', '3km', '5km', 'Any'].map(d => (<button key={d} onClick={() => setMaxDistance(d)} className={`h-14 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${maxDistance === d ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{d}</button>))}</div></div>
                      <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Active Services Protocols</h4><div className="space-y-4">{servicesList.map(s => (<button key={s} onClick={() => toggleService(s)} className="w-full flex items-center justify-between group"><span className={`font-syne font-black text-xs uppercase italic tracking-widest transition-colors ${selectedServices.includes(s) ? 'text-[#0a1628]' : 'text-gray-400 group-hover:text-[#0a1628]'}`}>{s}</span><div className={`h-8 w-8 rounded-xl border-2 flex items-center justify-center transition-all ${selectedServices.includes(s) ? 'bg-brand-teal border-brand-teal text-[#0a1628] shadow-mint shadow-inner scale-110' : 'border-black/[0.05] text-transparent hover:border-brand-teal/40'}`}><Check size={16}/></div></button>))}</div></div>
                   </div>
-                  <div className="pt-10 grid grid-cols-2 gap-6 mt-auto"><button onClick={() => { setSelectedAreas([]); setOpenStatus('All'); setSelectedServices([]); }} className="h-20 bg-gray-50 border border-black/[0.02] rounded-[2rem] font-syne font-black text-[10px] uppercase italic tracking-widest text-[#0a1628]">Clear Enclaves</button><button onClick={() => setShowFilters(false)} className="h-20 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-widest rounded-[2rem] shadow-4xl">Apply Uplink</button></div>
+                  <div className="pt-10 grid grid-cols-2 gap-6 mt-auto"><button onClick={() => { setSelectedAreas([]); setOpenStatus('All'); setSelectedServices([]); }} className="h-20 bg-gray-50 border border-black/[0.02] rounded-[2rem] font-syne font-black text-[10px] uppercase italic tracking-widest text-[#0a1628]">Clear All</button><button onClick={() => setShowFilters(false)} className="h-20 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-widest rounded-[2rem] shadow-4xl">Show Results</button></div>
                </motion.div></>
          )}
       </AnimatePresence>

@@ -18,7 +18,7 @@ export default function HospitalsPage() {
 
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-48">
-      {/* Hero Section: Institutional Registry Hub */}
+      {/* Hospital Directory Section */}
       <section className="bg-gradient-to-br from-[#0a1628] to-[#1a3440] pt-32 pb-60 relative overflow-hidden">
         <div className="absolute inset-0 bg-[#0a1628]/20 backdrop-blur-[2px]" />
         <div className="absolute top-0 right-0 h-full w-1/3 bg-brand-teal/5 blur-[120px]" />
@@ -61,7 +61,7 @@ export default function HospitalsPage() {
         </div>
       </section>
 
-      {/* Hospital Matrix Terminal */}
+      {/* Verified Medical Facilities */}
       <div className="max-w-7xl mx-auto px-10 -mt-32 relative z-20 space-y-16">
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
             {filteredHospitals.map((h, idx) => (
@@ -73,7 +73,7 @@ export default function HospitalsPage() {
                  transition={{ delay: idx * 0.1 }}
                  className="bg-white rounded-[5rem] overflow-hidden border border-black/[0.03] shadow-soft hover:shadow-4xl transition-all duration-1000 group relative flex flex-col h-full"
                >
-                  {/* Top: Image Hub */}
+                  {/* Top: Hospital Image Section */}
                   <div className="h-72 w-full relative overflow-hidden shrink-0">
                      <img src={h.image} alt={h.name} className="h-full w-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700" />
@@ -90,7 +90,7 @@ export default function HospitalsPage() {
                      </div>
                   </div>
 
-                  {/* Middle: Clinical Data Matrix */}
+                  {/* Middle: Facility Details */}
                   <div className="p-12 flex-1 flex flex-col space-y-10 justify-between">
                      <div className="space-y-6">
                         <div className="space-y-2">
@@ -144,7 +144,7 @@ export default function HospitalsPage() {
             ))}
          </div>
 
-         {/* Emergency Hotlink Banner Enclave */}
+         {/* Emergency Services Section */}
          <section className="bg-red-500 rounded-[5rem] p-12 lg:p-24 relative overflow-hidden group shadow-4xl border border-red-400/30">
             <div className="absolute top-0 right-0 h-full w-1/2 bg-white/5 skew-x-[-20deg] group-hover:translate-x-full transition-transform duration-1000" />
             <div className="absolute bottom-0 left-0 h-64 w-64 bg-black/10 rounded-full blur-[80px]" />

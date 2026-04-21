@@ -81,12 +81,12 @@ export default function Hero() {
                 <div className="absolute inset-0 h-3 w-3 bg-brand-teal rounded-full shadow-[0_0_15px_#02C39A]" />
              </div>
              <span className="text-white font-syne font-black text-[10px] md:text-[12px] uppercase tracking-[0.4em] italic drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
-                {t('activeNodes')} <span className="text-brand-teal ml-2">12</span> {t('nodesOnline')}
+                {t('activePharmacies') || 'Active Pharmacies'} <span className="text-brand-teal ml-2">12</span> {t('partnersOnline') || 'Partners Online'}
              </span>
           </div>
 
           <div className="space-y-4 md:space-y-6">
-             <h1 className="font-syne font-black text-white text-[clamp(2.5rem,10vw,4rem)] md:text-[clamp(3.5rem,10vw,8rem)] leading-[1.1] md:leading-[0.95] uppercase italic tracking-tighter text-center lg:text-left transition-all">
+             <h1 className="font-syne font-black text-white text-[clamp(2.3rem,10vw,4rem)] md:text-[clamp(3.5rem,10vw,8rem)] leading-[1.05] md:leading-[0.95] uppercase italic tracking-tighter text-center lg:text-left transition-all break-words w-full max-w-full px-2 md:px-0">
                 {t('heroTitle').split(' ').slice(0, -1).join(' ')} <br />
                 <span className="text-brand-teal drop-shadow-[0_0_20px_rgba(2,195,154,0.3)]">
                    {t('heroTitle').split(' ').slice(-1)}
@@ -104,7 +104,7 @@ export default function Hero() {
           </p>
 
           <div className="flex flex-wrap gap-3 md:gap-4 justify-center lg:justify-start">
-             {['🟢 12 ACTIVE NODES', '🚴 22min SYNC', '💊 5,000 SKUs'].map((label, idx) => (
+             {['🟢 12 ACTIVE SHOPS', '🚴 22min DELIVERY', '💊 5,000 MEDICINES'].map((label, idx) => (
                 <div key={idx} className="px-4 py-2 md:px-6 md:py-3 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black text-brand-teal uppercase tracking-[0.3em] backdrop-blur-3xl italic group hover:border-brand-teal/40 hover:bg-brand-teal/5 transition-all duration-500">
                    {label}
                 </div>
@@ -168,9 +168,9 @@ export default function Hero() {
            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border-2 border-brand-teal/5 rounded-full animate-reverse-spin" />
 
            {/* Mission Critical Badges */}
-           <FloatingBadge icon={HeartPulse} text={t('deliveryActive')} pos="top-0 right-0" delay={0} />
-           <FloatingBadge icon={Cpu} text={t('nodeHandshakeActive')} pos="top-[40%] left-[-10%]" delay={1} />
-           <FloatingBadge icon={Zap} text={t('emergencyProtocolSync')} pos="bottom-[10%] right-[10%]" delay={2} />
+           <FloatingBadge icon={HeartPulse} text={t('deliveryActive') || 'Delivery Active'} pos="top-0 right-0" delay={0} />
+           <FloatingBadge icon={Cpu} text={t('instantConnection') || 'Instant Connection'} pos="top-[40%] left-[-10%]" delay={1} />
+           <FloatingBadge icon={Zap} text={t('swiftEmergencySupport') || 'Swift Emergency Support'} pos="bottom-[10%] right-[10%]" delay={2} />
 
            {/* Pharmacy Node Network Visualization */}
            <div className="grid grid-cols-2 gap-10 w-full h-full p-20 relative z-20">
@@ -187,7 +187,7 @@ export default function Hero() {
                       <img src={p.img} alt={p.name} className="h-full w-full object-cover group-hover:scale-125 transition duration-1000 grayscale group-hover:grayscale-0" />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                       <div className="absolute top-4 right-4 bg-brand-teal text-[#0a1628] text-[10px] font-black px-4 py-2 rounded-xl shadow-2xl uppercase italic tracking-widest animate-pulse">
-                         {t('nodeActive')}
+                         {t('storeVerified') || 'Store Verified'}
                       </div>
                    </div>
                    <div className="pt-6 space-y-2">
@@ -197,7 +197,7 @@ export default function Hero() {
                          <span className="text-brand-teal">{p.dist}</span>
                       </div>
                       <div className="flex items-center gap-2 text-amber-400 text-[10px] font-black italic">
-                         <Star size={12} fill="currentColor" /> {p.rating} <span className="text-white/20 ml-2">DATA_SYNC_LOCKED</span>
+                         <Star size={12} fill="currentColor" /> {p.rating} <span className="text-white/20 ml-2">VERIFIED</span>
                       </div>
                    </div>
                 </motion.div>

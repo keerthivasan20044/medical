@@ -63,7 +63,7 @@ export default function Login() {
   const handleRequestOtp = async (e) => {
     e.preventDefault();
     if (phone.length < 10) {
-      toast.error('Invalid Protocol Length');
+      toast.error('Invalid Mobile Number');
       return;
     }
     setLoading(true);
@@ -180,7 +180,7 @@ export default function Login() {
                       <Input 
                         label={t('emailEncl')} 
                         icon={Mail} 
-                        placeholder="e.g. kark@enclave.in" 
+                        placeholder="user@example.com" 
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required

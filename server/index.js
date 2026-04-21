@@ -1,8 +1,10 @@
 import './config/env.js';
 import { checkEnvKeys } from './config/keyChecks.js';
+import { validateConfig } from './config/config.js';
 
 // Perform health checks on environment variables
 checkEnvKeys();
+validateConfig();
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';

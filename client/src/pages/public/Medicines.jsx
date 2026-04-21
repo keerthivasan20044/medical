@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { pharmacies } from '../../utils/data.js';
 import { medicineService } from '../../services/apiServices';
-import { addItem } from '../../store/cartSlice.js';
+import { addToCart } from '../../store/cartSlice.js';
 import MedicineCard from '../../components/medicine/MedicineCard.jsx';
 
 export default function MedicinesListPage() {
@@ -23,16 +23,16 @@ export default function MedicinesListPage() {
   // Advanced Filter States
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState([]);
-  const [priceRange, setPriceRange] = useState(2500);
+  const [priceRange, setPriceRange] = useState(10000); // Increased range for high-value meds
   const [rxFilter, setRxFilter] = useState('Both'); // Yes, No, Both
-  const [availability, setAvailability] = useState('All'); // In Stock, All
+  const [availability, setAvailability] = useState('All'); // In Stock (True), All
   const [sortBy, setSortBy] = useState('Most Popular');
   
   const { items: cartItems } = useSelector(state => state.cart);
   const dispatch = useDispatch();
 
   const handleAddToCart = (item) => {
-    dispatch(addItem({
+    dispatch(addToCart({
       id: item._id || item.id,
       name: item.name,
       price: item.price,
@@ -40,10 +40,11 @@ export default function MedicinesListPage() {
       brand: item.brand,
       qty: 1
     }));
-    toast.success(`${item.name} added to payload`);
+    toast.success(`${item.name} added to cart`);
   };
 
   useEffect(() => {
+    console.log('[Medicines] Initializing inventory sync...');
     fetchMedicines();
   }, [searchQuery]);
 
@@ -55,7 +56,7 @@ export default function MedicinesListPage() {
       const data = await medicineService.getAll(params);
       setMedicines(data.items || []);
     } catch (err) {
-      console.error('Inventory sync failure:', err);
+      console.error('Failed to load medicines:', err);
     } finally {
       setLoading(false);
     }
@@ -86,8 +87,9 @@ export default function MedicinesListPage() {
 
     if (sortBy === 'Price ↑') result.sort((a, b) => a.price - b.price);
     if (sortBy === 'Price ↓') result.sort((a, b) => b.price - a.price);
-    if (sortBy === 'Rating') result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    if (sortBy === 'Rating' || sortBy === 'Popularity') result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
     if (sortBy === 'Most Popular') result.sort((a, b) => (b.soldCount || 0) - (a.soldCount || 0));
+    if (sortBy === 'New arrivals') result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     
     return result;
   }, [medicines, searchQuery, selectedCategories, selectedPharmacies, priceRange, rxFilter, availability, sortBy]);
@@ -116,13 +118,13 @@ export default function MedicinesListPage() {
   const FilterPanel = ({ isMobile = false }) => (
     <div className={`space-y-10 ${isMobile ? 'p-8 pb-32' : ''}`}>
        <div className="space-y-2">
-          <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Matrix Config</div>
-          <h3 className="font-syne font-black text-2xl md:text-3xl uppercase italic tracking-tighter text-[#0a1628]">Filter Nodes</h3>
+          <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Settings</div>
+          <h3 className="font-syne font-black text-2xl md:text-3xl uppercase italic tracking-tighter text-[#0a1628]">Advanced Filters</h3>
        </div>
 
        {/* Category Cluster */}
        <div className="space-y-6 pt-8 border-t border-black/[0.03]">
-          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Therapeutic Category</div>
+          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Medical Category</div>
           <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
              {categories.map(cat => (
                 <button 
@@ -146,19 +148,33 @@ export default function MedicinesListPage() {
        <div className="space-y-6 pt-8 border-t border-black/[0.03]">
           <div className="flex justify-between items-center">
              <span className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Price Limit</span>
-             <span className="text-brand-teal font-syne font-black italic text-sm">₹{priceRange}</span>
+             <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold text-gray-400">₹</span>
+                <input 
+                  type="number"
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(Math.min(2500, Math.max(0, parseInt(e.target.value) || 0)))}
+                  className="w-16 bg-gray-50 border-none text-brand-teal font-syne font-black italic text-sm outline-none p-0 focus:ring-0"
+                />
+             </div>
           </div>
-          <input 
-            type="range" min="0" max="2500" step="50" 
-            className="w-full h-1 bg-gray-100 rounded-full appearance-none accent-brand-teal cursor-pointer"
-            value={priceRange}
-            onChange={(e) => setPriceRange(parseInt(e.target.value))}
-          />
+          <div className="space-y-3">
+            <input 
+              type="range" min="0" max="2500" step="50" 
+              className="w-full h-1 bg-gray-100 rounded-full appearance-none accent-brand-teal cursor-pointer"
+              value={priceRange}
+              onChange={(e) => setPriceRange(parseInt(e.target.value))}
+            />
+            <div className="flex justify-between text-[10px] font-black text-gray-300 uppercase italic">
+               <span>₹0</span>
+               <span>₹2500</span>
+            </div>
+          </div>
        </div>
 
-       {/* Pharmacy Nodes */}
+       {/* Pharmacy Filters */}
        <div className="space-y-6 pt-8 border-t border-black/[0.03]">
-          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Pharmacy Enclaves</div>
+          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Available at Pharmacies</div>
           <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
              {pharmacyOptions.map(p => (
                 <button 
@@ -177,27 +193,27 @@ export default function MedicinesListPage() {
           </div>
        </div>
 
-       {/* RX Type */}
+       {/* Stock Status */}
        <div className="space-y-4 pt-8 border-t border-black/[0.03]">
-          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Protocol Type (RX)</div>
-          <div className="grid grid-cols-3 gap-2">
-             {['Yes', 'No', 'Both'].map(opt => (
-               <button
-                 key={opt}
-                 onClick={() => setRxFilter(opt)}
-                 className={`h-12 rounded-xl text-[9px] font-black uppercase italic tracking-widest border transition-all ${rxFilter === opt ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-lg' : 'bg-gray-50 text-gray-300 border-black/[0.03] hover:text-[#0a1628]'}`}
-               >
-                  {opt}
-               </button>
-             ))}
-          </div>
+          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Availability</div>
+          <button 
+             onClick={() => setAvailability(availability === 'In Stock' ? 'All' : 'In Stock')}
+             className="w-full flex items-center justify-between group"
+          >
+             <span className="font-syne font-black text-[11px] uppercase italic tracking-widest text-[#0a1628]">In Stock Only</span>
+             <div className={`h-8 w-8 rounded-xl border-2 flex items-center justify-center transition-all ${availability === 'In Stock' ? 'bg-brand-teal border-brand-teal text-[#0a1628]' : 'border-black/[0.05] text-transparent'}`}>
+                <CheckCircle2 size={16}/>
+             </div>
+          </button>
        </div>
+
+       {/* RX Type */}
 
        <button 
          onClick={resetFilters}
          className="w-full h-14 bg-gray-50 border border-black/[0.02] rounded-xl text-[10px] font-black text-gray-400 uppercase italic hover:bg-[#0a1628] hover:text-white transition-all shadow-inner"
        >
-          RESET HUB MAPPING
+          RESET FILTERS
        </button>
     </div>
   );
@@ -216,15 +232,15 @@ export default function MedicinesListPage() {
            
            <div className="space-y-6 text-center md:text-left">
               <h1 className="font-syne font-black text-5xl md:text-8xl lg:text-9xl text-white leading-[0.85] tracking-tighter uppercase italic shadow-2xl">
-                 Clinical <br/><span className="text-brand-teal">Registry Node</span>
+                 Medicine <br/><span className="text-brand-teal">Store</span>
               </h1>
               <div className="flex flex-col lg:flex-row gap-8 items-center justify-between pt-10">
                  <p className="text-white/40 font-dm text-lg md:text-2xl italic max-w-xl leading-relaxed font-bold">
-                    Accessing 12,500+ SKU nodes within the Karaikal district clinical enclave.
+                    Browse our wide range of medicines from top verified pharmacies.
                  </p>
                  <Link to="/medicines/compare">
                     <button className="h-16 md:h-20 px-8 md:px-12 bg-white/5 border border-white/10 text-white font-syne font-black text-[10px] uppercase italic tracking-[0.2em] rounded-2xl hover:bg-brand-teal hover:text-[#0a1628] transition-all duration-700 flex items-center gap-4 active:scale-95 shadow-4xl group">
-                       <ArrowUpDown size={20} className="group-hover:rotate-180 transition-transform duration-700"/> Compare Protocols
+                       <ArrowUpDown size={20} className="group-hover:rotate-180 transition-transform duration-700"/> Compare Items
                     </button>
                  </Link>
               </div>
@@ -238,7 +254,7 @@ export default function MedicinesListPage() {
                  </div>
                  <input 
                     type="text" 
-                    placeholder="Search clinical registry..." 
+                    placeholder="Search for medicines..." 
                     className="flex-1 bg-transparent px-4 md:px-8 font-syne font-black text-lg md:text-2xl italic outline-none text-white placeholder-white/20 uppercase tracking-tighter"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -250,31 +266,31 @@ export default function MedicinesListPage() {
                    onClick={() => setShowFilters(true)}
                    className={`h-20 md:h-24 px-8 md:px-10 flex-1 lg:flex-none rounded-[2rem] md:rounded-[2.5rem] font-syne font-black text-[10px] md:text-xs uppercase italic tracking-widest transition-all duration-700 active:scale-95 shadow-4xl border flex items-center justify-center gap-4 md:gap-6 bg-white/5 text-white border-white/10 hover:bg-white/10`}
                  >
-                    <Sliders size={20}/> Config Hub
+                    <Sliders size={20}/> Filters
                  </button>
               </div>
            </div>
         </div>
       </section>
 
-      {/* Registry Matrix */}
+      {/* Medicines List Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-10 -mt-20 md:-mt-32 relative z-20">
          <div className="flex flex-col lg:flex-row gap-12 md:gap-16">
             
             {/* Desktop Sidebar */}
-            <aside className="hidden lg:block w-96 shrink-0">
-               <div className="bg-white rounded-[4rem] p-12 text-[#0a1628] shadow-4xl border border-black/[0.02]">
+            <aside className="hidden lg:block w-72 shrink-0">
+               <div className="sticky top-10 bg-white rounded-[3rem] p-10 text-[#0a1628] shadow-soft border border-black/[0.02]">
                   <FilterPanel />
                </div>
             </aside>
-
-            {/* Main Terminal Cluster */}
+ 
+            {/* Medicines Grid */}
             <div className="flex-1 space-y-12 md:space-y-16">
                <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 bg-white border border-black/[0.03] rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-10 shadow-soft transition-all duration-700">
                   <div className="flex items-center gap-4 md:gap-6">
                      <div className="h-2 w-16 bg-brand-teal rounded-full animate-pulse hidden md:block" />
-                     <h2 className="font-syne font-black text-xl md:text-4xl text-[#0a1628] uppercase tracking-tighter italic leading-none">
-                        {filteredMedicines.length} Nodes Synchronized
+                     <h2 className="font-syne font-black text-xl md:text-3xl text-[#0a1628] uppercase tracking-tighter italic leading-none">
+                        {filteredMedicines.length} Medicines Found
                      </h2>
                   </div>
                   
@@ -300,11 +316,12 @@ export default function MedicinesListPage() {
                           onChange={(e) => setSortBy(e.target.value)}
                           className="h-16 pl-8 pr-12 bg-gray-50 border border-black/[0.02] rounded-2xl font-syne font-black text-[10px] uppercase italic tracking-widest outline-none appearance-none cursor-pointer hover:bg-white transition-all shadow-sm"
                         >
-                           <option>Most Popular</option>
-                           <option>Price ↑</option>
-                           <option>Price ↓</option>
-                           <option>Rating</option>
-                        </select>
+                            <option>Most Popular</option>
+                            <option>Price ↑</option>
+                            <option>Price ↓</option>
+                            <option>Popularity</option>
+                            <option>New arrivals</option>
+                         </select>
                         <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-300 group-hover:text-[#0a1628]" />
                      </div>
                   </div>
@@ -323,15 +340,15 @@ export default function MedicinesListPage() {
                         </div>
                      </div>
                      <div className="space-y-3 text-center">
-                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase tracking-tighter italic">Syncing Enclave...</h3>
-                        <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">Establishing Clinical Handshake</p>
+                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase tracking-tighter italic">Loading Medicines...</h3>
+                        <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">Connecting to Pharmacies</p>
                      </div>
                   </div>
                ) : (
-                 <motion.div 
-                   layout
-                   className={`grid gap-6 md:gap-10 ${viewMode === 'grid' ? 'grid-cols-2 lg:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}
-                 >
+                  <motion.div 
+                    layout
+                    className={`grid gap-4 md:gap-8 px-2 md:px-0 ${viewMode === 'grid' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5' : 'grid-cols-1'}`}
+                  >
                    <AnimatePresence mode="popLayout">
                      {filteredMedicines.map((m, idx) => (
                        <MedicineCard 
@@ -345,22 +362,22 @@ export default function MedicinesListPage() {
                    </AnimatePresence>
 
                    {filteredMedicines.length === 0 && (
-                     <div className="col-span-full py-40 flex flex-col items-center justify-center text-center space-y-8 bg-white rounded-[4rem] border border-black/[0.03] shadow-soft relative overflow-hidden">
-                        <div className="absolute top-0 right-0 h-96 w-96 bg-brand-teal opacity-[0.02] rounded-full blur-[100px] pointer-events-none" />
-                        <div className="h-28 w-28 bg-gray-50 rounded-[2.5rem] flex items-center justify-center text-gray-200 border-2 border-dashed border-gray-100 italic transition-transform duration-1000 group-hover:rotate-12">
-                           <Pill size={56} strokeWidth={1} />
-                        </div>
-                        <div className="space-y-4 max-w-sm mx-auto">
-                           <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none tracking-tighter">Payload Not Found</h3>
-                           <p className="text-gray-400 font-dm italic font-bold text-lg leading-relaxed">The clinical registry returned zero clinical nodes for your current mapping configuration.</p>
-                        </div>
-                        <button 
-                           onClick={resetFilters}
-                           className="h-14 px-10 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-[0.2em] rounded-2xl hover:bg-brand-teal hover:text-white transition-all duration-700 shadow-2xl active:scale-95"
-                        >
-                           Recalibrate Hub
-                        </button>
-                     </div>
+                      <div className="col-span-full py-40 flex flex-col items-center justify-center text-center space-y-8 bg-white rounded-[4rem] border border-black/[0.03] shadow-soft relative overflow-hidden">
+                         <div className="absolute top-0 right-0 h-96 w-96 bg-brand-teal opacity-[0.02] rounded-full blur-[100px] pointer-events-none" />
+                         <div className="h-28 w-28 bg-gray-50 rounded-[2.5rem] flex items-center justify-center text-gray-200 border-2 border-dashed border-gray-100 italic">
+                            <Pill size={56} strokeWidth={1} />
+                         </div>
+                         <div className="space-y-4 max-w-sm mx-auto">
+                            <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none tracking-tighter">No Medicines Found</h3>
+                            <p className="text-gray-400 font-dm italic font-bold text-lg leading-relaxed">Try adjusting your filters or searching for something else.</p>
+                         </div>
+                         <button 
+                            onClick={resetFilters}
+                            className="h-14 px-10 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-[0.2em] rounded-2xl hover:bg-brand-teal hover:text-white transition-all duration-700 shadow-2xl active:scale-95"
+                         >
+                            Reset All Filters
+                         </button>
+                      </div>
                    )}
                  </motion.div>
                )}
@@ -388,7 +405,7 @@ export default function MedicinesListPage() {
                >
                   <div className="sticky top-0 bg-white p-6 border-b border-black/[0.03] flex items-center justify-between z-10">
                      <div className="h-1.5 w-16 bg-gray-100 rounded-full mx-auto absolute top-3 left-1/2 -translate-x-1/2" />
-                     <div className="font-syne font-black text-xl uppercase italic tracking-tighter text-[#0a1628]">Config Hub</div>
+                     <div className="font-syne font-black text-xl uppercase italic tracking-tighter text-[#0a1628]">Sort & Filter</div>
                      <button 
                         onClick={() => setShowFilters(false)}
                         className="h-10 w-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 hover:text-red-500"

@@ -65,7 +65,7 @@ export default function PharmacyDetailPage() {
   if (loading) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] space-y-6">
        <Loader2 className="animate-spin text-brand-teal" size={48}/>
-       <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-[0.3em] animate-pulse">Synchronizing Distribution Node...</p>
+       <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-[0.3em] animate-pulse">Loading Pharmacy details...</p>
     </div>
   );
 
@@ -119,7 +119,7 @@ export default function PharmacyDetailPage() {
             <div className="flex flex-wrap gap-4">
                <div className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest italic flex items-center gap-2 backdrop-blur-3xl border ${pharmacy.is24hr ? 'bg-red-500/20 text-red-100 border-red-500/30' : 'bg-emerald-500/20 text-emerald-100 border-emerald-500/30'}`}>
                   <div className={`h-2 w-2 rounded-full animate-pulse ${pharmacy.is24hr ? 'bg-red-500' : 'bg-emerald-500'}`} />
-                  {pharmacy.is24hr ? 'District Emergency Hub' : 'Verified Clinical Node'}
+                  {pharmacy.is24hr ? '24/7 Emergency Pharmacy' : 'Verified Partner Pharmacy'}
                </div>
                <div className="px-6 py-2 bg-brand-teal text-[#0a1628] text-[10px] font-black uppercase tracking-widest italic flex items-center gap-2 rounded-full shadow-mint">
                   <Star size={14} fill="currentColor" /> {pharmacy.rating} Rating
@@ -155,7 +155,7 @@ export default function PharmacyDetailPage() {
                <div className="flex items-center gap-4 group cursor-default border-l border-black/[0.03] pl-12">
                   <div className="h-12 w-12 bg-gray-50 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all duration-500 shadow-inner"><Truck size={20}/></div>
                   <div className="space-y-0.5">
-                     <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">Deliver Pulse</div>
+                     <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">Delivery Time</div>
                      <div className="font-dm font-black text-[#0a1628] text-sm italic">25-35 Min &bull; \u20B9{pharmacy.deliveryFee}</div>
                   </div>
                </div>
@@ -163,7 +163,7 @@ export default function PharmacyDetailPage() {
                <div className="flex items-center gap-4 group cursor-default border-l border-black/[0.03] pl-12">
                   <div className="h-12 w-12 bg-gray-50 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all duration-500 shadow-inner"><Clock size={20}/></div>
                   <div className="space-y-0.5">
-                     <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">Terminal State</div>
+                     <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">Opening Hours</div>
                      <div className="font-dm font-black text-[#0a1628] text-sm italic uppercase">{pharmacy.timings}</div>
                   </div>
                </div>
@@ -172,7 +172,7 @@ export default function PharmacyDetailPage() {
             <div className="flex items-center gap-6 shrink-0">
                <a href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.gps?.lat || 10.9254},${pharmacy.gps?.lng || 79.8386}`} target="_blank" rel="noreferrer">
                   <button className="h-16 px-10 bg-gray-50 border border-black/[0.02] text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl hover:bg-[#0a1628] hover:text-white transition-all duration-500 flex items-center gap-3">
-                     <Navigation size={18} /> Global Sync
+                     <Navigation size={18} /> View Map
                   </button>
                </a>
                <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-mint hover:scale-[1.05] active:scale-95 transition-all flex items-center justify-center gap-3">
@@ -214,12 +214,12 @@ export default function PharmacyDetailPage() {
                  <div className="space-y-16">
                     <div className="flex flex-col md:flex-row gap-8 items-center justify-between border-b border-black/[0.03] pb-12">
                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-6">
-                          <div className="h-2 w-16 bg-brand-teal rounded-full" /> Inventory Uplink
+                          <div className="h-2 w-16 bg-brand-teal rounded-full" /> Pharmacy Medicines
                        </h3>
                        <div className="flex gap-4 w-full md:w-auto">
                           <div className="h-16 flex-1 md:w-72 bg-gray-50 border border-black/[0.03] rounded-2xl flex items-center px-6 text-[#0a1628] focus-within:border-brand-teal transition-all group">
                              <Search size={20} className="text-gray-300 group-focus-within:text-brand-teal transition-colors" />
-                             <input type="text" placeholder="Search in node..." className="bg-transparent flex-1 px-4 font-dm italic font-bold text-lg outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                             <input type="text" placeholder="Search medicines..." className="bg-transparent flex-1 px-4 font-dm italic font-bold text-lg outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                           </div>
                           <button className="h-16 w-16 bg-[#0a1628] rounded-2xl flex items-center justify-center text-brand-teal shadow-4xl"><Filter size={24}/></button>
                        </div>
@@ -251,12 +251,12 @@ export default function PharmacyDetailPage() {
                  <div className="space-y-20">
                     <div className="space-y-10">
                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-6">
-                          <div className="h-2 w-16 bg-brand-teal rounded-full" /> Architecture Protocol
+                          <div className="h-2 w-16 bg-brand-teal rounded-full" /> Pharmacy Details
                        </h3>
                        <div className="grid md:grid-cols-2 gap-8">
                           {[
-                             { label: 'Clinical Responsible', val: pharmacy.owner, icon: CheckCircle2 },
-                             { label: 'Protocol ID (License)', val: pharmacy.license, icon: ShieldCheck },
+                             { label: 'Pharmacist/Owner', val: pharmacy.owner, icon: CheckCircle2 },
+                             { label: 'License Number', val: pharmacy.license, icon: ShieldCheck },
                              { label: 'Financial Matrix (GST)', val: pharmacy.gst, icon: Award },
                              { label: 'Initialization Year', val: pharmacy.established, icon: Calendar }
                           ].map(item => (
@@ -273,7 +273,7 @@ export default function PharmacyDetailPage() {
 
                     <div className="space-y-10">
                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-6">
-                          <div className="h-2 w-16 bg-brand-teal rounded-full" /> Terminal Facilities
+                          <div className="h-2 w-16 bg-brand-teal rounded-full" /> Facilities & Info
                        </h3>
                        <div className="flex flex-wrap gap-6">
                           {(pharmacy.facilities || []).map(f => (
@@ -286,7 +286,7 @@ export default function PharmacyDetailPage() {
 
                     <div className="space-y-10">
                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-6">
-                          <div className="h-2 w-16 bg-brand-teal rounded-full" /> Geo-Coordinate Lock
+                          <div className="h-2 w-16 bg-brand-teal rounded-full" /> Location Details
                        </h3>
                        <div className="h-96 w-full bg-gray-100 rounded-[4rem] overflow-hidden border border-black/[0.03] shadow-4xl relative group">
                           <div className="absolute inset-0 bg-[#0a1628]/5 pointer-events-none z-10" />
@@ -334,7 +334,7 @@ export default function PharmacyDetailPage() {
                     <div className="space-y-12">
                        <div className="flex justify-between items-center px-10">
                           <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-6">
-                             <div className="h-2 w-16 bg-brand-teal rounded-full" /> Audit Streams
+                             <div className="h-2 w-16 bg-brand-teal rounded-full" /> Customer Reviews
                           </h3>
                           <button className="h-16 px-10 bg-[#0a1628] text-brand-teal font-syne font-black text-xs uppercase italic tracking-widest rounded-2xl shadow-4xl hover:scale-105 transition-all">Write Review</button>
                        </div>
@@ -402,9 +402,9 @@ export default function PharmacyDetailPage() {
                </div>
                <div className="space-y-8">
                   {[
-                     { label: 'Licensed Fulfillment', val: 'Verified_2019' },
-                     { label: 'Cold Storage Matrix', val: 'Active_Optimal' },
-                     { label: 'Clinical Handshake', val: '99.9% Reliable' }
+                     { label: 'Licensed Pharmacy', val: 'Verified 2019' },
+                     { label: 'Safe Cold Storage', val: 'Active Optimal' },
+                     { label: 'Quality Partner', val: '99.9% Reliable' }
                   ].map(c => (
                      <div key={c.label} className="flex justify-between items-center border-b border-black/[0.03] pb-6 group/row">
                         <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-[#0a1628] transition-colors">{c.label}</span>
@@ -420,12 +420,12 @@ export default function PharmacyDetailPage() {
                <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-5 rounded-full blur-[80px]" />
                <div className="h-24 w-24 bg-white/5 border border-white/10 rounded-[2.5rem] flex items-center justify-center mx-auto text-brand-teal shadow-3xl group-hover:rotate-12 transition-all duration-700"><Activity size={48}/></div>
                <div className="space-y-4">
-                  <h3 className="font-syne font-black text-3xl uppercase italic tracking-tighter leading-none">Emergency Sync</h3>
-                  <p className="text-white/40 font-dm text-lg italic leading-relaxed">Need clinical support immediately? Initialize a direct bridge to this node.</p>
+                  <h3 className="font-syne font-black text-3xl uppercase italic tracking-tighter leading-none">Emergency Contact</h3>
+                  <p className="text-white/40 font-dm text-lg italic leading-relaxed">Need medical support immediately? Call this pharmacy directly.</p>
                </div>
                <a href={`tel:${(pharmacy.phone || '').replace(/\s+/g, '')}`} className="block">
                   <button className="w-full h-20 bg-brand-teal text-[#0a1628] font-syne font-black text-xs uppercase tracking-[0.3em] shadow-mint hover:scale-[1.05] active:scale-95 transition-all italic flex items-center justify-center gap-4">
-                     <Phone size={20}/> Call Enclave
+                     <Phone size={20}/> Call Pharmacy
                   </button>
                </a>
             </div>
@@ -436,7 +436,7 @@ export default function PharmacyDetailPage() {
       <div className="lg:hidden fixed bottom-10 left-10 right-10 z-[100] bg-[#0a1628] h-20 rounded-[2.5rem] shadow-4xl border border-white/10 backdrop-blur-3xl flex items-center justify-between px-6">
          <a href={`tel:${(pharmacy.phone || '').replace(/\s+/g, '')}`} className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal border border-white/5"><Phone size={20}/></a>
          <a href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.gps?.lat || 10.9254},${pharmacy.gps?.lng || 79.8386}`} className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal border border-white/5"><Navigation size={20}/></a>
-         <button className="flex-1 h-14 mx-4 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-mint">Order Payload</button>
+         <button className="flex-1 h-14 mx-4 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-mint">Order Medicines</button>
       </div>
     </div>
   );

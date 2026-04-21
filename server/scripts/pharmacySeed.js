@@ -22,7 +22,7 @@ const PHARMACIES = [
     totalReviews: 1240,
     isVerified: true,
     isOpen: true,
-    images: [{ url: 'https://images.unsplash.com/photo-1586015555751-63bb77f4322a?auto=format&fit=crop&w=800&q=80' }],
+    images: [{ url: '/assets/apollo pharmacy.jpeg' }],
     deliveryRadius: 10
   },
   {

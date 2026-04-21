@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 import { registerChatHandlers } from '../sockets/chatHandler.js';
+import { registerGPSHandlers } from '../utils/socket.js';
 
 let io;
 
@@ -52,6 +53,9 @@ export function initSocket(server) {
 
     // Architecture Chat Enclave
     registerChatHandlers(io, socket);
+    
+    // GPS Trajectory Mapping
+    registerGPSHandlers(io, socket);
   });
 }
 

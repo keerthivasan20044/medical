@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { useLanguage } from '../../context/LanguageContext.jsx';
-import { addItem } from '../../store/cartSlice.js';
+import { addToCart } from '../../store/cartSlice.js';
 import { medicines as mockMedicines, pharmacies } from '../../utils/data.js';
 import MedicineCard from '../medicine/MedicineCard.jsx';
 import { medicineService } from '../../services/apiServices';
@@ -20,7 +20,7 @@ export function FeaturedMedicines() {
   const dispatch = useDispatch();
 
   const handleAddToCart = (item) => {
-    dispatch(addItem({
+    dispatch(addToCart({
       id: item._id || item.id,
       name: item.name,
       price: item.price,
@@ -28,7 +28,7 @@ export function FeaturedMedicines() {
       brand: item.brand,
       qty: 1
     }));
-    toast.success(`${item.name} added to payload`);
+    toast.success(`${item.name} added to cart`);
   };
 
   useEffect(() => {

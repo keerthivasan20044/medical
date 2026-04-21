@@ -6,12 +6,14 @@ import {
 } from 'lucide-react';
 import { useCart } from '../../hooks/useCart';
 import { Button } from '../common/Core';
+import { useLanguage } from '../../context/LanguageContext';
 
 /**
  * Side-sliding basket enclave.
  */
 export function CartDrawer({ isOpen, onClose }) {
-  const { items, subtotal, removeItem, changeQty } = useCart();
+  const { items, subtotal, removeFromCart, incrementQty, decrementQty } = useCart();
+  const { t } = useLanguage();
 
   return (
     <AnimatePresence>
@@ -33,8 +35,8 @@ export function CartDrawer({ isOpen, onClose }) {
             >
                <div className="p-10 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                   <div className="space-y-1">
-                     <h3 className="font-syne font-black text-2xl text-[#0a1628] flex items-center gap-4">Enclave Cart <ShoppingBag size={24} /></h3>
-                     <p className="text-[10px] text-gray-300 font-black uppercase tracking-widest">{items.length} Architecture Nodes</p>
+                     <h3 className="font-syne font-black text-2xl text-[#0a1628] flex items-center gap-4">{t('shoppingCart') || 'My Cart'} <ShoppingBag size={24} /></h3>
+                     <p className="text-[10px] text-gray-300 font-black uppercase tracking-widest">{items.length} {t('selectedItems') || 'Items Selected'}</p>
                   </div>
                   <button onClick={onClose} className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center text-gray-400 hover:text-red-500 transition shadow-sm border border-gray-50"><X size={20}/></button>
                </div>
@@ -43,7 +45,7 @@ export function CartDrawer({ isOpen, onClose }) {
                   {items.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-center space-y-8 opacity-20 filter grayscale">
                        <ShoppingBag size={120} />
-                       <div className="font-syne font-black text-2xl uppercase tracking-[0.2em]">Enclave Empty</div>
+                       <div className="font-syne font-black text-2xl uppercase tracking-[0.2em]">{t('cartEmptyTitle') || 'Your Cart is Empty'}</div>
                     </div>
                   ) : (
                     items.map(item => (
@@ -54,17 +56,17 @@ export function CartDrawer({ isOpen, onClose }) {
                           <div className="flex-1 space-y-4">
                              <div className="space-y-1">
                                 <h4 className="font-syne font-black text-[#0a1628] uppercase tracking-tighter text-sm">{item.name}</h4>
-                                <div className="text-[10px] text-[#028090] font-black uppercase tracking-widest italic">{item.pharmacyName} Enclave</div>
+                                <div className="text-[10px] text-[#028090] font-black uppercase tracking-widest italic">{item.pharmacyName}</div>
                              </div>
                              <div className="flex items-center justify-between">
                                 <div className="flex items-center bg-gray-50 rounded-xl px-4 py-2 gap-4 border border-gray-100">
-                                   <button onClick={() => changeQty(item.id, -1)} className="text-gray-400 hover:text-red-500 transition"><Minus size={14}/></button>
+                                   <button onClick={() => decrementQty(item._id || item.id)} className="text-gray-400 hover:text-red-500 transition"><Minus size={14}/></button>
                                    <span className="font-syne font-black text-sm text-[#0a1628]">{item.qty}</span>
-                                   <button onClick={() => changeQty(item.id, 1)} className="text-[#02C39A] hover:text-[#028090] transition"><Plus size={14}/></button>
+                                   <button onClick={() => incrementQty(item._id || item.id)} className="text-[#02C39A] hover:text-[#028090] transition"><Plus size={14}/></button>
                                 </div>
                                 <div className="font-syne font-black text-lg text-[#0a1628]">₹{(item.price * item.qty).toFixed(2)}</div>
                              </div>
-                             <button onClick={() => removeItem(item.id)} className="text-[8px] font-black text-red-500 uppercase tracking-widest flex items-center gap-2 hover:underline"><Trash2 size={12}/> Purge From Enclave</button>
+                             <button onClick={() => removeFromCart(item._id || item.id)} className="text-[8px] font-black text-red-500 uppercase tracking-widest flex items-center gap-2 hover:underline"><Trash2 size={12}/> {t('removeItem') || 'Remove Item'}</button>
                           </div>
                        </div>
                     ))
@@ -74,25 +76,25 @@ export function CartDrawer({ isOpen, onClose }) {
                <div className="p-10 bg-gray-50 border-t border-gray-100 space-y-8">
                   <div className="space-y-4">
                      <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-gray-300">
-                        <span>Subtotal Enclave</span>
+                         <span>{t('subtotal') || 'Subtotal'}</span>
                         <span className="text-[#0a1628]">₹{subtotal.toFixed(2)}</span>
                      </div>
                      <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-emerald-500">
-                        <span>Enclave Discounts</span>
+                         <span>{t('discounts') || 'Discounts'}</span>
                         <span>-₹0.00</span>
                      </div>
                      <div className="pt-6 border-t border-gray-100 flex justify-between items-center">
-                        <span className="font-syne font-black text-[#0a1628] uppercase tracking-widest text-sm">Payable Node</span>
+                         <span className="font-syne font-black text-[#0a1628] uppercase tracking-widest text-sm">{t('totalAmount') || 'Total'}</span>
                         <span className="font-syne font-black text-3xl text-[#0a1628]">₹{subtotal.toFixed(2)}</span>
                      </div>
                   </div>
                   
                   <div className="flex gap-4">
-                     <Button variant="ghost" className="flex-1" onClick={onClose}>Architecture Clear</Button>
-                     <Button className="flex-[2]" icon={<Zap size={18} />}>Proceed to Checkout</Button>
+                      <Button variant="ghost" className="flex-1" onClick={onClose}>{t('close') || 'Close'}</Button>
+                      <Button className="flex-[2]" onClick={() => window.location.href='/checkout'} icon={<Zap size={18} />}>{t('proceedCheckout') || 'Checkout'}</Button>
                   </div>
                   <div className="flex items-center justify-center gap-3 text-[8px] font-black text-gray-300 uppercase tracking-widest">
-                     <ShieldCheck size={12} className="text-[#02C39A]" /> Verified Medical Enclave Protocol
+                     <ShieldCheck size={12} className="text-[#02C39A]" /> {t('securePayments') || 'Secure Payment'}
                   </div>
                </div>
             </motion.div>
@@ -106,6 +108,7 @@ export function CartDrawer({ isOpen, onClose }) {
  * Dropdown stream for system alerts.
  */
 export function NotificationPanel({ isOpen, onClose, notifications = [] }) {
+  const { t } = useLanguage();
   return (
     <AnimatePresence>
        {isOpen && (
@@ -124,15 +127,15 @@ export function NotificationPanel({ isOpen, onClose, notifications = [] }) {
             className="absolute top-24 right-0 w-full max-w-lg bg-white border border-gray-100 rounded-[3.5rem] shadow-4xl z-[110] overflow-hidden"
           >
              <div className="p-10 border-b border-gray-50 flex items-center justify-between bg-gray-50/30">
-                <h3 className="font-syne font-black text-2xl text-[#0a1628] flex items-center gap-4">Enclave Alert Stream <Bell size={24} className="animate-shake" /></h3>
-                <button className="text-[8px] font-black text-[#028090] uppercase tracking-widest hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">Mark Protocol as Read</button>
+                <h3 className="font-syne font-black text-2xl text-[#0a1628] flex items-center gap-4">{t('alerts') || 'Notifications'} <Bell size={24} className="animate-shake" /></h3>
+                <button className="text-[8px] font-black text-[#028090] uppercase tracking-widest hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">{t('markAllRead') || 'Mark all as read'}</button>
              </div>
              
              <div className="max-h-[500px] overflow-y-auto p-8 space-y-4 no-scrollbar">
                 {notifications.length === 0 ? (
                   <div className="py-20 text-center space-y-6 opacity-30">
                      <Package size={64} className="mx-auto" />
-                     <p className="font-syne font-black uppercase text-xs tracking-widest">No Active Alarms in Stream</p>
+                     <p className="font-syne font-black uppercase text-xs tracking-widest">{t('noNotifications') || 'No Notifications'}</p>
                   </div>
                 ) : (
                   notifications.map(n => (
@@ -142,7 +145,7 @@ export function NotificationPanel({ isOpen, onClose, notifications = [] }) {
                        </div>
                        <div className="space-y-1 flex-1">
                           <div className="flex items-center justify-between">
-                             <div className="text-[8px] text-gray-300 font-bold uppercase tracking-widest italic">{n.time} Enclave</div>
+                             <div className="text-[8px] text-gray-300 font-bold uppercase tracking-widest italic">{n.time}</div>
                              {!n.read && <div className="h-1.5 w-1.5 bg-red-500 rounded-full" />}
                           </div>
                           <h4 className="font-syne font-black text-sm text-[#0a1628] group-hover:text-[#028090] transition">{n.title}</h4>
@@ -155,7 +158,7 @@ export function NotificationPanel({ isOpen, onClose, notifications = [] }) {
 
              <div className="p-10 border-t border-gray-50 text-center">
                 <button className="text-[10px] font-black text-[#0a1628] uppercase tracking-[0.3em] flex items-center justify-center gap-3 w-full group">
-                   Visit Command Notification Center <ArrowRight size={14} className="group-hover:translate-x-2 transition" />
+                   {t('viewAllAlerts') || 'View all notifications'} <ArrowRight size={14} className="group-hover:translate-x-2 transition" />
                 </button>
              </div>
           </motion.div>

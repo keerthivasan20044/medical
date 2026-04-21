@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { medicines as mockMedicines, pharmacies as mockPharmacies } from '../../utils/data.js';
-import { addItem } from '../../store/cartSlice.js';
+import { addToCart } from '../../store/cartSlice.js';
 import MedicineCard from '../../components/medicine/MedicineCard.jsx';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 import { medicineService } from '../../services/apiServices';
@@ -52,7 +52,7 @@ export default function MedicineDetailPage() {
   };
 
   const handleAddToCart = () => {
-    dispatch(addItem({
+    dispatch(addToCart({
       id: medicine?._id || medicine?.id,
       name: medicine?.name,
       price: medicine?.price,
@@ -60,7 +60,7 @@ export default function MedicineDetailPage() {
       brand: medicine?.brand,
       qty
     }));
-    toast.success(`${qty} units added to payload.`);
+    toast.success(`${qty} units added to cart.`);
   };
 
   if (loading) return (
@@ -109,6 +109,7 @@ export default function MedicineDetailPage() {
                <img 
                  src={normalizeUrl(medicine.images?.[activeImg] || medicine.images?.[0] || '/assets/medicine_default.png')} 
                  alt={medicine.name} 
+                 onError={(e) => { e.target.src = '/assets/medicine_default.png'; }}
                  className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-1000 hover:scale-110"
                />
                <div className="absolute top-4 right-4 md:top-10 md:right-10 flex flex-col gap-4 z-20">
@@ -195,7 +196,7 @@ export default function MedicineDetailPage() {
                     onClick={handleAddToCart}
                     className="flex-1 h-16 md:h-20 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] md:text-xs uppercase italic tracking-[0.3em] rounded-2xl md:rounded-[2.2rem] shadow-mint hover:bg-brand-teal hover:text-white transition-all flex items-center justify-center gap-4"
                   >
-                     <ShoppingBag size={20}/> ADD TO PAYLOAD
+                     <ShoppingBag size={20}/> ADD TO CART
                   </button>
                </div>
             </div>
@@ -261,7 +262,7 @@ export default function MedicineDetailPage() {
               onClick={handleAddToCart}
               className="flex-1 h-12 bg-brand-teal text-[#0a1628] font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl shadow-mint active:scale-95 transition-all"
             >
-               ADD TO PAYLOAD
+               ADD TO CART
             </button>
          </motion.div>
       </AnimatePresence>

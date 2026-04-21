@@ -66,12 +66,12 @@ export default function PrescriptionUploadFlow() {
       
       setTimeout(() => {
         setIsUploading(false);
-        toast.success('Clinical Manifest Synchronized ✓');
+        toast.success('Prescription Uploaded Successfully ✓');
       }, 500);
     } catch (err) {
       clearInterval(interval);
       setIsUploading(false);
-      toast.error('Manifest Sync Failed — Protocol Error');
+      toast.error('Upload failed — Please try again');
       console.error('Upload error:', err);
     }
   };
@@ -111,7 +111,7 @@ export default function PrescriptionUploadFlow() {
         {/* Hero Header */}
         <div className="space-y-4 md:space-y-6">
            <h1 className="font-syne font-black text-4xl md:text-5xl lg:text-7xl text-[#0a1628] uppercase italic leading-none tracking-tighter">Upload <span className="text-brand-teal text-5xl md:text-6xl block transform translate-y-1">Prescription</span></h1>
-           <p className="text-gray-400 font-dm text-sm md:text-lg font-bold italic">Clinical authorization required for {rxItems.length} medicinal nodes in your payload.</p>
+           <p className="text-gray-400 font-dm text-sm md:text-lg font-bold italic">Medical verification required for {rxItems.length} medicines in your cart.</p>
         </div>
 
         <div className="grid lg:grid-cols-[1.3fr_1fr] gap-16 items-start">
@@ -123,7 +123,7 @@ export default function PrescriptionUploadFlow() {
                  
                  <div className="flex items-center gap-4 text-brand-teal">
                     <Activity size={20} className="animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] italic">Authorized Medicine Registry</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] italic">Verification List</span>
                  </div>
 
                  <div className="space-y-4">
@@ -249,7 +249,7 @@ export default function PrescriptionUploadFlow() {
                                 <div className="space-y-4">
                                    <div className="flex items-center gap-4 justify-center md:justify-start">
                                       <div className="h-10 w-10 bg-brand-teal/20 text-brand-teal rounded-full flex items-center justify-center"><CheckCircle size={22} /></div>
-                                      <h3 className="font-syne font-black text-3xl text-white uppercase italic tracking-tighter leading-none">Manifest Sync Complete</h3>
+                                      <h3 className="font-syne font-black text-3xl text-white uppercase italic tracking-tighter leading-none">Prescription uploaded successfully</h3>
                                    </div>
                                    <div className="text-xs text-white/40 font-dm font-bold italic tracking-widest leading-relaxed">
                                       clinical_scan_609602.jpg &bull; 2.4 MB <br/> 
@@ -275,17 +275,17 @@ export default function PrescriptionUploadFlow() {
               <div className="bg-white border border-black/[0.03] rounded-[5rem] p-16 space-y-12 shadow-soft group hover:shadow-4xl transition-all duration-1000 relative overflow-hidden">
                  <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-[0.02] rounded-full blur-[60px]" />
                  <div className="space-y-4 relative z-10">
-                    <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic leading-none tracking-tighter">Manifest Criteria</h3>
-                    <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">Clinical Sync Checklist</p>
+                    <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic leading-none tracking-tighter">Requirements</h3>
+                    <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">Ensure these are visible</p>
                  </div>
 
                  <div className="space-y-6 relative z-10">
                     {[
-                       { tip: "Doctor Signature Node", desc: "Digital or physical authorization signature must be legible." },
-                       { tip: "Time Inertia", desc: "Issued within the last 30 district standard days." },
-                       { tip: "Identity Matching", desc: "Recipient node identity must match your centralized profile." },
-                       { tip: "Medicine Resolution", desc: "Dosage and clinical names must be sharp and clear." },
-                       { tip: "Clinic Timestamp", desc: "Official medical stamp or registration index must be visible." }
+                       { tip: "Doctor's Name", desc: "Doctor's name and clinic details." },
+                       { tip: "Date", desc: "Date of issue (within 30 days)." },
+                       { tip: "Patient Name", desc: "Patient name matching your profile." },
+                       { tip: "Medicine Details", desc: "Clear dosage and medicine names." },
+                       { tip: "Pharmacy Stamp", desc: "Official stamp or registration." }
                     ].map((item, i) => (
                        <div key={i} className="flex items-start gap-5 group/tip">
                           <div className="h-6 w-6 bg-brand-teal/10 rounded-lg flex items-center justify-center shrink-0 mt-1 transition-all group-hover/tip:bg-[#0a1628]"><CheckCircle size={14} className="text-brand-teal" /></div>
@@ -330,7 +330,7 @@ export default function PrescriptionUploadFlow() {
                 <div className="bg-emerald-50 border border-emerald-100 rounded-[3rem] p-10 space-y-6 shadow-inner">
                    <div className="flex items-center gap-4 text-emerald-600">
                       <ShieldCheck size={20} />
-                      <h3 className="font-syne font-black text-sm uppercase italic tracking-widest leading-none">Safe Payload Summary</h3>
+                      <h3 className="font-syne font-black text-sm uppercase italic tracking-widest leading-none">Order Summary</h3>
                    </div>
                    <div className="space-y-4">
                       {nonRxItems.map((item, id) => (
@@ -351,8 +351,8 @@ export default function PrescriptionUploadFlow() {
             <button onClick={() => navigate(-1)} className="flex items-center gap-6 group">
                <div className="h-16 w-16 bg-white border border-black/[0.02] rounded-2xl flex items-center justify-center text-[#0a1628] shadow-soft group-hover:bg-[#0a1628] group-hover:text-white transition-all duration-700"><ArrowLeft size={24}/></div>
                <div className="text-left">
-                  <div className="text-[10px] font-black text-gray-300 uppercase italic tracking-[0.4em] mb-1 group-hover:text-[#0a1628] transition-colors">Back to Sync</div>
-                  <div className="font-syne font-black text-sm text-[#0a1628] uppercase italic leading-none">Medicines Matrix</div>
+                  <div className="text-[10px] font-black text-gray-300 uppercase italic tracking-[0.4em] mb-1 group-hover:text-[#0a1628] transition-colors">Back</div>
+                  <div className="font-syne font-black text-sm text-[#0a1628] uppercase italic leading-none">Medicines</div>
                </div>
             </button>
 
@@ -361,7 +361,7 @@ export default function PrescriptionUploadFlow() {
                className={`h-24 px-16 rounded-[2.5rem] font-syne font-black text-lg uppercase tracking-widest transition-all duration-1000 shadow-4xl flex items-center gap-8 ${previewUrl ? 'bg-brand-teal text-white hover:bg-[#0a1628] hover:scale-105' : 'bg-gray-100 text-gray-300 cursor-not-allowed'} italic`}
                disabled={!previewUrl}
             >
-               Authorize & Checkout <ArrowLeft size={32} className="rotate-180" />
+               Confirm & Checkout <ArrowLeft size={32} className="rotate-180" />
             </button>
         </div>
 

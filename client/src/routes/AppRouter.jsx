@@ -142,7 +142,7 @@ export default function AppRouter() {
         <Route path="/offline" element={<OfflinePage />} />
       </Route>
 
-      {/* CUSTOMER ENCLAVE */}
+      {/* CUSTOMER ROUTES */}
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           <Route path="/home" element={<CustomerDashboard />} />
@@ -172,7 +172,7 @@ export default function AppRouter() {
           <Route path="/help" element={<HelpCenterPage />} />
           <Route path="/chat" element={<ChatPage />} />
 
-          {/* PHARMACIST ENCLAVE */}
+          {/* PHARMACIST ROUTES */}
           <Route element={<RoleRoute allow={['pharmacist']} />}>
             <Route path="/pharmacist/dashboard" element={<PharmacistDashboard />} />
             <Route path="/pharmacist/inventory" element={<InventoryPage />} />
@@ -185,7 +185,7 @@ export default function AppRouter() {
             <Route path="/pharmacist/settings" element={<PharmacySettingsPage />} />
           </Route>
 
-          {/* DOCTOR ENCLAVE */}
+          {/* DOCTOR ROUTES */}
           <Route element={<RoleRoute allow={['doctor']} />}>
             <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
             <Route path="/doctor/appointments" element={<DoctorAppointmentsPage />} />
@@ -195,7 +195,7 @@ export default function AppRouter() {
             <Route path="/doctor/schedule" element={<SchedulePage />} />
           </Route>
 
-          {/* DELIVERY ENCLAVE */}
+          {/* DELIVERY ROUTES */}
           <Route element={<RoleRoute allow={['delivery']} />}>
             <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
             <Route path="/delivery/active" element={<ActiveDeliveryPage />} />

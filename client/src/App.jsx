@@ -9,25 +9,34 @@ import MobileBottomNav from './components/layout/MobileBottomNav.jsx';
 import SocketListener from './components/layout/SocketListener.jsx';
 import { fetchMe } from './store/authSlice.js';
 import ErrorBoundary from './components/common/ErrorBoundary.jsx';
+import { loadGoogleMaps } from './services/mapLoader.js';
+import ScrollToTop from './components/common/ScrollToTop.jsx';
+import InstallPrompt from './components/InstallPrompt.jsx';
 
 export default function App() {
   const location = useLocation();
   const dispatch = useDispatch();
   const hideBars = ['/login', '/register', '/verify-otp', '/forgot-password', '/reset-password'].includes(location.pathname);
+  const hideEmergency = ['/about', '/checkout', '/cart'].includes(location.pathname);
 
   // Rehydrate auth session from cookie on every page load/refresh
   useEffect(() => {
     dispatch(fetchMe());
+    
+    // Load Maps and Location Services
+    loadGoogleMaps();
   }, [dispatch]);
 
   return (
     <ErrorBoundary>
+      <ScrollToTop />
+      <InstallPrompt />
       <SocketListener />
       <AppRouter />
       {!hideBars && (
         <>
           <DistrictCommandBar />
-          <EmergencyFAB />
+          {!hideEmergency && <EmergencyFAB />}
           <MobileBottomNav />
         </>
       )}

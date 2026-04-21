@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, Heart, ShoppingBag, Store, FileText, CheckCircle2, Zap } from 'lucide-react';
+import { Eye, Heart, ShoppingBag, Store, FileText, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { normalizeUrl } from '../../utils/url';
 
 export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const id = item.id || item._id;
-  const { name, brand, generic, category, price, mrp, discount, stock, stockCount, requiresRx, pharmacyName, images } = item;
+  const { name, brand, category, price, mrp, discount, stock, stockCount, requiresRx, pharmacyName, images } = item;
   
   const isOutOfStock = stock === 'out' || stockCount === 0;
   const isLowStock = stockCount > 0 && stockCount < 20;
@@ -17,9 +17,9 @@ export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) 
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`group bg-white border border-black/[0.03] rounded-[3rem] overflow-hidden shadow-soft hover:shadow-4xl transition-all duration-700 relative flex flex-col ${layout === 'list' ? 'md:flex-row md:h-64' : ''}`}
+      whileHover={{ y: -5 }}
+      className={`group bg-white border border-black/[0.03] rounded-[2.5rem] overflow-hidden shadow-soft hover:shadow-xl transition-all duration-300 relative flex flex-col ${layout === 'list' ? 'md:flex-row md:h-64' : ''}`}
     >
-      {/* Product Image Terminal */}
       <div className={`relative overflow-hidden shrink-0 bg-gray-50 ${layout === 'list' ? 'md:w-64 h-full' : 'h-44 w-full'}`}>
         <img 
           src={normalizeUrl(images?.[0]?.url || images?.[0] || '/assets/medicine_default.png')} 
@@ -27,22 +27,20 @@ export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) 
           className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" 
         />
         
-        {/* Hub Action Overlays */}
         <div className="absolute top-4 inset-x-4 flex justify-between items-start z-10">
            <button 
              onClick={(e) => { e.preventDefault(); setIsFavorite(!isFavorite); }}
-             className={`h-10 w-10 rounded-xl flex items-center justify-center transition-all duration-500 backdrop-blur-md border ${isFavorite ? 'bg-red-500 border-red-500 text-white shadow-lg' : 'bg-white/40 border-white/20 text-white hover:bg-white hover:text-red-500'}`}
+             className={`h-10 w-10 rounded-full flex items-center justify-center transition-all duration-300 bg-white shadow-md border ${isFavorite ? 'border-red-100 text-red-500' : 'border-gray-50 text-gray-300 hover:text-red-500 hover:scale-110'}`}
            >
               <Heart size={18} fill={isFavorite ? 'currentColor' : 'none'} className={isFavorite ? 'animate-heartbeat' : ''} />
            </button>
            {discount > 0 && (
              <div className="bg-red-500 text-white text-[9px] font-black px-3 py-1.5 rounded-lg shadow-4xl tracking-widest uppercase italic border border-red-400/30">
-                -{discount}% Sync
+                -{discount}% OFF
              </div>
            )}
         </div>
 
-        {/* Intelligence Telemetry Hover */}
         <div className="absolute inset-0 bg-[#0a1628]/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 cursor-pointer flex flex-col items-center justify-center p-6 text-center">
            <Link to={`/medicines/${id}`} className="bg-white text-[#0a1628] font-syne font-black text-[9px] px-6 py-3 rounded-xl flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-all duration-700 uppercase tracking-widest shadow-4xl hover:bg-brand-teal hover:text-white">
               <Eye size={16} /> Quick View
@@ -50,7 +48,6 @@ export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) 
         </div>
       </div>
 
-      {/* Node Data Matrix */}
       <div className="p-4 md:p-6 flex-1 flex flex-col justify-between">
          <div className="space-y-2 md:space-y-3">
             <div className="flex flex-wrap items-center gap-1.5 md:gap-2">
@@ -64,7 +61,7 @@ export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) 
             
             <div className="space-y-1">
                <Link to={`/medicines/${id}`}>
-                  <h3 className="font-syne font-black text-[#0a1628] text-sm md:text-lg leading-tight group-hover:text-brand-teal transition-colors uppercase tracking-tighter italic line-clamp-1">{name}</h3>
+                  <h3 title={name} className="font-syne font-black text-[#0a1628] text-sm md:text-base leading-[1.2] group-hover:text-brand-teal transition-colors uppercase tracking-tight italic line-clamp-2 min-h-[2.4em]">{name}</h3>
                </Link>
                <div className="text-[8px] md:text-[10px] text-gray-400 font-dm font-bold italic truncate tracking-tight">{brand}</div>
             </div>
@@ -93,23 +90,22 @@ export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) 
                disabled={isOutOfStock}
                className={`w-full h-10 md:h-12 rounded-lg md:rounded-xl font-syne font-black text-[8px] md:text-[9px] flex items-center justify-center gap-2 md:gap-3 transition-all duration-500 uppercase tracking-widest shadow-soft hover:shadow-4xl ${
                   isAdded 
-                  ? 'bg-emerald-500 text-white' 
+                  ? 'bg-emerald-500 text-white border-2 border-emerald-100 shadow-emerald-100' 
                   : isOutOfStock 
                     ? 'bg-gray-100 text-gray-300 cursor-not-allowed border border-gray-100' 
                     : 'bg-[#0a1628] text-white hover:bg-brand-teal group-hover:scale-[1.02]'
                }`}
             >
                {isAdded ? (
-                 <> <CheckCircle2 size={14} className="md:w-4 md:h-4" /> SYNCED </>
+                 <> <CheckCircle2 size={14} className="md:w-4 md:h-4" /> ✓ In Cart </>
                ) : isOutOfStock ? (
-                 'OFFLINE'
+                 'OUT OF STOCK'
                ) : (
-                 <> <ShoppingBag size={14} className="md:w-4 md:h-4" /> ADD </>
+                 <> <ShoppingBag size={14} className="md:w-4 md:h-4" /> ADD TO CART </>
                )}
             </button>
          </div>
       </div>
-
     </motion.div>
   );
 }

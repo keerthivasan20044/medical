@@ -43,7 +43,7 @@ export default function Register() {
 
   const autoDetectAddress = () => {
     if (location.lat) {
-      setFormData(prev => ({ ...prev, address: `Detected Node: ${location.lat}, ${location.lng}` }));
+      setFormData(prev => ({ ...prev, address: `Detected Location: ${location.lat}, ${location.lng}` }));
       toast.success(t('gpsSyncSuccess'));
     } else {
       toast.error(t('locationError'));
@@ -220,7 +220,7 @@ export default function Register() {
                            <Input 
                              label={t('emailNode')} 
                              icon={Mail} 
-                             placeholder="name@enclave.in" 
+                             placeholder="name@example.com" 
                              value={formData.email}
                              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                            />
@@ -289,7 +289,7 @@ export default function Register() {
                          <div className="py-8">
                             <OTPInput length={6} onComplete={verifyRegistration} />
                          </div>
-                         {loading && <div className="text-brand-teal font-black animate-pulse text-[10px] uppercase tracking-widest">Verifying Node...</div>}
+                         {loading && <div className="text-brand-teal font-black animate-pulse text-[10px] uppercase tracking-widest">Verifying...</div>}
                          <div className="flex flex-col gap-6 items-center">
                             <p className="text-[10px] font-black uppercase tracking-widest text-gray-300">{t('waitForSignal')} 59s</p>
                             <button onClick={initiateVerification} className="text-[10px] font-black text-[#028090] uppercase tracking-widest hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">{t('resendSignal')}</button>

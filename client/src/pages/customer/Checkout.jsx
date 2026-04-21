@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldCheck, ArrowRight, CreditCard, Smartphone, 
   Truck, CheckCircle, MapPin, Package, Lock, 
-  ChevronRight, ArrowLeft, Info, AlertCircle, Activity, Zap, Globe
+  ChevronRight, ArrowLeft, Info, AlertCircle, Activity, Zap, Globe, Plus, ShoppingBag
 } from 'lucide-react';
 import { createOrder, confirmPayment, createPaymentIntent } from '../../store/paymentsSlice.js';
 import { Button, Input } from '../../components/common/Core';
@@ -22,41 +22,44 @@ function loadRazorpay() {
   });
 }
 
-export default function Checkout() {
+const SAVED_ADDRESSES = [
+  { id: 1, label: 'Home', address: '42 Gandhi Nagar, Karaikal', city: 'Puducherry', zip: '609602', default: true },
+  { id: 2, label: 'Work', address: 'District Hospital Compx, Nagore Rd', city: 'Karaikal', zip: '609602', default: false }
+];
+
+export default function CheckoutPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const { items, totalAmount, note, prescription } = useSelector((s) => s.cart);
   const { status } = useSelector((s) => s.payments);
-  const [step, setStep] = useState(1);
   const [method, setMethod] = useState('upi');
   const [error, setError] = useState('');
+  const [selectedAddress, setSelectedAddress] = useState(SAVED_ADDRESSES[0].id);
 
-  const needsPrescription = useMemo(() => items.some(i => i.requiresRx), [items]);
+  const deliveryFee = 35;
+  const discount = totalAmount > 1000 ? 100 : 0;
+  const finalTotal = totalAmount + deliveryFee - discount;
 
   useEffect(() => {
-    if (needsPrescription && !prescription) {
-      navigate('/cart');
-    }
-    window.scrollTo(0,0);
-  }, [needsPrescription, prescription, navigate, step]);
+    if (items.length === 0) navigate('/cart');
+    window.scrollTo(0, 0);
+  }, [items, navigate]);
 
-  const payload = useMemo(() => {
-    return {
-      items: items.map((i) => ({ medicine: i.id || i._id, qty: i.qty, price: i.price })),
-      totalAmount,
-      deliveryAddress: '42 Gandhi Nagar, Karaikal',
-      paymentMethod: method,
-      note,
-      prescription
-    };
-  }, [items, totalAmount, method, note, prescription]);
+  const payload = useMemo(() => ({
+    items: items.map((i) => ({ medicine: i.id || i._id, qty: i.qty, price: i.price })),
+    totalAmount: finalTotal,
+    deliveryAddress: SAVED_ADDRESSES.find(a => a.id === selectedAddress)?.address || '',
+    paymentMethod: method,
+    note,
+    prescription
+  }), [items, finalTotal, method, note, prescription, selectedAddress]);
 
   const handlePay = async () => {
     setError('');
     const orderRes = await dispatch(createOrder(payload));
     if (orderRes.meta.requestStatus !== 'fulfilled') {
-      setError(t('enclaveCreationFailed'));
+      setError('Enclave synchronization failed.');
       return;
     }
 
@@ -64,21 +67,21 @@ export default function Checkout() {
 
     if (method === 'cod') {
       const confirm = await dispatch(confirmPayment({ orderId, method }));
-      return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError(t('protocolConfirmationFailed'));
+      return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError('Protocol confirmation failed.');
     }
 
     const ok = await loadRazorpay();
-    if (!ok) return setError(t('satellitePaymentNodeOffline'));
+    if (!ok) return setError('Satellite payment node offline.');
 
     const intentRes = await dispatch(createPaymentIntent({ orderId, method }));
-    if (intentRes.meta.requestStatus !== 'fulfilled') return setError(t('paymentIntentFailed'));
+    if (intentRes.meta.requestStatus !== 'fulfilled') return setError('Payment intent failed.');
 
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID || '',
       amount: intentRes.payload.amount,
       currency: intentRes.payload.currency,
       name: 'MediReach Enclave',
-      description: t('medicalArchitectureProcurement'),
+      description: 'Medical Architecture Procurement',
       order_id: intentRes.payload.id,
       handler: async (response) => {
         const confirm = await dispatch(confirmPayment({
@@ -88,7 +91,7 @@ export default function Checkout() {
           razorpay_order_id: response.razorpay_order_id,
           razorpay_signature: response.razorpay_signature
         }));
-        return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError(t('nodeSyncFailed'));
+        return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError('Node synchronization failed.');
       },
       prefill: { name: 'User', email: 'user@karaikal.in', contact: '9876543210' },
       theme: { color: '#028090' }
@@ -99,146 +102,47 @@ export default function Checkout() {
   };
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-64 pt-20 md:pt-24">
+    <div className="bg-[#f8fafc] min-h-screen pb-64 pt-24 overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
-        <div className="grid lg:grid-cols-[1.3fr_1fr] gap-12 md:gap-20 items-start">
+        
+        <div className="grid lg:grid-cols-[1fr_1.2fr] gap-12 md:gap-20 items-start">
           
-          {/* Main Flow Section */}
-          <div className="space-y-10 md:space-y-16">
-             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-10">
-                <div className="space-y-4 md:space-y-6">
-                   <div className="px-5 py-2 bg-[#0a1628] rounded-xl w-fit flex items-center gap-3 text-[9px] md:text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic">
-                      <Zap size={14} className="text-amber-500 animate-pulse" /> {t('transactionProtocol')}
-                   </div>
-                   <h1 className="font-syne font-black text-4xl md:text-7xl lg:text-8xl text-[#0a1628] leading-[0.85] tracking-tighter uppercase italic">
-                      {t('order')} <br/><span className="text-brand-teal">{t('synchronization')}</span>
-                   </h1>
+          {/* Left Column: Order Summary */}
+          <section className="space-y-12">
+             <div className="space-y-4">
+                <div className="px-5 py-2 bg-[#0a1628] rounded-xl w-fit flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic">
+                   <Activity size={14} className="animate-pulse" /> Order Summary
                 </div>
-                <div className="flex items-center gap-4 bg-white border border-black/[0.03] p-2 md:p-3 rounded-2xl md:rounded-[2.5rem] shadow-soft">
-                   {[1, 2].map(s => (
-                      <div key={s} className={`h-12 w-16 md:h-14 md:px-8 rounded-xl md:rounded-2xl font-syne font-black text-xs flex items-center justify-center transition-all duration-700 ${step === s ? 'bg-[#0a1628] text-brand-teal shadow-4xl' : 'text-gray-200'}`}>0{s}</div>
-                   ))}
+                <h1 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic leading-none tracking-tighter">
+                   Checkout
+                </h1>
+                <div className="bg-brand-teal/5 border border-brand-teal/10 p-4 rounded-2xl flex items-center gap-4 text-brand-teal shrink-0">
+                   <Truck size={20} className="animate-bounce-slow" />
+                   <div className="font-syne font-black text-[10px] md:text-xs uppercase italic tracking-widest leading-none">Estimated Delivery: <span className="text-[#0a1628]">25–35 Mins</span></div>
                 </div>
              </div>
 
-             <AnimatePresence mode="wait">
-                {step === 1 ? (
-                  <motion.div 
-                    key="step-1"
-                    initial={{ opacity: 0, x: -20 }} 
-                    animate={{ opacity: 1, x: 0 }} 
-                    exit={{ opacity: 0, x: 20 }}
-                    className="space-y-8 md:space-y-12"
-                  >
-                     <div className="bg-white border border-black/[0.03] rounded-[2rem] md:rounded-[5rem] p-6 md:p-16 space-y-8 md:space-y-12 shadow-4xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 h-40 md:h-64 w-40 md:w-64 bg-brand-teal opacity-[0.02] rounded-full blur-[100px]" />
-                        <div className="flex flex-col md:flex-row md:items-center justify-between relative z-10 border-b border-gray-50 pb-6 md:pb-8 gap-4">
-                           <div className="flex items-center gap-4 md:gap-6">
-                              <div className="h-1.5 w-10 md:w-12 bg-brand-teal rounded-full" />
-                              <h2 className="font-syne font-black text-xl md:text-3xl text-[#0a1628] uppercase italic tracking-tighter">{t('shippingEnclave')}</h2>
-                           </div>
-                        </div>
-                        <div className="p-6 md:p-10 bg-gray-50 rounded-[1.8rem] md:rounded-[3.5rem] border border-black/[0.02] flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 relative z-10">
-                           <div className="h-14 w-14 md:h-20 md:w-20 bg-white border border-gray-50 rounded-xl md:rounded-[2rem] flex items-center justify-center text-brand-teal shadow-inner grow-0 shrink-0"><MapPin size={24}/></div>
-                           <div className="space-y-1 md:space-y-3 text-center md:text-left">
-                              <div className="text-[8px] md:text-[9px] text-gray-300 font-black uppercase tracking-[0.3em] italic">Destination Node</div>
-                              <div className="font-syne font-black text-lg md:text-2xl text-[#0a1628] italic">42 Gandhi Nagar, Karaikal</div>
-                              <div className="text-sm md:text-lg font-dm font-bold text-gray-300 italic">Puducherry District, 609602</div>
-                           </div>
-                        </div>
-                     </div>
-
-                     <div className="bg-white border border-black/[0.03] rounded-[2rem] md:rounded-[5rem] p-6 md:p-16 space-y-8 md:space-y-12 shadow-soft">
-                        <div className="flex items-center gap-4 md:gap-6">
-                           <div className="h-1.5 w-10 md:w-12 bg-brand-teal rounded-full" />
-                           <h2 className="font-syne font-black text-xl md:text-3xl text-[#0a1628] uppercase italic tracking-tighter">{t('paymentProtocol')}</h2>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-                           {[
-                              { id: 'upi', icon: Smartphone, label: 'UPI SYNC' },
-                              { id: 'card', icon: CreditCard, label: 'CARD' },
-                              { id: 'cod', icon: Truck, label: 'CASH' }
-                           ].map(m => (
-                              <button 
-                                 key={m.id}
-                                 onClick={() => setMethod(m.id)}
-                                 className={`p-6 md:p-10 rounded-2xl md:rounded-[3.5rem] border-2 transition-all duration-700 flex flex-row md:flex-col items-center gap-4 md:gap-6 ${method === m.id ? 'bg-[#0a1628] border-brand-teal text-white shadow-4xl' : 'bg-white border-gray-50 text-gray-200'}`}
-                              >
-                                 <div className={`h-10 w-10 md:h-16 md:w-16 rounded-xl flex items-center justify-center transition-all duration-700 shrink-0 ${method === m.id ? 'bg-brand-teal text-white' : 'bg-gray-50'}`}><m.icon size={20}/></div>
-                                 <div className="text-[10px] md:text-[11px] font-black uppercase tracking-widest italic">{m.label}</div>
-                              </button>
-                           ))}
-                        </div>
-
-                        <div className="p-8 md:p-12 bg-gray-50 rounded-[2rem] md:rounded-[4rem] border border-black/[0.02] shadow-inner relative overflow-hidden">
-                           <div className="relative z-10">
-                              {method === 'upi' && <div className="grid md:grid-cols-2 gap-6 md:gap-10"><Input label="VPA_ID" placeholder="user@okaxis" variant="flat" /><Input label="HOLDER_NODE" placeholder="Ramesh Kumar" variant="flat" /></div>}
-                              {method === 'card' && <div className="grid md:grid-cols-2 gap-6 md:gap-10"><Input className="md:col-span-2" label="ENCRYPTED_CARD" placeholder="**** **** **** ****" variant="flat" /><Input label="EXP_P" placeholder="MM / YY" variant="flat" /><Input label="CVC" placeholder="***" variant="flat" /></div>}
-                              {method === 'cod' && (
-                                 <div className="flex items-center gap-6 text-brand-teal">
-                                    <Info size={24}/>
-                                    <p className="font-syne font-black text-sm uppercase italic tracking-widest">{t('payUponNodeArrival')}</p>
-                                 </div>
-                              )}
-                           </div>
-                        </div>
-
-                        <button 
-                          onClick={() => setStep(2)}
-                          className="w-full h-16 md:h-24 bg-[#0a1628] text-brand-teal rounded-2xl md:rounded-[3rem] font-syne font-black text-sm md:text-xl uppercase tracking-[0.4em] shadow-4xl flex items-center justify-center gap-4 md:gap-6 active:scale-95 transition-all italic"
-                        >
-                           VALIDATE PAYLOAD <ArrowRight size={20} />
-                        </button>
-                     </div>
-                  </motion.div>
-                ) : (
-                  <motion.div 
-                    key="step-2"
-                    initial={{ opacity: 0, x: 20 }} 
-                    animate={{ opacity: 1, x: 0 }} 
-                    exit={{ opacity: 0, x: -20 }}
-                    className="space-y-10 md:space-y-16"
-                  >
-                     <div className="bg-brand-teal rounded-[2.5rem] md:rounded-[5rem] p-8 md:p-24 text-white text-center space-y-6 md:space-y-12 relative overflow-hidden shadow-4xl">
-                        <div className="absolute top-0 right-0 h-64 md:h-96 w-64 md:w-96 bg-white/10 rounded-full blur-[100px] animate-pulse" />
-                        <div className="h-16 w-16 md:h-32 md:w-32 bg-white/10 rounded-2xl md:rounded-[3rem] flex items-center justify-center mx-auto border-2 border-white/20 mb-4 shadow-4xl"><ShieldCheck size={32} md:size={64} className="text-white" /></div>
-                        <h2 className="font-syne font-black text-3xl md:text-7xl uppercase italic leading-none">Authorize <br /> Synchronization?</h2>
-                        <p className="text-white/60 font-dm text-base md:text-xl italic font-bold max-w-sm md:max-w-lg mx-auto leading-relaxed">{t('authorizeSyncDesc')}</p>
-                        
-                        <div className="flex flex-col md:flex-row gap-4 md:gap-8 pt-4 md:pt-12">
-                           <button onClick={() => setStep(1)} className="flex-1 h-16 md:h-24 bg-white/10 border-2 border-white/20 rounded-2xl md:rounded-[3rem] font-syne font-black text-[10px] md:text-sm uppercase tracking-widest hover:bg-white/20 transition-all italic">MODIFY_MAP</button>
-                           <button onClick={handlePay} disabled={status === 'loading'} className="flex-1 h-16 md:h-24 bg-white text-[#0a1628] rounded-2xl md:rounded-[3rem] font-syne font-black text-[10px] md:text-sm uppercase tracking-widest shadow-4xl hover:bg-brand-teal hover:text-white transition-all flex items-center justify-center gap-3 italic">
-                              {status === 'loading' ? 'SYNCING...' : 'AUTHORIZE_SYNC'} <ArrowRight size={18} />
-                           </button>
-                        </div>
-                     </div>
-                  </motion.div>
-                )}
-             </AnimatePresence>
-          </div>
-
-          {/* Sidebar Summary */}
-          <div className="lg:sticky lg:top-32 space-y-10 md:space-y-16 pb-20">
-             <div className="bg-white border border-black/[0.03] rounded-[2.5rem] md:rounded-[5rem] p-8 md:p-16 space-y-8 md:space-y-12 shadow-4xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 h-64 w-64 bg-brand-teal opacity-[0.02] rounded-full blur-[100px]" />
+             <div className="bg-white border border-black/[0.03] rounded-[3.5rem] p-8 md:p-12 shadow-soft space-y-10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 h-48 w-48 bg-brand-teal opacity-[0.02] rounded-full blur-[80px]" />
+                
                 <div className="flex items-center justify-between border-b border-gray-50 pb-8">
-                   <div className="flex items-center gap-4 md:gap-6">
-                      <div className="h-1.5 w-8 md:w-12 bg-brand-teal rounded-full" />
-                      <h3 className="font-syne font-black text-xl md:text-3xl text-[#0a1628] uppercase italic">Summary</h3>
+                   <div className="flex items-center gap-4">
+                      <div className="h-1.5 w-10 bg-brand-teal rounded-full" />
+                      <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic">Item List</h3>
                    </div>
+                   <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">{items.length} Modules</span>
                 </div>
 
-                <div className="space-y-6 max-h-[300px] md:max-h-[450px] overflow-y-auto pr-4 no-scrollbar">
+                <div className="space-y-8 max-h-[500px] overflow-y-auto pr-4 no-scrollbar">
                    {items.map((i) => (
-                      <div key={i.id || i._id} className="flex items-center gap-6 group/item">
-                         <div className="h-14 w-14 md:h-20 md:w-20 bg-white border border-black/[0.02] rounded-xl overflow-hidden shrink-0 shadow-soft">
-                            <img src={i.image} className="h-full w-full object-contain p-2 mix-blend-multiply" alt={i.name} />
+                      <div key={i.id || i._id} className="flex items-center gap-6 group">
+                         <div className="h-20 w-20 bg-gray-50 rounded-2xl overflow-hidden shrink-0 border border-black/[0.02] p-2">
+                            <img src={i.image} alt={i.name} className="h-full w-full object-contain group-hover:scale-110 transition duration-500" />
                          </div>
                          <div className="flex-1 space-y-1">
-                            <div className="font-syne font-black text-[#0a1628] text-sm md:text-lg italic uppercase truncate max-w-[150px]">{i.name}</div>
-                            <div className="text-[9px] md:text-[11px] font-dm text-gray-300 font-black uppercase tracking-widest flex justify-between">
-                               <span>Q:{i.qty}</span>
+                            <div className="font-syne font-black text-[#0a1628] text-lg uppercase italic tracking-tight leading-tight">{i.name}</div>
+                            <div className="flex justify-between items-center text-[10px] font-black uppercase text-gray-300 tracking-widest">
+                               <span>Qty: {i.qty}</span>
                                <span className="text-brand-teal">₹{i.price * i.qty}</span>
                             </div>
                          </div>
@@ -246,24 +150,118 @@ export default function Checkout() {
                    ))}
                 </div>
 
-                <div className="pt-8 md:pt-12 border-t border-gray-100 space-y-4 md:space-y-6">
-                   <div className="flex items-center justify-between">
-                      <div className="font-syne font-black text-xl md:text-3xl text-[#0a1628] uppercase italic">Total</div>
-                      <div className="font-syne font-black text-3xl md:text-5xl text-brand-teal italic tracking-tighter">₹{totalAmount}</div>
-                   </div>
-                </div>
-
-                <div className="p-8 md:p-10 bg-[#0a1628] rounded-[2rem] md:rounded-[4rem] text-white space-y-4 md:space-y-6 text-center border-t-8 border-brand-teal shadow-3xl">
-                   <div className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-brand-teal italic">Delivery Confidence</div>
-                   <div className="flex flex-col items-center justify-center gap-3">
-                      <div className="h-2 w-32 md:w-48 bg-white/5 rounded-full overflow-hidden">
-                         <div className="h-full bg-brand-teal w-[99%]" />
+                <div className="pt-10 border-t border-gray-50 space-y-6">
+                   <div className="space-y-4">
+                      <div className="flex justify-between text-gray-400 font-syne font-black text-[10px] uppercase italic tracking-widest">
+                         <span>Subtotal</span>
+                         <span>₹{totalAmount}</span>
                       </div>
-                      <span className="font-syne font-black text-2xl md:text-3xl text-white italic">99.8%</span>
+                      <div className="flex justify-between text-gray-400 font-syne font-black text-[10px] uppercase italic tracking-widest">
+                         <span>Delivery Fee</span>
+                         <span className="text-emerald-500">₹{deliveryFee}</span>
+                      </div>
+                      {discount > 0 && (
+                        <div className="flex justify-between text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-widest">
+                           <span>Discount</span>
+                           <span>-₹{discount}</span>
+                        </div>
+                      )}
+                   </div>
+                   <div className="h-px bg-black/[0.03]" />
+                   <div className="flex justify-between items-end pt-4">
+                      <div className="font-syne font-black text-2xl text-[#0a1628] uppercase italic">Grand Total</div>
+                      <div className="font-syne font-black text-5xl text-brand-teal italic tracking-tighter shadow-mint-text">₹{finalTotal}</div>
                    </div>
                 </div>
              </div>
-          </div>
+          </section>
+
+          {/* Right Column: Payment & Address */}
+          <section className="space-y-12">
+             <div className="bg-[#0a1628] rounded-[3.5rem] md:rounded-[4.5rem] p-8 md:p-16 text-white space-y-12 shadow-4xl relative overflow-hidden border-t-[20px] border-brand-teal">
+                <div className="absolute top-0 right-0 h-64 w-64 bg-brand-teal opacity-5 rounded-full blur-[100px]" />
+                
+                {/* Address Section */}
+                <div className="space-y-8 relative z-10">
+                   <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-6">
+                         <div className="h-14 w-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-brand-teal"><MapPin size={24}/></div>
+                         <h2 className="font-syne font-black text-2xl uppercase italic tracking-tighter">Delivery Address</h2>
+                      </div>
+                      <button className="h-10 w-10 md:h-12 md:w-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-brand-teal hover:bg-brand-teal hover:text-[#0a1628] transition-all"><Plus size={20}/></button>
+                   </div>
+
+                   <div className="grid gap-4">
+                      {SAVED_ADDRESSES.map(addr => (
+                         <button 
+                            key={addr.id}
+                            onClick={() => setSelectedAddress(addr.id)}
+                            className={`p-6 rounded-[2rem] border-2 text-left transition-all duration-700 relative group ${selectedAddress === addr.id ? 'bg-white/10 border-brand-teal ring-8 ring-brand-teal/5' : 'bg-transparent border-white/10 hover:border-white/30'}`}
+                         >
+                            <div className="flex justify-between items-start mb-2">
+                               <div className="text-[9px] font-black uppercase text-brand-teal tracking-[0.3em] italic">{addr.label}</div>
+                               {selectedAddress === addr.id && <CheckCircle size={16} className="text-brand-teal" />}
+                            </div>
+                            <div className="font-dm font-black text-sm md:text-lg italic text-white/80 group-hover:text-white transition-colors">{addr.address}</div>
+                            <div className="text-[10px] font-black text-white/40 uppercase tracking-widest">{addr.city} &bull; {addr.zip}</div>
+                         </button>
+                      ))}
+                   </div>
+                </div>
+
+                {/* Payment Section */}
+                <div className="space-y-8 relative z-10 pt-10 border-t border-white/5">
+                   <div className="flex items-center gap-6">
+                      <div className="h-14 w-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-brand-teal"><CreditCard size={24}/></div>
+                      <h2 className="font-syne font-black text-2xl uppercase italic tracking-tighter">Payment Method</h2>
+                   </div>
+
+                   <div className="grid grid-cols-3 gap-4">
+                      {[
+                         { id: 'upi', icon: Smartphone, label: 'UPI' },
+                         { id: 'card', icon: CreditCard, label: 'CARD' },
+                         { id: 'cod', icon: Truck, label: 'COD' }
+                      ].map(m => (
+                         <button 
+                            key={m.id}
+                            onClick={() => setMethod(m.id)}
+                            className={`py-6 rounded-[1.8rem] border-2 transition-all duration-700 flex flex-col items-center gap-3 ${method === m.id ? 'bg-white text-[#0a1628] border-white' : 'bg-transparent border-white/10 text-white/40 hover:text-white hover:border-white/30'}`}
+                         >
+                            <m.icon size={20} />
+                            <span className="text-[9px] font-black uppercase tracking-widest">{m.label}</span>
+                         </button>
+                      ))}
+                   </div>
+
+                   {error && (
+                      <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-4 text-red-500 text-[10px] font-black uppercase tracking-widest italic animate-shake">
+                         <AlertCircle size={16}/> {error}
+                      </div>
+                   )}
+
+                   <button 
+                      onClick={handlePay}
+                      disabled={status === 'loading'}
+                      className="w-full h-20 md:h-24 bg-brand-teal text-[#0a1628] rounded-[2rem] md:rounded-[3rem] font-syne font-black text-sm md:text-xl uppercase tracking-[0.4em] shadow-mint-large hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-6 italic overflow-hidden relative group"
+                   >
+                      <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
+                      {status === 'loading' ? 'PROCESSING...' : 'PAY NOW'} 
+                      <ArrowRight size={24} />
+                   </button>
+                   
+                   <div className="flex items-center justify-center gap-4 text-[9px] font-black text-white/20 uppercase tracking-[0.4em] italic">
+                      <Lock size={12}/> Secure 256-bit AES Encryption Node
+                   </div>
+                </div>
+             </div>
+
+             <div className="text-center space-y-6">
+                <Link to="/cart" className="inline-flex items-center gap-3 text-gray-300 font-syne font-black text-[10px] uppercase italic tracking-[0.2em] hover:text-[#0a1628] transition-colors group">
+                   <ArrowLeft size={14} className="group-hover:-translate-x-2 transition-transform" /> Back to Cart
+                </Link>
+             </div>
+          </section>
+
         </div>
       </div>
     </div>

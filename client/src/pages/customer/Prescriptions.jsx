@@ -94,16 +94,26 @@ export default function Prescriptions() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-10 pb-20 pt-10 px-6">
+    <div className="px-4 py-8 md:px-10 md:py-16 overflow-x-hidden w-full max-w-screen pb-24 md:pb-32 space-y-10">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <h1 className="font-syne font-black text-4xl text-[#0a1628]">{t('myPrescriptions')}</h1>
-          <p className="text-gray-400 mt-2 font-dm italic">{t('prescriptionVaultDesc')}</p>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="space-y-4 w-full">
+          <h1 className="font-syne font-black text-2xl md:text-5xl text-[#0a1628] leading-tight break-words w-full">
+            {t('myPrescriptions')}
+          </h1>
+          <p className="text-sm md:text-base text-gray-400 font-dm italic w-full">
+            {t('prescriptionVaultDesc')}
+          </p>
         </div>
-        <div className="flex items-center gap-3">
-           <div className="p-3 bg-white border border-gray-100 rounded-2xl shadow-sm text-gray-400"><Search size={18} /></div>
-           <div className="p-3 bg-white border border-gray-100 rounded-2xl shadow-sm text-gray-400"><Filter size={18} /></div>
+        <div className="flex items-center gap-4">
+           <button className="p-3 bg-white border border-gray-100 rounded-full shadow-sm text-gray-400 hover:text-brand-teal transition-all">
+             <span className="sr-only">Search Prescriptions</span>
+             <Search size={22} />
+           </button>
+           <button className="p-3 bg-white border border-gray-100 rounded-full shadow-sm text-gray-400 hover:text-brand-teal transition-all">
+             <span className="sr-only">Filter History</span>
+             <Filter size={22} />
+           </button>
         </div>
       </div>
 
@@ -112,17 +122,19 @@ export default function Prescriptions() {
         <div className="max-w-2xl mx-auto text-center space-y-8 relative z-10">
            {!isUploading ? (
              <div 
-               className="border-2 border-dashed border-[#028090]/30 rounded-[3rem] p-16 bg-white transition-all cursor-pointer group hover:border-[#02C39A] hover:shadow-2xl hover:shadow-[#028090]/5"
+               className="border-2 border-dashed border-[#028090]/30 rounded-[2.5rem] p-8 md:p-16 bg-white transition-all cursor-pointer group hover:border-[#02C39A] min-h-[220px] flex flex-col items-center justify-center gap-3"
                onClick={() => fileInputRef.current?.click()}
                onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('border-[#02C39A]', 'bg-gray-50'); }}
                onDragLeave={(e) => { e.preventDefault(); e.currentTarget.classList.remove('border-[#02C39A]', 'bg-gray-50'); }}
                onDrop={(e) => { e.preventDefault(); e.currentTarget.classList.remove('border-[#02C39A]', 'bg-gray-50'); performRealUpload(e.dataTransfer.files[0]); }}
              >
-                <div className="h-24 w-24 mx-auto bg-[#028090]/10 text-[#028090] rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-[#02C39A] group-hover:text-white transition duration-500 mb-8 shadow-xl shadow-[#028090]/10">
-                   <Upload size={48} />
+                <div className="h-16 w-16 md:h-20 md:w-20 bg-[#028090]/10 text-[#028090] rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-[#02C39A] group-hover:text-white transition duration-500 shadow-xl">
+                   <Upload size={32} />
                 </div>
-                <h3 className="font-syne font-black text-2xl text-[#0a1628]">{t('dragPrescription')}</h3>
-                <p className="text-gray-400 font-dm text-sm mt-2 font-bold uppercase tracking-widest leading-none">{t('acceptedFormats')}</p>
+                <div className="text-center px-4">
+                   <h3 className="font-syne font-black text-lg md:text-2xl text-[#0a1628] leading-tight">Drag prescription here or click to upload</h3>
+                   <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-2">{t('acceptedFormats')}</p>
+                </div>
                 
                 <div className="mt-10 flex flex-wrap justify-center gap-6">
                    <button className="px-10 py-5 bg-gradient-to-r from-[#02C39A] to-[#028090] text-white font-syne font-black text-sm uppercase tracking-widest rounded-3xl shadow-2xl shadow-[#02C39A]/40 hover:scale-105 active:scale-95 transition">

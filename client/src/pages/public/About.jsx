@@ -39,7 +39,7 @@ export default function About() {
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-48 font-dm">
       {/* Hero Section */}
-      <section className="bg-[#0a1628] py-48 md:py-72 relative overflow-hidden flex items-center justify-center text-center">
+      <section className="bg-[#0a1628] py-48 md:py-72 pr-4 md:pr-48 relative overflow-hidden flex items-center justify-center text-center">
          <div className="absolute inset-0 bg-[url('/assets/hospital_pro.png')] bg-cover bg-center opacity-10 filter grayscale brightness-125" />
          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a1628]/80 to-[#0a1628]" />
          <div className="absolute top-0 right-0 h-[800px] w-[800px] bg-brand-teal opacity-5 rounded-full blur-[180px]" />
@@ -61,13 +61,13 @@ export default function About() {
          <div className="grid lg:grid-cols-2 gap-24 items-center">
             <div className="space-y-12">
                <div className="px-6 py-2 bg-brand-teal/5 border border-brand-teal/10 rounded-xl inline-flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-widest italic">
-                  <Stethoscope size={16} /> Clinical Handshake Network
+                  <Stethoscope size={16} /> Our Medical Network
                </div>
                <h2 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic tracking-tighter leading-tight">
                   World-Class <span className="text-brand-teal">Practitioners</span>, <br />Local Care.
                </h2>
                <p className="text-gray-400 font-dm italic font-bold text-xl leading-relaxed">
-                  Our medical network consists of 50+ verified consultants from top institutions like JIPMER and Govt. General Hospital Karaikal. Each practitioner node is synchronized with our terminal to provide real-time consultations and digital clinical logs.
+                  Our network consists of 50+ verified consultants from top institutions like JIPMER and Govt. General Hospital Karaikal. Each doctor is connected to our platform to provide real-time consultations and digital records.
                </p>
                <div className="grid grid-cols-2 gap-8 pt-6">
                   <div className="space-y-2">
@@ -93,20 +93,20 @@ export default function About() {
             </div>
             <div className="order-1 lg:order-2 space-y-12">
                <div className="px-6 py-2 bg-[#0a1628] rounded-xl inline-flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-widest italic shadow-lg">
-                  <Store size={16} /> Distribution Enclaves
+                  <Store size={16} /> Pharmacy Network
                </div>
                <h2 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic tracking-tighter leading-tight">
-                  Hyper-Local <br /><span className="text-brand-teal">Surgical Nodes</span>.
+                  Hyper-Local <br /><span className="text-brand-teal">Healthcare Points</span>.
                </h2>
                <p className="text-gray-400 font-dm italic font-bold text-xl leading-relaxed">
-                  Our distribution matrix spans every enclave of Karaikal. From Market Road to Nagore, every pharmacy is a verified node offering cold-chain logistics, zero-lag inventory updates, and multi-service protocols (Vaccines, Diabetic Care, Baby Care).
+                  Our delivery network spans across Karaikal. From Market Road to Nagore, every pharmacy is verified, offering safe transport, real-time inventory updates, and essential services like vaccines and diabetic care.
                </p>
                <div className="space-y-6">
                   <div className="flex items-center gap-6">
                      <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center shadow-soft text-brand-teal"><Truck size={24}/></div>
                      <div className="space-y-1">
-                        <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest">Rapid Response Logistics</div>
-                        <p className="text-gray-300 text-sm font-bold italic">Sub-30 minute delivery from local enclave nodes.</p>
+                        <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest">Fast Delivery</div>
+                        <p className="text-gray-300 text-sm font-bold italic">Quick delivery from your nearest local pharmacy.</p>
                      </div>
                   </div>
                   <div className="flex items-center gap-6">
@@ -120,16 +120,16 @@ export default function About() {
             </div>
          </div>
 
-         {/* Quality Assurance Section — NEW ADDITION */}
+         {/* Safety & Quality Section */}
          <div className="bg-[#0a1628] rounded-[5rem] p-16 md:p-24 text-white relative overflow-hidden shadow-4xl border-t-[20px] border-brand-teal">
             <div className="absolute bottom-0 right-0 h-[600px] w-[600px] bg-brand-teal opacity-5 rounded-full blur-[150px] translate-x-1/2 translate-y-1/2" />
             <div className="max-w-4xl space-y-12 relative z-10">
                <div className="flex items-center gap-6">
                   <ShieldCheck size={48} className="text-brand-teal animate-pulse" />
-                  <h3 className="font-syne font-black text-4xl md:text-6xl uppercase italic tracking-tighter leading-none">Clinical Integrity <br /><span className="text-brand-teal">Safeguard Protocol</span></h3>
+                  <h3 className="font-syne font-black text-4xl md:text-6xl uppercase italic tracking-tighter leading-none">Safety & Quality <br /><span className="text-brand-teal">Standards</span></h3>
                </div>
                <p className="text-white/40 font-dm text-2xl italic font-bold leading-relaxed">
-                  Every medicine, practitioner, and pharmacy on our terminal goes through a multi-factor verification sync. We ensure that your healthcare Handshake is secure, clinical, and absolute.
+                  Every medicine and pharmacy on our platform goes through a strict verification process. We ensure your healthcare experience is safe, professional, and reliable.
                </p>
                <div className="grid md:grid-cols-3 gap-10">
                   <div className="space-y-3">
@@ -142,7 +142,7 @@ export default function About() {
                   </div>
                   <div className="space-y-3">
                      <div className="text-brand-teal font-syne font-black text-2xl italic">Immediate</div>
-                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Status Mapping</div>
+                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Real-time Updates</div>
                   </div>
                </div>
             </div>

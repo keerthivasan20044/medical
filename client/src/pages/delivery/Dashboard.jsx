@@ -5,7 +5,7 @@ import {
   Truck, CheckCircle, Clock, MapPin, 
   Phone, Package, ArrowRight,
   TrendingUp, Award, User, RefreshCw, 
-  Activity, Star, Navigation, ShieldCheck, X, MessageSquare, ChevronRight
+  Activity, Star, Navigation, ShieldCheck, X, MessageSquare, ChevronRight, IndianRupee
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
@@ -29,7 +29,7 @@ export default function DeliveryDashboard() {
   const stats = useMemo(() => [
     { label: 'Payloads Completed', value: orders.filter(o => o.status === 'delivered').length, icon: CheckCircle, color: 'text-emerald-600 bg-emerald-50' },
     { label: 'Active Manifests', value: orders.filter(o => o.status === 'shipped').length, icon: Clock, color: 'text-orange-600 bg-orange-50' },
-    { label: 'Today Revenue', value: '₹640', icon: TrendingUp, color: 'text-brand-teal bg-brand-teal/10' },
+    { label: 'Today Revenue', value: '₹640', icon: IndianRupee, color: 'text-brand-teal bg-brand-teal/10' },
     { label: 'Node Rating', value: '4.9', icon: Star, color: 'text-amber-500 bg-amber-50' }
   ], [orders]);
 

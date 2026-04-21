@@ -184,7 +184,7 @@
 
 * { box-sizing: border-box; }
 
-html, body {
+html, body, #root {
   background: #ffffff;
   color: var(--navy);
   overflow-x: hidden !important;

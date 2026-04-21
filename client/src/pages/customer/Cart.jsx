@@ -26,8 +26,9 @@ export default function Cart() {
     couponStatus,
     note,
     prescription,
-    changeQty,
-    removeItem,
+    incrementQty,
+    decrementQty,
+    removeFromCart,
     clearCart,
     applyCoupon,
     clearCoupon,
@@ -70,7 +71,7 @@ export default function Cart() {
          <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8 mb-12 md:mb-20">
             <div className="space-y-4 md:space-y-6 w-full">
                <div className="px-5 py-2 bg-[#0a1628] rounded-xl w-fit flex items-center gap-3 text-[9px] md:text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">
-                  <Activity size={14} className="animate-pulse" /> {t('acquisitionManifest')}
+                  <Activity size={14} className="animate-pulse" /> {t('shoppingCart')}
                </div>
                <h1 className="font-syne font-black text-5xl md:text-7xl lg:text-9xl text-[#0a1628] leading-[0.85] tracking-tighter uppercase italic">
                   {t('my')} <span className="text-brand-teal">{t('inventory')}</span>
@@ -104,7 +105,7 @@ export default function Cart() {
                      <div className="flex items-center justify-between border-b border-gray-50 pb-8 px-2 md:px-4">
                         <div className="flex items-center gap-4 md:gap-6">
                            <div className="h-1.5 w-10 md:w-16 bg-brand-teal rounded-full" />
-                           <h2 className="font-syne font-black text-xl md:text-2xl text-[#0a1628] uppercase tracking-tighter italic">{t('therapeuticNodes')}</h2>
+                           <h2 className="font-syne font-black text-xl md:text-2xl text-[#0a1628] uppercase tracking-tighter italic">{t('selectedItems')}</h2>
                         </div>
                         <div className="text-[9px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{items.length} {t('activeSyncs')}</div>
                      </div>
@@ -121,9 +122,9 @@ export default function Cart() {
                               >
                                  <CartItem
                                     item={item}
-                                    onIncrease={() => changeQty(item.id, 1)}
-                                    onDecrease={() => changeQty(item.id, -1)}
-                                    onRemove={() => removeItem(item.id)}
+                                    onIncrease={() => incrementQty(item._id || item.id)}
+                                    onDecrease={() => decrementQty(item._id || item.id)}
+                                    onRemove={() => removeFromCart(item._id || item.id)}
                                  />
                               </motion.div>
                            ))}
@@ -139,7 +140,7 @@ export default function Cart() {
                      <div className="flex items-center gap-6">
                         <div className="h-12 w-12 md:h-16 md:w-16 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-brand-teal"><Info size={24} /></div>
                         <div className="space-y-0.5">
-                           <h3 className="font-syne font-black text-xl md:text-2xl uppercase tracking-tighter italic leading-none">{t('deliveryProtocolNotes')}</h3>
+                           <h3 className="font-syne font-black text-xl md:text-2xl uppercase tracking-tighter italic leading-none">{t('deliveryNotes')}</h3>
                            <div className="text-[9px] font-black text-brand-teal uppercase tracking-[0.2em] italic">DISTRICT LOGISTICS</div>
                         </div>
                      </div>
@@ -213,7 +214,7 @@ export default function Cart() {
 
                <div className="hidden md:flex mt-12 px-8 items-center justify-between text-[11px] font-black uppercase italic tracking-[0.2em] text-gray-200">
                   <div className="flex items-center gap-3">
-                     <Zap size={16} className="text-amber-500" /> Secure Sync Protocol
+                     <Zap size={16} className="text-amber-500" /> Secure Delivery Protocol
                   </div>
                   <div className="flex items-center gap-3">
                      <ShieldCheck size={16} className="text-emerald-500" /> KARAIKAL MESH
@@ -232,14 +233,14 @@ export default function Cart() {
               className="lg:hidden fixed bottom-[90px] inset-x-4 z-[100] bg-[#0a1628] h-20 rounded-2xl border border-white/10 shadow-4xl flex items-center justify-between px-6 gap-6"
             >
                <div className="flex flex-col">
-                  <span className="text-[8px] font-black text-white/30 uppercase italic tracking-widest">FINAL YIELD</span>
+                  <span className="text-[8px] font-black text-white/30 uppercase italic tracking-widest">TOTAL AMOUNT</span>
                   <div className="font-syne font-black text-brand-teal text-3xl italic leading-none">₹{totalAmount}</div>
                </div>
                <button 
                  onClick={handleCheckout}
                  className="flex-1 h-12 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-xl shadow-mint active:scale-95 transition-transform"
                >
-                  PROCEED TO PAYLOAD
+                  PROCEED TO CHECKOUT
                </button>
             </motion.div>
          )}

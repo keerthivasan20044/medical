@@ -34,8 +34,8 @@ export default function Landing() {
   return (
     <div className="relative overflow-x-hidden flex flex-col min-h-screen">
       <SEO 
-        title="District Home" 
-        description="Karaikal's first unified medical command center. Order medicines, consult doctors, and track deliveries in real-time."
+        title="Home" 
+        description="Karaikal's first unified healthcare platform. Order medicines, consult doctors, and track deliveries in real-time."
         schema={{
           "@context": "https://schema.org",
           "@type": "MedicalOrganization",
@@ -58,7 +58,7 @@ export default function Landing() {
       />
 
       {/* Sections 1-16 in order */}
-      {/* Premium Conversion Funnel Architecture */}
+      {/* Hero & Vital Services */}
       <Hero />
       <LiveActivityPulse />
       <EmergencyBanner />

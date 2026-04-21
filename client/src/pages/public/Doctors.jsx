@@ -31,7 +31,7 @@ export default function DoctorsListPage() {
         image: u.avatar?.url || `https://ui-avatars.com/api/?name=${u.name}&background=028090&color=fff`,
         spec: u.doctorProfile?.specialization || 'General Physician',
         qual: u.doctorProfile?.qualification || 'MBBS',
-        hospital: u.doctorProfile?.hospital || 'Clinical Node',
+        hospital: u.doctorProfile?.hospital || 'Karaikal General Hospital',
         experience: u.doctorProfile?.experience || 5,
         rating: u.doctorProfile?.rating || 4.5,
         fee: u.doctorProfile?.fee || 200,
@@ -40,22 +40,21 @@ export default function DoctorsListPage() {
       }));
       setDoctors(mapped);
     } catch (err) {
-      console.error('Clinical handshake failed:', err);
+      console.error('Failed to load doctors:', err);
     } finally {
       setLoading(false);
     }
   };
 
   const specialties = [
-    'All', 'General Physician', 'Cardiologist', 'Paediatrician', 
-    'Gynaecologist', 'Orthopaedic', 'Dermatologist', 'ENT', 'Ophthalmologist', 'Diabetologist'
+    'All', 'General', 'Cardiologist', 'Dermatologist', 'Pediatrician', 'Orthopedic', 'ENT', 'Ophthalmologist'
   ];
 
   const filteredDoctors = doctors;
 
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-64 overflow-x-hidden">
-      {/* Hero Section: Clinical Terminal */}
+      {/* Doctor Search Section */}
       <section className="bg-[#0a1628] pt-24 pb-32 md:pt-32 md:pb-60 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid opacity-5" />
         <div className="absolute top-0 right-0 h-full w-1/3 bg-brand-teal/10 blur-[120px]" />
@@ -71,7 +70,7 @@ export default function DoctorsListPage() {
               </h1>
 
               <p className="text-white/40 font-dm text-base md:text-2xl italic max-w-2xl leading-relaxed mx-auto lg:mx-0 font-bold px-4 md:px-0">
-                 Get encrypted prescriptions from certified clinical nodes.
+                 Get prescriptions from certified specialist doctors.
               </p>
            </div>
 
@@ -95,14 +94,14 @@ export default function DoctorsListPage() {
                    onClick={() => setShowFilters(!showFilters)}
                    className={`h-20 md:h-24 px-8 md:px-10 flex-1 lg:flex-none rounded-[2rem] md:rounded-[2.5rem] font-syne font-black text-[10px] md:text-xs uppercase italic tracking-widest transition-all duration-700 active:scale-95 shadow-4xl border flex items-center justify-center gap-4 md:gap-6 ${showFilters ? 'bg-brand-teal text-[#0a1628] border-brand-teal' : 'bg-white/5 text-white border-white/10 hover:bg-white/10'}`}
                  >
-                    <Sliders size={20}/> {showFilters ? 'Hide Config' : 'Filter Enclaves'}
+                    <Sliders size={20}/> {showFilters ? 'Hide Filters' : 'Filters'}
                  </button>
               </div>
            </div>
         </div>
       </section>
 
-      {/* Registry Matrix */}
+      {/* Doctors Grid Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-10 mt-0 md:-mt-32 relative z-[100] space-y-10 md:space-y-16">
          
          {/* Specialty Chip Matrix */}
@@ -128,7 +127,7 @@ export default function DoctorsListPage() {
                <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 bg-white border border-black/[0.03] rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-10 shadow-soft">
                   <div className="flex items-center gap-4 md:gap-6">
                      <div className="h-1.5 w-12 bg-brand-teal rounded-full" />
-                     <h2 className="font-syne font-black text-xl md:text-4xl text-[#0a1628] uppercase tracking-tighter italic leading-none">{doctors.length} Clinical Practitioners</h2>
+                     <h2 className="font-syne font-black text-xl md:text-4xl text-[#0a1628] uppercase tracking-tighter italic leading-none">{doctors.length} Verified Doctors</h2>
                   </div>
                   
                   <div className="flex bg-gray-50/50 p-1.5 md:p-2 rounded-2xl border border-black/[0.01]">
@@ -150,7 +149,7 @@ export default function DoctorsListPage() {
                {loading ? (
                   <div className="min-h-[50vh] flex flex-col items-center justify-center space-y-8">
                       <Loader2 size={48} className="animate-spin text-brand-teal" />
-                      <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter italic">Syncing Enclave...</h3>
+                      <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter italic">Loading Doctors...</h3>
                   </div>
                ) : (
                  <div className={`grid gap-6 md:gap-12 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
@@ -182,7 +181,8 @@ export default function DoctorsListPage() {
                                 </div>
                                 <h3 className="font-syne font-black text-xl md:text-3xl text-[#0a1628] leading-[0.9] tracking-tighter uppercase italic group-hover:text-brand-teal transition-colors">{dr.name}</h3>
                                 <div className="text-[10px] md:text-xs text-gray-400 font-dm font-bold italic flex items-center justify-center md:justify-start gap-2">
-                                   <Clock size={12} className="text-brand-teal" /> {dr.qual} &bull; <span className={dr.status === 'online' ? 'text-emerald-500' : 'text-gray-400'}>{dr.status === 'online' ? 'Available' : 'Offline'}</span>
+                                   <div className={`h-2 w-2 rounded-full ${dr.status === 'online' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                                   {dr.status === 'online' ? 'Available Today' : 'Next Available: Tomorrow'}
                                 </div>
                              </div>
 

@@ -40,7 +40,7 @@ export default function DoctorProfilePage() {
   if (loading) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] space-y-6">
       <Loader2 className="animate-spin text-brand-teal" size={48}/>
-      <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-widest">Synchronizing Practitioner Node...</p>
+      <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-widest">Loading Doctor Profile...</p>
     </div>
   );
 
@@ -49,9 +49,9 @@ export default function DoctorProfilePage() {
       <div className="min-h-screen bg-[#0a1628] flex items-center justify-center p-6">
          <div className="text-center space-y-6 max-w-xl">
             <div className="h-20 w-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto text-brand-teal animate-pulse"><Briefcase size={40}/></div>
-            <h2 className="font-syne font-black text-3xl text-white uppercase italic tracking-tighter">PRAC_NODE_OFFLINE</h2>
+            <h2 className="font-syne font-black text-3xl text-white uppercase italic tracking-tighter">Doctor Not Found</h2>
             <Link to="/doctors">
-               <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase tracking-widest rounded-xl transition-all">RETURN TO ENCLAVE</button>
+               <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase tracking-widest rounded-xl transition-all">Back to Doctors</button>
             </Link>
          </div>
       </div>
@@ -70,7 +70,7 @@ export default function DoctorProfilePage() {
            <div className="flex items-center gap-3 text-[9px] md:text-[10px] font-black text-white/40 uppercase tracking-[0.4em] italic mb-10">
               <Link to="/doctors" className="hover:text-white transition-all">Consultants</Link>
               <ChevronRight size={12} className="opacity-40" /> 
-              <span className="text-brand-teal truncate">{doctor.name} node</span>
+              <span className="text-brand-teal truncate">{doctor.name} profile</span>
            </div>
 
            <div className="flex flex-col lg:flex-row items-center lg:items-end gap-8 md:gap-16">
@@ -103,14 +103,14 @@ export default function DoctorProfilePage() {
 
                  <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 pt-4">
                     <div className="h-16 md:h-20 bg-white/5 backdrop-blur-3xl rounded-2xl md:rounded-[2.2rem] flex items-center px-8 md:px-10 justify-between md:gap-10 border border-white/5">
-                       <div className="text-[9px] font-black text-white/20 uppercase tracking-widest italic">Node_Fee</div>
+                       <div className="text-[9px] font-black text-white/20 uppercase tracking-widest italic">Consultation Fee</div>
                        <div className="font-syne font-black text-brand-teal text-xl md:text-3xl italic">₹{doctor.fee}</div>
                     </div>
                     <button 
                       onClick={() => setShowBookingModal(true)}
                       className="h-16 md:h-20 px-8 md:px-12 bg-white text-[#0a1628] font-syne font-black text-[10px] md:text-xs uppercase italic tracking-[0.3em] rounded-2xl md:rounded-[2.2rem] shadow-mint active:scale-95 transition-all flex items-center justify-center gap-4 grow"
                     >
-                       INITIATE HANDSHAKE <Zap size={18}/>
+                       BOOK APPOINTMENT <Zap size={18}/>
                     </button>
                     <button onClick={() => setIsFavorite(!isFavorite)} className={`h-16 md:h-20 w-16 md:w-20 rounded-2xl md:rounded-[2.2rem] flex items-center justify-center transition-all duration-500 border shrink-0 ${isFavorite ? 'bg-red-500 border-red-500 text-white' : 'bg-white/5 border-white/10 text-white hover:text-red-500'}`}>
                        <Heart size={20} fill={isFavorite ? 'currentColor' : 'none'} className={isFavorite ? 'animate-heartbeat' : ''} />
@@ -147,7 +147,7 @@ export default function DoctorProfilePage() {
                         <motion.div key="About" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-10">
                            <div className="space-y-6">
                               <h3 className="font-syne font-black text-2xl md:text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-4">
-                                 <div className="h-1.5 w-12 bg-brand-teal rounded-full" /> Practitioner Bio
+                                 <div className="h-1.5 w-12 bg-brand-teal rounded-full" /> About the Doctor
                               </h3>
                               <p className="text-gray-400 font-dm italic font-bold text-lg md:text-xl leading-relaxed">{doctor.bio}</p>
                            </div>
@@ -182,7 +182,7 @@ export default function DoctorProfilePage() {
                      {activeTab === 'Schedule' && (
                         <motion.div key="Schedule" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-10">
                            <h3 className="font-syne font-black text-2xl md:text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-4">
-                              <div className="h-1.5 w-12 bg-brand-teal rounded-full" /> Temporal Slots
+                              <div className="h-1.5 w-12 bg-brand-teal rounded-full" /> Available Slots
                            </h3>
                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                               {(doctor.schedule?.slots || ['09:00 AM', '11:00 AM', '04:00 PM']).map((slot, idx) => (
@@ -198,7 +198,7 @@ export default function DoctorProfilePage() {
                      {activeTab === 'Reviews' && (
                         <motion.div key="Reviews" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
                            <h3 className="font-syne font-black text-2xl md:text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-4">
-                              <div className="h-1.5 w-12 bg-brand-teal rounded-full" /> Local Audits
+                              <div className="h-1.5 w-12 bg-brand-teal rounded-full" /> Patient Reviews
                            </h3>
                            {[1,2].map(i => (
                               <div key={i} className="bg-gray-50/50 p-8 rounded-[2rem] space-y-4 border border-black/[0.01]">
@@ -206,7 +206,7 @@ export default function DoctorProfilePage() {
                                     <div className="font-syne font-black text-[#0a1628] text-base uppercase italic">K. Selvamani</div>
                                     <div className="flex text-amber-500 gap-0.5"><Star size={12} fill="currentColor" /><Star size={12} fill="currentColor" /><Star size={12} fill="currentColor" /><Star size={12} fill="currentColor" /><Star size={12} fill="currentColor" /></div>
                                  </div>
-                                 <p className="text-gray-400 font-dm italic font-bold text-base leading-relaxed">"Synchronization was perfect. District clinical protocol implementation was very helpful."</p>
+                                 <p className="text-gray-400 font-dm italic font-bold text-base leading-relaxed">"The doctor was very professional. The appointment process was very smooth."</p>
                               </div>
                            ))}
                         </motion.div>
@@ -220,19 +220,19 @@ export default function DoctorProfilePage() {
                <div className="bg-[#0a1628] rounded-[3rem] md:rounded-[4.5rem] p-10 md:p-12 text-white space-y-10 shadow-4xl sticky top-32 border-l-[12px] border-l-brand-teal">
                   <div className="space-y-6">
                      <div className="h-12 w-12 bg-white/5 rounded-xl flex items-center justify-center text-brand-teal"><ShieldCheck size={28}/></div>
-                     <h3 className="font-syne font-black text-3xl uppercase italic tracking-tighter">Uplink Hub</h3>
+                     <h3 className="font-syne font-black text-3xl uppercase italic tracking-tighter">Clinic Info</h3>
                      <div className="space-y-4 pt-6 border-t border-white/5">
                         <div className="flex justify-between items-center">
-                           <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">Enclave Node</span>
+                           <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">Hospital</span>
                            <span className="text-brand-teal font-syne font-black text-sm italic uppercase">{doctor.hospital?.split(' ')[0]}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                           <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">Node State</span>
+                           <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">Status</span>
                            <span className="text-emerald-500 font-syne font-black text-sm italic uppercase tracking-widest">{doctor.status?.toUpperCase() || 'ONLINE'}</span>
                         </div>
                      </div>
                   </div>
-                  <button onClick={() => setShowBookingModal(true)} className="w-full h-16 md:h-20 bg-brand-teal text-[#0a1628] font-syne font-black text-[11px] uppercase italic tracking-[0.3em] rounded-[1.8rem] md:rounded-[2.5rem] shadow-mint active:scale-95 transition-all">INITIALIZE PAYLOAD</button>
+                  <button onClick={() => setShowBookingModal(true)} className="w-full h-16 md:h-20 bg-brand-teal text-[#0a1628] font-syne font-black text-[11px] uppercase italic tracking-[0.3em] rounded-[1.8rem] md:rounded-[2.5rem] shadow-mint active:scale-95 transition-all">BOOK NOW</button>
                </div>
             </div>
          </div>
@@ -255,13 +255,13 @@ export default function DoctorProfilePage() {
 
                   <div className="flex-1 p-8 md:p-16 space-y-10 overflow-y-auto no-scrollbar font-dm">
                      <div className="space-y-2">
-                        <h2 className="font-syne font-black text-3xl md:text-5xl text-[#0a1628] uppercase italic tracking-tighter">Sync Protocol</h2>
-                        <p className="text-gray-300 font-dm italic font-bold text-base md:text-lg uppercase tracking-widest italic">Clinical Handshake Configuration</p>
+                        <h2 className="font-syne font-black text-3xl md:text-5xl text-[#0a1628] uppercase italic tracking-tighter">Book Appointment</h2>
+                        <p className="text-gray-300 font-dm italic font-bold text-base md:text-lg uppercase tracking-widest italic">Provide your consultation details</p>
                      </div>
 
                      <div className="space-y-8">
                         <div className="space-y-4">
-                           <div className="text-[9px] font-black text-gray-300 uppercase italic">Protocol Node Target</div>
+                           <div className="text-[9px] font-black text-gray-300 uppercase italic">Select Date</div>
                            <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
                               {[1,2,3,4,5,6,7].map(d => (
                                  <button key={d} onClick={() => setSelectedDate(`2026-03-${d + 24}`)} className={`h-16 w-14 shrink-0 border rounded-2xl flex flex-col items-center justify-center transition-all ${selectedDate.includes(d + 24) ? 'bg-[#0a1628] border-brand-teal text-brand-teal' : 'bg-gray-100 border-black/[0.02] text-gray-400'}`}>
@@ -273,11 +273,11 @@ export default function DoctorProfilePage() {
                         </div>
 
                         <div className="space-y-4">
-                           <div className="text-[9px] font-black text-gray-300 uppercase italic">Binary Symptoms Log</div>
+                           <div className="text-[9px] font-black text-gray-300 uppercase italic">Symptoms / Notes</div>
                            <textarea placeholder="Clinical state details..." className="w-full h-32 bg-gray-50 border border-black/[0.03] rounded-2xl p-6 font-dm italic font-bold text-base outline-none focus:border-brand-teal resize-none"></textarea>
                         </div>
 
-                        <button onClick={() => { toast.success('Protocol Synchronized'); setShowBookingModal(false); }} className="w-full h-16 md:h-20 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] md:text-xs uppercase italic tracking-[0.3em] rounded-2xl md:rounded-[3rem] shadow-4xl hover:bg-brand-teal hover:text-white transition-all">CONFIRM SYNCHRONIZATION</button>
+                        <button onClick={() => { toast.success('Appointment Booked'); setShowBookingModal(false); }} className="w-full h-16 md:h-20 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] md:text-xs uppercase italic tracking-[0.3em] rounded-2xl md:rounded-[3rem] shadow-4xl hover:bg-brand-teal hover:text-white transition-all">CONFIRM APPOINTMENT</button>
                      </div>
                   </div>
                </motion.div>

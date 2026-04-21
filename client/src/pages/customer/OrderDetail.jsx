@@ -20,10 +20,10 @@ export default function OrderDetail() {
   }, [id, dispatch]);
 
   const STAGES = [
-    { key: 'placed', label: 'Nodes Uplinked', icon: Zap },
-    { key: 'confirmed', label: 'Logistics Ready', icon: CheckCircle },
+    { key: 'placed', label: 'Order Placed', icon: Zap },
+    { key: 'confirmed', label: 'Confirmed', icon: CheckCircle },
     { key: 'shipped', label: 'In Transit', icon: Truck },
-    { key: 'delivered', label: 'Neutralized', icon: Package }
+    { key: 'delivered', label: 'Delivered', icon: Package }
   ];
 
   if (status === 'loading') {
@@ -44,7 +44,7 @@ export default function OrderDetail() {
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between">
            <Link to="/orders" className="h-14 px-8 bg-white border border-black/[0.03] rounded-2xl flex items-center gap-4 font-syne font-black text-[10px] uppercase italic tracking-widest text-gray-400 hover:text-[#0a1628] transition-all shadow-soft group">
-              <ChevronLeft size={16} className="group-hover:-translate-x-1 transition" /> District Orders
+              <ChevronLeft size={16} className="group-hover:-translate-x-1 transition" /> My Orders
            </Link>
            <button onClick={() => window.print()} className="h-14 w-14 bg-white border border-black/[0.03] rounded-2xl flex items-center justify-center text-brand-teal hover:bg-[#0a1628] hover:text-white transition-all shadow-soft">
               <Printer size={20} />
@@ -56,13 +56,13 @@ export default function OrderDetail() {
            <div className="space-y-6 relative z-10 text-center md:text-left">
               <div className="inline-flex items-center gap-4 bg-white/5 border border-white/10 px-6 py-2 rounded-full">
                  <div className="h-2 w-2 bg-brand-teal rounded-full animate-ping" />
-                 <span className="text-[10px] font-black uppercase tracking-[0.4em] italic opacity-60">Payload Manifest</span>
+                 <span className="text-[10px] font-black uppercase tracking-[0.4em] italic opacity-60">Order Details</span>
               </div>
               <h1 className="font-syne font-black text-5xl md:text-7xl uppercase italic tracking-tighter leading-none">Order <span className="text-brand-teal">#{id.slice(-6)}</span></h1>
            </div>
            
            <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-xl relative z-10 text-center">
-              <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] mb-2">Protocol Status</div>
+              <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] mb-2">Current Status</div>
               <div className="font-syne font-black text-2xl text-brand-teal uppercase italic tracking-tighter">{order?.status || 'SYNCHRONIZING'}</div>
            </div>
         </div>
@@ -88,7 +88,7 @@ export default function OrderDetail() {
            <div className="bg-white border border-black/[0.03] rounded-[4rem] p-10 md:p-16 shadow-soft space-y-12">
               <div className="flex items-center gap-6 pb-8 border-b border-black/[0.03]">
                  <div className="h-2 w-12 bg-brand-teal rounded-full" />
-                 <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic tracking-tighter">Clinical Contents</h2>
+                 <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic tracking-tighter">Ordered Medicines</h2>
               </div>
               <div className="space-y-6">
                  {order?.items.map((item, idx) => (
@@ -97,13 +97,13 @@ export default function OrderDetail() {
                          <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center font-syne font-black text-xl text-gray-200 border border-black/[0.01] shadow-inner group-hover:bg-[#0a1628] group-hover:text-brand-teal transition-all duration-500">{(item.medicine?.name || item.name)[0]}</div>
                          <div className="space-y-1">
                             <h4 className="font-syne font-black text-[#0a1628] uppercase italic leading-none">{item.medicine?.name || item.name}</h4>
-                            <div className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">{item.qty} Node Components</div>
+                            <div className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">{item.qty} Items</div>
                          </div>
                       </div>
                       <div className="font-syne font-black text-xl text-[#0a1628]">₹{item.price * item.qty}</div>
                    </div>
                  ))}
-                 {!order?.items.length && <div className="text-center py-10 text-gray-300 font-black uppercase tracking-widest text-[10px] italic">Null Payload Registry</div>}
+                 {!order?.items.length && <div className="text-center py-10 text-gray-300 font-black uppercase tracking-widest text-[10px] italic">No items found</div>}
               </div>
            </div>
 
@@ -112,21 +112,21 @@ export default function OrderDetail() {
               <div className="bg-[#f4f2ff] rounded-[4rem] p-12 shadow-soft space-y-10 border border-[#7c3aed]/10">
                  <div className="text-[#7c3aed] flex items-center gap-4">
                     <Activity size={20} />
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] italic leading-none">Logistics Architecture</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] italic leading-none">Delivery Details</span>
                  </div>
                  
                  <div className="space-y-8">
                     <div className="flex gap-6">
                        <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-soft text-[#7c3aed] shrink-0 border border-[#7c3aed]/10"><MapPin size={20}/></div>
                        <div className="space-y-1">
-                          <div className="text-[9px] font-black text-gray-400 uppercase tracking-widest italic">Delivery Node</div>
-                          <p className="font-dm font-bold text-[#0a1628] text-sm italic">{order?.deliveryAddress || 'Central District Hub'}</p>
+                          <div className="text-[9px] font-black text-gray-400 uppercase tracking-widest italic">Delivery Address</div>
+                          <p className="font-dm font-bold text-[#0a1628] text-sm italic">{order?.deliveryAddress || 'Home Address'}</p>
                        </div>
                     </div>
                     <div className="flex gap-6">
                        <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-soft text-[#7c3aed] shrink-0 border border-[#7c3aed]/10"><Clock size={20}/></div>
                        <div className="space-y-1">
-                          <div className="text-[9px] font-black text-gray-400 uppercase tracking-widest italic">Synchronization Time</div>
+                          <div className="text-[9px] font-black text-gray-400 uppercase tracking-widest italic">Order Placed On</div>
                           <p className="font-dm font-bold text-[#0a1628] text-sm italic">{new Date(order?.createdAt).toLocaleString()}</p>
                        </div>
                     </div>
@@ -138,7 +138,7 @@ export default function OrderDetail() {
                        <span>₹{order?.totalAmount - 40}</span>
                     </div>
                     <div className="flex justify-between items-center text-gray-400 font-syne font-black text-[10px] uppercase tracking-widest italic">
-                       <span>logistics_sync_fee</span>
+                       <span>Delivery Fee</span>
                        <span>₹40</span>
                     </div>
                     <div className="flex justify-between items-center text-[#7c3aed] font-syne font-black text-2xl uppercase italic tracking-tighter pt-4">
@@ -152,8 +152,8 @@ export default function OrderDetail() {
                  <div className="flex items-center gap-6">
                     <div className="h-14 w-14 bg-gray-50 rounded-2xl flex items-center justify-center text-brand-teal group-hover:bg-white/10 transition-all"><Info size={24}/></div>
                     <div className="space-y-1">
-                       <div className="font-syne font-black text-[#0a1628] uppercase italic group-hover:text-white transition-colors">Support Channel</div>
-                       <div className="text-[9px] font-black text-gray-300 uppercase italic tracking-widest">Rapid Response Enclave</div>
+                       <div className="font-syne font-black text-[#0a1628] uppercase italic group-hover:text-white transition-colors">Need Help?</div>
+                       <div className="text-[9px] font-black text-gray-300 uppercase italic tracking-widest">Contact Customer Support</div>
                     </div>
                  </div>
                  <ArrowUpRight size={20} className="text-gray-200 group-hover:text-brand-teal transition-all" />
@@ -162,7 +162,7 @@ export default function OrderDetail() {
               {order?.status !== 'delivered' && (
                 <Link to={`/orders/${id}/track`} className="block">
                    <button className="w-full h-24 bg-gradient-to-r from-[#02C39A] to-[#028090] text-white rounded-[3rem] font-syne font-black text-xs uppercase tracking-[0.4em] italic shadow-4xl shadow-[#02C39A]/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-6">
-                      <Truck size={24} /> Locate Live Payload
+                      <Truck size={24} /> Track Order Live
                    </button>
                 </Link>
               )}

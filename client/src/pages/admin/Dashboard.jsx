@@ -147,8 +147,26 @@ export default function AdminDashboard() {
                      {loading ? 'Synchronizing Nodes...' : 'Nodes Synchronized'}
                   </div>
                </div>
-               <button className="h-12 w-12 bg-gray-50 text-[#028090] rounded-xl flex items-center justify-center hover:bg-white hover:shadow-lg transition"><RefreshCw size={18}/></button>
+                <button className="h-12 w-12 bg-gray-50 text-[#028090] rounded-xl flex items-center justify-center hover:bg-white hover:shadow-lg transition"><RefreshCw size={18}/></button>
             </div>
+         </div>
+
+         {/* Quick Action Matrix */}
+         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+               { label: 'Add Pharmacy', icon: Store, color: 'bg-[#0a1628]', textColor: 'text-brand-teal' },
+               { label: 'Add Medicine', icon: Pill, color: 'bg-brand-teal', textColor: 'text-[#0a1628]' },
+               { label: 'System Reports', icon: Activity, color: 'bg-white', textColor: 'text-[#0a1628]' },
+               { label: 'Manage Nodes', icon: Users, color: 'bg-white', textColor: 'text-[#0a1628]' }
+            ].map(action => (
+               <button key={action.label} className={`h-24 md:h-28 rounded-[2rem] flex items-center justify-between px-8 shadow-soft border border-black/[0.02] hover:shadow-4xl transition-all duration-700 active:scale-95 group ${action.color} ${action.textColor}`}>
+                  <div className="space-y-1 text-left">
+                     <div className="text-[10px] font-black uppercase tracking-[0.2em] italic opacity-40">Execute Protocol</div>
+                     <div className="font-syne font-black text-sm md:text-lg uppercase italic tracking-tighter leading-none">{action.label}</div>
+                  </div>
+                  <div className={`h-12 w-12 rounded-xl flex items-center justify-center transition-all duration-700 group-hover:rotate-12 ${action.color === 'bg-white' ? 'bg-gray-50' : 'bg-white/10'}`}><action.icon size={22} /></div>
+               </button>
+            ))}
          </div>
 
          {/* Stats Row */}

@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  addItem,
-  removeItem,
-  changeQty,
+  addToCart,
+  removeFromCart,
+  incrementQty,
+  decrementQty,
   clearCart,
   validateCoupon,
   clearCoupon,
@@ -18,9 +19,10 @@ export function useCart() {
 
   return {
     ...cart,
-    addItem: (item) => dispatch(addItem(item)),
-    removeItem: (id) => dispatch(removeItem(id)),
-    changeQty: (id, delta) => dispatch(changeQty({ id, delta })),
+    addToCart: (item) => dispatch(addToCart(item)),
+    removeFromCart: (id) => dispatch(removeFromCart(id)),
+    incrementQty: (id) => dispatch(incrementQty(id)),
+    decrementQty: (id) => dispatch(decrementQty(id)),
     clearCart: () => dispatch(clearCart()),
     applyCoupon: (code) => dispatch(validateCoupon({ code, subtotal: cart.subtotal })),
     clearCoupon: () => dispatch(clearCoupon()),

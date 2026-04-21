@@ -113,8 +113,8 @@ export async function registerUser(req, res) {
     try {
       getIO().emit('activity:new', {
          type: 'user_joined',
-         message: `New district node '${name}' synchronized with the enclave.`,
-         location: 'District Registration Node',
+         message: `New member '${name}' joined the platform.`,
+         location: 'Registration',
          timestamp: new Date()
       });
     } catch (e) {}
@@ -210,8 +210,8 @@ export async function loginUser(req, res) {
   try {
     getIO().emit('activity:new', {
        type: 'user_login',
-       message: `Node '${user.name}' authorized and online. Pulse sync active.`,
-       location: 'Security Terminal',
+       message: `'${user.name}' logged in successfully.`,
+       location: 'Security Hub',
        timestamp: new Date()
     });
   } catch (e) {}

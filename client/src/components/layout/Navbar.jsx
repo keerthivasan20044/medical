@@ -10,7 +10,7 @@ import {
   Activity, Globe, Zap, Cpu, Landmark, Clock
 } from 'lucide-react';
 import { logoutUser } from '../../store/authSlice';
-import { clearCart, removeItem, changeQty } from '../../store/cartSlice';
+import { clearCart } from '../../store/cartSlice';
 import { setCartOpen } from '../../store/uiSlice';
 import { markAllNotificationsRead } from '../../store/notificationsSlice';
 import { useSocket } from '../../context/SocketContext.jsx';

@@ -4,7 +4,7 @@ import twilio from 'twilio';
 let transporter;
 function getTransporter() {
   if (transporter) return transporter;
-  if (!process.env.SMTP_HOST) return null;
+  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) return null;
   transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT || 587),
@@ -22,16 +22,21 @@ function getTwilioClient() {
 export async function sendEmail(to, subject, body, attachments) {
   const t = getTransporter();
   if (!t) {
-    console.log(`[email] to=${to} subject=${subject} body=${body}`);
+    console.log(`[Email-Simulation] to=${to} subject=${subject} body=${body}`);
     return;
   }
-  await t.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
-    to,
-    subject,
-    text: body,
-    attachments: attachments || []
-  });
+  try {
+    await t.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to,
+      subject,
+      text: body,
+      attachments: attachments || []
+    });
+  } catch (err) {
+    console.error('Email delivery failure:', err.message);
+    console.log(`[Email-Fallback] to=${to} subject=${subject} body=${body}`);
+  }
 }
 
 export async function sendSMS(to, message) {

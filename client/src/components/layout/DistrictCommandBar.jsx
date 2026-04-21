@@ -58,7 +58,7 @@ export default function DistrictCommandBar() {
           opacity: scrollDirection === 'down' && !isOpen ? 0 : 1
         }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="fixed bottom-28 md:bottom-24 right-4 md:right-8 z-[150]"
+        className="hidden md:block fixed md:bottom-24 right-4 md:right-8 z-[150]"
       >
         <motion.button
           whileHover={{ scale: 1.1, rotate: 5 }}

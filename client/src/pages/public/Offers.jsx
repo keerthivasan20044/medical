@@ -10,22 +10,22 @@ import { toast } from 'react-hot-toast';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 
 const OFFERS = [
-  { id: 1, pharmacy: 'Apollo Pharmacy', title: 'Buy ₹500 worth → FREE delivery', sub: 'No minimum architecture fee', valid: 'Today only', code: 'APOLLO500', category: 'Medicines', color: 'from-[#028090] to-teal-500' },
+  { id: 1, pharmacy: 'Apollo Pharmacy', title: 'Buy ₹500 worth → FREE delivery', sub: 'No delivery fee', valid: 'Today only', code: 'APOLLO500', category: 'Medicines', color: 'from-[#028090] to-teal-500' },
   { id: 2, pharmacy: 'MedPlus', title: '20% off on Diabetes medicines', sub: 'Metformin, Glipizide, Januvia...', valid: 'This weekend', code: 'DIABCARE20', category: 'Medicines', color: 'from-blue-600 to-indigo-500' },
   { id: 3, pharmacy: 'Sri Murugan Medical', title: 'Flat ₹50 off on orders above ₹300', sub: 'Applicable on all products', valid: 'Ends 30 Mar', code: 'MURUGAN50', category: 'All', color: 'from-[#0a1628] to-slate-800' },
   { id: 4, pharmacy: 'Life Care Medicals', title: 'Buy 2 Vitamin packs get 1 FREE', sub: 'Multivitamins & Omega-3', valid: 'Till 31 Mar', category: 'Vitamins', color: 'from-orange-500 to-amber-500' },
   { id: 5, pharmacy: 'Karaikal Central', title: 'Night owl discount — 10% off', sub: 'Applicable from 10PM–6AM', valid: 'Daily', code: 'NIGHTKK10', category: 'All', color: 'from-indigo-900 to-purple-800' },
   { id: 6, pharmacy: 'Grace Pharmacy (Nagore)', title: 'Free delivery to Nagore area', sub: 'For orders above ₹200', valid: 'This week', code: 'NAGOREFREE', category: 'All', color: 'from-emerald-600 to-teal-400' },
-  { id: 7, pharmacy: 'Sri Dhanvantri', title: '15% off on Inhalers', sub: 'Asthma care architecture', valid: 'Until 28 Mar', code: 'BREATHE15', category: 'Medicines', color: 'from-[#02C39A] to-[#028090]' },
+  { id: 7, pharmacy: 'Sri Dhanvantri', title: '15% off on Inhalers', sub: 'Asthma Care', valid: 'Until 28 Mar', code: 'BREATHE15', category: 'Medicines', color: 'from-[#02C39A] to-[#028090]' },
   { id: 8, pharmacy: 'Life Care', title: '25% off on Child Vaccines', sub: 'Flu, Hep-B, Pneumococcal', valid: 'This month', code: 'VAXKID25', category: 'Vaccines', color: 'from-rose-500 to-pink-500' },
   { id: 9, pharmacy: 'MK Medical Kitchen', title: 'Buy 1 Get 1 on Skin Care', sub: 'Moisturizers & Sunscreens', valid: 'Weekend special', category: 'Baby Care', color: 'from-[#0a1628] to-teal-900' },
   { id: 10, pharmacy: 'Sri Murugan', title: 'Flat ₹100 cashback on UPI', sub: 'On orders above ₹1000', valid: 'Limited time', code: 'UPIKKL100', category: 'All', color: 'from-[#028090] to-blue-500' },
   { id: 11, pharmacy: 'Apollo Pharmacy', title: 'Free First Aid Kit', sub: 'On orders above ₹1500', valid: 'While stock lasts', category: 'All', color: 'from-teal-600 to-[#0a1628]' },
-  { id: 12, pharmacy: 'MedPlus', title: '30% off on Baby Diapers', sub: 'Huggies, Pampers architecture', valid: 'Today', code: 'BABY30', category: 'Baby Care', color: 'from-sky-500 to-indigo-400' }
+  { id: 12, pharmacy: 'MedPlus', title: '30% off on Baby Diapers', sub: 'Huggies & Pampers', valid: 'Today', code: 'BABY30', category: 'Baby Care', color: 'from-sky-500 to-indigo-400' }
 ];
 
 const PROMO_CODES = [
-  { code: 'FIRST50', desc: '₹50 off first order architecture', details: 'Min. order ₹300' },
+  { code: 'FIRST50', desc: '₹50 off first order', details: 'Min. order ₹300' },
   { code: 'KARAIKAL20', desc: '20% off (max ₹100) for locals', details: 'Valid on all medicines' },
   { code: 'VACCINE25', desc: '25% off on all vaccine bookings', details: 'Online booking only' },
   { code: 'MEDIAPP10', desc: '10% off on app orders', details: 'Limited time offer' }

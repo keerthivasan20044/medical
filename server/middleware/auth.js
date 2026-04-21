@@ -20,11 +20,11 @@ export async function verifyToken(req, res, next) {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     
-    // Achieving "Real-time" Authorization: Validating actual DB state
+    // Achieving real-time authorization: Validating actual DB state
     const user = await User.findById(decoded.id).select('isActive verified role').lean();
     
     if (!user || !user.isActive) {
-      return res.status(401).json({ error: 'Session Revoked: Account node offline or unauthorized.' });
+      return res.status(401).json({ error: 'Your session has ended. Please log in again.' });
     }
     
     // Ensure role matches current database record
@@ -37,14 +37,14 @@ export async function verifyToken(req, res, next) {
     next();
   } catch (e) {
     console.error('Real-time Token Sync Failure:', e);
-    return res.status(401).json({ error: 'Invalid token: Re-authentication required for district sync.' });
+    return res.status(401).json({ error: 'Your session has expired. Please log in again.' });
   }
 }
 
 export function authorizeRoles(roles = []) {
   return (req, res, next) => {
     if (!req.user || !roles.includes(req.user.role)) {
-      return res.status(403).json({ error: 'Forbidden: Insufficient clearing level' });
+      return res.status(403).json({ error: 'Access denied: You do not have permission to view this page.' });
     }
     next();
   };

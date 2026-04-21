@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { 
   Home, Search, ShoppingBag, Bell, 
   User, Pill, Activity, LayoutDashboard, 
-  Package, MapPinned, Stethoscope, Store
+  Package, MapPinned, Stethoscope, Store, FileText
 } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
@@ -22,8 +22,8 @@ const NAV = (t) => ({
     { to: '/home', icon: Home, label: t('sidebarDashboard') || 'Home' },
     { to: '/medicines', icon: Pill, label: t('sidebarMedicines') || 'Buy' },
     { to: '/doctors', icon: Stethoscope, label: t('doctors') || 'Doctor' },
-    { type: 'button', icon: ShoppingBag, label: t('cart') || 'Cart', action: 'cart' },
-    { to: '/profile', icon: User, label: t('profile') || 'Node' }
+    { to: '/prescriptions', icon: FileText, label: t('sidebarPrescriptions') || 'Prescriptions' },
+    { to: '/profile', icon: User, label: t('profile') || 'Profile' }
   ],
   pharmacist: [
     { to: '/pharmacist/dashboard', icon: LayoutDashboard, label: t('sidebarOperations') || 'Ops' },
