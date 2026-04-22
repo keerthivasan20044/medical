@@ -1,11 +1,11 @@
 /**
  * Google Maps Dynamic Loader
- * Injects the Geospatial Node script into the terminal environment.
+ * Loads the Google Maps script into the application.
  */
 export const loadGoogleMaps = () => {
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     if (!apiKey) {
-      console.warn('⚠️ Maps Node: VITE_GOOGLE_MAPS_API_KEY is missing. Geospatial features disabled.');
+      console.warn('⚠️ Maps Error: Google Maps API Key is missing. Map features disabled.');
       return;
     }
   
@@ -18,6 +18,6 @@ export const loadGoogleMaps = () => {
     document.head.appendChild(script);
     
     script.onload = () => {
-      console.log('✅ Maps Node: Geospatial Architecture Synchronized.');
+      console.log('✅ Maps Loaded: Map features ready.');
     };
   };

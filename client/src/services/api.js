@@ -7,8 +7,8 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // Master Node Request Sync
-    console.log(`[API] Synchronizing ${config.method.toUpperCase()} to ${config.url}`);
+    // API Request Interceptor
+    console.log(`[API] Request: ${config.method.toUpperCase()} ${config.url}`);
     return config;
   },
   (error) => Promise.reject(error)
@@ -16,12 +16,12 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (res) => {
-    console.log(`[API] Node Synchronized: ${res.status} from ${res.config.url}`);
+    console.log(`[API] Response: ${res.status} ${res.config.url}`);
     return res;
   },
   async (error) => {
     const original = error.config;
-    // Skip refresh pulse for auth-specific endpoints to avoid recursion
+    // Skip token refresh for auth-specific endpoints
     if (original.url?.includes('/api/auth/refresh') || original.url?.includes('/api/auth/login')) {
       return Promise.reject(error);
     }
@@ -35,11 +35,11 @@ api.interceptors.response.use(
       
       original._retry = true;
       try {
-        console.warn('[API] Auth Node Expired. Attempting Architecture Refresh...');
+        console.warn('[API] Session expired. Attempting token refresh...');
         await api.post('/api/auth/refresh');
         return api(original);
       } catch (e) {
-        console.error('[API] Resilience Protocol Failed.');
+        console.error('[API] Token refresh failed. Session cleared.');
         // Purge invalid session data to prevent persistent refresh failure spam
         localStorage.removeItem('medireach_auth_v1');
         localStorage.removeItem('medireach_cart_v1');

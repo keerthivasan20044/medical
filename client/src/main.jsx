@@ -41,7 +41,7 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <div style={{ padding: '40px', background: '#0a1628', color: '#ff4d4d', minHeight: '100vh', fontFamily: 'sans-serif' }}>
-          <h1 style={{ fontSize: '24px', marginBottom: '20px' }}>System Architecture Failure</h1>
+          <h1 style={{ fontSize: '24px', marginBottom: '20px' }}>Application Loading Error</h1>
           <p style={{ color: '#fff', opacity: 0.6 }}>The application encountered a terminal runtime error.</p>
           <pre style={{ background: 'rgba(255,255,255,0.05)', padding: '20px', borderRadius: '12px', overflow: 'auto', marginTop: '20px' }}>
             {this.state.error?.toString()}
@@ -50,7 +50,7 @@ class ErrorBoundary extends React.Component {
             onClick={() => window.location.reload()}
             style={{ marginTop: '20px', padding: '12px 24px', background: '#02C39A', border: 'none', borderRadius: '8px', color: '#0a1628', fontWeight: 'bold', cursor: 'pointer' }}
           >
-            Retry System Sync
+            Reload Application
           </button>
         </div>
       );
@@ -59,7 +59,7 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-console.log("MediPharm Hub: Initializing Telemetry...");
+console.log("MediPharm Hub: Initializing App...");
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -78,4 +78,4 @@ root.render(
   </React.StrictMode>
 );
 
-console.log("MediPharm Hub: Mount Protocol Successful.");
+console.log("MediPharm Hub: App Loaded Successfully.");
