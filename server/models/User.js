@@ -6,15 +6,16 @@ const userSchema = new mongoose.Schema(
     email: { type: String, unique: true, sparse: true, lowercase: true },
     phone: { type: String, unique: true, sparse: true },
     password: { type: String, required: true },
-    role: { type: String, enum: ['user', 'customer', 'doctor', 'pharmacist', 'delivery', 'admin'], default: 'user' },
+    role: { type: String, enum: ['customer', 'doctor', 'pharmacist', 'delivery', 'admin'], default: 'customer' },
     avatar: { url: String, publicId: String },
-    address: {
+    address: [{
       street: String,
       city: String,
       state: String,
       pincode: String,
-      coordinates: { lat: Number, lng: Number }
-    },
+      coordinates: { lat: Number, lng: Number },
+      isDefault: { type: Boolean, default: false }
+    }],
     // Doctor specific fields (for role: 'doctor')
     doctorProfile: {
       specialization: String,
@@ -36,11 +37,11 @@ const userSchema = new mongoose.Schema(
       tags: [String]
     },
     // Pharmacist/Delivery specific
-    pharmacy: { type: mongoose.Schema.Types.ObjectId, ref: 'Pharmacy' },
-    verified: { type: Boolean, default: false },
+    pharmacyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Pharmacy' },
+    isVerified: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
     refreshToken: String,
-    otpCode: String,
+    otp: String,
     otpExpiry: Date,
     resetToken: String,
     resetTokenExpiry: Date
@@ -51,6 +52,6 @@ const userSchema = new mongoose.Schema(
 // Create indexes for frequently queried fields
 // Note: email and phone already indexed via unique:true — no need to repeat
 userSchema.index({ role: 1 });
-userSchema.index({ verified: 1 });
+userSchema.index({ isVerified: 1 });
 
 export default mongoose.model('User', userSchema);

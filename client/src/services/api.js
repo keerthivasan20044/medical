@@ -35,6 +35,14 @@ api.interceptors.response.use(
       
       original._retry = true;
       try {
+        // Debounce refresh attempts - check if a refresh is already in progress via a global flag or short-lived timestamp
+        const lastRefresh = sessionStorage.getItem('last_refresh_attempt');
+        const now = Date.now();
+        if (lastRefresh && now - parseInt(lastRefresh) < 2000) {
+           return Promise.reject(error);
+        }
+        sessionStorage.setItem('last_refresh_attempt', now.toString());
+
         console.warn('[API] Session expired. Attempting token refresh...');
         await api.post('/api/auth/refresh');
         return api(original);

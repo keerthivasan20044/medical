@@ -2,9 +2,10 @@ import mongoose from 'mongoose';
 
 const prescriptionSchema = new mongoose.Schema(
   {
-    patient: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     doctor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     doctorName: String, // fallback for manual uploads
+    pharmacyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Pharmacy' },
     orderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' },
     imageUrl: { type: String, required: true },
     publicId: String,
@@ -15,20 +16,20 @@ const prescriptionSchema = new mongoose.Schema(
     expiryDate: Date,
     status: { 
       type: String, 
-      enum: ['pending', 'verified', 'rejected', 'dispensed'], 
+      enum: ['pending', 'approved', 'rejected', 'dispensed'], 
       default: 'pending' 
     },
     rejectionReason: String,
     rejectedAt: Date,
     rejectedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    verifiedAt: Date,
-    verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    approvedAt: Date,
+    pharmacistId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
   },
   { timestamps: true }
 );
 
 // Create indexes
-prescriptionSchema.index({ patient: 1 });
+prescriptionSchema.index({ customerId: 1 });
 prescriptionSchema.index({ status: 1 });
 prescriptionSchema.index({ createdAt: -1 });
 

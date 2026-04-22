@@ -25,6 +25,8 @@ export default function MedicineDetailPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setMedicine(null);
+    setLoading(true);
     fetchMedicineDetails();
     window.scrollTo(0, 0);
     setQty(1);
@@ -58,7 +60,7 @@ export default function MedicineDetailPage() {
       price: medicine?.price,
       image: normalizeUrl(medicine?.images?.[0] || '/assets/medicine_default.png'),
       brand: medicine?.brand,
-      qty
+      quantity: qty
     }));
     toast.success(`${qty} units added to cart.`);
   };
@@ -66,7 +68,7 @@ export default function MedicineDetailPage() {
   if (loading) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] space-y-6">
       <Loader2 className="animate-spin text-brand-teal" size={48}/>
-      <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-widest">Synchronizing Medicine Node...</p>
+      <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-widest">Loading Details...</p>
     </div>
   );
 
@@ -74,10 +76,10 @@ export default function MedicineDetailPage() {
     <div className="min-h-screen bg-[#0a1628] flex items-center justify-center p-6">
        <div className="text-center space-y-8 max-w-xl">
           <div className="h-24 w-24 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto text-brand-teal animate-pulse"><Pill size={40}/></div>
-          <h2 className="font-syne font-black text-3xl md:text-5xl text-white uppercase italic tracking-tighter">SKU NOT FOUND</h2>
+          <h2 className="font-syne font-black text-3xl md:text-5xl text-white uppercase italic tracking-tighter">MEDICINE NOT FOUND</h2>
           <Link to="/medicines">
-             <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase tracking-widest rounded-xl italic flex items-center gap-4 mx-auto">
-                <ChevronRight size={18} className="rotate-180"/> RETURN TO REGISTRY
+             <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase tracking-widest italic flex items-center gap-4 mx-auto">
+                <ChevronRight size={18} className="rotate-180"/> BACK TO SHOP
              </button>
           </Link>
        </div>
@@ -141,7 +143,7 @@ export default function MedicineDetailPage() {
                   </div>
                   {medicine.requiresRx && (
                      <div className="px-4 md:px-6 py-2 bg-purple-50 text-purple-600 text-[9px] md:text-[10px] font-black uppercase tracking-widest italic border border-purple-100 rounded-xl flex items-center gap-2">
-                        <FileText size={12}/> RX PROTOCOL
+                        <FileText size={12}/> PRESCRIPTION REQUIRED
                      </div>
                   )}
                </div>
@@ -156,20 +158,20 @@ export default function MedicineDetailPage() {
             <div className="space-y-8 md:space-y-10 bg-white border border-black/[0.03] p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] shadow-soft">
                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                   <div className="space-y-2">
-                     <div className="text-[9px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Terminal Price</div>
+                     <div className="text-[9px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Price</div>
                      <div className="flex items-center gap-4 md:gap-6">
-                        <span className="font-syne font-black text-brand-teal text-4xl md:text-6xl italic leading-none uppercase tracking-tighter">₹{medicine.price}</span>
+                        <span className="font-syne font-black text-brand-teal text-4xl md:text-6xl italic leading-none uppercase tracking-tighter select-none">₹{medicine.price}</span>
                         {medicine.mrp > medicine.price && (
                            <div className="flex flex-col">
-                              <span className="text-gray-200 line-through font-dm italic text-lg md:text-2xl font-bold leading-none">₹{medicine.mrp}</span>
+                              <span className="text-gray-200 line-through font-dm italic text-lg md:text-2xl font-bold leading-none select-none">₹{medicine.mrp}</span>
                               <span className="text-red-500 font-syne font-black italic text-[9px] uppercase pt-1 tracking-widest">{medicine.discount}% OFF</span>
                            </div>
                         )}
                      </div>
                   </div>
-                  <div className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest italic flex items-center gap-2 self-start md:self-auto ${medicine.stockCount > 0 ? 'bg-emerald-50 text-emerald-500' : 'bg-red-50 text-red-500'}`}>
-                     <div className={`h-1.5 w-1.5 rounded-full animate-pulse ${medicine.stockCount > 0 ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                     {medicine.stockCount > 0 ? `${medicine.stockCount} IN STOCK` : 'UNAVAILABLE'}
+                  <div className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest italic flex items-center gap-2 self-start md:self-auto ${medicine.stock > 0 ? 'bg-emerald-50 text-emerald-500' : 'bg-red-50 text-red-500'}`}>
+                     <div className={`h-1.5 w-1.5 rounded-full animate-pulse ${medicine.stock > 0 ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                     {medicine.stock > 0 ? `${medicine.stock} IN STOCK` : 'UNAVAILABLE'}
                   </div>
                </div>
 
@@ -179,7 +181,7 @@ export default function MedicineDetailPage() {
                         <Store size={20}/>
                      </div>
                      <div className="flex-1">
-                        <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest italic leading-none">Distributor Node</div>
+                        <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest italic leading-none">Sold by</div>
                         <div className="font-syne font-black text-[#0a1628] text-lg uppercase italic group-hover:text-brand-teal transition-colors tracking-tighter truncate">{medicine.pharmacyName}</div>
                      </div>
                      <ChevronRight size={16} className="text-gray-200 group-hover:text-brand-teal group-hover:translate-x-2 transition-all" />
@@ -207,11 +209,11 @@ export default function MedicineDetailPage() {
                   <div className="h-12 w-12 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal">
                      <Truck size={24}/>
                   </div>
-                  <h4 className="font-syne font-black text-xl md:text-2xl uppercase italic tracking-tighter">Logistics Protocol</h4>
+                  <h4 className="font-syne font-black text-xl md:text-2xl uppercase italic tracking-tighter">Delivery Details</h4>
                </div>
                <div className="space-y-4 relative z-10">
                   <p className="text-white/60 font-dm font-bold italic text-base md:text-lg leading-relaxed">
-                     Delivery from <span className="text-brand-teal">{medicine.pharmacyName}</span> Node confirmed for <span className="text-white">TODAY 6PM</span> via District Transport.
+                     Delivery from <span className="text-brand-teal">{medicine.pharmacyName}</span> confirmed for <span className="text-white">TODAY 6PM</span> via Delivery Team.
                   </p>
                </div>
             </div>
@@ -221,9 +223,9 @@ export default function MedicineDetailPage() {
       {/* Accordions */}
       <section className="max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-32 space-y-4 md:space-y-8">
          {[
-            { title: 'SPEC_DESCRIPTION', content: medicine.description, icon: Info },
-            { title: 'DOSAGE_NODE', content: medicine.dosage, icon: Zap },
-            { title: 'SAFEGUARD_STORAGE', content: medicine.storage, icon: ShieldCheck }
+            { title: 'Description', content: medicine.description, icon: Info },
+            { title: 'How to use', content: medicine.dosage, icon: Zap },
+            { title: 'Storage Info', content: medicine.storage, icon: ShieldCheck }
          ].map(section => (
             <div key={section.title} className="bg-white border border-black/[0.03] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-soft">
                <button 
@@ -255,8 +257,8 @@ export default function MedicineDetailPage() {
            className="fixed bottom-[110px] inset-x-4 md:hidden z-[100] bg-[#0a1628] h-20 rounded-2xl border border-white/10 shadow-4xl flex items-center justify-between px-6 gap-6"
          >
             <div className="flex flex-col">
-               <div className="text-[8px] font-black text-white/30 uppercase italic tracking-widest">UNIT_VAL</div>
-               <div className="font-syne font-black text-brand-teal text-2xl italic leading-none">₹{medicine.price}</div>
+               <div className="text-[8px] font-black text-white/30 uppercase italic tracking-widest">Price</div>
+               <div className="font-syne font-black text-brand-teal text-2xl italic leading-none select-none">₹{medicine.price}</div>
             </div>
             <button 
               onClick={handleAddToCart}

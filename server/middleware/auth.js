@@ -21,7 +21,7 @@ export async function verifyToken(req, res, next) {
     const decoded = jwt.verify(token, JWT_SECRET);
     
     // Achieving real-time authorization: Validating actual DB state
-    const user = await User.findById(decoded.id).select('isActive verified role').lean();
+    const user = await User.findById(decoded.id).select('isActive isVerified role').lean();
     
     if (!user || !user.isActive) {
       return res.status(401).json({ error: 'Your session has ended. Please log in again.' });

@@ -44,7 +44,7 @@ export default function Contact() {
          <div className="max-w-7xl mx-auto px-10 space-y-12 relative z-10">
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="space-y-10 group">
                <div className="px-8 py-3 bg-brand-teal/10 border border-brand-teal/20 rounded-[2rem] inline-flex items-center gap-4 text-[11px] font-black text-brand-teal uppercase tracking-[0.4em] italic backdrop-blur-3xl group-hover:scale-105 transition-transform duration-700">
-                  <Activity size={18} className="animate-pulse" /> Communications
+                  <Activity size={18} className="animate-pulse" /> Talk to Us
                </div>
                <h1 className="font-syne font-black text-7xl md:text-[11rem] text-white tracking-[-0.05em] leading-[0.8] uppercase italic drop-shadow-2xl">
                   {t('contact')} <br /><span className="text-brand-teal drop-shadow-[0_0_80px_rgba(2,195,154,0.3)]">Team</span>
@@ -190,11 +190,11 @@ export default function Contact() {
                <div className="absolute inset-0 bg-[url('/assets/hospital_pro.png')] bg-cover bg-center grayscale brightness-50 contrast-125 opacity-40 group-hover:grayscale-0 group-hover:brightness-100 group-hover:scale-105 transition-all duration-[8s] ease-out" />
                <div className="absolute inset-0 bg-[#0a1628]/20 group-hover:bg-transparent transition-all duration-1000" />
                
-               {/* Animated HUD Elements */}
+               {/* Animated Status Icons */}
                <div className="absolute top-20 left-20 space-y-4 opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
                   <div className="flex items-center gap-4 bg-[#0a1628] px-8 py-4 rounded-2xl border border-brand-teal/30 shadow-4xl">
                      <div className="h-2 w-2 bg-brand-teal rounded-full animate-ping" />
-                     <span className="text-[10px] font-black text-white uppercase tracking-[0.4em] italic">GPS ACTIVE</span>
+                     <span className="text-[10px] font-black text-white uppercase tracking-[0.4em] italic">Location Ready</span>
                   </div>
                </div>
 

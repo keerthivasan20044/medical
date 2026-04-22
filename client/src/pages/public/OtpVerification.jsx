@@ -155,8 +155,11 @@ export default function OtpVerification() {
                 </div>
              </div>
 
-             <div className="pt-12 flex items-center justify-between text-[11px] font-black uppercase italic tracking-widest text-gray-300">
-                <Link to="/login" className="flex items-center gap-3 hover:text-brand-teal transition-colors"><Globe size={16}/> Back to Login</Link>
+             <div className="pt-12 flex flex-col md:flex-row items-center justify-between gap-6 text-[11px] font-black uppercase italic tracking-widest text-gray-300">
+                <div className="flex items-center gap-8">
+                   <Link to="/login" className="flex items-center gap-3 hover:text-brand-teal transition-colors"><Globe size={16}/> Back to Login</Link>
+                   <Link to="/" className="flex items-center gap-3 hover:text-brand-teal transition-colors">Go Home</Link>
+                </div>
                 <div className="flex items-center gap-3"><Sparkles size={16} className="text-brand-teal animate-pulse"/> DISTRICT NETWORK 2.4</div>
              </div>
           </div>

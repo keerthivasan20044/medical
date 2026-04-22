@@ -5,15 +5,11 @@ import MobileBottomNav from './MobileBottomNav.jsx';
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen bg-brand-off">
-      <Navbar variant="app" />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 pt-[72px] p-4 md:p-8 pb-32 md:pb-8 page-fade-up">
-          <Outlet />
-        </main>
+    <div className="flex bg-brand-off min-h-screen">
+      <Sidebar />
+      <div className="flex-1">
+        <Outlet />
       </div>
-      <MobileBottomNav />
     </div>
   );
 }

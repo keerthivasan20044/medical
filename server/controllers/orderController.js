@@ -5,27 +5,32 @@ import { getIO } from '../config/socket.js';
 import { sendEmail, sendSMS } from '../utils/notify.js';
 
 export async function placeOrder(req, res) {
-  const { pharmacy, items = [], deliveryAddress, paymentMethod, note, prescription } = req.body;
+  const { pharmacyId, items = [], deliveryAddress, paymentMethod, note, prescriptionUrl } = req.body;
   if (!items.length) return res.status(400).json({ message: 'No items' });
-  const totalAmount = items.reduce((sum, i) => sum + (i.price || 0) * (i.qty || 1), 0);
+  
+  const totalAmount = items.reduce((sum, i) => sum + (i.price || 0) * (i.quantity || 1), 0);
   const orderNumber = `MED-${Date.now()}`;
+  
+  // Create OTP for delivery confirmation
+  const deliveryOtp = String(Math.floor(100000 + Math.random() * 900000));
+  
   const order = await Order.create({
     orderNumber,
-    customer: req.user.id,
-    pharmacy,
+    customerId: req.user.id,
+    pharmacyId,
     items,
     totalAmount,
     paymentMethod,
     deliveryAddress,
-    note,
-    prescription,
-    status: 'placed'
+    prescriptionUrl,
+    otp: deliveryOtp,
+    status: 'pending'
   });
 
   const notif = await Notification.create({
     user: req.user.id,
     title: 'Order Placed',
-    body: `Order ${order.orderNumber} confirmed.`,
+    body: `Order ${order.orderNumber} is being processed.`,
     type: 'order',
     icon: 'order'
   });
@@ -33,61 +38,70 @@ export async function placeOrder(req, res) {
   try {
     const io = getIO();
     io.to(`user:${req.user.id}`).emit('notification:new', notif);
-    // Emit order:placed for customer's UI update
-    io.to(`user:${req.user.id}`).emit('order:placed', { 
-       id: order.orderNumber, 
-       pharmacyName: 'Pharmacy Node', 
-       eta: '30 min' 
-    });
-    // Pharmacy Real-Time Node Handshake
-    io.to(`pharmacy:${pharmacy}`).emit('order:new', order);
-    // Global Multi-Node Sync
+    io.to(`pharmacy:${pharmacyId}`).emit('order:new', order);
     io.to('admin').emit('order:new', order);
-    // Global District Pulse Broadcast
+    
     io.emit('activity:new', {
        type: 'order_placed',
-       message: `New medical node handshake initiated in Karaikal via ${orderNumber}`,
-       location: 'Karaikal Central',
+       message: `New order ${orderNumber} placed in Karaikal cluster`,
+       location: 'Karaikal',
        timestamp: new Date()
     });
-  } catch (e) {
-    // socket not ready
-  }
+  } catch (e) {}
 
   const user = await User.findById(req.user.id);
   if (user?.email) await sendEmail(user.email, 'Order Placed', `Your order ${order.orderNumber} is confirmed.`);
-  if (user?.phone) await sendSMS(user.phone, `Order ${order.orderNumber} confirmed.`);
+  if (user?.phone) await sendSMS(user.phone, `Order ${order.orderNumber} confirmed. OTP: ${deliveryOtp}`);
 
   res.status(201).json({ order });
 }
 
+export async function getPharmacyOrders(req, res) {
+  try {
+    const pharmacyId = req.user.pharmacyId;
+    if (!pharmacyId && req.user.role !== 'admin') {
+       return res.status(403).json({ message: 'No pharmacy associated with this account' });
+    }
+    const query = pharmacyId ? { pharmacyId } : {};
+    const items = await Order.find(query)
+      .populate('customerId', 'name phone')
+      .sort({ createdAt: -1 });
+    res.json({ items });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch pharmacy orders' });
+  }
+}
+
 export async function getMyOrders(req, res) {
   try {
-    const items = await Order.find({ customer: req.user.id }).sort({ createdAt: -1 });
+    const items = await Order.find({ customerId: req.user.id })
+      .populate('pharmacyId', 'name address')
+      .sort({ createdAt: -1 });
     res.json({ items });
   } catch (error) {
-    console.error('Get my orders error:', error);
     res.status(500).json({ message: 'Failed to fetch orders' });
   }
 }
 
 export async function getOrderById(req, res) {
   try {
-    const item = await Order.findById(req.params.id).populate('items.medicine');
+    const item = await Order.findById(req.params.id)
+      .populate('items.medicine')
+      .populate('pharmacyId')
+      .populate('customerId', 'name phone email');
+      
     if (!item) return res.status(404).json({ message: 'Order not found' });
     
-    // Authorization check: User can only view their own orders unless they're admin/pharmacy staff/delivery agent
-    const isOrderOwner = item.customer.toString() === req.user.id;
-    const isDeliveryAgent = item.deliveryAgent?.toString() === req.user.id;
-    const isAdmin = req.user.role === 'admin' || req.user.role === 'pharmacist';
+    const isOrderOwner = item.customerId?._id.toString() === req.user.id;
+    const isDeliveryAgent = item.deliveryPartnerId?.toString() === req.user.id;
+    const isAdmin = ['admin', 'pharmacist'].includes(req.user.role);
     
     if (!isOrderOwner && !isDeliveryAgent && !isAdmin) {
-      return res.status(403).json({ message: 'Forbidden: Cannot access this order' });
+      return res.status(403).json({ message: 'Access denied' });
     }
     
     res.json({ item });
   } catch (error) {
-    console.error('Get order error:', error);
     res.status(500).json({ message: 'Failed to fetch order' });
   }
 }
@@ -95,29 +109,25 @@ export async function getOrderById(req, res) {
 export async function updateOrderStatus(req, res) {
   try {
     const { status } = req.body;
+    const validStatuses = ['pending', 'confirmed', 'preparing', 'out for delivery', 'delivered', 'cancelled'];
     
-    // Validate status enum (A-Rank District Protocol)
-    const validStatuses = ['placed', 'confirmed', 'preparing', 'shipped', 'dispatched', 'delivered', 'cancelled'];
     if (!validStatuses.includes(status)) {
-      return res.status(400).json({ message: `Invalid protocol status: ${status}` });
+      return res.status(400).json({ message: `Invalid status: ${status}` });
     }
     
     const order = await Order.findById(req.params.id);
     if (!order) return res.status(404).json({ message: 'Order not found' });
     
-    // Authorization check: Only admin, pharmacist, or assigned delivery agent can update
-    const isAdmin = req.user.role === 'admin' || req.user.role === 'pharmacist';
-    const isDeliveryAgent = order.deliveryAgent?.toString() === req.user.id;
-    
-    if (!isAdmin && !isDeliveryAgent) {
-      return res.status(403).json({ message: 'Forbidden: Cannot update this order' });
+    // Status transition rules
+    if (order.status === 'delivered' || order.status === 'cancelled') {
+       return res.status(400).json({ message: 'Cannot update a completed or cancelled order' });
     }
-    
+
     order.status = status;
     await order.save();
 
     const notif = await Notification.create({
-      user: order.customer,
+      user: order.customerId,
       title: 'Order Status Update',
       body: `Your order ${order.orderNumber} is now ${status}.`,
       type: 'order',
@@ -126,66 +136,62 @@ export async function updateOrderStatus(req, res) {
 
     try {
       const io = getIO();
-      const statusPayload = { 
-         orderId: order._id, 
-         id: order.orderNumber,
-         status,
-         pharmacyName: 'District Pharmacy', 
-         notif
-      };
-      // Consistent status update event
-      io.to(`user:${order.customer}`).emit('order:status-update', statusPayload);
-      io.to(`order:${order._id}`).emit('order:status-update', statusPayload);
-      
-      // Fallback for legacy listeners
-      io.to(`user:${order.customer}`).emit('order:status', statusPayload);
-      
-      io.to(`order:${order._id}`).emit('notification:new', notif);
-      
-      // Global District Pulse Broadcast
-      io.emit('activity:new', {
-         type: 'order_update',
-         message: `Order #${order.orderNumber.slice(-6)} protocol updated to: ${status.toUpperCase()}`,
-         location: 'Logistics Terminal',
-         timestamp: new Date()
-      });
+      const payload = { orderId: order._id, status, orderNumber: order.orderNumber };
+      io.to(`user:${order.customerId}`).emit('order:status-update', payload);
+      io.to(`user:${order.customerId}`).emit('notification:new', notif);
     } catch (e) {}
 
-    res.json({ item: order, order });
+    res.json({ item: order });
   } catch (error) {
-    console.error('Update order status error:', error);
-    res.status(500).json({ message: 'Failed to update order' });
+    res.status(500).json({ message: 'Failed to update status' });
   }
 }
 
 export async function verifyDeliveryOTP(req, res) {
-  const { code } = req.body;
-  const item = await Order.findById(req.params.id);
-  if (!item) return res.status(404).json({ message: 'Order not found' });
-  if (item.otp?.code && item.otp.code === code) {
-    item.otp.verified = true;
-    item.status = 'delivered';
-    await item.save();
-    return res.json({ ok: true });
+  try {
+    const { code } = req.body;
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+    
+    if (order.otp === code) {
+      order.status = 'delivered';
+      order.paymentStatus = 'paid'; // Assuming delivery confirms payment for COD
+      await order.save();
+      
+      const io = getIO();
+      io.to(`user:${order.customerId}`).emit('order:delivered', { orderId: order._id });
+      
+      return res.json({ ok: true, message: 'Order delivered successfully' });
+    }
+    return res.status(400).json({ message: 'Invalid delivery OTP' });
+  } catch (e) {
+    res.status(500).json({ message: 'Verification failed' });
   }
-  return res.status(400).json({ message: 'Invalid OTP' });
 }
 
 export async function liveTrackOrder(req, res) {
-  const item = await Order.findById(req.params.id).select('status liveLocation estimatedDelivery');
-  res.json({ item });
+  try {
+    const item = await Order.findById(req.params.id).select('status liveLocation');
+    res.json({ item });
+  } catch (e) {
+    res.status(500).json({ message: 'Tracking failed' });
+  }
 }
 
 export async function rateOrder(req, res) {
-  const { pharmacyRating, deliveryRating, comment } = req.body;
-  const order = await Order.findById(req.params.id);
-  if (!order) return res.status(404).json({ message: 'Order Node not found.' });
+  try {
+    const { pharmacyRating, deliveryRating, comment } = req.body;
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
 
-  order.rating = {
-    pharmacy: { score: pharmacyRating, review: comment },
-    delivery: { score: deliveryRating, review: comment }
-  };
+    order.rating = {
+      pharmacy: { score: pharmacyRating, review: comment },
+      delivery: { score: deliveryRating, review: comment }
+    };
 
-  await order.save();
-  res.json({ ok: true, message: 'Architecture Feedback Synchronized.' });
+    await order.save();
+    res.json({ ok: true, message: 'Rating submitted' });
+  } catch (e) {
+    res.status(500).json({ message: 'Rating failed' });
+  }
 }

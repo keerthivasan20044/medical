@@ -128,8 +128,11 @@ export default function PharmaciesListPage() {
            </div>
            
            <div className="space-y-4">
-              <h1 className="font-syne font-black text-3xl sm:text-5xl lg:text-7xl xl:text-8xl text-white leading-[0.9] tracking-tighter italic drop-shadow-2xl">
-                 Find <span className="text-brand-teal">Pharmacies</span> <br className="hidden md:block" /> in Karaikal
+              <h1
+                className="font-black text-white leading-[0.9] break-words w-full"
+                style={{ fontSize: 'clamp(2.2rem, 12vw, 5rem)' }}
+              >
+                 Find <span className="text-brand-teal">Pharmacies</span> in Karaikal
               </h1>
               <div className="flex flex-col lg:flex-row gap-8 items-center justify-between pt-6">
                  <p className="text-white/40 font-dm text-lg italic max-w-xl leading-relaxed mx-auto lg:mx-0">
@@ -137,7 +140,7 @@ export default function PharmaciesListPage() {
                  </p>
                  <div className="bg-brand-teal/5 border border-brand-teal/10 px-5 py-2 rounded-xl text-brand-teal font-syne font-black text-[9px] uppercase italic tracking-[0.25em] flex items-center gap-3 mx-auto lg:mx-0">
                     <div className="h-1.5 w-1.5 rounded-full bg-brand-teal animate-ping" />
-                    Live Data Protected
+                     Verified Data
                  </div>
               </div>
            </div>
@@ -172,12 +175,12 @@ export default function PharmaciesListPage() {
                     <MapIcon size={24} />
                  </div>
                  <div className="text-center">
-                    <div className="font-syne font-black text-white text-lg md:text-2xl uppercase italic tracking-tighter">District Grid Active</div>
+                    <div className="font-syne font-black text-white text-lg md:text-2xl uppercase italic tracking-tighter">Local Area Map Ready</div>
                     <div className="text-[10px] text-white/40 font-black uppercase tracking-[0.4em] italic">Showing {filteredPharmacies.length} Pharmacies</div>
                  </div>
               </div>
               <div className="absolute bottom-6 right-6">
-                 <button onClick={() => setViewMode('map')} className="h-10 px-6 bg-white/5 border border-white/10 text-white font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl hover:bg-brand-teal hover:text-[#0a1628] transition-all">Expand Matrix</button>
+                 <button onClick={() => setViewMode('map')} className="h-10 px-6 bg-white/5 border border-white/10 text-white font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl hover:bg-brand-teal hover:text-[#0a1628] transition-all">View Map</button>
               </div>
            </div>
         </div>
@@ -245,8 +248,8 @@ export default function PharmaciesListPage() {
             <div className="lg:w-1/3 space-y-8 text-center lg:text-left">
                <div className="h-16 w-16 bg-[#0a1628] rounded-[1.8rem] flex items-center justify-center text-brand-teal shadow-4xl mx-auto lg:mx-0"><Zap size={28}/></div>
                <div>
-                  <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic tracking-tighter leading-none">District Demand</h3>
-                  <p className="text-gray-400 font-dm font-bold italic text-lg leading-relaxed mt-4 uppercase tracking-tighter opacity-60">Pharmacy activity across Karaikal.</p>
+                  <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic tracking-tighter leading-none">Local Activity</h3>
+                  <p className="text-gray-400 font-dm font-bold italic text-lg leading-relaxed mt-4 uppercase tracking-tighter opacity-60">Pharmacy busy times in Karaikal.</p>
                </div>
                <div className="flex flex-col gap-4 text-xs font-dm font-bold italic text-[#0a1628] opacity-40 uppercase tracking-widest">
                   <div className="flex items-center gap-3"><div className="h-1.5 w-1.5 rounded-full bg-brand-teal" /> Live Updates</div>
@@ -254,7 +257,7 @@ export default function PharmaciesListPage() {
                </div>
             </div>
             <div className="flex-1 h-64 w-full relative min-h-[256px]">
-               <ResponsiveContainer width="100%" height="100%">
+               <ResponsiveContainer width="100%" height="100%" minHeight={256}>
                   <AreaChart data={demandData}>
                      <defs>
                         <linearGradient id="colorPulse" x1="0" y1="0" x2="0" y2="1">
@@ -312,7 +315,7 @@ export default function PharmaciesListPage() {
                <motion.div initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} className="fixed inset-y-0 left-0 w-full max-w-lg bg-white z-[101] shadow-4xl p-12 lg:p-16 flex flex-col pt-32">
                   <button onClick={() => setShowFilters(false)} className="absolute top-10 right-10 h-16 w-16 bg-gray-50 rounded-2xl flex items-center justify-center text-[#0a1628] hover:text-red-500 transition-all active:scale-95 shadow-soft"><X size={32}/></button>
                   <div className="flex-1 overflow-y-auto pr-6 no-scrollbar space-y-16">
-                     <div className="space-y-4"><div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Filter Settings</div><h2 className="font-syne font-black text-5xl text-[#0a1628] uppercase italic tracking-tighter leading-none">Filter Pharmacies</h2></div>
+                     <div className="space-y-4"><div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Filter Options</div><h2 className="font-syne font-black text-5xl text-[#0a1628] uppercase italic tracking-tighter leading-none">Filter Pharmacies</h2></div>
                      <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Select Area</h4><div className="grid grid-cols-2 gap-4">{areas.map(area => (<button key={area} onClick={() => toggleArea(area)} className={`h-16 px-6 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${selectedAreas.includes(area) ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{area}</button>))}</div></div>
                      <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Opening Status</h4><div className="flex gap-4">{['Open Now', '24 Hours', 'All'].map(opt => (<button key={opt} onClick={() => setOpenStatus(opt)} className={`flex-1 h-16 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${openStatus === opt ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{opt}</button>))}</div></div>
                      <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Distance</h4><div className="grid grid-cols-3 gap-4">{['1km', '3km', '5km', 'Any'].map(d => (<button key={d} onClick={() => setMaxDistance(d)} className={`h-14 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${maxDistance === d ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{d}</button>))}</div></div>

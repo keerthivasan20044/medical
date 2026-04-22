@@ -68,7 +68,7 @@ export default function DoctorProfilePage() {
         
         <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
            <div className="flex items-center gap-3 text-[9px] md:text-[10px] font-black text-white/40 uppercase tracking-[0.4em] italic mb-10">
-              <Link to="/doctors" className="hover:text-white transition-all">Consultants</Link>
+              <Link to="/doctors" className="hover:text-white transition-all">Doctors</Link>
               <ChevronRight size={12} className="opacity-40" /> 
               <span className="text-brand-teal truncate">{doctor.name} profile</span>
            </div>
@@ -103,7 +103,7 @@ export default function DoctorProfilePage() {
 
                  <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 pt-4">
                     <div className="h-16 md:h-20 bg-white/5 backdrop-blur-3xl rounded-2xl md:rounded-[2.2rem] flex items-center px-8 md:px-10 justify-between md:gap-10 border border-white/5">
-                       <div className="text-[9px] font-black text-white/20 uppercase tracking-widest italic">Consultation Fee</div>
+                       <div className="text-[9px] font-black text-white/20 uppercase tracking-widest italic">Fee</div>
                        <div className="font-syne font-black text-brand-teal text-xl md:text-3xl italic">₹{doctor.fee}</div>
                     </div>
                     <button 
@@ -220,7 +220,7 @@ export default function DoctorProfilePage() {
                <div className="bg-[#0a1628] rounded-[3rem] md:rounded-[4.5rem] p-10 md:p-12 text-white space-y-10 shadow-4xl sticky top-32 border-l-[12px] border-l-brand-teal">
                   <div className="space-y-6">
                      <div className="h-12 w-12 bg-white/5 rounded-xl flex items-center justify-center text-brand-teal"><ShieldCheck size={28}/></div>
-                     <h3 className="font-syne font-black text-3xl uppercase italic tracking-tighter">Clinic Info</h3>
+                     <h3 className="font-syne font-black text-3xl uppercase italic tracking-tighter">About Clinic</h3>
                      <div className="space-y-4 pt-6 border-t border-white/5">
                         <div className="flex justify-between items-center">
                            <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">Hospital</span>
@@ -273,8 +273,8 @@ export default function DoctorProfilePage() {
                         </div>
 
                         <div className="space-y-4">
-                           <div className="text-[9px] font-black text-gray-300 uppercase italic">Symptoms / Notes</div>
-                           <textarea placeholder="Clinical state details..." className="w-full h-32 bg-gray-50 border border-black/[0.03] rounded-2xl p-6 font-dm italic font-bold text-base outline-none focus:border-brand-teal resize-none"></textarea>
+                           <div className="text-[9px] font-black text-gray-300 uppercase italic">Your Health Notes</div>
+                           <textarea placeholder="How do you feel?" className="w-full h-32 bg-gray-50 border border-black/[0.03] rounded-2xl p-6 font-dm italic font-bold text-base outline-none focus:border-brand-teal resize-none"></textarea>
                         </div>
 
                         <button onClick={() => { toast.success('Appointment Booked'); setShowBookingModal(false); }} className="w-full h-16 md:h-20 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] md:text-xs uppercase italic tracking-[0.3em] rounded-2xl md:rounded-[3rem] shadow-4xl hover:bg-brand-teal hover:text-white transition-all">CONFIRM APPOINTMENT</button>

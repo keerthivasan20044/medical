@@ -1,3 +1,36 @@
+/* ===== GLOBAL MOBILE RESET ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100%;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-x: none;
+  position: relative;
+}
+
+/* Hide scrollbar globally */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Safe area for notched phones */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
+
+/* Prevent text overflow everywhere */
+h1, h2, h3, h4, h5, h6, p, span, a {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Minimum tap target size */
+button, a {
+  min-height: 44px;
+  min-width: 44px;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -193,6 +226,9 @@ html, body, #root {
   max-width: 100vw !important;
   width: 100%;
 }
+
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 @layer base {
   h1 {

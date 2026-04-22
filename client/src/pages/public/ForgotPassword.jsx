@@ -65,6 +65,10 @@ export default function ForgotPassword() {
             <div className="text-xs text-brand-muted text-center">
               Already have a code? <Link to="/reset-password" className="text-brand-teal">Reset here</Link>.
             </div>
+            <div className="flex justify-between items-center pt-4 border-t border-gray-50">
+               <Link to="/login" className="text-xs text-brand-teal hover:underline">&larr; Back to Login</Link>
+               <Link to="/" className="text-xs text-brand-muted hover:text-brand-teal transition-colors">Go Home</Link>
+            </div>
           </form>
         </div>
       </div>

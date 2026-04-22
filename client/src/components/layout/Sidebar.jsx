@@ -46,7 +46,7 @@ export default function Sidebar() {
   const navItems = NAV(t)[role || 'customer'];
 
   return (
-    <aside className="hidden lg:flex flex-col w-80 bg-[#0a1628] text-white min-h-[calc(100vh-96px)] sticky top-[96px] border-r border-white/5">
+    <aside className="hidden lg:flex flex-col w-80 bg-[#0a1628] text-white min-h-[calc(100vh-60px)] sticky top-[60px] border-r border-white/5">
       <div className="p-10 space-y-2">
         <div className="text-[10px] text-[#02C39A] font-black uppercase tracking-[0.4em] italic mb-4">{t('commandTerminal')}</div>
         <div className="flex items-center gap-4 p-6 bg-white/5 rounded-[2rem] border border-white/5">

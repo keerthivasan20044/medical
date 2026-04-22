@@ -4,7 +4,7 @@ import {
   getMyPrescriptions, 
   getPrescriptionById, 
   getPharmacyQueue,
-  verifyPrescription, 
+  approvePrescription, 
   rejectPrescription,
   deletePrescription
 } from '../controllers/prescriptionController.js';
@@ -21,7 +21,7 @@ router.get('/:id', verifyToken, getPrescriptionById);
 router.delete('/:id', verifyToken, deletePrescription);
 
 // Pharmacist routes
-router.put('/:id/verify', verifyToken, authorizeRoles(['pharmacist', 'admin']), verifyPrescription);
+router.put('/:id/approve', verifyToken, authorizeRoles(['pharmacist', 'admin']), approvePrescription);
 router.put('/:id/reject', verifyToken, authorizeRoles(['pharmacist', 'admin']), rejectPrescription);
 
 export default router;

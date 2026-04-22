@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   User, Mail, Lock, Phone, 
@@ -8,6 +8,7 @@ import {
   Upload, Sparkles, Smartphone
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Button, Input, OTPInput } from '../../components/common/Core';
 import { useGeolocation, useToast } from '../../hooks/core';
 import { useLanguage } from '../../context/LanguageContext.jsx';
@@ -34,6 +35,21 @@ export default function Register() {
   const navigate = useNavigate();
   const toast = useToast();
   const location = useGeolocation();
+  const { isAuthenticated, user } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const ROLE_DASHBOARDS = {
+        admin: '/admin/dashboard',
+        pharmacist: '/pharmacist/dashboard',
+        doctor: '/doctor/dashboard',
+        delivery: '/delivery/dashboard',
+        customer: '/home',
+      };
+      const dest = ROLE_DASHBOARDS[user.role] || '/home';
+      navigate(dest, { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleNext = () => setStep(s => s + 1);
   const handleBack = () => {
@@ -111,10 +127,10 @@ export default function Register() {
   };
 
   const ROLES = [
-    { id: 'customer', label: t('customer') || 'Customer', icon: User, desc: t('speakWithDoctors') || 'Access medicines & doctors' },
-    { id: 'doctor', label: t('doctor') || 'Doctor', icon: Stethoscope, desc: t('manageConsultations') },
-    { id: 'pharmacist', label: t('pharmacist') || 'Pharmacist', icon: Store, desc: 'Manage your pharmacy' },
-    { id: 'delivery', label: t('delivery') || 'Delivery', icon: Truck, desc: 'Deliver medicines' }
+    { id: 'customer', label: t('customer') || 'Customer', icon: User, desc: 'Order medicines and get home delivery.' },
+    { id: 'doctor', label: t('doctor') || 'Doctor', icon: Stethoscope, desc: 'Manage consultations and write prescriptions.' },
+    { id: 'pharmacist', label: t('pharmacist') || 'Pharmacist', icon: Store, desc: 'Manage your pharmacy inventory and orders.' },
+    { id: 'delivery', label: t('delivery') || 'Delivery', icon: Truck, desc: 'Deliver medicines to customers.' }
   ];
 
   const variants = {
@@ -129,15 +145,18 @@ export default function Register() {
        <div className="absolute top-0 right-0 h-96 w-96 bg-[#028090] rounded-full blur-[150px] opacity-10 animate-pulse" />
        
        <div className="w-full max-w-4xl bg-white rounded-[2rem] md:rounded-[5rem] shadow-4xl overflow-hidden relative z-10 grid md:grid-cols-[1fr_2fr]">
-          <aside className="bg-gray-50 p-8 md:p-12 space-y-12 border-r border-gray-100 hidden lg:block">
+          <aside className="bg-gray-50 p-8 md:p-12 space-y-12 border-r border-gray-100 hidden lg:block relative">
              <div className="space-y-4">
-                <Link to="/" className="flex items-center gap-3">
-                   <div className="h-10 w-10 bg-[#0a1628] rounded-xl flex items-center justify-center -rotate-[5deg]"><ShieldCheck className="text-[#02C39A]" size={24} /></div>
-                   <span className="font-syne font-black text-2xl text-[#0a1628] tracking-tighter">MediPharm.</span>
+                <Link to="/" className="flex items-center gap-3 flex-shrink-0">
+                   <div className="h-10 w-10 bg-[#0a1628] rounded-xl flex items-center justify-center -rotate-[5deg] flex-shrink-0"><ShieldCheck className="text-[#02C39A]" size={24} /></div>
+                   <span className="font-syne font-black text-2xl text-[#0a1628] tracking-tighter whitespace-nowrap">MediPharm.</span>
                 </Link>
              </div>
 
-             <div className="space-y-8">
+             <div className="space-y-10 relative">
+                {/* Stepper Connecting Line */}
+                <div className="absolute left-5 top-5 bottom-5 w-px bg-gray-200 z-0" />
+                
                 {[
                   { s: 1, l: t('step1') },
                   { s: 2, l: t('step2') },
@@ -145,8 +164,8 @@ export default function Register() {
                   { s: 4, l: t('step4') },
                   { s: 5, l: t('step5') }
                 ].map(item => (
-                   <div key={item.s} className="flex items-center gap-6 group">
-                      <div className={`h-10 w-10 rounded-xl flex items-center justify-center font-syne font-black text-xs transition duration-500 ${step >= item.s ? 'bg-[#0a1628] text-[#02C39A] shadow-xl' : 'bg-gray-200 text-gray-400'}`}>
+                   <div key={item.s} className="flex items-center gap-6 group relative z-10">
+                      <div className={`h-10 w-10 rounded-xl flex items-center justify-center font-syne font-black text-xs transition duration-500 border-2 ${step >= item.s ? 'bg-[#0a1628] border-[#0a1628] text-[#02C39A] shadow-xl' : 'bg-gray-50 border-gray-200 text-gray-400'}`}>
                          {step > item.s ? <CheckCircle size={16} /> : item.s}
                       </div>
                       <div className={`text-[10px] font-black uppercase tracking-widest transition duration-500 ${step === item.s ? 'text-[#0a1628]' : 'text-gray-300'}`}>{item.l}</div>
@@ -164,11 +183,11 @@ export default function Register() {
 
           <section className="p-6 md:p-12 lg:p-16 space-y-10 md:space-y-16 relative">
              <div className="flex justify-between items-center lg:hidden border-b border-gray-100 pb-6 mb-6">
-                <Link to="/" className="flex items-center gap-2">
-                   <div className="h-8 w-8 bg-[#0a1628] rounded-lg flex items-center justify-center -rotate-[5deg] shadow-lg shadow-[#02C39A]/20">
+                <Link to="/" className="flex items-center gap-2 flex-shrink-0">
+                   <div className="h-8 w-8 bg-[#0a1628] rounded-lg flex items-center justify-center -rotate-[5deg] shadow-lg shadow-[#02C39A]/20 flex-shrink-0">
                       <ShieldCheck className="text-[#02C39A]" size={16} />
                    </div>
-                   <span className="font-syne font-black text-lg text-[#0a1628] tracking-tighter">MediPharm.</span>
+                   <span className="font-syne font-black text-lg text-[#0a1628] tracking-tighter whitespace-nowrap">MediPharm.</span>
                 </Link>
                 <div className="px-4 py-1.5 bg-gray-50 border border-gray-200 rounded-full text-[9px] font-black text-[#028090] uppercase tracking-widest">
                    {t('step') || 'Step'} {step}/5
@@ -183,19 +202,18 @@ export default function Register() {
                            <h2 className="font-syne font-black text-3xl md:text-4xl text-[#0a1628]">Choose your role</h2>
                            <p className="text-gray-400 font-dm italic text-base md:text-lg opacity-60">Select how you want to use the platform.</p>
                         </div>
-                        <div className="grid grid-cols-2 gap-3 md:gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                            {ROLES.map(r => (
                              <button
                                key={r.id}
                                onClick={() => { setFormData({ ...formData, role: r.id }); handleNext(); }}
-                               className="p-4 md:p-8 bg-gray-50 rounded-[2rem] border-2 border-transparent hover:border-[#02C39A] hover:bg-white transition-all duration-500 flex flex-col md:flex-row items-center gap-3 md:gap-8 group text-center md:text-left"
+                               className="flex items-center gap-4 p-5 rounded-2xl border-2 border-gray-50 bg-gray-50 hover:border-[#02C39A] hover:bg-white transition-all duration-500 group text-left shadow-sm"
                              >
-                                <div className="h-12 w-12 md:h-16 md:w-16 bg-white rounded-2xl flex items-center justify-center text-[#0a1628] group-hover:bg-[#0a1628] group-hover:text-[#02C39A] transition duration-500 shadow-sm shrink-0"><r.icon size={20} className="md:w-7 md:h-7"/></div>
-                                <div className="flex-1">
-                                   <div className="font-syne font-black text-[10px] md:text-lg text-[#0a1628] uppercase tracking-tighter leading-none">{r.label}</div>
-                                   <div className="hidden md:block text-xs font-dm text-gray-400 italic mt-1">{r.desc}</div>
+                                <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center text-[#0a1628] group-hover:bg-[#0a1628] group-hover:text-[#02C39A] transition duration-500 shadow-sm flex-shrink-0"><r.icon size={20}/></div>
+                                <div className="flex-1 min-w-0">
+                                   <div className="font-syne font-black text-sm text-[#0a1628] uppercase tracking-tight leading-tight mb-1">{r.label}</div>
+                                   <div className="text-[10px] font-dm text-gray-400 italic line-clamp-2 leading-tight">{r.desc}</div>
                                 </div>
-                                <ArrowRight className="hidden md:block ml-auto opacity-0 group-hover:opacity-100 transition duration-500 text-[#02C39A]" size={20} />
                              </button>
                            ))}
                         </div>
@@ -374,6 +392,9 @@ export default function Register() {
                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-200">
                     {t('alreadyVerified')} <Link to="/login" className="text-[#028090] ml-2 hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">{t('termLogin')} &rarr;</Link>
                  </p>
+                 <Link to="/" className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-brand-teal transition-colors mt-4 block">
+                    Continue browsing without an account &rarr;
+                 </Link>
               </div>
            </section>
         </div>

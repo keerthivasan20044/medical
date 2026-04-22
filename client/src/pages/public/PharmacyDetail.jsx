@@ -29,6 +29,9 @@ export default function PharmacyDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setPharmacy(null);
+    setPharmacyMedicines([]);
+    setLoading(true);
     fetchPharmacyDetails();
   }, [id]);
 
@@ -87,7 +90,20 @@ export default function PharmacyDetailPage() {
   }
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-48">
+    <div className="bg-[#f8fafc] min-h-screen pb-36 w-full max-w-full overflow-x-hidden">
+      {/* Breadcrumb Terminal */}
+      <section className="bg-white/30 backdrop-blur-sm border-b border-black/[0.02] py-4 mt-16 md:mt-24">
+         <div className="max-w-7xl mx-auto px-6 md:px-10">
+            <div className="flex flex-wrap items-center gap-3 text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-[0.4em] italic leading-none">
+               <Link to="/" className="hover:text-brand-teal hidden md:block">{t('home') || 'Home'}</Link>
+               <ChevronRight size={12} className="opacity-40 hidden md:block" />
+               <Link to="/pharmacies" className="hover:text-brand-teal">{t('pharmacies') || 'Pharmacies'}</Link>
+               <ChevronRight size={12} className="opacity-40" />
+               <span className="text-brand-teal truncate max-w-[150px]">{pharmacy.name}</span>
+            </div>
+         </div>
+      </section>
+
       {/* Hero: Image Slider */}
       <section className="relative h-[65vh] overflow-hidden group">
          <Swiper
@@ -104,40 +120,46 @@ export default function PharmacyDetailPage() {
            ))}
          </Swiper>
          
-         {/* Overlay Header */}
-         <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/20 to-transparent pointer-events-none" />
-         
-         <div className="absolute top-10 left-10 z-20 flex items-center gap-4 text-[10px] font-black text-white/80 uppercase tracking-[0.4em] italic drop-shadow-lg">
-            <Link to="/" className="hover:text-brand-teal transition-colors">Home</Link>
-            <ChevronRight size={14} className="opacity-40" />
-            <Link to="/pharmacies" className="hover:text-brand-teal transition-colors">Pharmacies</Link>
-            <ChevronRight size={14} className="opacity-40" />
-            <span className="text-brand-teal">{pharmacy.name}</span>
-         </div>
+          {/* Overlay Header */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/40 to-transparent pointer-events-none" />
+          
+          {/* Breadcrumb - top left, clear of buttons */}
+          <div className="absolute top-6 left-6 z-20 flex items-center gap-2 text-[10px] font-bold text-white/70 uppercase tracking-widest">
+             <Link to="/" className="hover:text-brand-teal transition-colors">Home</Link>
+             <ChevronRight size={12} className="opacity-40" />
+             <Link to="/pharmacies" className="hover:text-brand-teal transition-colors">Pharmacies</Link>
+             <ChevronRight size={12} className="opacity-40" />
+             <span className="text-white font-black truncate max-w-[100px]">{pharmacy.name}</span>
+          </div>
 
-         <div className="absolute bottom-20 left-10 lg:left-20 z-20 space-y-6 max-w-4xl pr-10">
-            <div className="flex flex-wrap gap-4">
-               <div className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest italic flex items-center gap-2 backdrop-blur-3xl border ${pharmacy.is24hr ? 'bg-red-500/20 text-red-100 border-red-500/30' : 'bg-emerald-500/20 text-emerald-100 border-emerald-500/30'}`}>
-                  <div className={`h-2 w-2 rounded-full animate-pulse ${pharmacy.is24hr ? 'bg-red-500' : 'bg-emerald-500'}`} />
-                  {pharmacy.is24hr ? '24/7 Emergency Pharmacy' : 'Verified Partner Pharmacy'}
-               </div>
-               <div className="px-6 py-2 bg-brand-teal text-[#0a1628] text-[10px] font-black uppercase tracking-widest italic flex items-center gap-2 rounded-full shadow-mint">
-                  <Star size={14} fill="currentColor" /> {pharmacy.rating} Rating
-               </div>
-            </div>
-            <h1 className="font-syne font-black text-6xl lg:text-9xl text-white leading-[0.85] tracking-tighter uppercase italic drop-shadow-2xl">
-               {pharmacy.name}
-            </h1>
-         </div>
+          {/* Action buttons - top RIGHT, not overlapping breadcrumb */}
+          <div className="absolute top-6 right-6 z-20 flex gap-3">
+             <button className="h-10 w-10 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#0a1628] transition-all active:scale-95">
+                <Share2 size={18} />
+             </button>
+             <button className="h-10 w-10 bg-red-500 rounded-full flex items-center justify-center text-white transition-all active:scale-95 shadow-lg">
+                <Heart size={18} fill="white" />
+             </button>
+          </div>
 
-         <div className="absolute top-10 right-10 z-20 flex gap-4">
-            <button className="h-16 w-16 bg-white/10 backdrop-blur-3xl border border-white/20 rounded-2xl flex items-center justify-center text-white hover:bg-white hover:text-[#0a1628] transition-all group active:scale-95 shadow-4xl">
-               <Share2 size={24} className="group-hover:rotate-12 transition-transform" />
-            </button>
-            <button className="h-16 w-16 bg-white/10 backdrop-blur-3xl border border-white/20 rounded-2xl flex items-center justify-center text-white hover:bg-red-500 hover:text-white hover:border-red-500 transition-all group active:scale-95 shadow-4xl">
-               <Heart size={24} className="group-hover:animate-heartbeat" />
-            </button>
-         </div>
+          {/* Hero Text */}
+          <div className="absolute bottom-6 left-6 right-6 z-20 space-y-4 overflow-hidden">
+             <div className="flex flex-wrap gap-2">
+                <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest italic flex items-center gap-2 backdrop-blur-md border ${pharmacy.is24hr ? 'bg-red-500/20 text-red-100 border-red-500/30' : 'bg-emerald-500/20 text-emerald-100 border-emerald-500/30'}`}>
+                   <div className={`h-1.5 w-1.5 rounded-full animate-pulse ${pharmacy.is24hr ? 'bg-red-500' : 'bg-emerald-500'}`} />
+                   {pharmacy.is24hr ? '24/7 EMERGENCY' : 'TRUSTED PHARMACY'}
+                </div>
+                <div className="px-4 py-1.5 bg-brand-teal/90 text-[#0a1628] text-[9px] font-black uppercase tracking-widest italic flex items-center gap-1.5 rounded-full">
+                   <Star size={12} fill="currentColor" /> {pharmacy.rating}
+                </div>
+             </div>
+             <h1
+               className="font-black text-white leading-[0.9] break-words w-full"
+               style={{ fontSize: 'clamp(2.2rem, 12vw, 5rem)' }}
+             >
+                {pharmacy.name}
+             </h1>
+          </div>
       </section>
 
       {/* Pharmacy Information Bar */}
@@ -156,7 +178,9 @@ export default function PharmacyDetailPage() {
                   <div className="h-12 w-12 bg-gray-50 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all duration-500 shadow-inner"><Truck size={20}/></div>
                   <div className="space-y-0.5">
                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">Delivery Time</div>
-                     <div className="font-dm font-black text-[#0a1628] text-sm italic">25-35 Min &bull; \u20B9{pharmacy.deliveryFee}</div>
+                     <div className="font-dm font-black text-[#0a1628] text-sm italic">
+                        {pharmacy.deliveryTime || '25-35'} Min &bull; {pharmacy.deliveryFee === 0 ? 'Free Delivery' : `₹${pharmacy.deliveryFee || 30}`}
+                     </div>
                   </div>
                </div>
 
@@ -187,18 +211,24 @@ export default function PharmacyDetailPage() {
          
          <div className="lg:col-span-8 space-y-16">
             {/* Navigation Tabs */}
-            <div className="flex bg-white border border-black/[0.03] p-3 rounded-[3rem] shadow-soft overflow-x-auto no-scrollbar whitespace-nowrap justify-between">
-               {['Medicines', 'About', 'Reviews', 'Offers'].map(tab => (
+            <div className="flex w-full overflow-x-auto hide-scrollbar border-b border-gray-200 bg-white sticky top-[60px] z-20">
+               {[
+                 { id: 'Medicines', label: 'Medicines', icon: ShoppingBag },
+                 { id: 'About', label: 'About', icon: Info },
+                 { id: 'Reviews', label: 'Reviews', icon: MessageSquare },
+                 { id: 'Offers', label: 'Offers', icon: Tag },
+               ].map(tab => (
                  <button
-                   key={tab}
-                   onClick={() => setActiveTab(tab)}
-                   className={`h-20 px-12 rounded-[2.5rem] font-syne font-black text-xs uppercase italic tracking-widest transition-all duration-700 active:scale-95 flex items-center gap-4 ${activeTab === tab ? 'bg-[#0a1628] text-brand-teal shadow-4xl' : 'text-gray-300 hover:text-[#0a1628]'}`}
+                   key={tab.id}
+                   onClick={() => setActiveTab(tab.id)}
+                   className={`flex-1 flex flex-col items-center gap-1 py-4 text-[10px] font-black uppercase italic tracking-widest transition-all duration-300 min-w-[80px] ${
+                     activeTab === tab.id
+                       ? 'text-brand-teal border-b-2 border-brand-teal bg-brand-teal/5'
+                       : 'text-gray-300'
+                   }`}
                  >
-                    {tab === 'Medicines' && <ShoppingBag size={18}/>}
-                    {tab === 'About' && <Info size={18}/>}
-                    {tab === 'Reviews' && <MessageSquare size={18}/>}
-                    {tab === 'Offers' && <Tag size={18}/>}
-                    {t(`tab${tab}`)}
+                   <tab.icon size={18} />
+                   {tab.label}
                  </button>
                ))}
             </div>
@@ -253,18 +283,18 @@ export default function PharmacyDetailPage() {
                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-6">
                           <div className="h-2 w-16 bg-brand-teal rounded-full" /> Pharmacy Details
                        </h3>
-                       <div className="grid md:grid-cols-2 gap-8">
+                       <div className="grid md:grid-cols-2 gap-6">
                           {[
-                             { label: 'Pharmacist/Owner', val: pharmacy.owner, icon: CheckCircle2 },
-                             { label: 'License Number', val: pharmacy.license, icon: ShieldCheck },
-                             { label: 'GST Number', val: pharmacy.gst, icon: Award },
-                             { label: 'Established Year', val: pharmacy.established, icon: Calendar }
+                             { label: 'Owner', val: pharmacy.ownerName || pharmacy.owner, icon: CheckCircle2 },
+                             { label: 'License', val: pharmacy.licenseId || pharmacy.license, icon: ShieldCheck },
+                             { label: 'Tax ID', val: pharmacy.gst, icon: Award },
+                             { label: 'Founded', val: pharmacy.established, icon: Calendar }
                           ].map(item => (
-                            <div key={item.label} className="bg-white p-10 rounded-[3rem] border border-black/[0.03] flex items-center gap-8 group hover:shadow-4xl transition-all duration-700">
+                            <div key={item.label} className="bg-white p-8 rounded-[2.5rem] border border-black/[0.03] flex items-center gap-6 group hover:shadow-xl transition-all duration-500">
                                <div className="h-14 w-14 bg-gray-50 rounded-2xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all"><item.icon size={28}/></div>
-                               <div className="space-y-0.5">
+                               <div className="space-y-0.5 min-w-0">
                                   <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{item.label}</div>
-                                  <div className="font-syne font-black text-[#0a1628] text-xl uppercase italic tracking-tighter">{item.val}</div>
+                                  <div className="font-syne font-black text-[#0a1628] text-xl uppercase italic tracking-tighter truncate">{item.val || 'Not Available'}</div>
                                </div>
                             </div>
                           ))}
@@ -273,7 +303,7 @@ export default function PharmacyDetailPage() {
 
                     <div className="space-y-10">
                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-6">
-                          <div className="h-2 w-16 bg-brand-teal rounded-full" /> Facilities & Info
+                          <div className="h-2 w-16 bg-brand-teal rounded-full" /> Services
                        </h3>
                        <div className="flex flex-wrap gap-6">
                           {(pharmacy.facilities || []).map(f => (
@@ -403,7 +433,7 @@ export default function PharmacyDetailPage() {
                <div className="space-y-8">
                   {[
                      { label: 'Licensed Pharmacy', val: 'Verified 2019' },
-                     { label: 'Safe Cold Storage', val: 'Active Monitoring' },
+                     { label: 'Safe Cooling', val: 'Always Checked' },
                      { label: 'Quality Partner', val: '99.9% Reliable' }
                   ].map(c => (
                      <div key={c.label} className="flex justify-between items-center border-b border-black/[0.03] pb-6 group/row">
@@ -421,7 +451,7 @@ export default function PharmacyDetailPage() {
                <div className="h-24 w-24 bg-white/5 border border-white/10 rounded-[2.5rem] flex items-center justify-center mx-auto text-brand-teal shadow-3xl group-hover:rotate-12 transition-all duration-700"><Activity size={48}/></div>
                <div className="space-y-4">
                   <h3 className="font-syne font-black text-3xl uppercase italic tracking-tighter leading-none">Emergency Contact</h3>
-                  <p className="text-white/40 font-dm text-lg italic leading-relaxed">Need medical support immediately? Call this pharmacy directly.</p>
+                  <p className="text-white/40 font-dm text-lg italic leading-relaxed">Need help immediately? Call this pharmacy directly.</p>
                </div>
                <a href={`tel:${(pharmacy.phone || '').replace(/\s+/g, '')}`} className="block">
                   <button className="w-full h-20 bg-brand-teal text-[#0a1628] font-syne font-black text-xs uppercase tracking-[0.3em] shadow-mint hover:scale-[1.05] active:scale-95 transition-all italic flex items-center justify-center gap-4">
@@ -432,11 +462,19 @@ export default function PharmacyDetailPage() {
          </div>
       </div>
 
-      {/* Mobile Actions */}
-      <div className="lg:hidden fixed bottom-10 left-10 right-10 z-[100] bg-[#0a1628] h-20 rounded-[2.5rem] shadow-4xl border border-white/10 backdrop-blur-3xl flex items-center justify-between px-6">
-         <a href={`tel:${(pharmacy.phone || '').replace(/\s+/g, '')}`} className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal border border-white/5"><Phone size={20}/></a>
-         <a href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.gps?.lat || 10.9254},${pharmacy.gps?.lng || 79.8386}`} className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal border border-white/5"><Navigation size={20}/></a>
-         <button className="flex-1 h-14 mx-4 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-mint">Order Medicines</button>
+      {/* Mobile Actions - Fixed at bottom above nav */}
+      <div className="lg:hidden fixed bottom-16 left-0 right-0 z-[100] px-4 pb-3">
+         <div className="bg-[#0a1628] rounded-2xl p-3 flex items-center gap-3 shadow-2xl border border-white/10 backdrop-blur-3xl">
+            <button className="h-12 w-12 bg-white/5 rounded-xl flex items-center justify-center text-brand-teal border border-white/5 flex-shrink-0">
+               <Phone size={18}/>
+            </button>
+            <button className="h-12 w-12 bg-white/5 rounded-xl flex items-center justify-center text-brand-teal border border-white/5 flex-shrink-0">
+               <Navigation size={18}/>
+            </button>
+            <button className="flex-1 h-12 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-xl shadow-mint">
+               Order Medicines
+            </button>
+         </div>
       </div>
     </div>
   );

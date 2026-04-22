@@ -1,9 +1,17 @@
 import { CheckCircle, Download, ShoppingBag, ArrowRight, ShieldCheck, Truck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { clearCart } from '../../store/cartSlice';
 import PageShell from '../../components/layout/PageShell';
 
 export default function OrderSuccess() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearCart());
+  }, [dispatch]);
   return (
     <PageShell 
       title="Order Confirmed" 

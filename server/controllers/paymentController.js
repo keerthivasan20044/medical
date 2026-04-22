@@ -40,7 +40,7 @@ function renderReceipt(doc, order) {
   doc.moveDown(0.5);
   order.items.forEach((i) => {
     const name = i.medicine?.name || 'Medicine';
-    doc.text(`${name} x${i.qty} - ₹${i.price}`);
+    doc.text(`${name} x${i.quantity || 1} - ₹${i.price}`);
   });
   doc.moveDown();
   doc.fontSize(14).text(`Total: ₹${order.totalAmount}`, { align: 'right' });
@@ -59,26 +59,30 @@ function buildReceiptBuffer(order) {
 }
 
 export async function createPaymentIntent(req, res) {
-  const { orderId, method } = req.body;
-  const order = await Order.findById(orderId);
-  if (!order) return res.status(404).json({ message: 'Order not found' });
+  try {
+    const { orderId } = req.body;
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
 
-  const amount = Number(order.totalAmount || 0) * 100;
-  const client = getRazorpayClient();
-  if (client) {
-    const rpOrder = await client.orders.create({
-      amount,
-      currency: 'INR',
-      receipt: order.orderNumber,
-      notes: { orderId: String(order._id) }
-    });
-    order.paymentMeta = { ...order.paymentMeta, razorpayOrderId: rpOrder.id };
-    await order.save();
-    return res.json({ intent: rpOrder });
+    const amount = Math.round(Number(order.totalAmount || 0) * 100);
+    const client = getRazorpayClient();
+    
+    if (client) {
+      const rpOrder = await client.orders.create({
+        amount,
+        currency: 'INR',
+        receipt: order.orderNumber,
+        notes: { orderId: String(order._id) }
+      });
+      order.razorpayOrderId = rpOrder.id;
+      await order.save();
+      return res.json({ intent: rpOrder });
+    }
+
+    res.status(500).json({ message: 'Razorpay configuration missing' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to create payment' });
   }
-
-  const intent = { id: `pay_${Date.now()}`, amount: order.totalAmount, currency: 'INR', method };
-  res.json({ intent });
 }
 
 export async function confirmPayment(req, res) {
@@ -91,11 +95,8 @@ export async function confirmPayment(req, res) {
       if (!verifySignature(razorpay_order_id, razorpay_payment_id, razorpay_signature || '')) {
         return res.status(400).json({ message: 'Invalid payment signature' });
       }
-      order.paymentMeta = {
-        ...order.paymentMeta,
-        razorpayPaymentId: razorpay_payment_id,
-        razorpayOrderId: razorpay_order_id
-      };
+      order.paymentId = razorpay_payment_id;
+      order.razorpayOrderId = razorpay_order_id;
     }
 
     order.paymentMethod = method || order.paymentMethod;
@@ -103,7 +104,7 @@ export async function confirmPayment(req, res) {
     await order.save();
 
     const notif = await Notification.create({
-      user: order.customer,
+      user: order.customerId,
       title: 'Payment Update',
       body: `Payment status: ${order.paymentStatus} for ${order.orderNumber}`,
       type: 'payment',
@@ -111,12 +112,10 @@ export async function confirmPayment(req, res) {
     });
 
     try {
-      getIO().to(`user:${order.customer}`).emit('notification:new', notif);
-    } catch (e) {
-      // socket not ready
-    }
+      getIO().to(`user:${order.customerId}`).emit('notification:new', notif);
+    } catch (e) {}
 
-    const user = await User.findById(order.customer);
+    const user = await User.findById(order.customerId);
     if (user?.email) {
       const receipt = order.paymentStatus === 'paid' ? await buildReceiptBuffer(order) : null;
       await sendEmail(
@@ -130,57 +129,70 @@ export async function confirmPayment(req, res) {
 
     res.json({ order });
   } catch (error) {
-    console.error('confirmPayment error:', error);
     res.status(500).json({ message: 'Payment confirmation failed' });
   }
 }
 
 export async function getReceipt(req, res) {
-  const order = await Order.findById(req.params.id).populate('items.medicine');
-  if (!order) return res.status(404).json({ message: 'Order not found' });
+  try {
+    const order = await Order.findById(req.params.id).populate('items.medicine');
+    if (!order) return res.status(404).json({ message: 'Order not found' });
 
-  res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', `attachment; filename=receipt-${order.orderNumber}.pdf`);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=receipt-${order.orderNumber}.pdf`);
 
-  const doc = new PDFDocument({ margin: 40 });
-  doc.pipe(res);
-  renderReceipt(doc, order);
-  doc.end();
+    const doc = new PDFDocument({ margin: 40 });
+    doc.pipe(res);
+    renderReceipt(doc, order);
+    doc.end();
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to generate receipt' });
+  }
 }
 
 export async function getReceipts(req, res) {
-  const items = await Order.find({ customer: req.user.id, paymentStatus: { $in: ['paid', 'pending'] } })
-    .sort({ createdAt: -1 })
-    .select('orderNumber totalAmount paymentStatus createdAt');
-  res.json({ items });
+  try {
+    const items = await Order.find({ customerId: req.user.id, paymentStatus: { $in: ['paid', 'pending'] } })
+      .sort({ createdAt: -1 })
+      .select('orderNumber totalAmount paymentStatus createdAt');
+    res.json({ items });
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to fetch receipts' });
+  }
 }
 
 export async function getReceiptsCsv(req, res) {
-  const items = await Order.find({ customer: req.user.id, paymentStatus: { $in: ['paid', 'pending'] } })
-    .sort({ createdAt: -1 })
-    .select('orderNumber totalAmount paymentStatus createdAt');
+  try {
+    const items = await Order.find({ customerId: req.user.id, paymentStatus: { $in: ['paid', 'pending'] } })
+      .sort({ createdAt: -1 })
+      .select('orderNumber totalAmount paymentStatus createdAt');
 
-  const rows = [
-    ['orderNumber', 'totalAmount', 'paymentStatus', 'createdAt'],
-    ...items.map((i) => [i.orderNumber, i.totalAmount, i.paymentStatus, i.createdAt.toISOString()])
-  ];
+    const rows = [
+      ['orderNumber', 'totalAmount', 'paymentStatus', 'createdAt'],
+      ...items.map((i) => [i.orderNumber, i.totalAmount, i.paymentStatus, i.createdAt.toISOString()])
+    ];
 
-  const csv = rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
-  res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', 'attachment; filename=receipts.csv');
-  res.send(csv);
+    const csv = rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=receipts.csv');
+    res.send(csv);
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to generate CSV' });
+  }
 }
 
 export async function logPaymentRetry(req, res) {
-  const { orderId, reason } = req.body;
-  const order = await Order.findById(orderId);
-  if (!order) return res.status(404).json({ message: 'Order not found' });
-  const meta = order.paymentMeta || {};
-  meta.retryCount = (meta.retryCount || 0) + 1;
-  meta.retryLogs = [...(meta.retryLogs || []), { at: new Date(), reason: reason || 'retry' }];
-  order.paymentMeta = meta;
-  await order.save();
-  res.json({ ok: true });
+  try {
+    const { orderId, reason } = req.body;
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+    
+    // Using a simpler logging for now
+    console.log(`[Payment Retry] Order: ${order.orderNumber}, Reason: ${reason}`);
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to log retry' });
+  }
 }
 
 export async function razorpayWebhook(req, res) {
@@ -195,19 +207,19 @@ export async function razorpayWebhook(req, res) {
     try {
       payload = typeof rawBody === 'string' ? JSON.parse(rawBody) : rawBody;
     } catch (parseError) {
-      console.error('Webhook payload parse error:', parseError);
       return res.status(400).json({ message: 'Invalid webhook payload' });
     }
+    
     if (payload.event === 'payment.captured') {
       const payment = payload.payload.payment.entity;
-      const order = await Order.findOne({ 'paymentMeta.razorpayOrderId': payment.order_id }).populate('items.medicine');
+      const order = await Order.findOne({ razorpayOrderId: payment.order_id }).populate('items.medicine');
       if (order) {
         order.paymentStatus = 'paid';
-        order.paymentMeta = { ...order.paymentMeta, razorpayPaymentId: payment.id };
+        order.paymentId = payment.id;
         await order.save();
 
         const notif = await Notification.create({
-          user: order.customer,
+          user: order.customerId,
           title: 'Payment Captured',
           body: `Payment captured for ${order.orderNumber}`,
           type: 'payment',
@@ -215,12 +227,10 @@ export async function razorpayWebhook(req, res) {
         });
 
         try {
-          getIO().to(`user:${order.customer}`).emit('notification:new', notif);
-        } catch (e) {
-          // socket not ready
-        }
+          getIO().to(`user:${order.customerId}`).emit('notification:new', notif);
+        } catch (e) {}
 
-        const user = await User.findById(order.customer);
+        const user = await User.findById(order.customerId);
         if (user?.email) {
           const receipt = await buildReceiptBuffer(order);
           await sendEmail(
@@ -236,7 +246,6 @@ export async function razorpayWebhook(req, res) {
 
     res.json({ ok: true });
   } catch (error) {
-    console.error('razorpayWebhook error:', error);
     res.status(500).json({ message: 'Webhook processing failed' });
   }
 }

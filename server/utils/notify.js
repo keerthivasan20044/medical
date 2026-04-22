@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import twilio from 'twilio';
+import { sendOTP as fast2smsSend } from './sms.js';
 
 let transporter;
 function getTransporter() {
@@ -40,10 +40,15 @@ export async function sendEmail(to, subject, body, attachments) {
 }
 
 export async function sendSMS(to, message) {
-  const client = getTwilioClient();
-  if (!client) {
-    console.log(`[sms] to=${to} message=${message}`);
-    return;
+  try {
+    // If message contains OTP pattern, extract it or just send whole message
+    const otpMatch = message.match(/\b\d{6}\b/);
+    if (otpMatch) {
+       await fast2smsSend(to, otpMatch[0]);
+    } else {
+       console.log(`[SMS] Sending message via simulation (Fast2SMS preferred for OTP): ${to}: ${message}`);
+    }
+  } catch (err) {
+    console.error('SMS delivery failure:', err.message);
   }
-  await client.messages.create({ from: process.env.TWILIO_PHONE_NUMBER, to, body: message });
 }

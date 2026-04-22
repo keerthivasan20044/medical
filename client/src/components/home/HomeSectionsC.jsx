@@ -24,17 +24,23 @@ export function VaccineShowcase() {
    const [loading, setLoading] = useState(true);
 
    useEffect(() => {
+     const controller = new AbortController();
+
      const fetchVaccines = async () => {
         try {
            const data = await medicineService.getAll({ isVaccine: true, limit: 6 });
-           setVaccines(data.items || []);
+           if (!controller.signal.aborted) {
+             setVaccines(data.items || []);
+           }
         } catch (err) {
-           console.error('Vaccine Sync Error:', err);
+           if (err.name === 'AbortError' || err.code === 'ERR_CANCELED') return;
+           console.error('Vaccine fetch error:', err);
         } finally {
-           setLoading(false);
+           if (!controller.signal.aborted) setLoading(false);
         }
      };
      fetchVaccines();
+     return () => controller.abort();
    }, []);
 
    return (
@@ -47,7 +53,7 @@ export function VaccineShowcase() {
                </h2>
                <div className="hidden lg:flex items-center gap-4 bg-white/50 backdrop-blur-xl px-8 py-4 rounded-[2rem] border border-black/[0.03]">
                   <Activity size={24} className="text-brand-teal animate-pulse" />
-                  <span className="text-[10px] font-black text-[#0a1628] uppercase tracking-[0.3em] italic">System Active</span>
+                  <span className="text-[10px] font-black text-[#0a1628] uppercase tracking-[0.3em] italic">Everything Ready</span>
                </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
@@ -275,7 +281,7 @@ export function GPSTracking() {
                   {/* Customer Node */}
                   <div className="absolute left-[50px] bottom-[50px] space-y-4 z-20">
                      <div className="bg-[#0a1628] text-white text-[11px] font-black uppercase tracking-[0.3em] px-6 py-3 rounded-2xl shadow-4xl flex items-center gap-4 border-2 border-white/10 italic">
-                        <div className="h-2 w-2 bg-red-500 rounded-full animate-ping" /> DELIVERY_POINT
+                        <div className="h-2 w-2 bg-red-500 rounded-full animate-ping" /> YOUR HOUSE
                      </div>
                      <div className="h-16 w-16 bg-white rounded-[1.5rem] shadow-4xl flex items-center justify-center text-red-500 border-4 border-red-500/10 scale-110 active:scale-95 transition-transform"><MapPin size={32} fill="currentColor" /></div>
                   </div>
@@ -283,7 +289,7 @@ export function GPSTracking() {
                   {/* Terminal Node */}
                   <div className="absolute right-[80px] top-[60px] space-y-4 z-20">
                      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 10, ease: "linear" }} className="h-16 w-16 bg-[#0a1628] rounded-[1.5rem] shadow-4xl flex items-center justify-center text-brand-teal border-2 border-brand-teal/40"><Store size={32} /></motion.div>
-                     <div className="bg-white/90 backdrop-blur-3xl text-[#0a1628] text-[11px] font-black uppercase tracking-[0.3em] px-6 py-3 rounded-2xl border-2 border-gray-100 shadow-4xl italic">PHARMACY_HUB</div>
+                     <div className="bg-white/90 backdrop-blur-3xl text-[#0a1628] text-[11px] font-black uppercase tracking-[0.3em] px-6 py-3 rounded-2xl border-2 border-gray-100 shadow-4xl italic">PHARMACY</div>
                   </div>
 
                   {/* Biker Transmission Animation */}
@@ -319,7 +325,7 @@ export function PrescriptionUpload() {
             <div className="space-y-12 text-white text-center lg:text-left">
                <div className="space-y-6">
                   <div className="inline-flex items-center gap-4 px-6 py-2 bg-white/10 border border-white/20 rounded-full text-white font-syne font-black text-[10px] uppercase tracking-[0.4em] italic backdrop-blur-3xl shadow-2xl mx-auto lg:mx-0">
-                     <Heart size={14} className="fill-white animate-pulse" /> Secure Access
+                     <Heart size={14} className="fill-white animate-pulse" /> Safe & Secure
                   </div>
                   <h2 className="font-syne font-black text-4xl md:text-8xl leading-[0.9] text-white uppercase italic tracking-tighter">
                      {t('prescriptionTitle')}
@@ -493,7 +499,7 @@ export function BlogPreview() {
          <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16 space-y-4">
                <h2 className="font-syne font-black text-[#0a1628] text-4xl leading-tight">Karaikal Health Hub.</h2>
-               <p className="text-gray-400 font-dm text-lg">Curated medical intelligence for the Karaikal community.</p>
+               <p className="text-gray-400 font-dm text-lg">Helpful health information for the Karaikal community.</p>
             </div>
             
             <div className="grid md:grid-cols-3 gap-8">
@@ -589,7 +595,7 @@ export function AppDownload() {
                         </div>
 
                         <div className="absolute bottom-10 left-8 right-8 h-24 bg-brand-teal rounded-[2rem] shadow-4xl flex items-center justify-center text-[#0a1628]">
-                           <div className="font-syne font-black text-xl uppercase italic tracking-widest">PROCEED</div>
+                           <div className="font-syne font-black text-xl uppercase italic tracking-widest">START</div>
                         </div>
                      </div>
                   </div>

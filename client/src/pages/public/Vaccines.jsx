@@ -76,8 +76,11 @@ export default function VaccinesPage() {
            </div>
            
            <div className="space-y-6">
-              <h1 className="font-syne font-black text-4xl md:text-8xl lg:text-9xl text-white leading-[0.85] tracking-tighter uppercase italic drop-shadow-2xl break-words">
-                 Vaccine <br/><span className="text-brand-teal text-outline-white">Availability</span>
+              <h1
+                className="font-black text-white leading-[0.9] break-words w-full"
+                style={{ fontSize: 'clamp(2.2rem, 12vw, 5rem)' }}
+              >
+                 Vaccine <span className="text-brand-teal text-outline-white">Availability</span>
               </h1>
               <p className="text-white/40 font-dm text-lg md:text-2xl italic max-w-xl leading-relaxed">
                  Check vaccine availability at pharmacies near you in Karaikal. Professional immunization records and tracking.

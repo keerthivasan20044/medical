@@ -15,7 +15,9 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     // Connect for all users to maintain 'Sync Status'
-    socket.connect();
+    if (!socket.connected) {
+      socket.connect();
+    }
     
     if (user) {
       socket.emit('user:join', { id: user.id || user._id, role: user.role });
@@ -38,7 +40,6 @@ export const SocketProvider = ({ children }) => {
     }
 
     function onDeliveryTelemetry(data) {
-        // Only notify if status changed to 'delivered' or nearing
         if (data.status === 'delivered') {
           toast.success(`Protocol Successful: Order #${data?.orderId?.slice(-6) || "N/A"} reached destination!`, {
             icon: <ShieldCheck className="text-emerald-500" />,
@@ -57,9 +58,9 @@ export const SocketProvider = ({ children }) => {
       socket.off('disconnect', onDisconnect);
       socket.off('order:status-update', onOrderUpdate);
       socket.off('order:location-update', onDeliveryTelemetry);
-      socket.disconnect();
+      // Removed socket.disconnect() to prevent re-connection loops during state changes
     };
-  }, [user]);
+  }, [user?.id, user?._id]);
 
   return (
     <SocketContext.Provider value={{ socket, isConnected }}>

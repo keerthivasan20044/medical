@@ -155,8 +155,8 @@ export const prescriptionService = {
     return res.data;
   },
 
-  verify: async (id) => {
-    const res = await api.put(`/api/prescriptions/${id}/verify`);
+  approve: async (id) => {
+    const res = await api.put(`/api/prescriptions/${id}/approve`);
     return res.data;
   },
 

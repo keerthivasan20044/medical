@@ -49,8 +49,11 @@ export default function About() {
                <div className="px-8 py-3 bg-brand-teal/10 border border-brand-teal/20 rounded-[2rem] inline-flex items-center gap-4 text-[11px] font-black text-brand-teal uppercase tracking-[0.4em] italic backdrop-blur-3xl group-hover:scale-105 transition-transform duration-700">
                   <Landmark size={18} className="animate-spin-slow" /> {t('bornInKaraikal')}
                </div>
-               <h1 className="font-syne font-black text-7xl md:text-[11rem] text-white tracking-[-0.05em] leading-[0.8] uppercase italic">
-                  {t('about')} <br /><span className="text-brand-teal drop-shadow-[0_0_80px_rgba(2,195,154,0.3)]">{t('medireach')}</span>
+               <h1
+                 className="font-black text-white leading-[0.9] break-words w-full"
+                 style={{ fontSize: 'clamp(2.2rem, 12vw, 5rem)' }}
+               >
+                  {t('about')} <span className="text-brand-teal drop-shadow-[0_0_80px_rgba(2,195,154,0.3)]">{t('medireach')}</span>
                </h1>
             </motion.div>
          </div>
@@ -61,10 +64,10 @@ export default function About() {
          <div className="grid lg:grid-cols-2 gap-24 items-center">
             <div className="space-y-12">
                <div className="px-6 py-2 bg-brand-teal/5 border border-brand-teal/10 rounded-xl inline-flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-widest italic">
-                  <Stethoscope size={16} /> Our Medical Network
+                  <Stethoscope size={16} /> Our Local Doctors
                </div>
                <h2 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic tracking-tighter leading-tight">
-                  World-Class <span className="text-brand-teal">Practitioners</span>, <br />Local Care.
+                  Trusted <span className="text-brand-teal">Doctors</span>, <br />Local Care.
                </h2>
                <p className="text-gray-400 font-dm italic font-bold text-xl leading-relaxed">
                   Our network consists of 50+ verified consultants from top institutions like JIPMER and Govt. General Hospital Karaikal. Each doctor is connected to our platform to provide real-time consultations and digital records.
@@ -96,7 +99,7 @@ export default function About() {
                   <Store size={16} /> Pharmacy Network
                </div>
                <h2 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic tracking-tighter leading-tight">
-                  Hyper-Local <br /><span className="text-brand-teal">Healthcare Centers</span>.
+                  Your Local <br /><span className="text-brand-teal">Pharmacy Network</span>.
                </h2>
                <p className="text-gray-400 font-dm italic font-bold text-xl leading-relaxed">
                   Our delivery network spans across Karaikal. From Market Road to Nagore, every pharmacy is verified, offering safe transport, real-time inventory updates, and essential services like vaccines and diabetic care.
@@ -112,8 +115,8 @@ export default function About() {
                   <div className="flex items-center gap-6">
                      <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center shadow-soft text-brand-teal"><Biohazard size={24}/></div>
                      <div className="space-y-1">
-                        <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest">Cold Chain Integrity</div>
-                        <p className="text-gray-300 text-sm font-bold italic">Temperature-controlled transport for vaccines and insulin.</p>
+                         <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest">Safe Medicine Transport</div>
+                         <p className="text-gray-300 text-sm font-bold italic">Special cooling for vaccines and insulin.</p>
                      </div>
                   </div>
                </div>
@@ -298,7 +301,7 @@ export default function About() {
                {t('theJourney')} <br /><span className="text-brand-teal">{t('enclaveChronoview')}</span>
             </h2>
             <div className="px-8 py-3 bg-[#0a1628] rounded-[1.5rem] inline-flex items-center gap-4 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic shadow-4xl animate-pulse">
-               <Activity size={18} /> Platform History
+               <Activity size={18} /> Our Story
             </div>
          </div>
          

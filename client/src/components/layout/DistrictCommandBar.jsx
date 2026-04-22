@@ -50,26 +50,7 @@ export default function DistrictCommandBar() {
 
   return (
     <>
-      {/* Floating Trigger Macro */}
-      <motion.div
-        initial={false}
-        animate={{ 
-          y: scrollDirection === 'down' && !isOpen ? 120 : 0,
-          opacity: scrollDirection === 'down' && !isOpen ? 0 : 1
-        }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="hidden md:block fixed md:bottom-24 right-4 md:right-8 z-[150]"
-      >
-        <motion.button
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setIsOpen(true)}
-          className="h-10 w-10 md:h-16 md:w-16 bg-[#0a1628] text-brand-teal rounded-full md:rounded-3xl shadow-4xl flex items-center justify-center border-2 border-brand-teal/20 group overflow-hidden"
-        >
-          <div className="absolute inset-0 bg-brand-teal/5 animate-pulse" />
-          <Command size={18} className="relative z-10 md:w-7 md:h-7 group-hover:rotate-12 transition-transform duration-500" />
-        </motion.button>
-      </motion.div>
+
 
 
       <AnimatePresence>

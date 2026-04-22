@@ -8,8 +8,8 @@ export default function LiveActivityPulse() {
   const { socket } = useSocket();
   const { t } = useLanguage();
   const [activities, setActivities] = useState([
-    { id: 'init_1', type: 'system', message: 'Platform updated.', location: 'Karaikal HQ', timestamp: new Date() },
-    { id: 'init_2', type: 'pharmacy', message: 'Apollo Pharmacy is now online.', location: 'Central Karaikal', timestamp: new Date() }
+    { id: 'init_1', type: 'system', message: 'App updated.', location: 'Karaikal HQ', timestamp: new Date() },
+    { id: 'init_2', type: 'pharmacy', message: 'Apollo Pharmacy is now open.', location: 'Central Karaikal', timestamp: new Date() }
   ]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function LiveActivityPulse() {
            )}
         </AnimatePresence>
       </div>
-      <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest italic shrink-0">Dispatch Active</span>
+      <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest italic shrink-0">Delivery Active</span>
     </div>
   );
 }

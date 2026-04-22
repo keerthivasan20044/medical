@@ -24,7 +24,7 @@ export default function EmergencyFAB() {
         opacity: scrollDirection === 'down' && !isOpen ? 0 : 1
       }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
-      className="fixed bottom-24 right-4 md:bottom-24 md:right-6 z-[3000]"
+      className="fixed bottom-[72px] right-4 md:bottom-10 md:right-8 z-[3000]"
     >
       <AnimatePresence>
         {isOpen && (
@@ -72,18 +72,18 @@ export default function EmergencyFAB() {
       </AnimatePresence>
 
       <motion.button
-        whileHover={{ scale: 1.1, rotate: -5 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className={`h-12 w-12 md:h-16 md:px-6 md:w-auto rounded-full md:rounded-[2rem] shadow-4xl flex items-center justify-center gap-4 z-[100] border-2 transition-all duration-700 relative overflow-hidden ${isOpen ? 'bg-white border-red-500 text-red-500' : 'bg-red-600 border-red-500/20 text-white'}`}
+        className={`h-12 w-12 md:h-16 md:w-16 lg:hover:w-auto lg:hover:px-8 rounded-full shadow-4xl flex items-center justify-center gap-4 z-[100] border-2 transition-all duration-500 relative overflow-hidden group ${isOpen ? 'bg-white border-red-500 text-red-500' : 'bg-red-600 border-red-500/20 text-white'}`}
       >
         <div className="absolute inset-0 bg-white/10 animate-pulse pointer-events-none" />
         {isOpen ? (
           <X size={20} />
         ) : (
           <>
-            <Phone size={18} className="relative z-10 animate-shake" />
-            <span className="hidden lg:block font-syne font-black text-[10px] uppercase tracking-[0.2em] italic">{t('emergency')}</span>
+            <Phone size={18} className="relative z-10 animate-shake flex-shrink-0" />
+            <span className="hidden lg:group-hover:block font-syne font-black text-[10px] uppercase tracking-[0.2em] italic whitespace-nowrap">{t('emergency')}</span>
           </>
         )}
       </motion.button>

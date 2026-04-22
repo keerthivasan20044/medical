@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Mail, Lock, LogIn, ChevronRight, 
@@ -7,12 +7,21 @@ import {
   Stethoscope, Store, Truck, Globe
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setAuth } from '../../store/authSlice';
 import { Button, Input } from '../../components/common/Core';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 import { authService } from '../../services/apiServices';
 import { useToast } from '../../hooks/core';
+
+// Role-based destination map — defined at module scope so the useEffect can reference it safely
+const ROLE_DASHBOARDS = {
+  admin: '/admin/dashboard',
+  pharmacist: '/pharmacist/dashboard',
+  doctor: '/doctor/dashboard',
+  delivery: '/delivery/dashboard',
+  customer: '/home',
+};
 
 export default function Login() {
   const { t } = useLanguage();
@@ -28,14 +37,15 @@ export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const toast = useToast();
+  const { isAuthenticated, user } = useSelector(state => state.auth);
 
-  const ROLE_DASHBOARDS = {
-    admin: '/admin/dashboard',
-    pharmacist: '/pharmacist/dashboard',
-    doctor: '/doctor/dashboard',
-    delivery: '/delivery/dashboard',
-    customer: '/home',
-  };
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const dest = ROLE_DASHBOARDS[user.role] || '/home';
+      navigate(dest, { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -52,7 +62,7 @@ export default function Login() {
       dispatch(setAuth({ user: data.user, role: data.user?.role || role }));
       toast.success(t('accessAuthorized'));
       const dest = ROLE_DASHBOARDS[data.user?.role] || '/home';
-      navigate(dest);
+      navigate(dest, { replace: true });
     } catch (err) {
       toast.error(err.response?.data?.error || err.response?.data?.message || t('authError'));
     } finally {
@@ -104,12 +114,12 @@ export default function Login() {
          
          <div className="relative z-10 w-full max-w-xl space-y-16">
             <Link to="/" className="flex items-center gap-4 group">
-               <div className="h-14 w-14 bg-gradient-to-br from-[#02C39A] to-[#028090] rounded-2xl flex items-center justify-center -rotate-[5deg] group-hover:rotate-0 transition duration-500 shadow-2xl shadow-[#02C39A]/40">
+               <div className="h-14 w-14 bg-gradient-to-br from-[#02C39A] to-[#028090] rounded-2xl flex items-center justify-center -rotate-[5deg] group-hover:rotate-0 transition duration-500 shadow-2xl shadow-[#02C39A]/40 flex-shrink-0">
                   <Heart className="text-white w-8 h-8 rotate-[25deg] group-hover:rotate-0 transition duration-700" />
                </div>
                <div className="flex flex-col">
-                  <span className="font-syne font-black text-4xl text-white tracking-tighter leading-none">MediPharm.</span>
-                  <span className="text-[10px] text-[#02C39A] font-black uppercase tracking-[0.4em] italic shadow-mint">{t('servingSince')}</span>
+                  <span className="font-syne font-black text-4xl text-white tracking-tighter leading-none whitespace-nowrap">MediPharm.</span>
+                  <span className="text-[10px] text-[#02C39A] font-black uppercase tracking-[0.4em] italic">{t('servingSince')}</span>
                </div>
             </Link>
 
@@ -146,6 +156,13 @@ export default function Login() {
       {/* Right: Login Form Panel */}
       <section className="flex-1 flex flex-col items-center justify-center p-8 md:p-16 space-y-12">
          <div className="w-full max-w-lg space-y-8 md:space-y-12 px-4 md:px-0">
+            {/* Mobile logo — only visible on small screens */}
+            <div className="flex md:hidden items-center gap-3 pb-2">
+              <div className="h-10 w-10 bg-gradient-to-br from-[#02C39A] to-[#028090] rounded-xl flex items-center justify-center flex-shrink-0">
+                <Heart className="text-white w-5 h-5" />
+              </div>
+              <span className="font-syne font-black text-2xl text-[#0a1628] whitespace-nowrap">MediPharm.</span>
+            </div>
             <div className="space-y-4">
                <h2 className="font-syne font-black text-4xl md:text-5xl text-[#0a1628] leading-tight select-none">{t('welcomeBack')}</h2>
                <p className="text-gray-400 font-dm text-sm md:text-lg italic tracking-wide">{t('selectRoleDesc')}</p>
@@ -159,7 +176,7 @@ export default function Login() {
                       key={r.id}
                       type="button"
                       onClick={() => setRole(r.id)}
-                      className={`flex flex-col items-center justify-center gap-2 md:gap-4 p-4 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border transition-all duration-500 group ${role === r.id ? 'bg-[#0a1628] border-transparent text-white shadow-3xl' : 'bg-gray-50 border-transparent text-gray-400 hover:bg-white hover:border-gray-100'}`}
+                      className={`flex flex-col items-center justify-center gap-2 md:gap-4 p-4 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-2 transition-all duration-500 group ${role === r.id ? 'bg-[#0a1628] border-[#0a1628] text-white shadow-3xl' : 'bg-gray-50 border-gray-100 text-gray-400 hover:bg-white hover:border-[#028090]/20'}`}
                     >
                        <r.icon size={role === r.id ? 20 : 18} className={role === r.id ? 'text-[#02C39A]' : 'group-hover:text-[#028090]'} />
                        <span className="font-syne font-black text-[9px] md:text-[10px] uppercase tracking-widest text-center">{r.label}</span>
@@ -295,6 +312,9 @@ export default function Login() {
                         Create Account &rarr;
                      </Link>
                   </p>
+                  <Link to="/" className="text-[10px] font-black uppercase tracking-widest text-gray-300 hover:text-brand-teal transition-colors mt-4 block">
+                     Continue browsing without an account &rarr;
+                  </Link>
                </div>
 
             <div className="p-8 bg-gray-50/50 rounded-[2.5rem] border border-gray-100 space-y-4">

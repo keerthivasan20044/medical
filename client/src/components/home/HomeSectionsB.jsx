@@ -79,7 +79,7 @@ export function FeaturedMedicines() {
            <div className="space-y-6">
               <div className="flex items-center gap-4">
                  <div className={`h-4 w-4 rounded-full shadow-[0_0_10px_rgba(2,195,154,0.5)] ${loading ? 'bg-amber-500 animate-pulse' : 'bg-brand-teal'}`} />
-                 <span className="text-[12px] font-black text-brand-teal uppercase tracking-[0.4em] italic">Live Status</span>
+                 <span className="text-[12px] font-black text-brand-teal uppercase tracking-[0.4em] italic">Open Now</span>
               </div>
               <h2 className="font-syne font-black text-[#0a1628] text-5xl md:text-7xl leading-[0.9] uppercase italic tracking-tighter">
                 {(t('popularMeds') || '').includes('.') ? t('popularMeds').split('.').slice(0, -1).join('.') : t('popularMeds')} <span className="text-brand-teal">.</span>
@@ -243,8 +243,8 @@ export function KaraikalPharmacies() {
 
                      <div className="pt-8 border-t-2 border-dashed border-black/[0.05] flex items-center justify-between">
                         <div className="space-y-1">
-                           <div className="text-[9px] text-gray-300 font-black uppercase tracking-widest italic leading-none">ID</div>
-                           <div className="text-[#0a1628] font-black font-syne text-sm uppercase italic tracking-tighter">KKL-{33+i}-TX</div>
+                           <div className="text-[9px] text-gray-300 font-black uppercase tracking-widest italic leading-none">Pharmacy ID</div>
+                           <div className="text-[#0a1628] font-black font-syne text-sm uppercase italic tracking-tighter">PH-KKL-{33+i}</div>
                         </div>
                         <Link to={`/pharmacies/${p.id}`} className="h-16 w-16 bg-[#0a1628] text-brand-teal rounded-2xl flex items-center justify-center transition-all duration-500 hover:scale-110 active:scale-95 shadow-4xl group/link">
                            <ChevronRight size={28} className="group-hover:translate-x-1 transition-transform" />

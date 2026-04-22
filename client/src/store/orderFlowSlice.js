@@ -38,7 +38,7 @@ export const placeOrder = createAsyncThunk(
       const payload = {
         items: state.cart.items,
         pharmacyId: state.selectedPharmacy?.id,
-        prescription: state.prescription.url,
+        prescriptionUrl: state.prescription.url,
         deliveryAddress: state.deliveryAddress,
         paymentMethod: state.paymentMethod,
         useWallet: state.useWallet,
@@ -101,32 +101,32 @@ const orderFlowSlice = createSlice({
       state.cart.pharmacyName = action.payload.name;
     },
     addToCart(state, action) {
-       const { medicine, qty } = action.payload;
+       const { medicine, quantity } = action.payload;
        const existing = state.cart.items.find(i => i.id === medicine.id);
        if (existing) {
-          existing.qty += qty;
+          existing.quantity += quantity;
        } else {
-          state.cart.items.push({ ...medicine, qty });
+          state.cart.items.push({ ...medicine, quantity });
        }
        // Update Totals
-       state.cart.subtotal = state.cart.items.reduce((acc, i) => acc + (i.price * i.qty), 0);
+       state.cart.subtotal = state.cart.items.reduce((acc, i) => acc + (i.price * i.quantity), 0);
        state.cart.total = state.cart.subtotal + state.cart.deliveryCharge - state.cart.discount;
     },
     removeFromCart(state, action) {
        state.cart.items = state.cart.items.filter(i => i.id !== action.payload);
-       state.cart.subtotal = state.cart.items.reduce((acc, i) => acc + (i.price * i.qty), 0);
+       state.cart.subtotal = state.cart.items.reduce((acc, i) => acc + (i.price * i.quantity), 0);
        state.cart.total = state.cart.subtotal + state.cart.deliveryCharge - state.cart.discount;
     },
-    updateCartQty(state, action) {
-       const { medicineId, qty } = action.payload;
+    updateCartQuantity(state, action) {
+       const { medicineId, quantity } = action.payload;
        const item = state.cart.items.find(i => i.id === medicineId);
        if (item) {
-          item.qty = qty;
-          if (item.qty <= 0) {
+          item.quantity = quantity;
+          if (item.quantity <= 0) {
              state.cart.items = state.cart.items.filter(i => i.id !== medicineId);
           }
        }
-       state.cart.subtotal = state.cart.items.reduce((acc, i) => acc + (i.price * i.qty), 0);
+       state.cart.subtotal = state.cart.items.reduce((acc, i) => acc + (i.price * i.quantity), 0);
        state.cart.total = state.cart.subtotal + state.cart.deliveryCharge - state.cart.discount;
     },
     clearCart(state) {
@@ -201,7 +201,7 @@ export const selectNeedsRx = (state) => state.orderFlow.cart.items.some(i => i.r
 
 export const { 
   setStep, selectPharmacy, addToCart, removeFromCart, 
-  updateCartQty, clearCart, setPrescriptionStatus, 
+  updateCartQuantity, clearCart, setPrescriptionStatus, 
   setDeliveryAddress, setPaymentMethod, toggleWallet, 
   toggleLoyaltyPoints, resetOrderFlow 
 } = orderFlowSlice.actions;

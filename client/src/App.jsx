@@ -14,17 +14,16 @@ import ScrollToTop from './components/common/ScrollToTop.jsx';
 import ScrollToTopButton from './components/common/ScrollToTopButton.jsx';
 import InstallPrompt from './components/InstallPrompt.jsx';
 
+import Layout from './components/layout/Layout.jsx';
+
 export default function App() {
   const location = useLocation();
   const dispatch = useDispatch();
-  const hideBars = ['/login', '/register', '/verify-otp', '/forgot-password', '/reset-password'].includes(location.pathname);
-  const hideEmergency = ['/about', '/checkout', '/cart'].includes(location.pathname);
+  const hideBars = ['/verify-otp', '/forgot-password', '/reset-password'].includes(location.pathname);
+  const isAuthPage = ['/login', '/register'].includes(location.pathname);
 
-  // Rehydrate auth session from cookie on every page load/refresh
   useEffect(() => {
     dispatch(fetchMe());
-    
-    // Load Maps and Location Services
     loadGoogleMaps();
   }, [dispatch]);
 
@@ -33,15 +32,15 @@ export default function App() {
       <ScrollToTop />
       <InstallPrompt />
       <SocketListener />
-      <ScrollToTopButton />
-      <AppRouter />
-      {!hideBars && (
-        <>
-          <DistrictCommandBar />
-          {!hideEmergency && <EmergencyFAB />}
-          <MobileBottomNav />
-        </>
+      
+      {hideBars ? (
+        <AppRouter />
+      ) : (
+        <Layout isAuthPage={isAuthPage}>
+          <AppRouter />
+        </Layout>
       )}
+
       <Toaster
         position="top-right"
         toastOptions={{

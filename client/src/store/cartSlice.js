@@ -15,7 +15,7 @@ const PACKAGING_FEE = 9;
 
 const defaultState = {
   items: [],
-  totalQty: 0,
+  totalQuantity: 0,
   subtotal: 0,
   deliveryFee: 0,
   packagingFee: 0,
@@ -46,9 +46,9 @@ function calcDiscount(subtotal, deliveryFee, coupon) {
 }
 
 function recalc(state) {
-  const subtotal = state.items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   state.subtotal = subtotal;
-  state.totalQty = state.items.reduce((sum, item) => sum + item.qty, 0);
+  state.totalQuantity = state.items.reduce((sum, item) => sum + item.quantity, 0);
 
   const deliveryFee = subtotal === 0 ? 0 : subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : BASE_DELIVERY_FEE;
   const packagingFee = subtotal === 0 ? 0 : PACKAGING_FEE;
@@ -103,13 +103,13 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart(state, action) {
-      const { _id, id, qty = 1, ...rest } = action.payload;
+      const { _id, id, quantity = 1, ...rest } = action.payload;
       const itemId = _id || id;
       const existing = state.items.find((i) => (i._id || i.id) === itemId);
       if (existing) {
-        existing.qty += qty;
+        existing.quantity += quantity;
       } else {
-        state.items.push({ _id: itemId, id: itemId, qty, ...rest });
+        state.items.push({ _id: itemId, id: itemId, quantity, ...rest });
       }
       recalc(state);
     },
@@ -118,18 +118,18 @@ const cartSlice = createSlice({
       state.items = state.items.filter((i) => (i._id || i.id) !== id);
       recalc(state);
     },
-    incrementQty(state, action) {
+    incrementQuantity(state, action) {
       const id = action.payload;
       const existing = state.items.find((i) => (i._id || i.id) === id);
-      if (existing) existing.qty += 1;
+      if (existing) existing.quantity += 1;
       recalc(state);
     },
-    decrementQty(state, action) {
+    decrementQuantity(state, action) {
       const id = action.payload;
       const existing = state.items.find((i) => (i._id || i.id) === id);
       if (existing) {
-        existing.qty -= 1;
-        if (existing.qty <= 0) {
+        existing.quantity -= 1;
+        if (existing.quantity <= 0) {
           state.items = state.items.filter((i) => (i._id || i.id) !== id);
         }
       }
@@ -180,8 +180,8 @@ const cartSlice = createSlice({
 export const {
   addToCart,
   removeFromCart,
-  incrementQty,
-  decrementQty,
+  incrementQuantity,
+  decrementQuantity,
   clearCart,
   clearCoupon,
   setTip,

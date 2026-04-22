@@ -86,12 +86,18 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="space-y-4 md:space-y-6 w-screen max-w-full overflow-hidden px-5 pt-6 pb-4">
-             <h1 
-                className="font-syne font-black text-white leading-[0.95] break-words hyphens-auto w-full"
-                style={{ fontSize: 'clamp(2.8rem, 14vw, 6rem)', maxWidth: '100%' }}
+          <div className="space-y-4 md:space-y-6 w-full overflow-hidden px-5 pt-6 pb-4">
+             <h1
+               className="font-black text-white leading-[0.9]"
+               style={{
+                 fontSize: 'clamp(2.4rem, 7vw, 5rem)',
+                 wordBreak: 'normal',
+                 overflowWrap: 'normal',
+                 hyphens: 'none',
+                 whiteSpace: 'normal'
+               }}
              >
-                Order Medicines Online Today
+               Order Medicines Online Today
              </h1>
              <p className="text-teal-400 italic text-sm mt-2 w-full truncate">
                 karaikal medicine hub
@@ -163,7 +169,7 @@ export default function Hero() {
         </motion.div>
 
         {/* Right Side: Local Pharmacy Network */}
-        <div className="relative hidden lg:flex flex-col items-center justify-center h-[700px] w-full">
+        <div className="relative hidden lg:flex flex-col items-center justify-center h-[700px] w-full overflow-hidden">
            {/* HUD Ring Decorations */}
            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border-2 border-brand-teal/10 rounded-full animate-spin-slow" />
            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-white/5 rounded-full" />
@@ -172,39 +178,33 @@ export default function Hero() {
            {/* Service Badges */}
            <FloatingBadge icon={HeartPulse} text={t('deliveryActive') || 'Delivery Active'} pos="top-0 right-0" delay={0} />
            <FloatingBadge icon={Cpu} text={t('liveAssistance') || 'Live Assistance'} pos="top-[40%] left-[-10%]" delay={1} />
-           <FloatingBadge icon={Zap} text={t('swiftEmergencySupport') || 'Swift Emergency Support'} pos="bottom-[10%] right-[10%]" delay={2} />
 
-           {/* Pharmacy Network */}
-           <div className="grid grid-cols-2 gap-10 w-full h-full p-20 relative z-20">
+           {/* Pharmacy Cards — compact scrollable row */}
+           <div className="relative z-20 flex gap-5 px-8 w-full justify-center flex-wrap">
               {PHARMACIES.map((p, i) => (
                 <motion.div
                   key={p.id}
-                  initial={{ opacity: 0, scale: 0.5, rotate: i % 2 === 0 ? -15 : 15 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                  transition={{ delay: 1 + (i * 0.2), duration: 0.8 }}
-                  whileHover={{ scale: 1.1, rotate: i % 2 === 0 ? -5 : 5, zIndex: 50 }}
-                  className={`${p.rot} ${p.mt || ''} bg-white/5 backdrop-blur-3xl rounded-[3rem] p-6 shadow-4xl w-full aspect-square flex flex-col justify-between overflow-hidden border-2 border-white/5 group hover:border-brand-teal/40 transition-all duration-700`}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 + i * 0.15, duration: 0.6 }}
+                  whileHover={{ y: -6, scale: 1.04 }}
+                  className="w-36 flex-shrink-0 bg-white/10 backdrop-blur rounded-2xl overflow-hidden border border-white/10 hover:border-teal-400/40 transition-all duration-500 shadow-xl"
                 >
-                   <div className="h-2/3 rounded-[2.5rem] overflow-hidden relative shadow-inner">
-                      <img src={p.img} alt={p.name} className="h-full w-full object-cover group-hover:scale-125 transition duration-1000 grayscale group-hover:grayscale-0" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                      <div className="absolute top-4 right-4 bg-brand-teal text-[#0a1628] text-[10px] font-black px-4 py-2 rounded-xl shadow-2xl uppercase italic tracking-widest animate-pulse">
-                         {t('storeVerified') || 'Store Verified'}
-                      </div>
-                   </div>
-                   <div className="pt-6 space-y-2">
-                      <h4 className="font-syne font-black text-white text-lg uppercase italic tracking-tighter truncate group-hover:text-brand-teal transition-colors">{p.name}</h4>
-                      <div className="flex items-center justify-between text-[10px] font-syne font-black text-white/40 uppercase tracking-widest italic leading-none">
-                         <span>{p.area}</span>
-                         <span className="text-brand-teal">{p.dist}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-amber-400 text-[10px] font-black italic">
-                         <Star size={12} fill="currentColor" /> {p.rating} <span className="text-white/20 ml-2">VERIFIED</span>
-                      </div>
-                   </div>
+                  <img src={p.img} alt={p.name} className="w-full h-20 object-cover" />
+                  <div className="p-2.5 space-y-1">
+                    <p className="text-white font-black text-xs truncate">{p.name}</p>
+                    <p className="text-gray-400 text-[10px] truncate">{p.area}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-yellow-400 text-[10px] font-bold">★ {p.rating}</span>
+                      <span className="text-teal-400 text-[10px] font-bold">{p.dist}</span>
+                    </div>
+                    <span className="inline-block text-green-400 text-[9px] font-black uppercase tracking-wider">✓ Verified</span>
+                  </div>
                 </motion.div>
               ))}
            </div>
+
+           <FloatingBadge icon={Zap} text={t('swiftEmergencySupport') || 'Swift Support'} pos="bottom-[8%] right-[8%]" delay={2} />
         </div>
       </div>
 

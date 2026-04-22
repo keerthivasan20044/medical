@@ -120,7 +120,7 @@ export function StatsCounter() {
                 {/* HUD Data Text */}
                 <div className="mt-8 flex items-center justify-center lg:justify-start gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                    <Activity size={12} className="text-brand-teal animate-pulse" />
-                   <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] italic">Live Update: Location 0{i+1}</span>
+                   <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] italic">Live: Store 0{i+1}</span>
                 </div>
              </motion.div>
            ))}
@@ -142,7 +142,7 @@ export function Categories() {
          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-20 border-l-8 border-brand-teal pl-6 md:pl-10">
             <div className="space-y-6">
                <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-5xl lg:text-7xl leading-tight uppercase italic tracking-tighter text-center lg:text-left w-full px-4 break-words">
-                  Category Shop
+                  Shop by Category
                </h2>
                <p className="text-gray-400 font-dm text-xl max-w-xl italic font-bold leading-relaxed">Browse our curated health categories.</p>
             </div>

@@ -6,10 +6,10 @@ export const fetchAllOrders = createAsyncThunk(
   'pharmacistOrders/fetchAll',
   async (_, thunkAPI) => {
     try {
-      const res = await api.get('/api/pharmacist/orders');
+      const res = await api.get('/api/orders/pharmacy');
       return res.data.items || [];
     } catch (e) {
-      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Failed to fetch clinical manifests');
+      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Failed to fetch orders');
     }
   }
 );
@@ -19,9 +19,9 @@ export const confirmOrder = createAsyncThunk(
   async (orderId, thunkAPI) => {
     try {
       const res = await api.patch(`/api/orders/${orderId}/status`, { status: 'confirmed' });
-      return res.data.order;
+      return res.data.item;
     } catch (e) {
-      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Protocol confirmation failed');
+      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Confirmation failed');
     }
   }
 );
@@ -30,10 +30,10 @@ export const rejectOrder = createAsyncThunk(
   'pharmacistOrders/reject',
   async ({ orderId, reason }, thunkAPI) => {
     try {
-      const res = await api.patch(`/api/orders/${orderId}/status`, { status: 'rejected', reason });
-      return res.data.order;
+      const res = await api.patch(`/api/orders/${orderId}/status`, { status: 'cancelled', reason });
+      return res.data.item;
     } catch (e) {
-      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Rejection handshake failed');
+      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Rejection failed');
     }
   }
 );
@@ -43,21 +43,9 @@ export const markPreparing = createAsyncThunk(
   async (orderId, thunkAPI) => {
     try {
       const res = await api.patch(`/api/orders/${orderId}/status`, { status: 'preparing' });
-      return res.data.order;
+      return res.data.item;
     } catch (e) {
-      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Redline cycle initialization failed');
-    }
-  }
-);
-
-export const assignAgent = createAsyncThunk(
-  'pharmacistOrders/assignAgent',
-  async ({ orderId, agentId }, thunkAPI) => {
-    try {
-      const res = await api.patch(`/api/orders/${orderId}/rider`, { riderId: agentId });
-      return res.data.order;
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Logistics agent assignment failed');
+      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Failed to update to preparing');
     }
   }
 );
@@ -66,22 +54,22 @@ export const dispatchOrder = createAsyncThunk(
   'pharmacistOrders/dispatch',
   async (orderId, thunkAPI) => {
     try {
-      const res = await api.patch(`/api/orders/${orderId}/status`, { status: 'dispatched' });
-      return res.data.order; // Server should generate OTP and emit to patient node
+      const res = await api.patch(`/api/orders/${orderId}/status`, { status: 'out for delivery' });
+      return res.data.item;
     } catch (e) {
-      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Logistics departure protocol failed');
+      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Failed to dispatch');
     }
   }
 );
 
-export const verifyPrescription = createAsyncThunk(
-  'pharmacistOrders/verifyRx',
-  async ({ orderId, verdict }, thunkAPI) => {
+export const approvePrescription = createAsyncThunk(
+  'pharmacistOrders/approveRx',
+  async ({ prescriptionId }, thunkAPI) => {
     try {
-      const res = await api.patch(`/api/orders/${orderId}/rx-status`, { verdict });
-      return res.data.order;
+      const res = await api.put(`/api/prescriptions/${prescriptionId}/approve`);
+      return res.data.item;
     } catch (e) {
-      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Clinical manifest verification failed');
+      return thunkAPI.rejectWithValue(e.response?.data?.message || 'Prescription approval failed');
     }
   }
 );
@@ -103,21 +91,14 @@ const pharmacistOrderSlice = createSlice({
   reducers: {
     newOrderReceived(state, action) {
        state.incomingOrders.unshift(action.payload);
-       if (action.payload.needsPrescription) {
-          state.pendingRx.unshift(action.payload);
-       }
     },
     updateOrderStatus(state, action) {
        const { orderId, status } = action.payload;
-       // Find and update in all lists
-       const lists = ['incomingOrders', 'preparingOrders', 'dispatchedOrders', 'deliveredToday', 'pendingRx'];
+       const lists = ['incomingOrders', 'preparingOrders', 'dispatchedOrders', 'deliveredToday'];
        lists.forEach(list => {
           const item = state[list].find(o => (o.id === orderId || o._id === orderId));
           if (item) item.status = status;
        });
-       if (state.selectedOrder && (state.selectedOrder.id === orderId || state.selectedOrder._id === orderId)) {
-          state.selectedOrder.status = status;
-       }
     }
   },
   extraReducers: (builder) => {
@@ -128,11 +109,10 @@ const pharmacistOrderSlice = createSlice({
       .addCase(fetchAllOrders.fulfilled, (state, action) => {
         state.loading = false;
         const orders = action.payload;
-        state.incomingOrders = orders.filter(o => o.status === 'new' || o.status === 'pending');
-        state.preparingOrders = orders.filter(o => o.status === 'preparing');
-        state.dispatchedOrders = orders.filter(o => o.status === 'dispatched');
+        state.incomingOrders = orders.filter(o => o.status === 'pending');
+        state.preparingOrders = orders.filter(o => o.status === 'confirmed' || o.status === 'preparing');
+        state.dispatchedOrders = orders.filter(o => o.status === 'out for delivery');
         state.deliveredToday = orders.filter(o => o.status === 'delivered');
-        state.pendingRx = orders.filter(o => o.status === 'awaiting_rx_verification');
       })
       .addCase(fetchAllOrders.rejected, (state, action) => {
         state.loading = false;
@@ -140,29 +120,22 @@ const pharmacistOrderSlice = createSlice({
       })
       .addCase(confirmOrder.fulfilled, (state, action) => {
         const order = action.payload;
-        state.incomingOrders = state.incomingOrders.filter(o => (o.id !== order.id && o._id !== order.id));
+        state.incomingOrders = state.incomingOrders.filter(o => (o.id !== order._id && o._id !== order._id));
         state.preparingOrders.unshift(order);
       })
       .addCase(markPreparing.fulfilled, (state, action) => {
         const order = action.payload;
-        const idx = state.preparingOrders.findIndex(o => (o.id === order.id || o._id === order.id));
+        const idx = state.preparingOrders.findIndex(o => (o.id === order._id || o._id === order._id));
         if (idx !== -1) state.preparingOrders[idx] = order;
       })
       .addCase(dispatchOrder.fulfilled, (state, action) => {
         const order = action.payload;
-        state.preparingOrders = state.preparingOrders.filter(o => (o.id !== order.id && o._id !== order.id));
+        state.preparingOrders = state.preparingOrders.filter(o => (o.id !== order._id && o._id !== order._id));
         state.dispatchedOrders.unshift(order);
-      })
-      .addCase(verifyPrescription.fulfilled, (state, action) => {
-        const order = action.payload;
-        state.pendingRx = state.pendingRx.filter(o => (o.id !== order.id && o._id !== order.id));
-        // Update status in other lists too
-        const target = state.incomingOrders.find(o => (o.id === order.id || o._id === order.id));
-        if (target) target.status = order.status;
       });
   }
 });
 
 export const { newOrderReceived, updateOrderStatus } = pharmacistOrderSlice.actions;
-
 export default pharmacistOrderSlice.reducer;
+

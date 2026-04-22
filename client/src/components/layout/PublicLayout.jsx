@@ -5,13 +5,9 @@ import MobileBottomNav from './MobileBottomNav.jsx';
 
 export default function PublicLayout() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar variant="public" />
-      <main className="flex-1 pt-[72px] pb-32 lg:pb-0 page-fade-up">
-        <Outlet />
-      </main>
+    <>
+      <Outlet />
       <Footer />
-      <MobileBottomNav />
-    </div>
+    </>
   );
 }

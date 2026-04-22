@@ -188,7 +188,7 @@ export default function SocketListener() {
       socket.off('delivery:pickup-ready');
       socket.off('user:update');
     };
-  }, [dispatch, user]);
+  }, [dispatch, user?.id, user?._id]);
 
   return null;
 }

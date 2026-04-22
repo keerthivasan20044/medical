@@ -29,7 +29,7 @@ export default function DoctorsListPage() {
         id: u._id,
         name: u.name,
         image: u.avatar?.url || `https://ui-avatars.com/api/?name=${u.name}&background=028090&color=fff`,
-        spec: u.doctorProfile?.specialization || 'General Physician',
+        spec: u.doctorProfile?.specialization || 'General Doctor',
         qual: u.doctorProfile?.qualification || 'MBBS',
         hospital: u.doctorProfile?.hospital || 'Karaikal General Hospital',
         experience: u.doctorProfile?.experience || 5,
@@ -61,7 +61,7 @@ export default function DoctorsListPage() {
         
         <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10 space-y-10 md:space-y-12 text-center lg:text-left">
            <div className="flex items-center justify-center lg:justify-start gap-4 text-[9px] md:text-[10px] font-black text-white/40 uppercase tracking-[0.4em] italic mb-6">
-              <span>Home</span> <ChevronRight size={14} className="opacity-40" /> <span>Consultation</span>
+              <span>Home</span> <ChevronRight size={14} className="opacity-40" /> <span>Doctor Help</span>
            </div>
            
            <div className="space-y-4 md:space-y-6">
@@ -127,7 +127,7 @@ export default function DoctorsListPage() {
                <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 bg-white border border-black/[0.03] rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-10 shadow-soft">
                   <div className="flex items-center gap-4 md:gap-6">
                      <div className="h-1.5 w-12 bg-brand-teal rounded-full" />
-                     <h2 className="font-syne font-black text-xl md:text-4xl text-[#0a1628] uppercase tracking-tighter italic leading-none">{doctors.length} Certified Doctors</h2>
+                     <h2 className="font-syne font-black text-xl md:text-4xl text-[#0a1628] uppercase tracking-tighter italic leading-none">{doctors.length} Trusted Doctors</h2>
                   </div>
                   
                   <div className="flex bg-gray-50/50 p-1.5 md:p-2 rounded-2xl border border-black/[0.01]">
@@ -196,7 +196,7 @@ export default function DoctorsListPage() {
                        <div className="grid grid-cols-2 gap-3 mt-8 pt-8 border-t border-black/[0.03] relative z-10">
                           <Link to={`/doctors/${dr.id}`} className="block">
                              <button className="w-full h-14 md:h-16 bg-gray-50 border border-black/[0.02] text-[#0a1628] font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest rounded-xl md:rounded-2xl hover:bg-[#0a1628] hover:text-white transition-all duration-500">
-                                Profile
+                                View Profile
                              </button>
                           </Link>
                           <button className="w-full h-14 md:h-16 bg-brand-teal text-[#0a1628] font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest rounded-xl md:rounded-2xl shadow-mint hover:scale-[1.05] active:scale-95 transition-all flex items-center justify-center gap-2">

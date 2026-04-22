@@ -1,111 +1,81 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Eye, Heart, ShoppingBag, Store, FileText, CheckCircle2 } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { normalizeUrl } from '../../utils/url';
+import { forwardRef } from 'react';
+import { Heart, ShoppingBag } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../store/cartSlice';
+import { getMedicineImage } from '../../data/medicineImages';
 
-export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const id = item.id || item._id;
-  const { name, brand, category, price, mrp, discount, stock, stockCount, requiresRx, pharmacyName, images } = item;
-  
-  const isOutOfStock = stock === 'out' || stockCount === 0;
-  const isLowStock = stockCount > 0 && stockCount < 20;
+const MedicineCard = forwardRef(({ item: medicine }, ref) => {
+  const dispatch = useDispatch();
+
+  if (!medicine) return null;
+
+  const genericPillsUrl = 'photo-1584308666744-24d5c474f2ae';
+  const dbImage = medicine.image || medicine.images?.[0]?.url;
+  const imageUrl = (dbImage && !dbImage.includes(genericPillsUrl)) 
+    ? dbImage 
+    : getMedicineImage(medicine.name, medicine.category);
 
   return (
-    <motion.div 
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -5 }}
-      className={`group bg-white border border-black/[0.03] rounded-[2.5rem] overflow-hidden shadow-soft hover:shadow-xl transition-all duration-300 relative flex flex-col ${layout === 'list' ? 'md:flex-row md:h-64' : ''}`}
-    >
-      <div className={`relative overflow-hidden shrink-0 bg-gray-50 ${layout === 'list' ? 'md:w-64 h-full' : 'h-44 w-full'}`}>
-        <img 
-          src={normalizeUrl(images?.[0]?.url || images?.[0] || '/assets/medicine_pro.png')} 
-          alt={name} 
-          className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" 
+    <div ref={ref} className="w-full bg-white rounded-2xl overflow-hidden shadow-sm">
+      {/* Image */}
+      <div className="relative w-full h-44 overflow-hidden bg-gray-100">
+        <img
+          src={imageUrl}
+          alt={medicine.name}
+          className="w-full h-full object-cover"
+          loading="lazy"
+          onError={e => { e.target.src = getMedicineImage('default') }}
         />
-        
-        <div className="absolute top-4 inset-x-4 flex justify-between items-start z-10">
-           <button 
-             onClick={(e) => { e.preventDefault(); setIsFavorite(!isFavorite); }}
-             className={`h-10 w-10 rounded-full flex items-center justify-center transition-all duration-300 bg-white shadow-md border ${isFavorite ? 'border-red-100 text-red-500' : 'border-gray-50 text-gray-300 hover:text-red-500 hover:scale-110'}`}
-           >
-              <Heart size={18} fill={isFavorite ? 'currentColor' : 'none'} className={isFavorite ? 'animate-heartbeat' : ''} />
-           </button>
-           {discount > 0 && (
-             <div className="bg-red-500 text-white text-[9px] font-black px-3 py-1.5 rounded-lg shadow-4xl tracking-widest uppercase italic border border-red-400/30">
-                -{discount}% OFF
-             </div>
-           )}
-        </div>
-
-        <div className="absolute inset-0 bg-[#0a1628]/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 cursor-pointer flex flex-col items-center justify-center p-6 text-center">
-           <Link to={`/medicines/${id}`} className="bg-white text-[#0a1628] font-syne font-black text-[9px] px-6 py-3 rounded-xl flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-all duration-700 uppercase tracking-widest shadow-4xl hover:bg-brand-teal hover:text-white">
-              <Eye size={16} /> Quick View
-           </Link>
-        </div>
+        <button className="absolute top-3 left-3 w-8 h-8 bg-white rounded-full
+                           flex items-center justify-center shadow-sm">
+          <Heart size={14} className="text-gray-400" />
+        </button>
+        {medicine.discount && (
+          <span className="absolute top-3 right-3 bg-red-500 text-white
+                           text-xs font-bold px-2 py-0.5 rounded-full">
+            -{medicine.discount}%
+          </span>
+        )}
       </div>
 
-      <div className="p-4 md:p-6 flex-1 flex flex-col justify-between">
-         <div className="space-y-2 md:space-y-3">
-            <div className="flex flex-wrap items-center gap-1.5 md:gap-2">
-               <span className="text-[7px] md:text-[8px] font-black text-brand-teal bg-brand-teal/5 px-2.5 py-1 rounded-lg uppercase tracking-widest italic border border-brand-teal/10">{category}</span>
-               {requiresRx && (
-                 <span className="text-[7px] md:text-[8px] font-black text-purple-600 bg-purple-50 px-2.5 py-1 rounded-lg uppercase tracking-widest flex items-center gap-2 italic border border-purple-100">
-                    <FileText size={10} className="md:w-3 md:h-3" /> RX
-                 </span>
-               )}
-            </div>
-            
-            <div className="space-y-1">
-               <Link to={`/medicines/${id}`}>
-                  <h3 title={name} className="font-syne font-black text-[#0a1628] text-sm md:text-base leading-[1.2] group-hover:text-brand-teal transition-colors uppercase tracking-tight italic line-clamp-2 min-h-[2.4em]">{name}</h3>
-               </Link>
-               <div className="text-[8px] md:text-[10px] text-gray-400 font-dm font-bold italic truncate tracking-tight">{brand}</div>
-            </div>
-
-            <div className="flex items-center gap-2 md:gap-4 pt-1 md:pt-2">
-               <div className="font-syne font-black text-[#0a1628] text-lg md:text-2xl tracking-tighter italic">₹{price}</div>
-               {mrp > price && (
-                 <div className="text-[10px] md:text-sm text-gray-300 line-through italic font-dm">₹{mrp}</div>
-               )}
-            </div>
-         </div>
-
-         <div className="space-y-3 md:space-y-5 pt-4 md:pt-6 mt-auto">
-            <div className="flex items-center justify-between border-t border-black/[0.03] pt-3 md:pt-4">
-               <div className={`flex items-center gap-1.5 md:gap-2 text-[7px] md:text-[8px] font-black uppercase tracking-widest italic ${isOutOfStock ? 'text-red-500' : isLowStock ? 'text-orange-500' : 'text-emerald-500'}`}>
-                  <div className={`h-1 w-1 md:h-1.5 md:w-1.5 rounded-full animate-pulse ${isOutOfStock ? 'bg-red-500' : isLowStock ? 'bg-orange-500' : 'bg-emerald-500'}`} />
-                  {isOutOfStock ? 'OUT' : isLowStock ? 'LOW' : 'IN'}
-               </div>
-               <div className="text-[7px] md:text-[8px] text-gray-300 font-black uppercase tracking-widest flex items-center gap-1.5 md:gap-2 italic">
-                  <Store size={10} className="text-brand-teal" /> {pharmacyName?.split(' ')[0]}
-               </div>
-            </div>
-
-            <button
-               onClick={(e) => { e.preventDefault(); onAdd && onAdd(item); }}
-               disabled={isOutOfStock}
-               className={`w-full h-10 md:h-12 rounded-lg md:rounded-xl font-syne font-black text-[8px] md:text-[9px] flex items-center justify-center gap-2 md:gap-3 transition-all duration-500 uppercase tracking-widest shadow-soft hover:shadow-4xl ${
-                  isAdded 
-                  ? 'bg-emerald-500 text-white border-2 border-emerald-100 shadow-emerald-100' 
-                  : isOutOfStock 
-                    ? 'bg-gray-100 text-gray-300 cursor-not-allowed border border-gray-100' 
-                    : 'bg-[#0a1628] text-white hover:bg-brand-teal group-hover:scale-[1.02]'
-               }`}
-            >
-               {isAdded ? (
-                 <> <CheckCircle2 size={14} className="md:w-4 md:h-4" /> ✓ In Cart </>
-               ) : isOutOfStock ? (
-                 'OUT OF STOCK'
-               ) : (
-                 <> <ShoppingBag size={14} className="md:w-4 md:h-4" /> ADD TO CART </>
-               )}
-            </button>
-         </div>
+      {/* Content */}
+      <div className="p-3">
+        <span className="text-[10px] text-teal-600 font-bold bg-teal-50
+                         px-2 py-0.5 rounded-full">
+          {medicine.category}
+        </span>
+        <h3 className="font-black text-navy text-sm mt-1 leading-tight
+                       line-clamp-2">
+          {medicine.name}
+        </h3>
+        <p className="text-gray-400 text-xs mt-0.5">{medicine.brand}</p>
+        <div className="flex items-center gap-2 mt-2 select-none">
+          <span className="font-black text-navy text-base">₹{medicine.price}</span>
+          {medicine.mrp && (
+            <span className="text-gray-400 text-xs line-through">₹{medicine.mrp}</span>
+          )}
+        </div>
+        <div className="flex items-center justify-between mt-1 mb-3">
+          <span className="flex items-center gap-1 text-[10px] text-green-500 font-bold">
+            <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+            In Stock
+          </span>
+          {medicine.requiresPrescription && (
+            <span className="text-[10px] text-orange-500 font-bold">Rx Required</span>
+          )}
+        </div>
+        <button
+          onClick={() => dispatch(addToCart(medicine))}
+          className="w-full bg-[#0a0f1e] text-white font-bold py-2.5
+                     rounded-xl text-sm flex items-center justify-center gap-2"
+        >
+          <ShoppingBag size={14} /> Add to Cart
+        </button>
       </div>
-    </motion.div>
+    </div>
   );
-}
+});
+
+MedicineCard.displayName = 'MedicineCard';
+
+export default MedicineCard;

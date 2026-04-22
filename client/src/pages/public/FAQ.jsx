@@ -12,26 +12,26 @@ const FAQ_DATA = [
   { 
     category: 'Orders', 
     questions: [
-      { q: 'How do I place an order on MediReach in Karaikal?', a: 'Browse medicines or pharmacies, add items to your cart, and click checkout. You can also upload a prescription directly, and our pharmacists will process the order architecture for you.' },
-      { q: 'Can I order from multiple pharmacies in one order?', a: 'No, each order is fulfilled by a single pharmacy to ensure architecture delivery speed and accountability. You can place multiple orders for separate pharmacies.' },
+      { q: 'How do I place an order on MediReach in Karaikal?', a: 'Browse medicines or pharmacies, add items to your cart, and click checkout. You can also upload a prescription directly, and our pharmacists will process the order for you.' },
+      { q: 'Can I order from multiple pharmacies in one order?', a: 'No, each order is fulfilled by a single pharmacy to ensure delivery speed and accountability. You can place multiple orders for separate pharmacies.' },
       { q: 'How do I cancel my order?', a: 'Go to "My Orders", find your active order, and click "Cancel". Cancellations are allowed before the pharmacy marks the order as "Preparing".' },
-      { q: 'What is the minimum order amount?', a: 'Most pharmacies in Karaikal have a minimum order architecture of ₹100 for delivery. Pickup has no minimum.' }
+      { q: 'What is the minimum order amount?', a: 'Most pharmacies in Karaikal have a minimum order of ₹100 for delivery. Pickup has no minimum.' }
     ]
   },
   { 
     category: 'Delivery', 
     questions: [
-      { q: 'How fast is delivery in Karaikal town?', a: 'We deliver within 30 minutes in Karaikal town area. For Nagore and Poompuhar areas, delivery takes 45-60 minutes depending on the courier enclave.' },
+      { q: 'How fast is delivery in Karaikal town?', a: 'We deliver within 30 minutes in Karaikal town area. For Nagore and Poompuhar areas, delivery takes 45-60 minutes depending on the delivery team.' },
       { q: 'Do you deliver to Nagore and Poompuhar?', a: 'Yes! We cover the entire Karaikal district including Nagore, Poompuhar, and T.R. Pattinam.' },
-      { q: 'What if I am not home during delivery?', a: 'Our rider will call you. You can authorize them to leave it with a neighbor or reschedule the delivery architecture.' },
+      { q: 'What if I am not home during delivery?', a: 'Our rider will call you. You can authorize them to leave it with a neighbor or reschedule the delivery.' },
       { q: 'How does GPS tracking work?', a: 'Once an order is "Out for Delivery", you can view the live GPS location of your rider on the "Track Order" page.' },
-      { q: 'What is OTP delivery confirmation?', a: 'For security, you must provide a 4-digit code (sent via SMS) to the rider to confirm you received your medical architecture correctly.' }
+      { q: 'What is OTP delivery confirmation?', a: 'For security, you must provide a 4-digit code (sent via SMS) to the rider to confirm you received your medicine correctly.' }
     ]
   },
   { 
     category: 'Medicines', 
     questions: [
-      { q: 'Are all medicines authentic at Karaikal pharmacies?', a: 'Yes. MediReach only partners with licensed pharmacies in the Karaikal district. Every architecture delivery comes with a real tax invoice.' },
+      { q: 'Are all medicines authentic at Karaikal pharmacies?', a: 'Yes. MediReach only partners with licensed pharmacies in the Karaikal district. Every delivery comes with a real tax invoice.' },
       { q: 'Can I get prescription medicines without prescription?', a: 'No. For Schedule H and X medicines, a valid prescription is legally required and must be verified by our licensed pharmacists.' },
       { q: 'What if a medicine is out of stock?', a: 'The app will notify you if a medicine is unavailable at your chosen pharmacy. You can try searching in other partner pharmacies in the enclave.' }
     ]
@@ -47,8 +47,8 @@ const FAQ_DATA = [
     category: 'Payment', 
     questions: [
       { q: 'What payment methods are accepted?', a: 'UPI (GPay, PhonePe, Paytm), Debit/Credit Cards (Visa, Mastercard, RuPay), Net Banking, and Cash on Delivery — all accepted.' },
-      { q: 'Is my payment information secure?', a: 'Absolutely. We use industry-standard encryption architecture. MediReach does not store your card or UPI pins.' },
-      { q: 'Can I pay on delivery?', a: 'Yes, most pharmacies in the Karaikal enclave support Cash on Delivery (COD).' }
+      { q: 'Is my payment information secure?', a: 'Absolutely. We use industry-standard encryption. MediReach does not store your card or UPI pins.' },
+      { q: 'Can I pay on delivery?', a: 'Yes, most pharmacies in the Karaikal area support Cash on Delivery (COD).' }
     ]
   }
 ];
@@ -74,7 +74,7 @@ export default function FAQ() {
       <section className="bg-[#0a1628] py-32 md:py-48 relative overflow-hidden">
          <div className="absolute inset-0 bg-grid opacity-10" />
          <div className="max-w-7xl mx-auto px-6 text-center space-y-8 relative z-10">
-            <h1 className="font-syne font-black text-5xl md:text-8xl text-white tracking-tighter">Support & <br /><span className="text-[#02C39A]">Architecture FAQs.</span></h1>
+            <h1 className="font-syne font-black text-5xl md:text-8xl text-white tracking-tighter">Support & <br /><span className="text-[#02C39A]">Help & FAQs.</span></h1>
             <p className="text-white/40 font-dm text-lg md:text-2xl max-w-2xl mx-auto italic leading-relaxed">Everything you need to know about MediReach Karaikal operations in one place.</p>
 
             <div className="max-w-2xl mx-auto pt-12">
@@ -102,7 +102,7 @@ export default function FAQ() {
             {/* Nav Sidebar */}
             <aside className="space-y-12 lg:sticky lg:top-32">
                <div className="space-y-4">
-                  <h3 className="font-syne font-black text-[#0a1628] uppercase tracking-widest text-sm flex items-center gap-3"><Filter size={18} /> Protocol Categories</h3>
+                  <h3 className="font-syne font-black text-[#0a1628] uppercase tracking-widest text-sm flex items-center gap-3"><Filter size={18} /> Help Topics</h3>
                   <div className="flex flex-col gap-2">
                      {categories.map(cat => (
                         <button
@@ -120,16 +120,16 @@ export default function FAQ() {
                   <div className="h-16 w-16 bg-[#028090] text-white rounded-[1.8rem] flex items-center justify-center shadow-lg"><MessageSquare size={24} /></div>
                   <div>
                      <h4 className="font-syne font-black text-[#0a1628]">Still have questions?</h4>
-                     <p className="text-gray-400 font-dm text-xs italic mt-1 leading-relaxed">Our support architecture is available 24/7 for Karaikal residents.</p>
+                     <p className="text-gray-400 font-dm text-xs italic mt-1 leading-relaxed">Our support team is available 24/7 for Karaikal residents.</p>
                   </div>
-                  <button className="w-full py-4 bg-[#0a1628] text-white rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-[#028090] transition shadow-lg">Chat with Enclave Support</button>
+                  <button className="w-full py-4 bg-[#0a1628] text-white rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-[#028090] transition shadow-lg">Chat with Support</button>
                </div>
             </aside>
 
             {/* Accordion Component */}
             <div className="space-y-12">
                <div className="flex items-center justify-between border-b border-gray-50 pb-8">
-                  <h2 className="font-syne font-black text-4xl text-[#0a1628]">{searchQuery ? 'Search Architecture Results' : `${activeCategory} Protocol`}</h2>
+                  <h2 className="font-syne font-black text-4xl text-[#0a1628]">{searchQuery ? 'Search Results' : `${activeCategory} Topics`}</h2>
                   <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Showing {filteredFaqs.length} Answers</div>
                </div>
 
@@ -177,8 +177,8 @@ export default function FAQ() {
                         <X size={64} />
                      </div>
                      <div>
-                        <h3 className="font-syne font-black text-3xl text-[#0a1628]">Architecture Insight Not Found.</h3>
-                        <p className="text-gray-400 text-lg font-dm max-w-xs mx-auto italic mt-2 leading-relaxed">We couldn't find an answer for your specific medical query. Please connect with our enclave support.</p>
+                        <h3 className="font-syne font-black text-3xl text-[#0a1628]">No results found.</h3>
+                        <p className="text-gray-400 text-lg font-dm max-w-xs mx-auto italic mt-2 leading-relaxed">We couldn't find an answer for your specific query. Please connect with our support team.</p>
                      </div>
                      <button className="px-12 py-5 bg-[#0a1628] text-white rounded-3xl font-syne font-black text-xs uppercase tracking-widest hover:bg-[#028090] transition shadow-2xl">Connect with Real Agent &rarr;</button>
                   </div>
@@ -192,9 +192,9 @@ export default function FAQ() {
          <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 lg:grid-cols-4 gap-12">
             {[
                { icon: Phone, label: 'Emergency Support', val: '108 (District)' },
-               { icon: MessageSquare, label: 'WhatsApp Stream', val: '+91 99999 99999' },
-               { icon: Mail, label: 'Email Architecture', val: 'support@medireach.in' },
-               { icon: Store, label: 'Partner Enclave', val: '8 Licensed Pharmacies' }
+               { icon: MessageSquare, label: 'WhatsApp Support', val: '+91 99999 99999' },
+               { icon: Mail, label: 'Email Support', val: 'support@medireach.in' },
+               { icon: Store, label: 'Our Partners', val: '8 Licensed Pharmacies' }
             ].map(link => (
                <div key={link.label} className="space-y-6">
                   <div className="h-16 w-16 bg-white rounded-3xl flex items-center justify-center text-[#028090] shadow-sm"><link.icon size={26} /></div>

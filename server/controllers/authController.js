@@ -32,7 +32,7 @@ function toSafeUser(user) {
     role: user.role,
     avatar: user.avatar,
     address: user.address,
-    verified: user.verified,
+    isVerified: user.isVerified,
     isActive: user.isActive
   };
 }
@@ -57,26 +57,27 @@ export async function registerUser(req, res) {
     if (phone) query.push({ phone });
     let user = query.length > 0 ? await User.findOne({ $or: query }) : null;
 
-    const otpCode = process.env.NODE_ENV === 'development' ? '123456' : String(Math.floor(100000 + Math.random() * 900000));
+    const otp = process.env.NODE_ENV === 'development' ? '123456' : String(Math.floor(100000 + Math.random() * 900000));
     const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
     if (user) {
-      if (user.verified) {
+      if (user.isVerified) {
         return res.status(409).json({ error: 'Email already exists' });
       }
       // Re-send OTP for unverified user
-      user.otpCode = otpCode;
+      user.otp = otp;
       user.otpExpiry = otpExpiry;
       // Update info if provided
       if (name) user.name = name;
       if (password) user.password = await bcrypt.hash(password, 10);
       if (address || city || state || pincode) {
-        user.address = {
-          street: address || user.address?.street,
-          city: city || user.address?.city,
-          state: state || user.address?.state,
-          pincode: pincode || user.address?.pincode
-        };
+        user.address = [{
+          street: address,
+          city: city,
+          state: state,
+          pincode: pincode,
+          isDefault: true
+        }];
       }
       await user.save();
     } else {
@@ -87,19 +88,20 @@ export async function registerUser(req, res) {
         phone: phone || undefined, 
         role: finalRole, 
         password: hashedPassword, 
-        otpCode, 
+        otp, 
         otpExpiry,
-        address: {
+        address: [{
           street: address,
           city: city,
           state: state,
-          pincode: pincode
-        }
+          pincode: pincode,
+          isDefault: true
+        }]
       });
     }
 
-    if (email) await sendEmail(email, 'Verify OTP', `Your OTP is ${otpCode}`);
-    if (phone) await sendSMS(phone, `Your OTP is ${otpCode}`);
+    if (email) await sendEmail(email, 'Verify OTP', `Your OTP is ${otp}`);
+    if (phone) await sendSMS(phone, `Your OTP is ${otp}`);
 
     const payload = { id: user._id, name: user.name, email: user.email, role: user.role };
     const accessToken = signToken(payload, '7d'); // Requested 7d expiry
@@ -135,11 +137,11 @@ export async function verifyOTP(req, res) {
     if (phone) queryArr.push({ phone });
     const user = queryArr.length > 0 ? await User.findOne({ $or: queryArr }) : null;
     if (!user) return res.status(404).json({ message: 'User not found' });
-    if (!user.otpCode || user.otpCode !== code) return res.status(400).json({ message: 'Invalid OTP' });
+    if (!user.otp || user.otp !== code) return res.status(400).json({ message: 'Invalid OTP' });
     if (user.otpExpiry && user.otpExpiry < new Date()) return res.status(400).json({ message: 'OTP expired' });
 
-    user.verified = true;
-    user.otpCode = null;
+    user.isVerified = true;
+    user.otp = null;
     user.otpExpiry = null;
     user.isActive = true; // Ensure active on verification
     await user.save();
@@ -166,8 +168,8 @@ export async function resendOTP(req, res) {
     const user = queryArr.length > 0 ? await User.findOne({ $or: queryArr }) : null;
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const otpCode = process.env.NODE_ENV === 'development' ? '123456' : String(Math.floor(100000 + Math.random() * 900000));
-    user.otpCode = otpCode;
+    const otp = process.env.NODE_ENV === 'development' ? '123456' : String(Math.floor(100000 + Math.random() * 900000));
+    user.otp = otp;
     user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
     await user.save();
 
@@ -255,7 +257,7 @@ export async function googleOAuth(req, res) {
       name: name || email.split('@')[0],
       email,
       role: role || 'customer',
-      verified: true
+      isVerified: true
     });
   }
 
@@ -280,13 +282,13 @@ export async function requestLoginOtp(req, res) {
   if (!user) return res.status(404).json({ message: 'User not found' });
   if (role && user.role !== role) return res.status(403).json({ message: 'Role mismatch' });
 
-  const otpCode = process.env.NODE_ENV === 'development' ? '123456' : String(Math.floor(100000 + Math.random() * 900000));
-  user.otpCode = otpCode;
+  const otp = process.env.NODE_ENV === 'development' ? '123456' : String(Math.floor(100000 + Math.random() * 900000));
+  user.otp = otp;
   user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
   await user.save();
 
-  if (email) await sendEmail(email, 'Login OTP', `Your OTP is ${otpCode}`);
-  if (phone) await sendSMS(phone, `Your OTP is ${otpCode}`);
+  if (email) await sendEmail(email, 'Login OTP', `Your OTP is ${otp}`);
+  if (phone) await sendSMS(phone, `Your OTP is ${otp}`);
 
   res.json({ ok: true });
 }
@@ -300,10 +302,10 @@ export async function verifyLoginOtp(req, res) {
   const user = queryArr.length > 0 ? await User.findOne({ $or: queryArr }) : null;
   if (!user) return res.status(404).json({ message: 'User not found' });
   if (role && user.role !== role) return res.status(403).json({ message: 'Role mismatch' });
-  if (!user.otpCode || user.otpCode !== code) return res.status(400).json({ message: 'Invalid OTP' });
+  if (!user.otp || user.otp !== code) return res.status(400).json({ message: 'Invalid OTP' });
   if (user.otpExpiry && user.otpExpiry < new Date()) return res.status(400).json({ message: 'OTP expired' });
 
-  user.otpCode = null;
+  user.otp = null;
   user.otpExpiry = null;
   await user.save();
 

@@ -90,14 +90,14 @@ export default function AdminDashboard() {
             { ...prev[5], value: (data.deliveries || 0).toLocaleString() }
           ]);
        } catch (e) {
-          console.warn('Admin Node Sync Failed. Reverting to Mock Architecture.');
+          console.warn('Update failed. Using saved data.');
        } finally {
           setLoading(false);
        }
     };
     fetchAdminNode();
 
-    // REAL-TIME DASHBOARD PULSE
+    // DASHBOARD UPDATES
     if (socket) {
       socket.on('order:new', (data) => {
         setOrders(prev => [data.order, ...prev.slice(0, 9)]);
@@ -136,7 +136,7 @@ export default function AdminDashboard() {
          {/* Header */}
          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-1">
-               <div className="text-[10px] font-black text-[#028090] uppercase tracking-[0.3em]">Command Center v2.0</div>
+               <div className="text-[10px] font-black text-[#028090] uppercase tracking-[0.3em]">Dashboard v2.0</div>
                <h1 className="font-syne font-black text-4xl text-[#0a1628]">MediPharm Admin — <span className="text-[#028090]">Karaikal Operations</span></h1>
             </div>
             <div className="flex items-center gap-4 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
@@ -144,7 +144,7 @@ export default function AdminDashboard() {
                   <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">System Status</div>
                   <div className={`text-sm font-dm font-black uppercase flex items-center gap-2 ${loading ? 'text-amber-500' : 'text-emerald-500'}`}>
                      <div className={`h-2 w-2 rounded-full ${loading ? 'bg-amber-500 animate-spin' : 'bg-emerald-500 animate-pulse'}`} /> 
-                     {loading ? 'Synchronizing Nodes...' : 'Nodes Synchronized'}
+                     {loading ? 'Updating...' : 'Up to date'}
                   </div>
                </div>
                 <button className="h-12 w-12 bg-gray-50 text-[#028090] rounded-xl flex items-center justify-center hover:bg-white hover:shadow-lg transition"><RefreshCw size={18}/></button>
@@ -156,12 +156,12 @@ export default function AdminDashboard() {
             {[
                { label: 'Add Pharmacy', icon: Store, color: 'bg-[#0a1628]', textColor: 'text-brand-teal' },
                { label: 'Add Medicine', icon: Pill, color: 'bg-brand-teal', textColor: 'text-[#0a1628]' },
-               { label: 'System Reports', icon: Activity, color: 'bg-white', textColor: 'text-[#0a1628]' },
-               { label: 'Manage Nodes', icon: Users, color: 'bg-white', textColor: 'text-[#0a1628]' }
+               { label: 'Reports', icon: Activity, color: 'bg-white', textColor: 'text-[#0a1628]' },
+               { label: 'Manage Accounts', icon: Users, color: 'bg-white', textColor: 'text-[#0a1628]' }
             ].map(action => (
                <button key={action.label} className={`h-24 md:h-28 rounded-[2rem] flex items-center justify-between px-8 shadow-soft border border-black/[0.02] hover:shadow-4xl transition-all duration-700 active:scale-95 group ${action.color} ${action.textColor}`}>
                   <div className="space-y-1 text-left">
-                     <div className="text-[10px] font-black uppercase tracking-[0.2em] italic opacity-40">Execute Protocol</div>
+                     <div className="text-[10px] font-black uppercase tracking-[0.2em] italic opacity-40">Tasks</div>
                      <div className="font-syne font-black text-sm md:text-lg uppercase italic tracking-tighter leading-none">{action.label}</div>
                   </div>
                   <div className={`h-12 w-12 rounded-xl flex items-center justify-center transition-all duration-700 group-hover:rotate-12 ${action.color === 'bg-white' ? 'bg-gray-50' : 'bg-white/10'}`}><action.icon size={22} /></div>
@@ -199,7 +199,7 @@ export default function AdminDashboard() {
             <div className="lg:col-span-12 bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-sm space-y-8">
                <div className="flex items-center justify-between">
                   <h2 className="font-syne font-black text-[#0a1628] text-2xl flex items-center gap-3">
-                     <IndianRupee className="text-[#028090]" /> Monthly Revenue Analysis
+                     <IndianRupee className="text-[#028090]" /> Monthly Revenue
                   </h2>
                   <select className="bg-gray-50 border-none rounded-xl px-4 py-2 text-xs font-dm font-bold text-[#028090] outline-none">
                      <option>Year 2026</option>
@@ -207,7 +207,7 @@ export default function AdminDashboard() {
                   </select>
                </div>
                <div className="h-[400px]">
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" minHeight={400}>
                      <BarChart data={REVENUE_DATA} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                         <defs>
                            <linearGradient id="barTeal" x1="0" y1="0" x2="0" y2="1">
@@ -229,25 +229,25 @@ export default function AdminDashboard() {
             </div>
          </div>
 
-         {/* Telemetry Real-Time Audit Hub */}
+         {/* Delivery Updates */}
          <div className="grid lg:grid-cols-12 gap-10">
             <div className="lg:col-span-12 bg-[#0a1628] rounded-[4rem] p-12 text-white relative overflow-hidden group">
                <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-10 blur-[80px]" />
                <div className="flex items-center justify-between mb-10 relative z-10">
                   <div className="space-y-1">
-                     <h2 className="font-syne font-black text-3xl">Logistics Telemetry Audit</h2>
-                     <p className="text-white/40 font-dm text-sm">Monitoring live trajectories across the Karaikal medical enclave.</p>
+                     <h2 className="font-syne font-black text-3xl">Live Delivery Tracking</h2>
+                     <p className="text-white/40 font-dm text-sm">Monitor active orders across Karaikal.</p>
                   </div>
                   <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-2 rounded-2xl">
                      <div className="h-2 w-2 bg-emerald-500 rounded-full animate-ping" />
-                     <span className="text-[10px] font-black uppercase tracking-widest text-[#02C39A]">Real-Time Monitor Active</span>
+                     <span className="text-[10px] font-black uppercase tracking-widest text-[#02C39A]">Monitoring Active</span>
                   </div>
                </div>
 
                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
                   {telemetryNodes.length === 0 ? (
                      <div className="lg:col-span-4 p-12 text-center text-white/20 font-syne font-black uppercase tracking-widest border border-dashed border-white/10 rounded-[3rem]">
-                        No Active District Trajectories Detected.
+                        No active deliveries.
                      </div>
                   ) : (
                      telemetryNodes.map((node, i) => (
@@ -258,9 +258,9 @@ export default function AdminDashboard() {
                          className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] space-y-4 hover:bg-white/[0.08] transition group"
                         >
                            <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-white/40">
-                              <span>Agent Node #{node.orderId.slice(-4)}</span>
+                              <span>Order #{node.orderId.slice(-4)}</span>
                               <span className="text-[#02C39A] flex items-center gap-1">
-                                 <Activity size={10} className="animate-pulse" /> Live Sync
+                                 <Activity size={10} className="animate-pulse" /> Tracking
                               </span>
                            </div>
                            <div className="flex items-end justify-between">
@@ -289,12 +289,12 @@ export default function AdminDashboard() {
          <div className="bg-white p-12 rounded-[4rem] text-[#0a1628] border border-gray-100 shadow-sm space-y-10 relative overflow-hidden group">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
                <div className="space-y-1">
-                  <h2 className="font-syne font-black text-3xl">Daily Active Users Trend</h2>
-                  <p className="text-gray-400 font-dm text-sm">Synchronized real-time heartbeat of Karaikal district enclave.</p>
+                  <h2 className="font-syne font-black text-3xl">Daily Active Users</h2>
+                  <p className="text-gray-400 font-dm text-sm">Daily usage trends in Karaikal.</p>
                </div>
                <div className="flex items-center gap-6">
                   <div className="text-center">
-                     <div className="text-[10px] text-white/30 font-bold uppercase tracking-widest">Peak Users Today</div>
+                     <div className="text-[10px] text-white/30 font-bold uppercase tracking-widest">Today's Peak</div>
                      <div className="text-3xl font-syne font-black text-[#02C39A]">512</div>
                   </div>
                   <div className="h-10 w-[1px] bg-white/10" />
@@ -305,7 +305,7 @@ export default function AdminDashboard() {
                </div>
             </div>
             <div className="h-[300px] w-full relative z-10">
-               <ResponsiveContainer width="100%" height="100%">
+               <ResponsiveContainer width="100%" height="100%" minHeight={300}>
                   <LineChart data={DAU_DATA}>
                      <XAxis dataKey="day" hide />
                      <Tooltip 
@@ -331,7 +331,7 @@ export default function AdminDashboard() {
                       <thead>
                          <tr className="bg-gray-50/50">
                             <th className="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Pharmacy</th>
-                            <th className="px-6 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Today Orders</th>
+                            <th className="px-6 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Orders Today</th>
                             <th className="px-6 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Revenue</th>
                             <th className="px-6 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Rating</th>
                             <th className="px-6 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</th>
@@ -374,21 +374,17 @@ export default function AdminDashboard() {
                    </div>
                 </div>
                 
-                {/* CSS Karaikal Map Structure */}
+                {/* Map Display */}
                 <div className="flex-1 min-h-[400px] bg-gray-50 rounded-[3rem] border border-dashed border-gray-200 relative overflow-hidden group">
                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(2,195,154,0.05)_0%,transparent_70%)]" />
                    
-                   {/* Grid Lines */}
                    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(#0a1628 1px, transparent 1px), linear-gradient(90deg, #0a1628 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 
-                   {/* Representative Pins */}
                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px]">
-                      {/* Radius Circles */}
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border border-[#028090]/10 rounded-full animate-ping-slow" />
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] border border-[#02C39A]/20 rounded-full" />
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] border-2 border-dashed border-[#028090]/20 rounded-full animate-rotate-slow" />
                       
-                      {/* Pins */}
                       {[
                          { t: '15%', l: '35%', n: 'Karaikal Port' },
                          { t: '45%', l: '50%', n: 'Market Road' },
@@ -403,11 +399,10 @@ export default function AdminDashboard() {
                       ))}
                    </div>
                    
-                   {/* Heatmap Overlay Simulation */}
                    <div className="absolute bottom-6 left-6 right-6 p-6 bg-[#0a1628] rounded-[2rem] text-white shadow-2xl flex items-center justify-between group-hover:-translate-y-2 transition duration-500">
                       <div className="space-y-1">
                          <div className="text-[10px] text-white/30 font-bold uppercase tracking-widest">Delivery Density</div>
-                         <div className="text-sm font-syne font-black text-[#02C39A] uppercase tracking-widest">High Concentration Area</div>
+                         <div className="text-sm font-syne font-black text-[#02C39A] uppercase tracking-widest">High Activity Zone</div>
                       </div>
                       <Activity size={24} className="text-[#02C39A] animate-pulse" />
                    </div>
@@ -419,8 +414,8 @@ export default function AdminDashboard() {
          <div className="bg-white rounded-[4rem] border border-gray-100 shadow-sm overflow-hidden">
             <div className="p-12 border-b border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-6">
                <div className="space-y-1">
-                  <h2 className="font-syne font-black text-3xl text-[#0a1628]">Recent Architecture Events</h2>
-                  <p className="text-gray-400 font-dm italic">Real-time order sync across the Karaikal medical enclave.</p>
+                  <h2 className="font-syne font-black text-3xl text-[#0a1628]">Recent Orders</h2>
+                  <p className="text-gray-400 font-dm italic">Live view of customer orders.</p>
                </div>
                <div className="flex bg-gray-50 p-2 rounded-2xl items-center gap-2">
                   <input type="text" placeholder="Search order ID..." className="bg-transparent border-none outline-none font-dm text-sm px-4 w-48" />
@@ -470,9 +465,9 @@ export default function AdminDashboard() {
                </table>
             </div>
             
-            <div className="p-10 border-t border-gray-50 text-center">
-               <button className="font-syne font-black text-[#0a1628] text-xs uppercase tracking-widest border-b-2 border-gray-100 hover:border-[#028090] transition px-4 pb-1">View All Historical Transactions</button>
-            </div>
+             <div className="p-10 border-t border-gray-50 text-center">
+                <button className="font-syne font-black text-[#0a1628] text-xs uppercase tracking-widest border-b-2 border-gray-100 hover:border-[#028090] transition px-4 pb-1">View All Orders</button>
+             </div>
          </div>
       </div>
     </div>

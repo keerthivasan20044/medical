@@ -4,8 +4,10 @@ const pharmacySchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     ownerName: { type: String, required: true },
-    licenseNumber: { type: String, unique: true, required: true },
+    ownerPhone: String,
+    licenseId: { type: String, unique: true, required: true },
     images: [{ url: String, publicId: String }],
+    image: String, // Supporting singular image as requested
     address: {
       street: String,
       city: { type: String, default: 'Karaikal' },
@@ -14,13 +16,15 @@ const pharmacySchema = new mongoose.Schema(
     },
     phone: String,
     email: String,
-    timings: String,
+    operatingHours: String,
+    deliveryTime: String,
+    deliveryFee: { type: Number, default: 0 },
     rating: { type: Number, min: 0, max: 5 },
     totalReviews: Number,
     isVerified: { type: Boolean, default: false },
     isOpen: { type: Boolean, default: true },
     medicines: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Medicine' }],
-    pharmacist: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    pharmacistId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     deliveryRadius: Number
   },
   { timestamps: true }

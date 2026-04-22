@@ -4,26 +4,26 @@ import PageShell from '../../components/layout/PageShell';
 export default function AdminSettings() {
   return (
     <PageShell 
-      title="Architecture Matrix" 
-      subtitle="Define global district parameters and mission-critical system synchronization layers."
+      title="System Settings" 
+      subtitle="Manage global platform settings and system updates."
       icon={Settings}
       actions={
         <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-xs rounded-2xl flex items-center gap-3 active:scale-95 shadow-4xl italic uppercase tracking-wider group">
-          <Save size={18} className="group-hover:animate-pulse" /> Deploy Changes
+          <Save size={18} className="group-hover:animate-pulse" /> Save Changes
         </button>
       }
     >
       <div className="p-20 grid lg:grid-cols-2 gap-24">
          <div className="space-y-12">
             <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic tracking-tighter leading-none flex items-center gap-6">
-               <div className="h-2 w-16 bg-brand-teal rounded-full" /> System Node Metadata
+               <div className="h-2 w-16 bg-brand-teal rounded-full" /> System Information
             </h3>
             
             <div className="space-y-8">
                {[
-                  { label: 'Platform Architecture', val: 'MediReach v2.0 (Stable)', icon: Globe },
-                  { label: 'Enclave Region', val: 'Karaikal (UTP_PUDUCHERRY)', icon: Database },
-                  { label: 'Admin Command ID', val: 'ADM-KKL-SYNC-001', icon: ShieldCheck },
+                  { label: 'Platform Version', val: 'MediPharm v2.0 (Stable)', icon: Globe },
+                  { label: 'Region', val: 'Karaikal (Puducherry)', icon: Database },
+                  { label: 'Admin ID', val: 'ADM-KKL-UPDATE-001', icon: ShieldCheck },
                   { label: 'Maintenance Interval', val: 'Weekly (03:00 - 05:00)', icon: Activity }
                ].map(item => (
                   <div key={item.label} className="bg-gray-50/50 p-12 rounded-[3.5rem] border border-black/[0.03] flex items-center gap-10 group hover:bg-white hover:shadow-4xl transition-all duration-700 cursor-pointer relative overflow-hidden">
@@ -42,7 +42,7 @@ export default function AdminSettings() {
 
          <div className="space-y-12">
             <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic tracking-tighter leading-none flex items-center gap-6">
-               <div className="h-2 w-16 bg-brand-teal rounded-full" /> Master Sync Controls
+               <div className="h-2 w-16 bg-brand-teal rounded-full" /> Live Update Controls
             </h3>
             
             <div className="grid grid-cols-1 gap-8">
@@ -51,27 +51,27 @@ export default function AdminSettings() {
                   <div className="space-y-8 relative z-10">
                      <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                           <div className="text-[10px] text-brand-teal font-black uppercase tracking-[0.4em] italic">Telemetry Hub</div>
-                           <h4 className="font-syne font-black text-2xl uppercase italic tracking-tighter">Socket Node Synchronization</h4>
+                           <div className="text-[10px] text-brand-teal font-black uppercase tracking-[0.4em] italic">Update Hub</div>
+                           <h4 className="font-syne font-black text-2xl uppercase italic tracking-tighter">Live Updates</h4>
                         </div>
                         <div className="h-10 w-20 bg-brand-teal/10 rounded-full flex items-center px-1 border border-brand-teal/20"><div className="h-8 w-8 bg-brand-teal rounded-full ml-auto shadow-lg" /></div>
                      </div>
                      <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                           <div className="text-[10px] text-brand-teal font-black uppercase tracking-[0.4em] italic">Automatic Enclave Maintenance</div>
-                           <h4 className="font-syne font-black text-2xl uppercase italic tracking-tighter">GLOBAL_CRON_SYNC</h4>
+                           <div className="text-[10px] text-brand-teal font-black uppercase tracking-[0.4em] italic">Automatic Maintenance</div>
+                           <h4 className="font-syne font-black text-2xl uppercase italic tracking-tighter">AUTO_SYSTEM_UPDATE</h4>
                         </div>
                         <div className="h-10 w-20 bg-white/5 rounded-full flex items-center px-1 border border-white/10"><div className="h-8 w-8 bg-white/20 rounded-full" /></div>
                      </div>
-                     <button className="h-20 w-full bg-brand-teal text-[#0a1628] font-syne font-black text-sm uppercase italic tracking-[0.2em] rounded-2xl shadow-mint hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 mt-8"><RefreshCw size={24}/> Force Architecture Re-Sync</button>
+                     <button className="h-20 w-full bg-brand-teal text-[#0a1628] font-syne font-black text-sm uppercase italic tracking-[0.2em] rounded-2xl shadow-mint hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 mt-8"><RefreshCw size={24}/> Force System Update</button>
                   </div>
                </div>
 
                <div className="bg-white p-12 rounded-[4rem] border border-black/[0.03] shadow-inner space-y-6 group">
                   <div className="flex items-center gap-4 text-brand-teal font-syne font-black text-sm uppercase italic">
-                     <MessageSquare size={24} className="group-hover:animate-shake" /> ADMIN_COMMMS_NODE
+                     <MessageSquare size={24} className="group-hover:animate-shake" /> Admin Messages
                   </div>
-                  <p className="text-[#0a1628]/60 font-dm italic font-bold">Broadcasting a district-wide notification pulse will synchronize across all active customer and terminal nodes within 5 seconds.</p>
+                  <p className="text-[#0a1628]/60 font-dm italic font-bold">Sending a message will reach all active users and pharmacies within 5 seconds.</p>
                </div>
             </div>
          </div>

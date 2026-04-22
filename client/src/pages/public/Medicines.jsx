@@ -6,7 +6,7 @@ import {
   Store, ShoppingBag, FileText, AlertCircle, Info, Database
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { pharmacies } from '../../utils/data.js';
 import { medicineService } from '../../services/apiServices';
@@ -14,20 +14,60 @@ import { addToCart } from '../../store/cartSlice.js';
 import MedicineCard from '../../components/medicine/MedicineCard.jsx';
 
 export default function MedicinesListPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid');
-  const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-  
-  // Advanced Filter States
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedPharmacies, setSelectedPharmacies] = useState([]);
-  const [priceRange, setPriceRange] = useState(10000); // Increased range for high-value meds
-  const [rxFilter, setRxFilter] = useState('Both'); // Yes, No, Both
-  const [availability, setAvailability] = useState('All'); // In Stock (True), All
-  const [sortBy, setSortBy] = useState('Most Popular');
-  
+
+  // Sync state with URL params
+  const searchQuery = searchParams.get('q') || '';
+  const selectedCategories = useMemo(() => searchParams.getAll('category'), [searchParams]);
+  const selectedPharmacies = useMemo(() => searchParams.getAll('pharmacy'), [searchParams]);
+  const priceRange = parseInt(searchParams.get('maxPrice')) || 10000;
+  const rxFilter = searchParams.get('rx') || 'Both';
+  const availability = searchParams.get('stock') || 'All';
+  const sortBy = searchParams.get('sort') || 'Most Popular';
+
+  const updateFilters = (updates) => {
+    const newParams = new URLSearchParams(searchParams);
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value === null || value === undefined || value === '' || (Array.isArray(value) && value.length === 0)) {
+        newParams.delete(key);
+      } else if (Array.isArray(value)) {
+        newParams.delete(key);
+        value.forEach(v => newParams.append(key, v));
+      } else {
+        newParams.set(key, value);
+      }
+    });
+    setSearchParams(newParams);
+  };
+
+  const setSearchQuery = (val) => updateFilters({ q: val });
+  const setPriceRange = (val) => updateFilters({ maxPrice: val });
+  const setRxFilter = (val) => updateFilters({ rx: val });
+  const setAvailability = (val) => updateFilters({ stock: val });
+  const setSortBy = (val) => updateFilters({ sort: val });
+
+  const toggleCategory = (cat) => {
+    const next = selectedCategories.includes(cat) 
+      ? selectedCategories.filter(c => c !== cat) 
+      : [...selectedCategories, cat];
+    updateFilters({ category: next });
+  };
+
+  const togglePharmacy = (id) => {
+    const next = selectedPharmacies.includes(id) 
+      ? selectedPharmacies.filter(p => p !== id) 
+      : [...selectedPharmacies, id];
+    updateFilters({ pharmacy: next });
+  };
+
+  const resetFilters = () => {
+    setSearchParams({});
+  };
+
   const { items: cartItems } = useSelector(state => state.cart);
   const dispatch = useDispatch();
 
@@ -38,7 +78,7 @@ export default function MedicinesListPage() {
       price: item.price,
       image: item.images?.[0] || '/assets/medicine_default.png',
       brand: item.brand,
-      qty: 1
+      quantity: 1
     }));
     toast.success(`${item.name} added to cart`);
   };
@@ -80,7 +120,7 @@ export default function MedicinesListPage() {
       const matchesPharmacy = selectedPharmacies.length === 0 || selectedPharmacies.includes(m.pharmacy?._id || m.pharmacy);
       const matchesPrice = m.price <= priceRange;
       const matchesRx = rxFilter === 'Both' || (rxFilter === 'Yes' ? m.requiresPrescription : !m.requiresPrescription);
-      const matchesStock = availability === 'All' || m.stockCount > 0;
+      const matchesStock = availability === 'All' || m.stock > 0;
       
       return matchesSearch && matchesCategory && matchesPharmacy && matchesPrice && matchesRx && matchesStock;
     });
@@ -118,13 +158,13 @@ export default function MedicinesListPage() {
   const FilterPanel = ({ isMobile = false }) => (
     <div className={`space-y-10 ${isMobile ? 'p-8 pb-32' : ''}`}>
        <div className="space-y-2">
-          <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Settings</div>
-          <h3 className="font-syne font-black text-2xl md:text-3xl uppercase italic tracking-tighter text-[#0a1628]">Advanced Filters</h3>
+          <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Options</div>
+          <h3 className="font-syne font-black text-2xl md:text-3xl uppercase italic tracking-tighter text-[#0a1628]">Filters</h3>
        </div>
 
        {/* Categories */}
        <div className="space-y-6 pt-8 border-t border-black/[0.03]">
-          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Medical Category</div>
+          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Category</div>
           <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
              {categories.map(cat => (
                 <button 
@@ -231,8 +271,11 @@ export default function MedicinesListPage() {
            </div>
            
            <div className="space-y-6 text-center md:text-left">
-              <h1 className="font-syne font-black text-5xl md:text-8xl lg:text-9xl text-white leading-[0.85] tracking-tighter uppercase italic shadow-2xl">
-                 Medicine <br/><span className="text-brand-teal">Store</span>
+              <h1
+                className="font-black text-white leading-[0.9] break-words w-full"
+                style={{ fontSize: 'clamp(2.2rem, 12vw, 5rem)' }}
+              >
+                 Medicine <span className="text-brand-teal">Store</span>
               </h1>
               <div className="flex flex-col lg:flex-row gap-8 items-center justify-between pt-10">
                  <p className="text-white/40 font-dm text-lg md:text-2xl italic max-w-xl leading-relaxed font-bold">
@@ -341,7 +384,7 @@ export default function MedicinesListPage() {
                      </div>
                      <div className="space-y-3 text-center">
                         <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase tracking-tighter italic">Loading Medicines...</h3>
-                        <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">Contacting Pharmacies</p>
+                        <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">Connecting...</p>
                      </div>
                   </div>
                ) : (
