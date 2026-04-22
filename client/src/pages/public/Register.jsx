@@ -113,8 +113,8 @@ export default function Register() {
   const ROLES = [
     { id: 'customer', label: t('customer') || 'Customer', icon: User, desc: t('speakWithDoctors') || 'Access medicines & doctors' },
     { id: 'doctor', label: t('doctor') || 'Doctor', icon: Stethoscope, desc: t('manageConsultations') },
-    { id: 'pharmacist', label: t('pharmacist') || 'Pharmacist', icon: Store, desc: t('operateEnclave') },
-    { id: 'delivery', label: t('delivery') || 'Delivery', icon: Truck, desc: t('logisticsFulfillment') }
+    { id: 'pharmacist', label: t('pharmacist') || 'Pharmacist', icon: Store, desc: 'Manage your pharmacy' },
+    { id: 'delivery', label: t('delivery') || 'Delivery', icon: Truck, desc: 'Deliver medicines' }
   ];
 
   const variants = {
@@ -157,7 +157,7 @@ export default function Register() {
              <div className="pt-20">
                 <div className="p-8 bg-white rounded-3xl border border-gray-100 space-y-4 shadow-sm">
                    <Sparkles size={24} className="text-[#02C39A] animate-pulse" />
-                   <p className="text-[10px] text-gray-400 font-bold leading-relaxed italic uppercase">{t('joiningEnclave')}</p>
+                   <p className="text-[10px] text-gray-400 font-bold leading-relaxed italic uppercase">Join our medical network</p>
                 </div>
              </div>
           </aside>
@@ -180,8 +180,8 @@ export default function Register() {
                    {step === 1 && (
                      <motion.div key="step1" custom={1} variants={variants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.5 }} className="space-y-12">
                         <div className="space-y-4 text-center md:text-left">
-                           <h2 className="font-syne font-black text-3xl md:text-4xl text-[#0a1628]">{t('chooseNode')}</h2>
-                           <p className="text-gray-400 font-dm italic text-base md:text-lg opacity-60">{t('identityFoundation')}</p>
+                           <h2 className="font-syne font-black text-3xl md:text-4xl text-[#0a1628]">Choose your role</h2>
+                           <p className="text-gray-400 font-dm italic text-base md:text-lg opacity-60">Select how you want to use the platform.</p>
                         </div>
                         <div className="grid grid-cols-2 gap-3 md:gap-4">
                            {ROLES.map(r => (
@@ -206,8 +206,8 @@ export default function Register() {
                    {step === 2 && (
                      <motion.div key="step2" custom={1} variants={variants} initial="enter" animate="center" exit="exit" className="space-y-12">
                         <div className="space-y-4">
-                           <h2 className="font-syne font-black text-4xl text-[#0a1628]">{t('personalProtTitle')}</h2>
-                           <p className="text-gray-400 font-dm italic text-lg opacity-60">{t('establishCreds')}</p>
+                           <h2 className="font-syne font-black text-4xl text-[#0a1628]">Personal Details</h2>
+                           <p className="text-gray-400 font-dm italic text-lg opacity-60">Create your account credentials.</p>
                         </div>
                         <div className="space-y-8">
                            <Input 
@@ -218,7 +218,7 @@ export default function Register() {
                              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                            />
                            <Input 
-                             label={t('emailNode')} 
+                             label="Email Address" 
                              icon={Mail} 
                              placeholder="name@example.com" 
                              value={formData.email}
@@ -243,8 +243,8 @@ export default function Register() {
                    {step === 3 && (
                       <motion.div key="step3" custom={1} variants={variants} initial="enter" animate="center" exit="exit" className="space-y-12">
                          <div className="space-y-4">
-                            <h2 className="font-syne font-black text-4xl text-[#0a1628]">{t('locEnclaveTitle')}</h2>
-                            <p className="text-gray-400 font-dm italic text-lg opacity-60">{t('karaikalSync')}</p>
+                            <h2 className="font-syne font-black text-4xl text-[#0a1628]">Location Details</h2>
+                            <p className="text-gray-400 font-dm italic text-lg opacity-60">Connect your location to Karaikal.</p>
                          </div>
                          <div className="space-y-8">
                             <div className="relative">
@@ -283,8 +283,8 @@ export default function Register() {
                     {step === 4 && (
                       <motion.div key="step4" custom={1} variants={variants} initial="enter" animate="center" exit="exit" className="space-y-12 text-center">
                          <div className="space-y-4">
-                            <h2 className="font-syne font-black text-4xl text-[#0a1628] mx-auto">{t('step4')}.</h2>
-                            <p className="text-gray-400 font-dm italic text-lg opacity-60">{t('codeSentStream')}</p>
+                            <h2 className="font-syne font-black text-4xl text-[#0a1628] mx-auto">Verification</h2>
+                            <p className="text-gray-400 font-dm italic text-lg opacity-60">A code has been sent to your email.</p>
                          </div>
                          <div className="py-8">
                             <OTPInput length={6} onComplete={verifyRegistration} />
@@ -303,14 +303,14 @@ export default function Register() {
                     {step === 5 && (
                       <motion.div key="step5" custom={1} variants={variants} initial="enter" animate="center" exit="exit" className="space-y-12">
                          <div className="space-y-4 text-center">
-                            <h2 className="font-syne font-black text-4xl text-[#0a1628]">{t('profileIdTitle')}</h2>
-                            <p className="text-gray-400 font-dm italic text-lg opacity-60">{t('uploadVisual')}</p>
+                            <h2 className="font-syne font-black text-4xl text-[#0a1628]">Profile Setup</h2>
+                            <p className="text-gray-400 font-dm italic text-lg opacity-60">Upload a profile photo.</p>
                          </div>
 
                          <div className="flex items-center justify-between">
                             <div className="space-y-1">
-                               <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none tracking-tighter">{t('idSync')}</h2>
-                               <p className="text-gray-400 font-dm font-bold italic text-[10px] opacity-60">{t('verifiedNodeProtocol')}</p>
+                               <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none tracking-tighter">ID Verification</h2>
+                               <p className="text-gray-400 font-dm font-bold italic text-[10px] opacity-60">Verified Partner</p>
                             </div>
                          </div>
 
@@ -327,7 +327,7 @@ export default function Register() {
                                ) : (
                                   <>
                                      <Camera size={48} className="group-hover:scale-110 group-hover:text-[#02C39A] transition duration-500" />
-                                     <span className="text-[9px] font-black uppercase tracking-[0.4em] mt-4 opacity-30">{t('idNodePlaceholder')}</span>
+                                     <span className="text-[9px] font-black uppercase tracking-[0.4em] mt-4 opacity-30">UPLOAD ID PHOTO</span>
                                   </>
                                 )}
                             </label>
@@ -362,7 +362,7 @@ export default function Register() {
                               className="w-full py-10 text-xl font-syne font-black uppercase tracking-[0.2em] shadow-4xl hover:scale-[1.02] active:scale-95 transition-all duration-1000 italic" 
                               icon={<Sparkles size={20}/>}
                             >
-                               {t('initHandshake')}
+                               Complete Registration
                             </Button>
                          </div>
                       </motion.div>

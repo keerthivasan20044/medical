@@ -13,14 +13,14 @@ const DEFAULT_STATS = [
 ];
 
 const CATEGORIES = [
-  { id: 1, name: 'Tablets', count: '500+ items', bg: 'bg-blue-50', icon: '💊', img: '/assets/medicine_default.png' },
-  { id: 2, name: 'Syrups', count: '120+ items', bg: 'bg-green-50', icon: '🧴', img: '/assets/medicine_default.png' },
-  { id: 3, name: 'Vaccines', count: '45+ items', bg: 'bg-purple-50', icon: '💉', img: '/assets/medicine_default.png' },
-  { id: 4, name: 'Injections', count: '80+ items', bg: 'bg-orange-50', icon: '🩺', img: '/assets/medicine_default.png' },
-  { id: 5, name: 'Baby Care', count: '200+ items', bg: 'bg-pink-50', icon: '👶', img: '/assets/medicine_default.png' },
-  { id: 6, name: 'Ayurvedic', count: '150+ items', bg: 'bg-emerald-50', icon: '🌿', img: '/assets/hospital_pro.png' },
-  { id: 7, name: 'Surgical', count: '90+ items', bg: 'bg-red-50', icon: '🩹', img: '/assets/medicine_default.png' },
-  { id: 8, name: 'Vitamins', count: '300+ items', bg: 'bg-yellow-50', icon: '⚡', img: '/assets/medicine_default.png' }
+  { id: 1, name: 'Tablets', count: '500+ items', bg: 'bg-blue-50', icon: '💊' },
+  { id: 2, name: 'Syrups', count: '120+ items', bg: 'bg-green-50', icon: '🧴' },
+  { id: 3, name: 'Vaccines', count: '45+ items', bg: 'bg-purple-50', icon: '💉' },
+  { id: 4, name: 'Injections', count: '80+ items', bg: 'bg-orange-50', icon: '🩺' },
+  { id: 5, name: 'Baby Care', count: '200+ items', bg: 'bg-pink-50', icon: '👶' },
+  { id: 6, name: 'Ayurvedic', count: '150+ items', bg: 'bg-emerald-50', icon: '🌿' },
+  { id: 7, name: 'Surgical', count: '90+ items', bg: 'bg-red-50', icon: '🩹' },
+  { id: 8, name: 'Vitamins', count: '300+ items', bg: 'bg-yellow-50', icon: '⚡' }
 ];
 
 const Counter = ({ value, suffix = '' }) => {
@@ -73,7 +73,7 @@ export function StatsCounter() {
   }, []);
 
   return (
-    <section className="bg-[#0a1628] py-24 md:py-32 relative overflow-hidden">
+    <section className="bg-[#0a1628] py-12 md:py-16 relative overflow-hidden">
       {/* Background HUD Graphics */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[600px] bg-brand-teal/5 rounded-full blur-[200px] opacity-20" />
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(2,195,154,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(2,195,154,0.1) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
@@ -98,7 +98,7 @@ export function StatsCounter() {
                             <s.icon size={22} />
                          </div>
                          <div className="space-y-1">
-                            <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] group-hover:text-brand-teal transition-colors italic">{t(s.label)}</h4>
+                            <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] group-hover:text-brand-teal transition-colors italic pr-16">{t(s.label)}</h4>
                             <div className="h-1 w-8 bg-brand-teal/20 rounded-full group-hover:w-full transition-all duration-700" />
                          </div>
                       </div>
@@ -120,7 +120,7 @@ export function StatsCounter() {
                 {/* HUD Data Text */}
                 <div className="mt-8 flex items-center justify-center lg:justify-start gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                    <Activity size={12} className="text-brand-teal animate-pulse" />
-                   <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] italic">District_Telemetry_Sync: LAK_0{i+1}</span>
+                   <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] italic">Live Update: Location 0{i+1}</span>
                 </div>
              </motion.div>
            ))}
@@ -133,7 +133,7 @@ export function StatsCounter() {
 export function Categories() {
   const { t } = useLanguage();
   return (
-    <section className="py-32 bg-white relative overflow-hidden">
+    <section className="py-12 md:py-16 bg-white relative overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-teal/[0.03] rounded-full blur-[150px]" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#028090]/[0.03] rounded-full blur-[100px]" />
@@ -141,13 +141,10 @@ export function Categories() {
       <div className="max-w-7xl mx-auto px-6 md:px-10">
          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-20 border-l-8 border-brand-teal pl-6 md:pl-10">
             <div className="space-y-6">
-               <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-5xl lg:text-7xl leading-[0.9] uppercase italic tracking-tighter text-center lg:text-left">
-                  {t('shopCategoryTitleMain')} <br />
-                  <span className="text-brand-teal drop-shadow-[0_0_10px_rgba(2,195,154,0.2)]">
-                     {t('shopCategoryTitleSub')}
-                  </span>
+               <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-5xl lg:text-7xl leading-tight uppercase italic tracking-tighter text-center lg:text-left w-full px-4 break-words">
+                  Category Shop
                </h2>
-               <p className="text-gray-400 font-dm text-xl max-w-xl italic font-bold leading-relaxed">{t('browseCuratedClusters')}</p>
+               <p className="text-gray-400 font-dm text-xl max-w-xl italic font-bold leading-relaxed">Browse our curated health categories.</p>
             </div>
              <Link to="/medicines" className="group flex items-center justify-center lg:justify-start gap-4 md:gap-6 font-syne font-black text-lg md:text-xl uppercase italic tracking-widest text-[#0a1628] hover:text-brand-teal transition-all duration-500 bg-gray-50 px-8 py-4 md:px-10 md:py-5 rounded-[1.5rem] md:rounded-[2rem] hover:shadow-4xl">
                {t('exploreCatalog')} <ArrowRight className="group-hover:translate-x-4 transition-transform duration-500 text-brand-teal" />
@@ -164,7 +161,7 @@ export function Categories() {
                 whileHover={{ y: -15, scale: 1.02 }}
                 className={`group relative ${c.bg} rounded-[3.5rem] p-10 border-4 border-white shadow-3xl hover:shadow-4xl transition-all duration-700 overflow-hidden h-96 flex flex-col justify-between`}
               >
-                 {/* Biometric Pulse Background Icon */}
+                 {/* Category Background Icon */}
                  <div className="absolute -right-10 -top-10 text-[180px] opacity-[0.03] group-hover:rotate-12 group-hover:scale-125 transition-all duration-1000 select-none">
                     {c.icon}
                  </div>
@@ -184,16 +181,11 @@ export function Categories() {
                  
                  <div className="relative z-10 flex items-center justify-between">
                     <Link to={`/medicines?category=${c.name}`} className="h-14 px-8 bg-white rounded-2xl flex items-center justify-center text-[#0a1628] font-syne font-black uppercase italic tracking-widest text-[10px] shadow-2xl hover:bg-[#0a1628] hover:text-white transition-all duration-500 group-hover:translate-x-2">
-                       {t('accessNodes')}
+                       Shop Now
                     </Link>
                     <div className="h-10 w-10 bg-[#0a1628]/5 rounded-full flex items-center justify-center text-[#0a1628]/20 group-hover:text-brand-teal transition-colors">
                        <Database size={18} />
                     </div>
-                 </div>
-
-                 {/* High-Fidelity Product Visualization */}
-                 <div className="absolute right-0 bottom-0 h-1/2 w-1/2 translate-y-10 group-hover:translate-y-0 transition-transform duration-700 pointer-events-none">
-                    <img src={c.img} alt={c.name} className="h-full w-full object-contain filter drop-shadow-2xl group-hover:scale-125 transition-transform duration-1000" />
                  </div>
               </motion.div>
             ))}

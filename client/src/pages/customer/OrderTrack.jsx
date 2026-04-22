@@ -51,7 +51,7 @@ export default function TrackingPage() {
     <div className="min-h-screen bg-[#0a1628] text-white overflow-hidden flex flex-col">
       
       {/* Full-width Satellite Map Interface */}
-      <section className="relative h-[60vh] md:h-[65vh] w-full overflow-hidden">
+      <section className="relative h-[45vh] md:h-[65vh] w-full overflow-hidden shrink-0">
         {/* Synthetic Map Grid */}
         <div className="absolute inset-0 opacity-20" style={{ 
           backgroundImage: 'radial-gradient(circle at 2px 2px, #028090 1px, transparent 0)',
@@ -104,41 +104,43 @@ export default function TrackingPage() {
       {/* Live Status Card */}
       <motion.section 
         initial={{ y: 100 }} animate={{ y: 0 }}
-        className="bg-white text-[#0a1628] rounded-t-[4rem] flex-1 p-10 md:p-16 relative z-50 shadow-4xl border-t border-gray-100"
+        className="bg-white text-[#0a1628] rounded-t-[3rem] flex-1 p-6 md:p-16 relative z-50 shadow-4xl border-t border-gray-100 mt-[-2rem]"
       >
          <div className="max-w-6xl mx-auto space-y-12">
             
             {/* Live Driver Header */}
-            <div className="grid md:grid-cols-2 gap-12 items-center border-b border-gray-50 pb-12">
-               <div className="flex items-center gap-8">
-                  <div className="relative">
-                     <div className="h-20 w-20 md:h-24 md:w-24 bg-gray-100 rounded-[2.5rem] overflow-hidden border-4 border-white shadow-xl">
+            <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between border-b border-gray-50 pb-8">
+               <div className="flex items-center gap-4 md:gap-8">
+                  <div className="relative shrink-0">
+                     <div className="h-16 w-16 md:h-24 md:w-24 bg-gray-100 rounded-2xl md:rounded-[2.5rem] overflow-hidden border-2 md:border-4 border-white shadow-xl">
                         <img src="https://ui-avatars.com/api/?name=Rakesh+Kumar&background=028090&color=fff" className="h-full w-full object-cover" />
                      </div>
-                     <div className="absolute -bottom-1 -right-1 h-8 w-8 bg-emerald-500 border-4 border-white rounded-full flex items-center justify-center text-white"><CheckCircle size={14}/></div>
+                     <div className="absolute -bottom-1 -right-1 h-6 w-6 md:h-8 md:w-8 bg-emerald-500 border-2 md:border-4 border-white rounded-full flex items-center justify-center text-white"><CheckCircle size={12}/></div>
                   </div>
-                  <div className="space-y-1">
-                     <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em] italic">Delivery Partner</div>
-                     <h2 className="font-syne font-black text-3xl md:text-4xl italic uppercase leading-none">Rakesh Kumar</h2>
-                     <div className="flex items-center gap-4">
-                        <div className="flex text-amber-500 gap-0.5"><Star size={12} fill="currentColor"/><Star size={12} fill="currentColor"/><Star size={12} fill="currentColor"/><Star size={12} fill="currentColor"/><Star size={12} fill="currentColor"/></div>
-                        <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">PY-01-AX-4829</span>
+                  <div className="space-y-1 min-w-0">
+                     <div className="text-[8px] md:text-[10px] font-black text-brand-teal uppercase tracking-[0.3em] italic">Delivery Partner</div>
+                     <h2 className="font-syne font-black text-xl md:text-4xl italic uppercase leading-tight truncate">Rakesh Kumar</h2>
+                     <div className="flex items-center gap-2 md:gap-4">
+                        <div className="flex text-amber-500 gap-0.5"><Star size={10} fill="currentColor"/><Star size={10} fill="currentColor"/><Star size={10} fill="currentColor"/><Star size={10} fill="currentColor"/><Star size={10} fill="currentColor"/></div>
+                        <span className="text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic truncate">PY-01-AX-4829</span>
                      </div>
                   </div>
                </div>
 
-               <div className="flex items-center justify-end gap-6">
-                  <div className="text-right">
-                     <div className="text-[9px] text-gray-400 font-bold uppercase tracking-[0.3em] mb-1 leading-none">Estimated Arrival</div>
-                     <div className="font-syne font-black text-4xl md:text-5xl text-brand-teal italic tracking-tighter">{eta || '8 min'}</div>
+               <div className="flex items-center justify-between md:justify-end gap-4 md:gap-6">
+                  <div className="text-left md:text-right">
+                     <div className="text-[8px] md:text-[9px] text-gray-400 font-bold uppercase tracking-[0.3em] mb-1 leading-none">Arrival</div>
+                     <div className="font-syne font-black text-3xl md:text-5xl text-brand-teal italic tracking-tighter">{eta || '8 min'}</div>
                   </div>
-                  <div className="h-16 w-px bg-gray-100 mx-4" />
-                  <a href="tel:9876543210" className="h-16 md:h-20 w-16 md:w-20 bg-[#0a1628] rounded-[2rem] flex items-center justify-center text-brand-teal shadow-4xl hover:bg-brand-teal hover:text-white transition-all scale-animation">
-                     <Phone size={24} />
-                  </a>
-                  <button className="h-16 md:h-20 w-16 md:w-20 bg-gray-50 border border-gray-100 rounded-[2rem] flex items-center justify-center text-[#0a1628] hover:bg-[#0a1628] hover:text-white transition-all">
-                     <MessageCircle size={24} />
-                  </button>
+                  <div className="hidden md:block h-12 w-px bg-gray-100 mx-2" />
+                  <div className="flex gap-2">
+                     <a href="tel:9876543210" className="h-12 w-12 md:h-20 md:w-20 bg-[#0a1628] rounded-xl md:rounded-[2rem] flex items-center justify-center text-brand-teal shadow-4xl hover:bg-brand-teal hover:text-white transition-all scale-animation">
+                        <Phone size={20} />
+                     </a>
+                     <button className="h-12 w-12 md:h-20 md:w-20 bg-gray-50 border border-gray-100 rounded-xl md:rounded-[2rem] flex items-center justify-center text-[#0a1628] hover:bg-[#0a1628] hover:text-white transition-all">
+                        <MessageCircle size={20} />
+                     </button>
+                  </div>
                </div>
             </div>
 
@@ -177,18 +179,18 @@ export default function TrackingPage() {
                </div>
             </div>
 
-            <div className="p-10 bg-gray-50 rounded-[3rem] border border-black/[0.02] flex items-center justify-between group overflow-hidden relative">
+            <div className="p-6 md:p-10 bg-gray-50 rounded-[2rem] md:rounded-[3rem] border border-black/[0.02] flex flex-col md:flex-row items-center justify-between gap-6 group overflow-hidden relative">
                <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-0 group-hover:opacity-5 rounded-full blur-[80px] transition-opacity" />
-               <div className="flex items-center gap-8">
-                  <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center text-brand-teal shadow-soft"><ShieldCheck size={32}/></div>
-                  <div className="space-y-1">
-                     <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Delivery OTP</div>
-                     <div className="font-syne font-black text-2xl text-[#0a1628] uppercase italic leading-none">Your Code: 5821</div>
+               <div className="flex items-center gap-4 md:gap-8 w-full md:w-auto">
+                  <div className="h-12 w-12 md:h-16 md:w-16 bg-white rounded-xl md:rounded-2xl flex items-center justify-center text-brand-teal shadow-soft shrink-0"><ShieldCheck size={28}/></div>
+                  <div className="space-y-0.5">
+                     <div className="text-[9px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Delivery OTP</div>
+                     <div className="font-syne font-black text-lg md:text-2xl text-[#0a1628] uppercase italic leading-none">Code: 5821</div>
                   </div>
                </div>
-               <div className="text-right">
-                  <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic mb-2">Actions</div>
-                  <button className="h-14 px-8 bg-[#0a1628] text-brand-teal rounded-xl font-syne font-black text-[9px] uppercase italic tracking-[0.3em] shadow-4xl">Cancel Delivery</button>
+               <div className="w-full md:w-auto flex md:flex-col justify-between items-center md:items-end gap-2">
+                  <div className="hidden md:block text-[10px] font-black text-gray-300 uppercase tracking-widest italic mb-2">Actions</div>
+                  <button className="w-full md:w-auto h-12 md:h-14 px-6 md:px-8 bg-[#0a1628] text-brand-teal rounded-xl font-syne font-black text-[9px] uppercase italic tracking-[0.3em] shadow-4xl">Cancel</button>
                </div>
             </div>
 

@@ -74,7 +74,7 @@ export default function PharmaciesListPage() {
       }));
       setPharmacies(mapped);
     } catch (err) {
-      console.error('Handshake failed with pharmacy registry:', err);
+      console.error('Could not load pharmacies from registry:', err);
     } finally {
       setLoading(false);
     }
@@ -133,7 +133,7 @@ export default function PharmaciesListPage() {
               </h1>
               <div className="flex flex-col lg:flex-row gap-8 items-center justify-between pt-6">
                  <p className="text-white/40 font-dm text-lg italic max-w-xl leading-relaxed mx-auto lg:mx-0">
-                    {filteredPharmacies.length} verified pharmacy nodes synchronized and active.
+                    {filteredPharmacies.length} verified pharmacies available in your area.
                  </p>
                  <div className="bg-brand-teal/5 border border-brand-teal/10 px-5 py-2 rounded-xl text-brand-teal font-syne font-black text-[9px] uppercase italic tracking-[0.25em] flex items-center gap-3 mx-auto lg:mx-0">
                     <div className="h-1.5 w-1.5 rounded-full bg-brand-teal animate-ping" />
@@ -147,7 +147,7 @@ export default function PharmaciesListPage() {
                  <Search className="text-brand-teal md:w-5 md:h-5" size={18} />
                  <input 
                     type="text" 
-                    placeholder="Search node..." 
+                    placeholder="Search pharmacies..." 
                     className="flex-1 bg-transparent font-syne font-black text-sm md:text-base italic outline-none text-white placeholder:text-white/20 uppercase tracking-tighter"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -231,7 +231,7 @@ export default function PharmaciesListPage() {
                   ))}
                </div>
                <div className="flex items-center gap-4">
-                  <span className="text-[10px] font-black text-gray-300 uppercase italic tracking-widest">Sort Protocol</span>
+                  <span className="text-[10px] font-black text-gray-300 uppercase italic tracking-widest">Sort By</span>
                   <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="h-12 px-6 bg-gray-50 border border-black/[0.03] rounded-xl font-syne font-black text-[10px] uppercase italic tracking-widest outline-none appearance-none cursor-pointer hover:bg-white hover:border-[#0a1628] transition-all"><option>Nearest</option><option>Rating</option><option>Delivery Time</option><option>Name</option></select>
                </div>
             </div>
@@ -245,11 +245,11 @@ export default function PharmaciesListPage() {
             <div className="lg:w-1/3 space-y-8 text-center lg:text-left">
                <div className="h-16 w-16 bg-[#0a1628] rounded-[1.8rem] flex items-center justify-center text-brand-teal shadow-4xl mx-auto lg:mx-0"><Zap size={28}/></div>
                <div>
-                  <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic tracking-tighter leading-none">District Demand Pulse</h3>
-                  <p className="text-gray-400 font-dm font-bold italic text-lg leading-relaxed mt-4 uppercase tracking-tighter opacity-60">Logistical volume across all Karaikal surgical nodes.</p>
+                  <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic tracking-tighter leading-none">District Demand</h3>
+                  <p className="text-gray-400 font-dm font-bold italic text-lg leading-relaxed mt-4 uppercase tracking-tighter opacity-60">Pharmacy activity across Karaikal.</p>
                </div>
                <div className="flex flex-col gap-4 text-xs font-dm font-bold italic text-[#0a1628] opacity-40 uppercase tracking-widest">
-                  <div className="flex items-center gap-3"><div className="h-1.5 w-1.5 rounded-full bg-brand-teal" /> Currently Synchronized</div>
+                  <div className="flex items-center gap-3"><div className="h-1.5 w-1.5 rounded-full bg-brand-teal" /> Live Updates</div>
                   <div className="flex items-center gap-3"><div className="h-1.5 w-1.5 rounded-full bg-brand-teal" /> 8 Verified Local Pharmacies</div>
                </div>
             </div>
@@ -291,8 +291,8 @@ export default function PharmaciesListPage() {
                   </div>
                </div>
                <div className="text-center space-y-2">
-                  <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter italic">Synchronizing Nodes...</h3>
-                  <p className="text-[9px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">Establishing Clinical Handshake</p>
+                  <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter italic">Loading Pharmacies...</h3>
+                  <p className="text-[9px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">Connecting to network...</p>
                </div>
             </div>
          ) : (
@@ -312,11 +312,11 @@ export default function PharmaciesListPage() {
                <motion.div initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} className="fixed inset-y-0 left-0 w-full max-w-lg bg-white z-[101] shadow-4xl p-12 lg:p-16 flex flex-col pt-32">
                   <button onClick={() => setShowFilters(false)} className="absolute top-10 right-10 h-16 w-16 bg-gray-50 rounded-2xl flex items-center justify-center text-[#0a1628] hover:text-red-500 transition-all active:scale-95 shadow-soft"><X size={32}/></button>
                   <div className="flex-1 overflow-y-auto pr-6 no-scrollbar space-y-16">
-                     <div className="space-y-4"><div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Matrix Config</div><h2 className="font-syne font-black text-5xl text-[#0a1628] uppercase italic tracking-tighter leading-none">Filter Nodes</h2></div>
+                     <div className="space-y-4"><div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Filter Settings</div><h2 className="font-syne font-black text-5xl text-[#0a1628] uppercase italic tracking-tighter leading-none">Filter Pharmacies</h2></div>
                      <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Select Area</h4><div className="grid grid-cols-2 gap-4">{areas.map(area => (<button key={area} onClick={() => toggleArea(area)} className={`h-16 px-6 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${selectedAreas.includes(area) ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{area}</button>))}</div></div>
-                     <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Node Operational Status</h4><div className="flex gap-4">{['Open Now', '24 Hours', 'All'].map(opt => (<button key={opt} onClick={() => setOpenStatus(opt)} className={`flex-1 h-16 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${openStatus === opt ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{opt}</button>))}</div></div>
-                     <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Proximity Matrix (Distance)</h4><div className="grid grid-cols-3 gap-4">{['1km', '3km', '5km', 'Any'].map(d => (<button key={d} onClick={() => setMaxDistance(d)} className={`h-14 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${maxDistance === d ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{d}</button>))}</div></div>
-                     <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Active Services Protocols</h4><div className="space-y-4">{servicesList.map(s => (<button key={s} onClick={() => toggleService(s)} className="w-full flex items-center justify-between group"><span className={`font-syne font-black text-xs uppercase italic tracking-widest transition-colors ${selectedServices.includes(s) ? 'text-[#0a1628]' : 'text-gray-400 group-hover:text-[#0a1628]'}`}>{s}</span><div className={`h-8 w-8 rounded-xl border-2 flex items-center justify-center transition-all ${selectedServices.includes(s) ? 'bg-brand-teal border-brand-teal text-[#0a1628] shadow-mint shadow-inner scale-110' : 'border-black/[0.05] text-transparent hover:border-brand-teal/40'}`}><Check size={16}/></div></button>))}</div></div>
+                     <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Opening Status</h4><div className="flex gap-4">{['Open Now', '24 Hours', 'All'].map(opt => (<button key={opt} onClick={() => setOpenStatus(opt)} className={`flex-1 h-16 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${openStatus === opt ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{opt}</button>))}</div></div>
+                     <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Distance</h4><div className="grid grid-cols-3 gap-4">{['1km', '3km', '5km', 'Any'].map(d => (<button key={d} onClick={() => setMaxDistance(d)} className={`h-14 rounded-2xl border font-syne font-black text-[9px] uppercase italic tracking-widest transition-all ${maxDistance === d ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl' : 'bg-gray-50 text-gray-400 border-black/[0.01]'}`}>{d}</button>))}</div></div>
+                     <div className="space-y-8 pt-10 border-t border-black/[0.03]"><h4 className="text-[10px] font-black uppercase text-gray-300 italic tracking-widest">Services</h4><div className="space-y-4">{servicesList.map(s => (<button key={s} onClick={() => toggleService(s)} className="w-full flex items-center justify-between group"><span className={`font-syne font-black text-xs uppercase italic tracking-widest transition-colors ${selectedServices.includes(s) ? 'text-[#0a1628]' : 'text-gray-400 group-hover:text-[#0a1628]'}`}>{s}</span><div className={`h-8 w-8 rounded-xl border-2 flex items-center justify-center transition-all ${selectedServices.includes(s) ? 'bg-brand-teal border-brand-teal text-[#0a1628] shadow-mint shadow-inner scale-110' : 'border-black/[0.05] text-transparent hover:border-brand-teal/40'}`}><Check size={16}/></div></button>))}</div></div>
                   </div>
                   <div className="pt-10 grid grid-cols-2 gap-6 mt-auto"><button onClick={() => { setSelectedAreas([]); setOpenStatus('All'); setSelectedServices([]); }} className="h-20 bg-gray-50 border border-black/[0.02] rounded-[2rem] font-syne font-black text-[10px] uppercase italic tracking-widest text-[#0a1628]">Clear All</button><button onClick={() => setShowFilters(false)} className="h-20 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-widest rounded-[2rem] shadow-4xl">Show Results</button></div>
                </motion.div></>

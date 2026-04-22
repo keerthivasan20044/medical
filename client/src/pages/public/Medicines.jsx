@@ -44,7 +44,7 @@ export default function MedicinesListPage() {
   };
 
   useEffect(() => {
-    console.log('[Medicines] Initializing inventory sync...');
+    console.log('[Medicines] Loading medicines...');
     fetchMedicines();
   }, [searchQuery]);
 
@@ -122,7 +122,7 @@ export default function MedicinesListPage() {
           <h3 className="font-syne font-black text-2xl md:text-3xl uppercase italic tracking-tighter text-[#0a1628]">Advanced Filters</h3>
        </div>
 
-       {/* Category Cluster */}
+       {/* Categories */}
        <div className="space-y-6 pt-8 border-t border-black/[0.03]">
           <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Medical Category</div>
           <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
@@ -246,7 +246,7 @@ export default function MedicinesListPage() {
               </div>
            </div>
 
-           {/* Functional Bar */}
+           {/* Search Bar */}
            <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-stretch pt-12 md:pt-20">
               <div className="flex-1 h-20 md:h-24 bg-white/5 backdrop-blur-3xl rounded-[2rem] md:rounded-[2.5rem] shadow-4xl flex items-center px-6 md:px-10 border border-white/10 focus-within:border-brand-teal transition-all group overflow-hidden">
                  <div className="h-12 w-12 md:h-16 md:w-16 bg-brand-teal rounded-xl md:rounded-2xl flex items-center justify-center text-[#0a1628] shadow-mint group-focus-within:bg-white transition-all duration-700 shrink-0">
@@ -341,7 +341,7 @@ export default function MedicinesListPage() {
                      </div>
                      <div className="space-y-3 text-center">
                         <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase tracking-tighter italic">Loading Medicines...</h3>
-                        <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">Connecting to Pharmacies</p>
+                        <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">Contacting Pharmacies</p>
                      </div>
                   </div>
                ) : (

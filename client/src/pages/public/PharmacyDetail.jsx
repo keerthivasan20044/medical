@@ -29,10 +29,10 @@ export default function PharmacyDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchEnclaveNode();
+    fetchPharmacyDetails();
   }, [id]);
 
-  const fetchEnclaveNode = async () => {
+  const fetchPharmacyDetails = async () => {
     try {
       setLoading(true);
       const [pharmData, medData] = await Promise.all([
@@ -42,7 +42,7 @@ export default function PharmacyDetailPage() {
       setPharmacy(pharmData);
       setPharmacyMedicines(medData.items || []);
     } catch (err) {
-      console.warn('Enclave sync failed, using mock data...', err);
+      console.warn('Failed to load pharmacy details, using mock data...', err);
       const fallbackPharm = mockPharmacies.find(p => p.id === id || p._id === id);
       const fallbackMeds = mockMedicines.filter(m => m.pharmacyId === id || m.pharmacyId === fallbackPharm?.id);
       setPharmacy(fallbackPharm);
@@ -78,7 +78,7 @@ export default function PharmacyDetailPage() {
             <p className="text-white/40 font-dm text-xl italic font-bold leading-relaxed">{t('skuNotFoundDesc', { id })}</p>
             <Link to="/pharmacies">
                <button className="h-20 px-16 bg-brand-teal text-[#0a1628] font-syne font-black text-xs uppercase tracking-[0.3em] shadow-mint hover:scale-[1.05] active:scale-95 transition-all italic flex items-center gap-4 mx-auto">
-                  <ChevronRight size={20} className="rotate-180"/> {t('returnRegistry')}
+                   <ChevronRight size={20} className="rotate-180"/> Return to Pharmacies
                </button>
             </Link>
          </div>
@@ -140,7 +140,7 @@ export default function PharmacyDetailPage() {
          </div>
       </section>
 
-      {/* Sticky Info Hub Bar */}
+      {/* Pharmacy Information Bar */}
       <section className="sticky top-0 z-40 bg-white border-b border-black/[0.03] shadow-soft">
          <div className="max-w-7xl mx-auto px-10 h-32 flex items-center justify-between gap-12 overflow-x-auto whitespace-nowrap no-scrollbar">
             <div className="flex items-center gap-12">
@@ -148,7 +148,7 @@ export default function PharmacyDetailPage() {
                   <div className="h-12 w-12 bg-gray-50 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all duration-500 shadow-inner"><MapPin size={20}/></div>
                   <div className="space-y-0.5">
                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">{pharmacy.area}</div>
-                     <div className="font-dm font-black text-[#0a1628] text-sm italic">{(pharmacy.location || pharmacy.address || 'Karaikal Node').split(',')[0]}</div>
+                     <div className="font-dm font-black text-[#0a1628] text-sm italic">{(pharmacy.location || pharmacy.address || 'Karaikal').split(',')[0]}</div>
                   </div>
                </div>
                
@@ -176,17 +176,17 @@ export default function PharmacyDetailPage() {
                   </button>
                </a>
                <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-mint hover:scale-[1.05] active:scale-95 transition-all flex items-center justify-center gap-3">
-                  <Plus size={18}/> New Payload
+                   <Plus size={18}/> Order Now
                </button>
             </div>
          </div>
       </section>
 
-      {/* Main Terminal Activity Grid */}
+      {/* Pharmacy Details */}
       <div className="max-w-7xl mx-auto px-10 py-20 lg:py-32 grid lg:grid-cols-12 gap-20">
          
          <div className="lg:col-span-8 space-y-16">
-            {/* Navigation Tabs Node */}
+            {/* Navigation Tabs */}
             <div className="flex bg-white border border-black/[0.03] p-3 rounded-[3rem] shadow-soft overflow-x-auto no-scrollbar whitespace-nowrap justify-between">
                {['Medicines', 'About', 'Reviews', 'Offers'].map(tab => (
                  <button
@@ -203,7 +203,7 @@ export default function PharmacyDetailPage() {
                ))}
             </div>
 
-            {/* Tab Panes Panel */}
+            {/* Tabs Content */}
             <motion.div 
                key={activeTab}
                initial={{ opacity: 0, y: 30 }}
@@ -214,7 +214,7 @@ export default function PharmacyDetailPage() {
                  <div className="space-y-16">
                     <div className="flex flex-col md:flex-row gap-8 items-center justify-between border-b border-black/[0.03] pb-12">
                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-6">
-                          <div className="h-2 w-16 bg-brand-teal rounded-full" /> Pharmacy Medicines
+                           <div className="h-2 w-16 bg-brand-teal rounded-full" /> Pharmacy Medicines
                        </h3>
                        <div className="flex gap-4 w-full md:w-auto">
                           <div className="h-16 flex-1 md:w-72 bg-gray-50 border border-black/[0.03] rounded-2xl flex items-center px-6 text-[#0a1628] focus-within:border-brand-teal transition-all group">
@@ -232,7 +232,7 @@ export default function PharmacyDetailPage() {
                            onClick={() => setSelectedCategory(cat)}
                            className={`h-12 px-6 rounded-xl font-syne font-black text-[9px] uppercase tracking-[0.2em] italic transition-all duration-500 border ${selectedCategory === cat ? 'bg-brand-teal text-[#0a1628] border-brand-teal shadow-lg' : 'bg-white text-gray-300 border-black/[0.03] hover:text-[#0a1628] hover:border-[#0a1628]'}`}
                          >
-                            {cat} Node
+                            {cat}
                          </button>
                        ))}
                     </div>
@@ -257,8 +257,8 @@ export default function PharmacyDetailPage() {
                           {[
                              { label: 'Pharmacist/Owner', val: pharmacy.owner, icon: CheckCircle2 },
                              { label: 'License Number', val: pharmacy.license, icon: ShieldCheck },
-                             { label: 'Financial Matrix (GST)', val: pharmacy.gst, icon: Award },
-                             { label: 'Initialization Year', val: pharmacy.established, icon: Calendar }
+                             { label: 'GST Number', val: pharmacy.gst, icon: Award },
+                             { label: 'Established Year', val: pharmacy.established, icon: Calendar }
                           ].map(item => (
                             <div key={item.label} className="bg-white p-10 rounded-[3rem] border border-black/[0.03] flex items-center gap-8 group hover:shadow-4xl transition-all duration-700">
                                <div className="h-14 w-14 bg-gray-50 rounded-2xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all"><item.icon size={28}/></div>
@@ -291,7 +291,7 @@ export default function PharmacyDetailPage() {
                        <div className="h-96 w-full bg-gray-100 rounded-[4rem] overflow-hidden border border-black/[0.03] shadow-4xl relative group">
                           <div className="absolute inset-0 bg-[#0a1628]/5 pointer-events-none z-10" />
                           <iframe 
-                             title="Pharmacy Geo Lock"
+                             title="Pharmacy Location"
                              className="w-full h-full grayscale-[0.8] opacity-60 filter contrast-125 brightness-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000"
                              frameBorder="0" scrolling="no" marginHeight="0" marginWidth="0"
                              src={`https://maps.google.com/maps?q=${pharmacy.gps?.lat || 10.9254},${pharmacy.gps?.lng || 79.8386}&z=16&output=embed`}
@@ -312,7 +312,7 @@ export default function PharmacyDetailPage() {
                        <div className="text-center space-y-4">
                           <div className="font-syne font-black text-9xl text-brand-teal leading-none italic">{pharmacy.rating}</div>
                           <div className="flex justify-center text-brand-teal gap-1"><Star fill="currentColor" size={24}/><Star fill="currentColor" size={24}/><Star fill="currentColor" size={24}/><Star fill="currentColor" size={24}/><Star fill="currentColor" size={12} className="opacity-50"/></div>
-                          <div className="text-xs font-black uppercase italic tracking-widest text-white/40">{pharmacy.reviewsCount} AUDITED SESSIONS</div>
+                          <div className="text-xs font-black uppercase italic tracking-widest text-white/40">{pharmacy.reviewsCount} CUSTOMER REVIEWS</div>
                        </div>
                        <div className="space-y-4">
                           {[5, 4, 3, 2, 1].map(s => (
@@ -340,11 +340,11 @@ export default function PharmacyDetailPage() {
                        </div>
                        
                        <div className="grid gap-8">
-                          {[
-                             { name: 'Suresh Kumar', area: 'Karaikal Town', text: 'Fast synchronization and professional fulfillment. Best clinical node in the town.', rating: 5 },
-                             { name: 'Anitha R.', area: 'Nagore Road', text: 'Prescription verification was swift. Excellent availability of chronic meds.', rating: 4 },
-                             { name: 'Muthuvel S.', area: 'Poompuhar', text: 'Synchronized home delivery protocol is highly reliable.', rating: 5 }
-                          ].map((r, i) => (
+                           {[
+                              { name: 'Suresh Kumar', area: 'Karaikal Town', text: 'Fast service and professional. Best pharmacy in the town.', rating: 5 },
+                              { name: 'Anitha R.', area: 'Nagore Road', text: 'Prescription verification was swift. Excellent availability of chronic meds.', rating: 4 },
+                              { name: 'Muthuvel S.', area: 'Poompuhar', text: 'Home delivery service is highly reliable.', rating: 5 }
+                           ].map((r, i) => (
                              <div key={i} className="bg-white p-12 rounded-[4rem] border border-black/[0.03] space-y-6 hover:shadow-4xl transition-all duration-700 border-l-[12px] border-gray-50 hover:border-brand-teal">
                                 <div className="flex justify-between items-start">
                                    <div className="flex items-center gap-6">
@@ -366,22 +366,22 @@ export default function PharmacyDetailPage() {
 
                {activeTab === 'Offers' && (
                  <div className="grid md:grid-cols-2 gap-12">
-                    {[
-                       { title: 'Vitamin Pulse Promo', text: '20% off on Multivitamin sync protocols this weekend.', color: 'from-brand-teal to-[#1a3a4a]', expiry: '2h 45m' },
-                       { title: 'Logistics Matrix', text: 'Free delivery on all payloads above \u20B9300 today.', color: 'from-[#0a1628] to-[#1a3a4a]', expiry: '5h 12m' }
-                    ].map((offer, i) => (
+                     {[
+                        { title: 'Vitamin Offer', text: '20% off on Multivitamins this weekend.', color: 'from-brand-teal to-[#1a3a4a]', expiry: '2h 45m' },
+                        { title: 'Delivery Offer', text: 'Free delivery on all orders above \u20B9300 today.', color: 'from-[#0a1628] to-[#1a3a4a]', expiry: '5h 12m' }
+                     ].map((offer, i) => (
                        <div key={i} className={`p-12 rounded-[4.5rem] bg-gradient-to-br ${offer.color} text-white space-y-12 relative overflow-hidden group shadow-4xl`}>
                           <div className="absolute top-0 right-0 h-40 w-40 bg-white opacity-0 group-hover:opacity-5 rounded-full blur-[80px] transition-opacity" />
                           <div className="space-y-6 relative z-10">
                              <div className="px-5 py-2 bg-white/10 border border-white/20 rounded-xl w-fit flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] italic">
-                                <Zap className="animate-pulse" size={14} /> ACTIVE_OFFER_NODE
+                                <Zap className="animate-pulse" size={14} /> EXCLUSIVE OFFER
                              </div>
                              <h4 className="font-syne font-black text-3xl uppercase italic tracking-tighter leading-tight">{offer.title}</h4>
                              <p className="text-white/60 font-dm italic text-xl font-bold">{offer.text}</p>
                           </div>
                           <div className="flex items-center justify-between relative z-10 pt-8 border-t border-white/10">
                              <div className="space-y-1">
-                                <div className="text-[10px] font-black uppercase tracking-widest text-white/40">Sync Lock Ends In:</div>
+                                <div className="text-[10px] font-black uppercase tracking-widest text-white/40">Expires In:</div>
                                 <div className="font-syne font-black text-brand-teal text-xl italic">{offer.expiry}</div>
                              </div>
                              <button className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center text-[#0a1628] shadow-4xl hover:bg-brand-teal hover:scale-110 transition-all"><Plus size={24}/></button>
@@ -393,7 +393,7 @@ export default function PharmacyDetailPage() {
             </motion.div>
          </div>
 
-         {/* Sidebar Quick-Response Hub */}
+         {/* Quick Info */}
          <div className="lg:col-span-4 space-y-12">
             <div className="bg-white border border-black/[0.03] rounded-[4.5rem] p-16 space-y-12 shadow-soft hover:shadow-4xl transition-all duration-1000 group">
                <div className="flex items-center gap-6 text-[#0a1628]">
@@ -403,7 +403,7 @@ export default function PharmacyDetailPage() {
                <div className="space-y-8">
                   {[
                      { label: 'Licensed Pharmacy', val: 'Verified 2019' },
-                     { label: 'Safe Cold Storage', val: 'Active Optimal' },
+                     { label: 'Safe Cold Storage', val: 'Active Monitoring' },
                      { label: 'Quality Partner', val: '99.9% Reliable' }
                   ].map(c => (
                      <div key={c.label} className="flex justify-between items-center border-b border-black/[0.03] pb-6 group/row">
@@ -432,7 +432,7 @@ export default function PharmacyDetailPage() {
          </div>
       </div>
 
-      {/* Sticky Mobile Command Bar */}
+      {/* Mobile Actions */}
       <div className="lg:hidden fixed bottom-10 left-10 right-10 z-[100] bg-[#0a1628] h-20 rounded-[2.5rem] shadow-4xl border border-white/10 backdrop-blur-3xl flex items-center justify-between px-6">
          <a href={`tel:${(pharmacy.phone || '').replace(/\s+/g, '')}`} className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal border border-white/5"><Phone size={20}/></a>
          <a href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.gps?.lat || 10.9254},${pharmacy.gps?.lng || 79.8386}`} className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal border border-white/5"><Navigation size={20}/></a>

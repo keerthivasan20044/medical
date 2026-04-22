@@ -47,7 +47,7 @@ export function VaccineShowcase() {
                </h2>
                <div className="hidden lg:flex items-center gap-4 bg-white/50 backdrop-blur-xl px-8 py-4 rounded-[2rem] border border-black/[0.03]">
                   <Activity size={24} className="text-brand-teal animate-pulse" />
-                  <span className="text-[10px] font-black text-[#0a1628] uppercase tracking-[0.3em] italic">{t('telemetryActive')}</span>
+                  <span className="text-[10px] font-black text-[#0a1628] uppercase tracking-[0.3em] italic">System Active</span>
                </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
@@ -73,12 +73,12 @@ export function VaccineShowcase() {
                      <div className="p-10 flex-1 flex flex-col justify-between space-y-6 relative">
                          <div className="space-y-3">
                             <h3 className="font-syne font-black text-[#0a1628] text-xl uppercase italic tracking-tighter truncate">{v.name}</h3>
-                            <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em] italic">{t('dose')}: {v.generic || t('standardProtocol')}</div>
+                            <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em] italic">Dose: {v.generic || 'Standard'}</div>
                          </div>
                          <div className="pt-8 border-t-2 border-dashed border-black/[0.05] flex items-center justify-between gap-6">
                             <div className="grow">
                                <div className="text-[9px] text-gray-300 uppercase tracking-widest font-black italic mb-1">{t('storeLocation')}</div>
-                               <div className="text-xs font-black text-[#0a1628] uppercase italic truncate tracking-tight">{v.brand || t('centralHub')}</div>
+                               <div className="text-xs font-black text-[#0a1628] uppercase italic truncate tracking-tight">{v.brand || 'Central'}</div>
                             </div>
                             <div className="text-right shrink-0">
                                <div className="text-[9px] text-gray-300 uppercase tracking-widest font-black italic mb-1">{t('priceCard')}</div>
@@ -91,7 +91,7 @@ export function VaccineShowcase() {
                ) : (
                  <div className="col-span-full py-20 text-center opacity-30">
                     <Activity size={48} className="mx-auto mb-4" />
-                    <div className="font-syne font-black text-xl uppercase italic tracking-widest">{t('noVaccinesNodes')}</div>
+                    <div className="font-syne font-black text-xl uppercase italic tracking-widest">No vaccines available.</div>
                  </div>
                )}
             </div>
@@ -111,19 +111,19 @@ export function HowItWorks() {
 
    return (
       <section className="py-16 lg:py-40 bg-[#0a1628] relative overflow-hidden">
-         {/* HUD Grid Infrastructure */}
+         {/* Network Overlay */}
          <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(2,195,154,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(2,195,154,0.1) 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[600px] bg-brand-teal/5 rounded-full blur-[250px] opacity-20" />
          
          <div className="max-w-7xl mx-auto px-4 md:px-10 relative z-10">
             <div className="text-center space-y-8 mb-16 md:mb-32">
                <div className="inline-flex items-center gap-4 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-brand-teal font-syne font-black text-[10px] uppercase tracking-[0.4em] italic shadow-2xl">
-                  <Cpu size={14} className="animate-spin-slow" /> {t('seamlessLogistics')}
+                  <Cpu size={14} className="animate-spin-slow" /> Fast Delivery
                </div>
                <h2 className="font-syne font-black text-white text-4xl md:text-8xl leading-none uppercase italic tracking-tighter drop-shadow-4xl">
                   {t('howItWorks')}
                </h2>
-               <p className="text-white/30 font-dm text-lg md:text-2xl italic font-bold max-w-3xl mx-auto">{t('districtArchitecture')}</p>
+               <p className="text-white/30 font-dm text-lg md:text-2xl italic font-bold max-w-3xl mx-auto">Karaikal Healthcare Network</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-12 relative">
@@ -213,7 +213,7 @@ export function DoctorsConsultation() {
                            </div>
                         </div>
              </div>
-                        <button className="w-full py-5 bg-gray-50 text-[#0a1628] group-hover:bg-[#0a1628] group-hover:text-brand-teal rounded-[2rem] font-syne font-black text-xs uppercase italic tracking-[0.2em] transition-all duration-700 shadow-inner group-hover:shadow-4xl">{t('bookConsultation') || 'Book Sync'}</button>
+                        <button className="w-full py-5 bg-gray-50 text-[#0a1628] group-hover:bg-[#0a1628] group-hover:text-brand-teal rounded-[2rem] font-syne font-black text-xs uppercase italic tracking-[0.2em] transition-all duration-700 shadow-inner group-hover:shadow-4xl">Book Now</button>
                      </div>
                   </motion.div>
                ))}
@@ -239,9 +239,9 @@ export function GPSTracking() {
                
                <div className="space-y-8">
                   {[
-                     { label: t('riderTelemetry'), desc: t('riderTelemetry') },
-                     { label: t('pharmacyVerification'), desc: t('pharmacyVerification') },
-                     { label: t('intelligentEta'), desc: t('intelligentEta') }
+                     { label: 'Rider Tracking', desc: 'Real-time rider location' },
+                     { label: 'Pharmacy Verification', desc: 'Verified partners' },
+                     { label: 'Smart Arrival Time', desc: 'Accurate ETA' }
                   ].map((f, i) => (
                      <div key={i} className="flex gap-8 group">
                         <div className="h-10 w-10 border-2 border-brand-teal/20 rounded-2xl flex items-center justify-center text-brand-teal shrink-0 mt-1 duration-700 group-hover:bg-brand-teal group-hover:text-[#0a1628] group-hover:rotate-12 group-hover:scale-110 shadow-inner"><CheckCircle size={20} strokeWidth={3} /></div>
@@ -275,7 +275,7 @@ export function GPSTracking() {
                   {/* Customer Node */}
                   <div className="absolute left-[50px] bottom-[50px] space-y-4 z-20">
                      <div className="bg-[#0a1628] text-white text-[11px] font-black uppercase tracking-[0.3em] px-6 py-3 rounded-2xl shadow-4xl flex items-center gap-4 border-2 border-white/10 italic">
-                        <div className="h-2 w-2 bg-red-500 rounded-full animate-ping" /> MARKET_ROAD_NODE
+                        <div className="h-2 w-2 bg-red-500 rounded-full animate-ping" /> DELIVERY_POINT
                      </div>
                      <div className="h-16 w-16 bg-white rounded-[1.5rem] shadow-4xl flex items-center justify-center text-red-500 border-4 border-red-500/10 scale-110 active:scale-95 transition-transform"><MapPin size={32} fill="currentColor" /></div>
                   </div>
@@ -283,7 +283,7 @@ export function GPSTracking() {
                   {/* Terminal Node */}
                   <div className="absolute right-[80px] top-[60px] space-y-4 z-20">
                      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 10, ease: "linear" }} className="h-16 w-16 bg-[#0a1628] rounded-[1.5rem] shadow-4xl flex items-center justify-center text-brand-teal border-2 border-brand-teal/40"><Store size={32} /></motion.div>
-                     <div className="bg-white/90 backdrop-blur-3xl text-[#0a1628] text-[11px] font-black uppercase tracking-[0.3em] px-6 py-3 rounded-2xl border-2 border-gray-100 shadow-4xl italic">APOLLO_CENTRAL_HUB</div>
+                     <div className="bg-white/90 backdrop-blur-3xl text-[#0a1628] text-[11px] font-black uppercase tracking-[0.3em] px-6 py-3 rounded-2xl border-2 border-gray-100 shadow-4xl italic">PHARMACY_HUB</div>
                   </div>
 
                   {/* Biker Transmission Animation */}
@@ -297,9 +297,9 @@ export function GPSTracking() {
 
                   {/* Telemetry Status HUD */}
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0a1628] p-8 md:p-12 rounded-[3rem] md:rounded-[4rem] border-2 border-white/10 shadow-4xl text-center space-y-4 w-[260px] md:w-80 transform group-hover:scale-110 transition duration-1000 z-30 backdrop-blur-3xl">
-                     <div className="text-[8px] md:text-[10px] font-black text-white/40 uppercase tracking-[0.4em] leading-none italic">Logistics_Telemetry</div>
+                     <div className="text-[8px] md:text-[10px] font-black text-white/40 uppercase tracking-[0.4em] leading-none italic">Delivery Progress</div>
                      <div className="font-syne font-black text-4xl md:text-6xl text-brand-teal tracking-tighter italic">04:12 <span className="text-white/10 text-base md:text-xl font-normal">MIN</span></div>
-                     <div className="text-[8px] md:text-[10px] font-black text-emerald-400 uppercase tracking-widest border-2 border-emerald-500/20 rounded-full py-2 px-6 inline-block italic shadow-inner bg-emerald-500/5 animate-pulse">Rider_Pulse_Locked</div>
+                     <div className="text-[8px] md:text-[10px] font-black text-emerald-400 uppercase tracking-widest border-2 border-emerald-500/20 rounded-full py-2 px-6 inline-block italic shadow-inner bg-emerald-500/5 animate-pulse">Rider Assigned</div>
                   </div>
                </div>
             </div>
@@ -319,7 +319,7 @@ export function PrescriptionUpload() {
             <div className="space-y-12 text-white text-center lg:text-left">
                <div className="space-y-6">
                   <div className="inline-flex items-center gap-4 px-6 py-2 bg-white/10 border border-white/20 rounded-full text-white font-syne font-black text-[10px] uppercase tracking-[0.4em] italic backdrop-blur-3xl shadow-2xl mx-auto lg:mx-0">
-                     <Heart size={14} className="fill-white animate-pulse" /> Secure_Medical_Vault
+                     <Heart size={14} className="fill-white animate-pulse" /> Secure Access
                   </div>
                   <h2 className="font-syne font-black text-4xl md:text-8xl leading-[0.9] text-white uppercase italic tracking-tighter">
                      {t('prescriptionTitle')}
@@ -328,9 +328,9 @@ export function PrescriptionUpload() {
                
                <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-8">
                   {[
-                     { label: t('ocrScanning'), desc: t('ocrScanning') },
-                     { label: t('pharmacistVerification'), desc: t('pharmacistVerification') },
-                     { label: t('oneClickRefills'), desc: t('oneClickRefills') }
+                     { label: 'Smart Scanning', desc: 'AI-powered prescription reading' },
+                     { label: 'Pharmacist Review', desc: 'Manual verification by experts' },
+                     { label: 'One-Click Refills', desc: 'Easy repeat orders' }
                   ].map((f, i) => (
                      <div key={i} className="flex gap-6 group bg-white/5 p-6 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition-all duration-500 backdrop-blur-3xl shadow-inner">
                         <div className="h-10 w-10 bg-white/20 rounded-2xl flex items-center justify-center text-white shrink-0 mt-1 shadow-2xl group-hover:rotate-12 group-hover:scale-110 transition-all duration-500"><CheckCircle size={20} strokeWidth={3} /></div>
@@ -384,7 +384,7 @@ export function Testimonials() {
       { name: 'Ramesh Kumar', area: 'New Colony, Karaikal', text: 'Got my blood pressure medicines delivered in just 22 minutes! The live tracking on the app is super convenient. No more standing in queues in the Karaikal heat.', img: patientImg },
       { name: 'Lalitha Subramaniam', area: 'Market Road, Karaikal', text: 'As a diabetic patient, I need insulin monthly. MediPharm set up auto-reminders and delivers from Central Pharmacy every month. Such a blessing for patients like me.', img: familyImg },
       { name: 'Priya Krishnan', area: 'Bus Stand Area, Karaikal', text: 'My son had fever at midnight. Apollo Pharmacy was open and MediPharm delivered Dolo 650 in 30 minutes. Amazing service for emergency situations!', img: familyImg },
-      { name: 'Murugan Pillai', area: 'Nagore Road, Karaikal', text: 'Finding medicines was always a problem in Nagore. Now Grace Pharmacy delivers to my home via MediPharm architecture. Life changed for our family!', img: patientImg },
+      { name: 'Murugan Pillai', area: 'Nagore Road, Karaikal', text: 'Finding medicines was always a problem in Nagore. Now Grace Pharmacy delivers to my home via MediReach network. Life changed for our family!', img: patientImg },
       { name: 'Anitha Rajan', area: 'Poompuhar Street', text: 'Uploaded my prescription photo from JIPMER and the pharmacist verified it in 8 minutes. Medicines came in 25 mins. Superb service for Karaikal people!', img: patientImg },
       { name: 'Venkatesan M.', area: 'Keezhavur, Karaikal', text: 'The doctors consultation feature is brilliant. Consulted Dr. Priya Raman online and got prescription in 10 minutes. No need to travel to hospital!', img: patientImg }
    ];
@@ -399,7 +399,7 @@ export function Testimonials() {
                <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-8xl leading-none uppercase italic tracking-tighter">
                   {t('voicesOfKaraikal')}
                </h2>
-               <p className="text-gray-400 font-dm text-lg md:text-2xl italic font-bold">{t('satisfiedNodes')}</p>
+               <p className="text-gray-400 font-dm text-lg md:text-2xl italic font-bold">Satisfied Customers</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
@@ -423,7 +423,7 @@ export function Testimonials() {
                         <img src={r.img} alt={r.name} className="h-16 w-16 rounded-[1.5rem] object-cover ring-4 ring-gray-100 p-0.5 group-hover:scale-110 transition duration-700 shadow-xl" />
                         <div>
                            <div className="font-syne font-black text-[#0a1628] text-lg uppercase italic tracking-tighter leading-none mb-1">{r.name}</div>
-                           <div className="text-[10px] text-brand-teal font-black uppercase tracking-widest italic">{r.area} | {t('nodeActive')} ✓</div>
+                           <div className="text-[10px] text-brand-teal font-black uppercase tracking-widest italic">{r.area} | Active ✓</div>
                         </div>
                      </div>
                   </motion.div>
@@ -528,12 +528,12 @@ export function AppDownload() {
             <div className="space-y-12 text-white">
                <div className="space-y-8">
                   <div className="inline-flex items-center gap-4 px-6 py-2 bg-brand-teal text-[#0a1628] rounded-xl font-syne font-black text-[10px] uppercase tracking-[0.4em] italic shadow-4xl rotate-3">
-                     <Terminal size={14} /> DOWNLOAD_CMD_CLI
+                     <Terminal size={14} /> AVAILABLE NOW
                   </div>
                   <h2 className="font-syne font-black text-6xl md:text-8xl leading-none text-white uppercase italic tracking-tighter">
                      Your Health. <br /> Your Pocket.
                   </h2>
-                  <p className="text-white/30 font-dm text-2xl italic font-bold leading-relaxed max-w-xl">Download the MediPharm app for faster checkout, live order telemetry, and emergency medical signals.</p>
+                  <p className="text-white/30 font-dm text-2xl italic font-bold leading-relaxed max-w-xl">Download the MediReach app for faster checkout, live order tracking, and emergency health alerts.</p>
                </div>
                
                <div className="flex flex-wrap gap-8">
@@ -589,7 +589,7 @@ export function AppDownload() {
                         </div>
 
                         <div className="absolute bottom-10 left-8 right-8 h-24 bg-brand-teal rounded-[2rem] shadow-4xl flex items-center justify-center text-[#0a1628]">
-                           <div className="font-syne font-black text-xl uppercase italic tracking-widest">PROCEED_SYNC</div>
+                           <div className="font-syne font-black text-xl uppercase italic tracking-widest">PROCEED</div>
                         </div>
                      </div>
                   </div>
@@ -603,27 +603,21 @@ export function AppDownload() {
 export function EmergencyBanner() {
    const { t } = useLanguage();
    return (
-      <section className="bg-red-600 py-3 border-b-4 border-red-700 shadow-[0_20px_40px_rgba(220,38,38,0.4)] relative z-[100] overflow-hidden">
-         {/* Moving Hazard Pulse */}
-         <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(0,0,0,0.1)_25%,rgba(0,0,0,0.1)_50%,transparent_50%,transparent_75%,rgba(0,0,0,0.1)_75%,rgba(0,0,0,0.1))] bg-[size:40px_40px] animate-marquee pointer-events-none" />
-         
-         <div className="max-w-7xl mx-auto px-4 md:px-10 flex flex-col lg:flex-row items-center justify-center gap-6 text-center relative z-10">
-            <div className="flex items-center gap-4">
-               <div className="relative">
-                  <div className="h-4 w-4 bg-white rounded-full animate-ping" />
-                  <div className="absolute inset-0 h-4 w-4 bg-white rounded-full shadow-[0_0_20px_white]" />
-               </div>
-               <span className="font-syne font-black text-white text-sm md:text-lg uppercase tracking-[0.3em] whitespace-nowrap leading-none flex items-center gap-3 italic">
-                  <AlertCircle size={20} className="text-white fill-white/20 animate-pulse" /> {t('emergencyProtocolSync')}
-               </span>
+      <section className="bg-red-600 px-4 py-6 w-full relative z-[100]">
+         <div className="max-w-7xl mx-auto">
+            <div className="flex items-center gap-2 mb-3">
+               <AlertCircle className="text-white" size={20} />
+               <h3 className="text-white font-black text-lg uppercase tracking-tight">Emergency</h3>
             </div>
-            <div className="hidden lg:block h-6 w-[2px] bg-white/20 mx-6" />
-            <div className="text-white font-dm font-black text-sm md:text-lg italic tracking-[0.05em] uppercase">
-               Call 108 (District_Ambulance) | Govt_Karaikal: 04368-222288
-            </div>
-            <button className="lg:ml-auto px-10 py-3 bg-[#0a1628] text-white font-syne font-black text-xs md:text-sm rounded-xl hover:bg-white hover:text-red-700 transition shadow-4xl flex items-center gap-3 outline-none uppercase tracking-widest italic group active:scale-95">
-               <Phone size={18} className="group-hover:animate-bounce" /> {t('callNow')}
-            </button>
+            <p className="text-white text-sm mb-1">🚑 Ambulance: <strong>108</strong></p>
+            <p className="text-white text-sm mb-4">
+               Govt Hospital Karaikal: <strong>04368-222288</strong>
+            </p>
+            <a href="tel:108" className="block w-full">
+               <button className="w-full bg-white text-red-600 font-black py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform">
+                  <Phone size={18} /> Call 108 Now
+               </button>
+            </a>
          </div>
       </section>
    );
@@ -642,7 +636,7 @@ export function DistrictBackdrop() {
                <div className="h-[400px] w-full md:w-[300px] rounded-[3rem] overflow-hidden border-4 border-white animate-float shadow-4xl"><img src="/assets/hospital_pro.png" className="h-full w-full object-cover" alt="Temple" /></div>
                <div className="h-[400px] w-full md:w-[300px] rounded-[3rem] overflow-hidden border-4 border-white animate-float-delayed shadow-4xl"><img src="/assets/hospital_pro.png" className="h-full w-full object-cover" alt="Beach" /></div>
             </div>
-            <p className="text-white/40 font-dm text-2xl italic font-bold max-w-4xl mx-auto uppercase tracking-widest">{t('districtArchitecture')}</p>
+            <p className="text-white/40 font-dm text-2xl italic font-bold max-w-4xl mx-auto uppercase tracking-widest">Karaikal Healthcare Network</p>
          </div>
       </section>
    );

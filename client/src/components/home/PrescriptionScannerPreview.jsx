@@ -13,10 +13,10 @@ export default function PrescriptionScannerPreview() {
   const [step, setStep] = useState(0);
 
   const STEPS = [
-    { title: 'Optical_Sync_Start', icon: FileText, color: 'text-brand-teal' },
-    { title: 'Neural_Layer_Scan', icon: Search, color: 'text-blue-500' },
-    { title: 'Node_Auth_Link', icon: ShieldCheck, color: 'text-emerald-500' },
-    { title: 'Enclave_Inventory_Match', icon: Zap, color: 'text-amber-500' }
+    { title: 'Starting Scan', icon: FileText, color: 'text-brand-teal' },
+    { title: 'Analyzing Text', icon: Search, color: 'text-blue-500' },
+    { title: 'Authenticating', icon: ShieldCheck, color: 'text-emerald-500' },
+    { title: 'Checking Stock', icon: Zap, color: 'text-amber-500' }
   ];
 
   useEffect(() => {
@@ -42,21 +42,21 @@ export default function PrescriptionScannerPreview() {
           <div className="space-y-12 md:space-y-16">
             <div className="space-y-6 md:space-y-8 text-center lg:text-left">
               <div className="inline-flex items-center gap-4 px-6 py-2 bg-[#0a1628]/5 border border-black/5 rounded-full text-[#0a1628] font-syne font-black text-[10px] uppercase tracking-[0.4em] italic shadow-inner mx-auto lg:mx-0">
-                <Terminal size={14} className="text-brand-teal" /> Neural_Vision_v2.0
+                <Terminal size={14} className="text-brand-teal" /> Smart Vision
               </div>
               <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-6xl lg:text-8xl leading-[0.9] uppercase italic tracking-tighter mx-auto lg:mx-0">
-                Smart Node <br /><span className="text-brand-teal">OCR Scanner.</span>
+                Smart Prescription <br /><span className="text-brand-teal">Scanner.</span>
               </h2>
               <p className="text-gray-400 font-dm text-lg md:text-2xl italic font-bold max-w-xl leading-relaxed mx-auto lg:mx-0">
-                Upload any handwritten prescription. Our district-wide neural network identifies medicine nodes and synchronizes with local terminal stocks instantly.
+                Upload any handwritten prescription. Our district-wide network identifies medicines and synchronizes with local pharmacy stocks instantly.
               </p>
             </div>
 
             <div className="space-y-8">
                {[
-                 { label: 'Neural Accuracy', val: '98.9% Pulse', icon: Activity },
-                 { label: 'Latency', icon: Zap, val: '0.4s Sync' },
-                 { label: 'Protocol Match', icon: ShieldCheck, val: '128 District Nodes' }
+                 { label: 'Scanning Accuracy', val: '98.9% Accurate', icon: Activity },
+                 { label: 'Speed', icon: Zap, val: '0.4s Fast' },
+                 { label: 'Local Reach', icon: ShieldCheck, val: '128 Pharmacies' }
                ].map((f, i) => (
                  <div key={i} className="flex items-center gap-8 group justify-center lg:justify-start">
                     <div className="h-14 w-14 bg-white rounded-2xl flex items-center justify-center text-[#0a1628] shadow-soft group-hover:bg-brand-teal transition-all duration-500">
@@ -74,7 +74,7 @@ export default function PrescriptionScannerPreview() {
               onClick={() => setScanning(true)}
               className="h-20 px-12 bg-[#0a1628] text-white rounded-[2rem] font-syne font-black text-xs uppercase tracking-[0.3em] italic flex items-center gap-6 hover:bg-brand-teal transition-all shadow-4xl group mx-auto lg:mx-0"
             >
-              Initialize Scanner Protocol <Upload size={20} className="group-hover:-translate-y-2 transition-transform" />
+              Start Scanning <Upload size={20} className="group-hover:-translate-y-2 transition-transform" />
             </button>
           </div>
 
@@ -105,8 +105,8 @@ export default function PrescriptionScannerPreview() {
                            </motion.div>
                         </div>
                         <div className="space-y-4">
-                           <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic">Scan Enclave Nodes</h3>
-                           <p className="text-gray-300 text-sm font-bold font-dm uppercase tracking-widest">Awaiting Pulse Upload...</p>
+                           <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic">Scan Prescription</h3>
+                           <p className="text-gray-300 text-sm font-bold font-dm uppercase tracking-widest">Ready for Upload...</p>
                         </div>
                      </motion.div>
                    ) : (
@@ -120,7 +120,7 @@ export default function PrescriptionScannerPreview() {
                         <div className="relative h-64 w-full bg-gray-50 rounded-3xl overflow-hidden border border-gray-100 shadow-inner group">
                            <img src={prescriptionImg} className="h-full w-full object-cover opacity-40 grayscale group-hover:grayscale-0 transition duration-1000" />
                            
-                           {/* Neural Scan Line */}
+                           {/* Scan Line */}
                            <motion.div 
                               animate={{ top: ['0%', '100%'] }}
                               transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
@@ -129,10 +129,10 @@ export default function PrescriptionScannerPreview() {
 
                            {/* Detected Blocks */}
                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.6 }} className="absolute top-[20%] left-[10%] h-12 w-40 bg-brand-teal/20 backdrop-blur-sm border border-brand-teal/30 flex items-center px-4">
-                              <span className="text-[8px] font-black text-brand-teal uppercase tracking-widest">PARACETAMOL_NODE</span>
+                              <span className="text-[8px] font-black text-brand-teal uppercase tracking-widest">PARACETAMOL FOUND</span>
                            </motion.div>
                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.6 }} transition={{delay: 0.5}} className="absolute top-[50%] right-[10%] h-10 w-32 bg-brand-teal/20 backdrop-blur-sm border border-brand-teal/30 flex items-center px-4">
-                              <span className="text-[8px] font-black text-brand-teal uppercase tracking-widest">DOLO_SYNC</span>
+                              <span className="text-[8px] font-black text-brand-teal uppercase tracking-widest">DOLO FOUND</span>
                            </motion.div>
                         </div>
 
@@ -158,7 +158,7 @@ export default function PrescriptionScannerPreview() {
                    )}
                 </AnimatePresence>
 
-                {/* Simulated Results Enclave */}
+                {/* Results Panel */}
                 {scanning && step === 3 && (
                    <motion.div 
                       initial={{ opacity: 0, y: 20 }}
@@ -169,7 +169,7 @@ export default function PrescriptionScannerPreview() {
                          <div className="h-10 w-10 bg-white rounded-xl flex items-center justify-center shadow-sm"><Zap size={20}/></div>
                          <div className="text-left">
                             <div className="text-[10px] font-black uppercase tracking-widest leading-none">Status</div>
-                            <div className="text-sm font-black font-syne uppercase italic">Nodes Identified & Synced</div>
+                            <div className="text-sm font-black font-syne uppercase italic">Medicines Found & Verified</div>
                          </div>
                       </div>
                       <ExternalLink size={18} className="text-emerald-300" />
@@ -177,8 +177,8 @@ export default function PrescriptionScannerPreview() {
                 )}
 
                 {/* HUD Corner Data */}
-                <div className="absolute top-8 left-8 text-[8px] font-black text-gray-200 uppercase tracking-[0.4em] italic leading-none">Neural_Vision_0.2.2</div>
-                <div className="absolute top-8 right-8 text-[8px] font-black text-gray-200 uppercase tracking-[0.4em] italic leading-none">Karaikal_Enclave</div>
+                <div className="absolute top-8 left-8 text-[8px] font-black text-gray-200 uppercase tracking-[0.4em] italic leading-none">Smart Vision</div>
+                <div className="absolute top-8 right-8 text-[8px] font-black text-gray-200 uppercase tracking-[0.4em] italic leading-none">Karaikal Region</div>
              </div>
 
              {/* Floor Decoration */}

@@ -32,7 +32,10 @@ export default function Landing() {
   });
 
   return (
-    <div className="relative overflow-x-hidden flex flex-col min-h-screen">
+    <div 
+      className="w-full min-h-screen overflow-x-hidden pb-36"
+      style={{ maxWidth: '100vw' }}
+    >
       <SEO 
         title="Home" 
         description="Karaikal's first unified healthcare platform. Order medicines, consult doctors, and track deliveries in real-time."
@@ -79,17 +82,20 @@ export default function Landing() {
       <BlogPreview />
       <LogoStrip />
 
-      {/* Back to Top */}
-      <motion.button
-         initial={{ opacity: 0 }}
-         whileInView={{ opacity: 1 }}
-         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-         className="fixed bottom-48 right-6 md:bottom-8 md:right-8 h-14 w-14 bg-[#0a1628] text-white rounded-2xl shadow-2xl flex items-center justify-center hover:bg-[#028090] transition-all z-50 focus:outline-none"
-      >
-         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18 15l-6-6-6 6" />
-         </svg>
-      </motion.button>
+      {/* Ticker - fixed just above bottom nav */}
+      <div className="fixed bottom-[64px] left-0 right-0 z-30 bg-[#080c18] border-t border-teal-900/40 py-1.5 px-4 flex md:hidden items-center gap-3">
+        <div className="flex items-center gap-1.5 flex-shrink-0">
+          <span className="w-1.5 h-1.5 bg-teal-400 rounded-full animate-pulse" />
+          <span className="text-teal-400 text-[10px] font-black tracking-wider">LIVE</span>
+        </div>
+        <div className="overflow-x-auto flex gap-5 no-scrollbar">
+          <span className="text-gray-400 text-[10px] whitespace-nowrap">Platform Updated</span>
+          <span className="text-gray-500 text-[10px]">•</span>
+          <span className="text-gray-400 text-[10px] whitespace-nowrap">Dispatch Active</span>
+          <span className="text-gray-500 text-[10px]">•</span>
+          <span className="text-gray-400 text-[10px] whitespace-nowrap">12 Pharmacies Online</span>
+        </div>
+      </div>
     </div>
   );
 }

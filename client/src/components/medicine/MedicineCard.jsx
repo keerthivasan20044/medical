@@ -22,7 +22,7 @@ export default function MedicineCard({ item, onAdd, isAdded, layout = 'grid' }) 
     >
       <div className={`relative overflow-hidden shrink-0 bg-gray-50 ${layout === 'list' ? 'md:w-64 h-full' : 'h-44 w-full'}`}>
         <img 
-          src={normalizeUrl(images?.[0]?.url || images?.[0] || '/assets/medicine_default.png')} 
+          src={normalizeUrl(images?.[0]?.url || images?.[0] || '/assets/medicine_pro.png')} 
           alt={name} 
           className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" 
         />

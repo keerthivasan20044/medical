@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '../../components/common/Core';
 
 /**
- * Node Not Found Architecture.
+ * Page Not Found.
  */
 export function NotFound() {
   return (
@@ -24,27 +24,27 @@ export function NotFound() {
           </div>
           
           <div className="space-y-6">
-             <h1 className="font-syne font-black text-6xl text-white tracking-tighter leading-tight drop-shadow-2xl">Oops! Node Not <br /><span className="text-[#02C39A]">Found.</span></h1>
-             <p className="text-white/40 font-dm text-2xl italic leading-relaxed max-w-lg mx-auto selection:bg-[#02C39A] selection:text-[#0a1628]">The page you're searching for has gone on a medicine run in Karaikal district enclave. 🚴</p>
+             <h1 className="font-syne font-black text-6xl text-white tracking-tighter leading-tight drop-shadow-2xl">Oops! Page Not <br /><span className="text-[#02C39A]">Found.</span></h1>
+             <p className="text-white/40 font-dm text-2xl italic leading-relaxed max-w-lg mx-auto selection:bg-[#02C39A] selection:text-[#0a1628]">The page you're searching for has gone on a medicine run in Karaikal. 🚴</p>
           </div>
 
           <div className="flex flex-col md:flex-row gap-6 justify-center pt-8">
              <Link to="/" className="flex-1">
-                <Button className="w-full" icon={<Home size={18} />}>Return to Command Center</Button>
+                <Button className="w-full" icon={<Home size={18} />}>Return to Home</Button>
              </Link>
              <Link to="/medicines" className="flex-1">
-                <Button variant="outline" className="w-full text-white border-white/20 hover:bg-white/5" icon={<Pill size={18} />}>Browse Enclave Store</Button>
+                <Button variant="outline" className="w-full text-white border-white/20 hover:bg-white/5" icon={<Pill size={18} />}>Browse Medicines</Button>
              </Link>
           </div>
 
           <div className="pt-16 border-t border-white/5 space-y-8">
              <div className="max-w-md mx-auto p-6 bg-white/5 rounded-2xl border border-white/5 italic text-[10px] text-[#02C39A]">
-                "Tip: Drinking 8 glasses of Karaikal water daily improves metabolic architecture sync."
+                "Tip: Drinking 8 glasses of water daily improves your overall health."
              </div>
-             <p className="text-[10px] text-white/20 font-black uppercase tracking-[0.4em] italic mb-6">Healing Architecture Protocol Enclave</p>
+             <p className="text-[10px] text-white/20 font-black uppercase tracking-[0.4em] italic mb-6">Your Trusted Healthcare Partner</p>
              <div className="flex items-center justify-center gap-12 text-white/10 uppercase font-black text-[8px] tracking-widest">
-                <span className="flex items-center gap-2 hover:text-[#02C39A] transition cursor-help"><HelpCircle size={12}/> Emergency Support Node</span>
-                <span className="flex items-center gap-2 hover:text-[#02C39A] transition cursor-help"><ShieldCheck size={12}/> Security Protocol Verified</span>
+                <span className="flex items-center gap-2 hover:text-[#02C39A] transition cursor-help"><HelpCircle size={12}/> Emergency Support</span>
+                <span className="flex items-center gap-2 hover:text-[#02C39A] transition cursor-help"><ShieldCheck size={12}/> Secure Platform</span>
              </div>
           </div>
        </div>
@@ -53,7 +53,7 @@ export function NotFound() {
 }
 
 /**
- * Connection Sync Error Node.
+ * Offline Error.
  */
 export function Offline() {
   return (
@@ -70,14 +70,14 @@ export function Offline() {
           </div>
 
           <div className="space-y-6">
-             <h2 className="font-syne font-black text-5xl text-[#0a1628] tracking-tighter leading-tight">Sync Error: You are <br /><span className="text-red-500">Offline.</span></h2>
-             <p className="text-gray-400 font-dm text-lg italic tracking-wide leading-relaxed">Terminal disconnect from the Karaikal district enclave. Re-establish internet protocol to order medicines.</p>
+             <h2 className="font-syne font-black text-5xl text-[#0a1628] tracking-tighter leading-tight">You are <br /><span className="text-red-500">Offline.</span></h2>
+             <p className="text-gray-400 font-dm text-lg italic tracking-wide leading-relaxed">You are disconnected from the network. Reconnect to the internet to order medicines.</p>
           </div>
 
           <div className="grid gap-6">
-             <Button className="w-full bg-[#0a1628] hover:bg-black transition-all" onClick={() => window.location.reload()}>Retry Connection Sync &rarr;</Button>
+             <Button className="w-full bg-[#0a1628] hover:bg-black transition-all" onClick={() => window.location.reload()}>Retry Connection &rarr;</Button>
              <div className="p-8 bg-gray-50 rounded-3xl space-y-4 border border-gray-100 group hover:border-[#028090] transition duration-500">
-                <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest text-center">Emergency Protocol</div>
+                <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest text-center">Emergency Contact</div>
                 <div className="font-syne font-black text-[#0a1628] text-sm uppercase tracking-tighter">Govt General Hospital Karaikal</div>
                 <div className="text-xl font-dm italic text-[#028090] flex items-center justify-center gap-4 group-hover:scale-105 transition"><Phone size={20}/> 04368-222288</div>
              </div>
@@ -88,7 +88,7 @@ export function Offline() {
 }
 
 /**
- * Enclave Maintenance Protocol Node.
+ * Maintenance Mode.
  */
 export function Maintenance() {
   return (
@@ -106,23 +106,23 @@ export function Maintenance() {
           </div>
 
           <div className="space-y-8">
-             <div className="text-[10px] text-[#028090] font-black uppercase tracking-[0.4em] italic leading-none flex items-center justify-center gap-6"><div className="h-0.5 w-12 bg-current" /> Enclave Maintenance Protocol <div className="h-0.5 w-12 bg-current" /></div>
-             <h2 className="font-syne font-black text-6xl text-[#0a1628] tracking-tighter leading-tight select-none">Undergoing Architecture <br /><span className="text-[#028090]">Synchronization.</span></h2>
-             <p className="text-gray-400 font-dm text-2xl italic leading-relaxed opacity-80 shrink-0">We will be back in 2 hours. Our nodes are currently upgrading for Karaikal district wellness.</p>
+             <div className="text-[10px] text-[#028090] font-black uppercase tracking-[0.4em] italic leading-none flex items-center justify-center gap-6"><div className="h-0.5 w-12 bg-current" /> Scheduled Maintenance <div className="h-0.5 w-12 bg-current" /></div>
+             <h2 className="font-syne font-black text-6xl text-[#0a1628] tracking-tighter leading-tight select-none">Undergoing System <br /><span className="text-[#028090]">Maintenance.</span></h2>
+             <p className="text-gray-400 font-dm text-2xl italic leading-relaxed opacity-80 shrink-0">We will be back in 2 hours. Our systems are currently upgrading for your better experience.</p>
           </div>
 
           <div className="p-12 bg-gray-50 rounded-[3.5rem] border border-gray-100 flex flex-col md:flex-row items-center gap-10 group hover:bg-white transition duration-700 hover:shadow-2xl">
               <div className="h-16 w-16 bg-[#0a1628] text-[#02C39A] rounded-2xl flex items-center justify-center shadow-xl shrink-0"><Phone size={32}/></div>
               <div className="flex-1 space-y-2 text-left">
-                 <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest leading-none">Emergency Architecture Access</div>
-                 <div className="font-syne font-black text-xl text-[#0a1628]">Apollo Pharmacy Karaikal Protocol</div>
+                 <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest leading-none">Emergency Contact</div>
+                 <div className="font-syne font-black text-xl text-[#0a1628]">Apollo Pharmacy Karaikal</div>
                  <div className="text-2xl font-dm italic text-[#028090] font-bold">+91 94432 11111</div>
               </div>
           </div>
 
           <div className="flex items-center justify-center gap-12 pt-12">
               <span className="flex items-center gap-3 text-[10px] font-black uppercase text-gray-300 tracking-[0.2em] group cursor-pointer hover:text-[#02C39A] transition duration-500"><Heart size={14} className="group-hover:animate-shake"/> Healthy Community</span>
-              <span className="flex items-center gap-3 text-[10px] font-black uppercase text-gray-300 tracking-[0.2em] group cursor-pointer hover:text-[#02C39A] transition duration-500"><ShieldCheck size={14} className="group-hover:animate-float"/> Verified Sync</span>
+              <span className="flex items-center gap-3 text-[10px] font-black uppercase text-gray-300 tracking-[0.2em] group cursor-pointer hover:text-[#02C39A] transition duration-500"><ShieldCheck size={14} className="group-hover:animate-float"/> Verified Partner</span>
           </div>
        </div>
     </div>
@@ -130,7 +130,7 @@ export function Maintenance() {
 }
 
 /**
- * District System Error Node (500).
+ * System Error (500).
  */
 export function ServerError() {
   return (
@@ -147,17 +147,17 @@ export function ServerError() {
           </div>
           
           <div className="space-y-6">
-             <h1 className="font-syne font-black text-6xl text-white tracking-tighter leading-tight drop-shadow-2xl">Terminal System <br /><span className="text-red-500">Error.</span></h1>
-             <p className="text-white/40 font-dm text-2xl italic leading-relaxed max-w-lg mx-auto">The Karaikal District server has encountered a critical architectural failure. Emergency protocols active.</p>
+             <h1 className="font-syne font-black text-6xl text-white tracking-tighter leading-tight drop-shadow-2xl">System <br /><span className="text-red-500">Error.</span></h1>
+             <p className="text-white/40 font-dm text-2xl italic leading-relaxed max-w-lg mx-auto">The Karaikal District server has encountered a critical error. Our team has been notified.</p>
           </div>
 
           <div className="flex flex-col md:flex-row gap-6 justify-center pt-8">
              <button onClick={() => window.location.reload()} className="h-20 px-12 bg-red-600 text-white font-syne font-black text-sm rounded-2xl hover:bg-red-700 transition shadow-4xl flex-1 flex items-center justify-center gap-4 uppercase italic tracking-widest active:scale-95">
-               <RefreshCw size={24} /> Retry System Sync
+               <RefreshCw size={24} /> Retry
              </button>
              <Link to="/contact" className="flex-1">
                 <button className="h-20 w-full bg-white/5 border border-white/10 text-white font-syne font-black text-sm rounded-2xl hover:bg-white/10 transition flex items-center justify-center gap-4 uppercase italic tracking-widest active:scale-95 text-center px-12">
-                   <Headphones size={24} /> Contact Command
+                   <Headphones size={24} /> Contact Support
                 </button>
              </Link>
           </div>

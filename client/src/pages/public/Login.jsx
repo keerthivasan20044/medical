@@ -133,8 +133,8 @@ export default function Login() {
 
             <div className="pt-12 border-t border-white/5 flex items-center justify-between">
                <div className="space-y-1">
-                  <div className="text-[10px] text-white/20 font-black uppercase tracking-widest">{t('nodeEnclave')}</div>
-                  <div className="text-xs font-dm font-bold text-white/40 italic flex items-center gap-3"> <ShieldCheck size={14} className="text-emerald-500" /> {t('authAccessOnly')}</div>
+                  <div className="text-[10px] text-white/20 font-black uppercase tracking-widest">SECURE ACCESS</div>
+                  <div className="text-xs font-dm font-bold text-white/40 italic flex items-center gap-3"> <ShieldCheck size={14} className="text-emerald-500" /> Authorized Access Only</div>
                </div>
                <button className="h-12 w-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-white/40 hover:text-white transition group">
                   <Globe size={20} className="group-hover:rotate-12 transition" />
@@ -178,7 +178,7 @@ export default function Login() {
                      className="space-y-6"
                    >
                       <Input 
-                        label={t('emailEncl')} 
+                        label="Email Address" 
                         icon={Mail} 
                         placeholder="user@example.com" 
                         value={email}
@@ -186,7 +186,7 @@ export default function Login() {
                         required
                       />
                       <Input 
-                        label={t('secretProt')} 
+                        label="Password" 
                         icon={Lock} 
                         type="password" 
                         placeholder="••••••••" 
@@ -205,7 +205,7 @@ export default function Login() {
                    >
                       {otpStep === 'request' ? (
                         <Input 
-                          label={t('districtMobile')} 
+                          label="Mobile Number" 
                           icon={Smartphone} 
                           placeholder="94432 XXXXX" 
                           value={phone}
@@ -216,9 +216,9 @@ export default function Login() {
                       ) : (
                         <div className="space-y-4">
                           <Input 
-                            label={t('accessCodeOtp')} 
+                            label="Access Code" 
                             icon={ShieldCheck} 
-                            placeholder={t('sixDigitCode')} 
+                            placeholder="Enter 6-digit code" 
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}
                             maxLength={6}
@@ -248,10 +248,10 @@ export default function Login() {
                          />
                          <div className={`h-2 w-2 bg-[#02C39A] rounded-full transition ${rememberMe ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`} />
                       </div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#0a1628]">{t('rememberNode')}</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-[#0a1628]">Remember Me</span>
                    </label>
                   {method === 'email' && (
-                    <Link to="/forgot-password" title="Forgot Password" className="text-[10px] font-black uppercase tracking-widest text-[#028090] hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">{t('forgotProt')}</Link>
+                    <Link to="/forgot-password" title="Forgot Password" className="text-[10px] font-black uppercase tracking-widest text-[#028090] hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">Forgot Password?</Link>
                   )}
                </div>
 
@@ -260,13 +260,13 @@ export default function Login() {
                  className="w-full py-8 text-xl" 
                  icon={method === 'email' ? <LogIn size={20}/> : (otpStep === 'request' ? <ArrowRight size={20}/> : <ShieldCheck size={20}/>)}
                >
-                 {method === 'email' ? t('login') : (otpStep === 'request' ? t('requestCode') : t('verifySync'))}
+                 {method === 'email' ? t('login') : (otpStep === 'request' ? t('requestCode') : 'Verify')}
                </Button>
             </form>
 
             <div className="relative">
                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-50" /></div>
-               <div className="relative flex justify-center"><span className="bg-white px-8 text-[10px] font-black text-gray-200 uppercase tracking-widest">{t('authStream')}</span></div>
+               <div className="relative flex justify-center"><span className="bg-white px-8 text-[10px] font-black text-gray-200 uppercase tracking-widest">OR LOGIN WITH</span></div>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
@@ -276,7 +276,7 @@ export default function Login() {
                 className={`flex items-center justify-center gap-4 py-6 rounded-3xl border transition duration-500 group shadow-sm ${method === 'email' ? 'bg-[#0a1628] border-transparent text-white' : 'bg-gray-50 border-transparent hover:border-gray-100 hover:bg-white text-gray-400'}`}
                >
                   <div className="h-8 w-8 bg-white rounded-lg flex items-center justify-center shadow-sm"><Mail size={18} className="text-blue-500"/></div>
-                  <span className="font-syne font-black text-[10px] uppercase tracking-widest">{t('enclMail')}</span>
+                  <span className="font-syne font-black text-[10px] uppercase tracking-widest">Email</span>
                </button>
                <button 
                 type="button"
@@ -284,15 +284,15 @@ export default function Login() {
                 className={`flex items-center justify-center gap-4 py-6 rounded-3xl border transition duration-500 group shadow-sm ${method === 'phone' ? 'bg-[#0a1628] border-transparent text-white' : 'bg-gray-50 border-transparent hover:border-gray-100 hover:bg-white text-gray-400'}`}
                >
                   <div className="h-8 w-8 bg-white rounded-lg flex items-center justify-center shadow-sm"><Smartphone size={18} className="text-[#028090]"/></div>
-                  <span className="font-syne font-black text-[10px] uppercase tracking-widest">{t('phoneOtp')}</span>
+                  <span className="font-syne font-black text-[10px] uppercase tracking-widest">Phone OTP</span>
                </button>
             </div>
 
                <div className="text-center px-4 w-full">
                   <p className="text-[10px] font-black uppercase tracking-widest text-gray-300 flex flex-wrap items-center justify-center gap-2">
-                     <span>{t('newNode')}</span>
+                     <span>New here?</span>
                      <Link to="/register" className="text-[#028090] font-bold hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">
-                        {t('initReg')} &rarr;
+                        Create Account &rarr;
                      </Link>
                   </p>
                </div>
@@ -300,7 +300,7 @@ export default function Login() {
             <div className="p-8 bg-gray-50/50 rounded-[2.5rem] border border-gray-100 space-y-4">
                <div className="text-[9px] text-gray-300 font-black uppercase tracking-[0.2em] flex items-center gap-4"> 
                   <div className="h-1 w-6 bg-brand-teal rounded-full" /> 
-                  {t('demoHub')}
+                  Demo Accounts
                </div>
                <div className="grid grid-cols-2 gap-4">
                   {[

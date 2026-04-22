@@ -19,7 +19,7 @@ const NAV_ITEMS = [
   { id: 'appointments', labelKey: 'appointments', icon: Calendar, roles: ['customer'] },
   { id: 'prescriptions', labelKey: 'myPrescriptions', icon: FileText, roles: ['customer'] },
   { id: 'wallet', labelKey: 'myWallet', icon: Wallet, roles: ['customer', 'delivery'] },
-  { id: 'security', labelKey: 'enclavePrivacy', icon: Shield, roles: ['customer', 'pharmacist', 'doctor', 'delivery', 'admin'] },
+  { id: 'security', labelKey: 'privacy', icon: Shield, roles: ['customer', 'pharmacist', 'doctor', 'delivery', 'admin'] },
 ];
 
 export default function Profile() {
@@ -54,7 +54,7 @@ export default function Profile() {
         <div className="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-10">
            <div className="space-y-6">
               <div className="px-6 py-2.5 bg-[#0a1628] rounded-2xl w-fit flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic">
-                 <ShieldCheck size={16} className="text-brand-teal" /> {t('identitySynced') || 'IDENTITY SYNCED'}
+                 <ShieldCheck size={16} className="text-brand-teal" /> {t('identityVerified') || 'ACCOUNT VERIFIED'}
               </div>
               <h1 className="font-syne font-black text-6xl md:text-8xl lg:text-9xl text-[#0a1628] leading-[0.85] tracking-tighter uppercase italic">
                  {t('my')} <span className="text-brand-teal">{t('profile').split(' ')[0]}</span>
@@ -69,13 +69,13 @@ export default function Profile() {
                 </div>
               ) : (
                 <div className="px-6 border-r border-gray-100 flex flex-col">
-                   <span className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">PERFORMANCE_SYNC</span>
+                   <span className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">PERFORMANCE</span>
                    <span className="font-syne font-black text-2xl text-[#0a1628] italic">99<span className="text-brand-teal">%</span></span>
                 </div>
               )}
               <div className="px-6 flex flex-col">
-                 <span className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">{t('meshId') || 'NODE_ID'}</span>
-                 <span className="font-syne font-black text-lg text-[#0a1628] italic">NODE-{user?._id?.slice(-6).toUpperCase() || 'SYS-42'}</span>
+                 <span className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">{t('idLabel') || 'ID'}</span>
+                 <span className="font-syne font-black text-lg text-[#0a1628] italic">ID-{user?._id?.slice(-6).toUpperCase() || 'SYS-42'}</span>
               </div>
            </div>
         </div>
@@ -100,7 +100,7 @@ export default function Profile() {
                    <div className="space-y-1">
                       <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic tracking-tighter leading-none">{user?.name}</h2>
                       <div className="flex items-center justify-center gap-3">
-                         <span className="text-[10px] font-black text-brand-teal uppercase tracking-widest italic">{role} Architecture Node</span>
+                         <span className="text-[10px] font-black text-brand-teal uppercase tracking-widest italic">{role} Verified</span>
                       </div>
                    </div>
                 </div>
@@ -134,7 +134,7 @@ export default function Profile() {
                         onClick={handleLogout}
                         className="w-full flex items-center gap-5 px-6 py-5 rounded-2xl text-red-500 hover:bg-red-50 transition-all font-syne font-black text-[11px] uppercase tracking-widest italic"
                       >
-                         <LogOut size={18} /> {t('logoutSystem') || 'Terminiate Enclave'}
+                         <LogOut size={18} /> {t('logout') || 'Logout'}
                       </button>
                    </div>
                 </div>
@@ -158,7 +158,7 @@ export default function Profile() {
                          <div className="flex items-center gap-6">
                             <div className="h-1.5 w-12 bg-brand-teal rounded-full" />
                             <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic tracking-tighter">
-                               {active.toUpperCase()} Protocol
+                               {active.toUpperCase()}
                             </h2>
                          </div>
                       </div>
@@ -167,12 +167,12 @@ export default function Profile() {
                          <div className="space-y-10">
                             <div className="grid md:grid-cols-2 gap-8">
                                {[
-                                 { label: 'IDENT_NAME', value: user?.name, locked: false },
-                                 { label: 'MAIL_UPLINK', value: user?.email, locked: true },
-                                 { label: 'COMMS_DEVICE', value: user?.phone || '+91 9443XXXXXX', locked: false },
-                                 { label: 'ROLE_CLASS', value: role?.toUpperCase(), locked: true },
-                                 { label: 'BLOOD_MATRX', value: 'O+', locked: false },
-                                 { label: 'REGION_NODE', value: 'Karaikal, India', locked: true },
+                                 { label: 'NAME', value: user?.name, locked: false },
+                                 { label: 'EMAIL', value: user?.email, locked: true },
+                                 { label: 'PHONE', value: user?.phone || '+91 9443XXXXXX', locked: false },
+                                 { label: 'ROLE', value: role?.toUpperCase(), locked: true },
+                                 { label: 'BLOOD GROUP', value: 'O+', locked: false },
+                                 { label: 'LOCATION', value: 'Karaikal, India', locked: true },
                                ].map((field) => (
                                  <div key={field.label} className="group/field">
                                     <div className="flex items-center justify-between mb-3 px-2">
@@ -195,15 +195,15 @@ export default function Profile() {
                                <div className="space-y-10 relative z-10 text-center md:text-left">
                                   <div className="flex items-center justify-center md:justify-start gap-4">
                                      <div className="h-14 w-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-brand-teal shadow-2xl"><Landmark size={28}/></div>
-                                     <span className="text-xs font-dm font-black uppercase tracking-[0.4em] text-white/40 italic">DISTRICT_LIQUIDITY_VAULT</span>
+                                     <span className="text-xs font-dm font-black uppercase tracking-[0.4em] text-white/40 italic">WALLET</span>
                                   </div>
                                   <div className="space-y-2">
                                      <span className="text-[10px] font-black uppercase tracking-widest text-[#00BF72]">Available Balance</span>
                                      <div className="text-7xl md:text-9xl font-syne font-black tracking-tighter italic leading-none">₹1,250<span className="text-3xl text-white/20">.00</span></div>
                                   </div>
                                   <div className="flex flex-col md:flex-row gap-4">
-                                     <button onClick={() => navigate('/wallet/add-money')} className="h-20 px-12 bg-white text-[#0a1628] rounded-[2rem] font-syne font-black text-xs uppercase tracking-widest italic shadow-4xl hover:bg-brand-teal transition-all duration-700">REPLENISH_RESERVE</button>
-                                     <button className="h-20 px-12 bg-white/5 border border-white/10 text-white rounded-[2rem] font-syne font-black text-xs uppercase tracking-widest italic hover:bg-white/10 transition-all">VIEW_LEDGER</button>
+                                     <button onClick={() => navigate('/wallet/add-money')} className="h-20 px-12 bg-white text-[#0a1628] rounded-[2rem] font-syne font-black text-xs uppercase tracking-widest italic shadow-4xl hover:bg-brand-teal transition-all duration-700">ADD MONEY</button>
+                                     <button className="h-20 px-12 bg-white/5 border border-white/10 text-white rounded-[2rem] font-syne font-black text-xs uppercase tracking-widest italic hover:bg-white/10 transition-all">VIEW HISTORY</button>
                                   </div>
                                </div>
                             </div>
@@ -216,9 +216,9 @@ export default function Profile() {
                            <div className="h-32 w-32 bg-gray-50 rounded-full flex items-center justify-center text-gray-200 border border-black/[0.02] shadow-inner">
                               <Zap size={48} className="animate-pulse" />
                            </div>
-                           <h3 className="font-syne font-black text-2xl text-[#0a1628] italic">{active.toUpperCase()}_LOG_EMPTY</h3>
-                           <p className="max-w-xs text-gray-400 font-dm italic font-bold">No active architectural nodes found in this sector.</p>
-                           <button onClick={() => navigate('/medicines')} className="h-16 px-10 bg-[#0a1628] text-brand-teal rounded-2xl font-syne font-black text-[10px] uppercase italic tracking-widest shadow-lg">INITIALIZE_SCAN</button>
+                           <h3 className="font-syne font-black text-2xl text-[#0a1628] italic">NO DATA</h3>
+                           <p className="max-w-xs text-gray-400 font-dm italic font-bold">No items found in this section.</p>
+                           <button onClick={() => navigate('/medicines')} className="h-16 px-10 bg-[#0a1628] text-brand-teal rounded-2xl font-syne font-black text-[10px] uppercase italic tracking-widest shadow-lg">START BROWSING</button>
                         </div>
                       )}
 

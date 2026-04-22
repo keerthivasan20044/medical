@@ -60,7 +60,7 @@ export default function Doctors() {
         <div className="max-w-7xl mx-auto px-10 relative z-10 text-center">
           <div className="flex flex-col items-center space-y-8">
             <div className="px-5 py-2 bg-brand-teal/10 border border-brand-teal/20 rounded-2xl w-fit flex items-center gap-2 text-[10px] font-black text-brand-teal uppercase tracking-[0.3em] italic">
-              <Verified className="animate-pulse" size={14} /> {t('personnelRegistry')} v4.2
+              <Verified className="animate-pulse" size={14} /> CERTIFIED PRACTITIONERS
             </div>
             <h1 className="font-syne font-black text-4xl sm:text-5xl md:text-7xl lg:text-9xl text-white leading-[0.9] tracking-tighter uppercase italic px-4">
                {t('consultDoctorsTitle')}
@@ -82,7 +82,7 @@ export default function Doctors() {
                 className="w-full h-16 md:h-24 pl-16 md:pl-24 pr-10 md:pr-64 rounded-2xl md:rounded-[3rem] border border-white/10 bg-white/5 backdrop-blur-3xl font-dm text-lg md:text-2xl italic text-white shadow-4xl focus:outline-none focus:ring-4 focus:ring-[#028090]/20 transition-all placeholder:text-[12px] md:placeholder:text-2xl placeholder:italic placeholder-white/20"
              />
              <div className="absolute right-3 top-3 bottom-3 hidden md:flex items-center gap-4 bg-white/5 border border-white/10 px-8 rounded-[2rem] text-white font-syne font-black text-[10px] uppercase tracking-widest italic backdrop-blur-3xl group-focus-within:bg-white group-focus-within:text-[#0a1628] transition-all">
-                <MapPin size={18} className="text-[#02C39A]" /> {t('karaikalNode')}
+                <MapPin size={18} className="text-[#02C39A]" /> KARAIKAL
              </div>
           </div>
 
@@ -90,14 +90,14 @@ export default function Doctors() {
       </section>
 
       {/* specialty Intelligence chips */}
-      <section className="max-w-7xl mx-auto px-10 -mt-24 relative z-20">
-         <div className="bg-white border border-gray-100 rounded-[3.5rem] p-10 shadow-4xl flex items-center gap-4 overflow-x-auto no-scrollbar">
-            <div className="h-16 w-16 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400 shrink-0 shadow-inner"><Filter size={24} /></div>
+      <section className="max-w-7xl mx-auto px-6 md:px-10 -mt-24 relative z-20">
+         <div className="bg-white border border-gray-100 rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-10 shadow-4xl flex items-center gap-4 overflow-x-auto no-scrollbar">
+            <div className="h-14 w-14 md:h-16 md:w-16 bg-gray-50 rounded-xl md:rounded-2xl flex items-center justify-center text-gray-400 shrink-0 shadow-inner"><Filter size={20} /></div>
             {SPECIALTIES.map(s => (
                <button 
                  key={s} 
                  onClick={() => setActiveSpec(s)}
-                 className={`px-10 h-16 rounded-[2rem] font-syne font-black text-[10px] uppercase tracking-widest transition-all duration-500 whitespace-nowrap shadow-soft active:scale-95 ${activeSpec === s ? 'bg-[#0a1628] text-white shadow-4xl scale-110 translate-x-1' : 'bg-gray-50 text-gray-400 hover:bg-white border border-gray-100'}`}
+                 className={`px-6 md:px-10 h-14 md:h-16 rounded-[1.5rem] md:rounded-[2rem] font-syne font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all duration-500 whitespace-nowrap shadow-soft active:scale-95 ${activeSpec === s ? 'bg-[#0a1628] text-white shadow-4xl scale-110 translate-x-1' : 'bg-gray-50 text-gray-400 hover:bg-white border border-gray-100'}`}
                >
                   {s}
                </button>
@@ -106,13 +106,13 @@ export default function Doctors() {
       </section>
 
       <section className="max-w-7xl mx-auto px-10 py-24">
-         <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16 px-4">
+         <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12 px-2">
             <div className="space-y-2">
-               <h2 className="font-syne font-black text-[#0a1628] text-5xl uppercase tracking-tighter italic">{filteredDocs.length} {t('activeSpecialists')}</h2>
-               <div className="text-[10px] font-black text-brand-teal uppercase tracking-widest italic leading-none">{t('authorizedCredentials')}</div>
+               <h2 className="font-syne font-black text-[#0a1628] text-3xl md:text-5xl uppercase tracking-tighter italic">{filteredDocs.length} Specialists</h2>
+               <div className="text-[10px] font-black text-brand-teal uppercase tracking-widest italic leading-none">Verified Medical Experts</div>
             </div>
             <div className="flex items-center gap-4 text-[10px] font-black text-brand-teal uppercase tracking-widest bg-brand-teal/5 border border-brand-teal/10 px-6 py-3 rounded-2xl italic">
-               <ShieldCheck size={18} /> {t('secureProtocolActive')}
+               <ShieldCheck size={18} /> Verified
             </div>
          </div>
 
@@ -126,7 +126,7 @@ export default function Doctors() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9, y: 30 }}
                     transition={{ duration: 0.5, delay: idx * 0.05 }}
-                    className="group bg-white rounded-[4rem] border border-gray-100 p-12 shadow-soft hover:shadow-4xl hover:border-brand-teal/20 transition-all duration-700 relative flex flex-col h-full overflow-hidden"
+                    className="group bg-white rounded-[3rem] md:rounded-[4rem] border border-gray-100 p-8 md:p-12 shadow-soft hover:shadow-4xl hover:border-brand-teal/20 transition-all duration-700 relative flex flex-col h-full overflow-hidden"
                   >
                      <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-[0.02] rounded-full blur-[60px]" />
                      <div className="absolute top-8 right-8 flex flex-col gap-3 relative z-10">
@@ -146,7 +146,7 @@ export default function Doctors() {
                         </div>
 
                         <div className="flex items-center gap-3 text-[11px] font-black text-amber-500 italic">
-                           <Star size={18} fill="currentColor" /> {doc.rating} <span className="text-gray-200 font-black uppercase tracking-widest border-l border-gray-100 pl-3 ml-1">({doc.consultations} Syncs)</span>
+                           <Star size={18} fill="currentColor" /> {doc.rating} <span className="text-gray-200 font-black uppercase tracking-widest border-l border-gray-100 pl-3 ml-1">({doc.consultations} consultations)</span>
                         </div>
 
                          <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-gray-100 to-transparent" />
@@ -155,14 +155,14 @@ export default function Doctors() {
                             <div className="flex items-center justify-between px-2">
                                <div className="flex items-center gap-3">
                                   <div className="h-8 w-8 bg-brand-teal/5 rounded-lg flex items-center justify-center text-brand-teal"><Clock size={16}/></div>
-                                  <div className="text-[10px] font-black text-gray-400 uppercase italic">Next Sync Available</div>
+                                  <div className="text-[10px] font-black text-gray-400 uppercase italic">Next Available</div>
                                </div>
                                <div className="text-sm font-syne font-black text-[#0a1628] italic uppercase">Today 4PM</div>
                             </div>
                             <div className="flex items-center justify-between px-2">
                                <div className="flex items-center gap-3">
                                   <div className="h-8 w-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-400"><Store size={16}/></div>
-                                  <div className="text-[10px] font-black text-gray-400 uppercase italic">Clinical Node</div>
+                                  <div className="text-[10px] font-black text-gray-400 uppercase italic">Location</div>
                                </div>
                                <div className="text-[10px] font-black text-[#0a1628] uppercase italic truncate max-w-[120px]">{(doc.hospital || doc.clinic || 'Karaikal Enclave').split(',')[0]}</div>
                             </div>
@@ -184,31 +184,31 @@ export default function Doctors() {
           </div>
          
          {/* Emergency Pulse Hub */}
-         <div className="mt-40 p-16 md:p-24 bg-[#0a1628] rounded-[5rem] text-white relative overflow-hidden group border-l-[16px] border-red-500 shadow-4xl">
+         <div className="mt-40 p-10 md:p-24 bg-[#0a1628] rounded-[3.5rem] md:rounded-[5rem] text-white relative overflow-hidden group border-l-[16px] border-red-500 shadow-4xl">
             <div className="absolute top-0 right-0 h-[600px] w-[600px] bg-brand-teal opacity-[0.03] rounded-full blur-[160px]" />
-            <div className="relative z-10 grid lg:grid-cols-[1fr_auto] items-center gap-20">
-               <div className="space-y-12 max-w-2xl text-center lg:text-left">
+            <div className="relative z-10 flex flex-col lg:flex-row items-center gap-12 md:gap-20">
+               <div className="space-y-8 md:space-y-12 max-w-2xl text-center lg:text-left">
                   <div className="space-y-6">
                      <div className="px-5 py-2 bg-red-500/10 border border-red-500/20 rounded-2xl w-fit flex items-center gap-2 text-[10px] font-black text-red-500 uppercase tracking-[0.3em] mx-auto lg:mx-0">
-                        <Activity className="animate-ping" size={14} /> Emergency Synchronization Hub
+                        <Activity className="animate-ping" size={14} /> Emergency Support
                      </div>
-                     <h2 className="font-syne font-black text-6xl md:text-8xl leading-[0.9] tracking-tighter uppercase italic">{t('emergencyAssistanceTitle')}</h2>
-                     <p className="text-white/40 font-dm text-2xl italic leading-relaxed">{t('emergencyAssistanceSub')}</p>
+                     <h2 className="font-syne font-black text-5xl md:text-8xl leading-[0.9] tracking-tighter uppercase italic">{t('emergencyAssistanceTitle')}</h2>
+                     <p className="text-white/40 font-dm text-xl md:text-2xl italic leading-relaxed">{t('emergencyAssistanceSub')}</p>
                   </div>
-                  <div className="flex flex-wrap justify-center lg:justify-start gap-10">
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-6 md:gap-10">
                      <div className="space-y-2">
-                        <div className="text-[10px] font-black uppercase text-white/20 tracking-[0.3em] italic">Ambulance Telemetry</div>
-                        <div className="flex items-center gap-4 text-4xl font-syne font-black text-red-500"><Phone size={32} /> 108</div>
+                        <div className="text-[10px] font-black uppercase text-white/20 tracking-[0.3em] italic">Ambulance</div>
+                        <div className="flex items-center gap-4 text-3xl md:text-4xl font-syne font-black text-red-500"><Phone size={28} /> 108</div>
                      </div>
                      <div className="h-16 w-px bg-white/10 hidden md:block" />
                      <div className="space-y-2">
-                        <div className="text-[10px] font-black uppercase text-white/20 tracking-[0.3em] italic">GGH Karaikal Node</div>
-                        <div className="flex items-center gap-4 text-4xl font-syne font-black text-white"><MapPin size={32} /> 04368-222288</div>
+                        <div className="text-[10px] font-black uppercase text-white/20 tracking-[0.3em] italic">GGH Karaikal</div>
+                        <div className="flex items-center gap-4 text-3xl md:text-4xl font-syne font-black text-white"><MapPin size={28} /> 04368-222288</div>
                      </div>
                   </div>
                </div>
-               <button className="h-32 w-32 md:h-48 md:w-48 bg-red-500 text-white rounded-[3.5rem] shadow-[0_0_80px_rgba(239,68,68,0.4)] hover:bg-white hover:text-red-500 active:scale-95 transition-all duration-700 font-syne font-black text-lg md:text-xl uppercase tracking-tighter italic leading-none rotate-12 hover:rotate-0 flex items-center justify-center p-8 text-center group cursor-pointer lg:mt-0 mt-8 mx-auto lg:mx-0">
-                  {t('contactHelplineNow')} &rarr;
+               <button className="h-28 w-28 md:h-48 md:w-48 bg-red-500 text-white rounded-[2.5rem] md:rounded-[3.5rem] shadow-[0_0_80px_rgba(239,68,68,0.4)] hover:bg-white hover:text-red-500 active:scale-95 transition-all duration-700 font-syne font-black text-base md:text-xl uppercase tracking-tighter italic leading-none rotate-12 hover:rotate-0 flex items-center justify-center p-6 text-center group cursor-pointer lg:mt-0 mt-8 mx-auto lg:mx-0 shrink-0">
+                  Call Help &rarr;
                </button>
             </div>
          </div>

@@ -76,7 +76,7 @@ export default function Offers() {
             <div className="absolute top-0 right-0 h-48 w-48 bg-[#028090] rounded-full blur-[100px] opacity-20" />
             <div className="space-y-6 relative z-10">
                <div className="bg-orange-500 text-white text-[10px] font-black px-6 py-2 rounded-full inline-flex items-center gap-2 uppercase tracking-widest shadow-xl animate-pulse">
-                  <Zap size={14} /> {t('flashSaleArch')}
+                  <Zap size={14} /> Flash Sale
                </div>
                <h2 className="font-syne font-black text-4xl md:text-6xl text-white leading-tight">{t('discountVitamins').split(' ').slice(0,3).join(' ')} <br /><span className="text-[#02C39A]">{t('discountVitamins').split(' ').slice(3).join(' ')}</span></h2>
             </div>
@@ -160,8 +160,8 @@ export default function Offers() {
          {/* Promo Codes Section */}
          <section className="py-24 space-y-12">
             <div className="text-center space-y-2">
-               <h2 className="font-syne font-black text-5xl text-[#0a1628]">{t('globalArchCodes')}</h2>
-               <p className="text-gray-400 font-dm italic">{t('activePharmacyVouchers')}</p>
+               <h2 className="font-syne font-black text-5xl text-[#0a1628]">Promo Codes</h2>
+               <p className="text-gray-400 font-dm italic">Use these codes at checkout for extra savings.</p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                {PROMO_CODES.map((promo, i) => (

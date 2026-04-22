@@ -24,7 +24,7 @@ export default function EmergencyFAB() {
         opacity: scrollDirection === 'down' && !isOpen ? 0 : 1
       }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
-      className="fixed bottom-20 right-4 md:bottom-24 md:right-6 z-[3000]"
+      className="fixed bottom-24 right-4 md:bottom-24 md:right-6 z-[3000]"
     >
       <AnimatePresence>
         {isOpen && (

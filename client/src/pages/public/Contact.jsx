@@ -15,13 +15,13 @@ export default function Contact() {
   const [isSent, setIsSent] = useState(false);
 
   const CONTACT_INFO = [
-    { icon: Landmark, label: t('enclaveHub'), val: '12, Market Road, Karaikal, Tamil Nadu - 609602', sub: t('nearSBI') },
-    { icon: Phone, label: t('supportArchitecture'), val: '+91 98765 43210', sub: t('available247') },
-    { icon: MessageCircle, label: t('whatsAppStream'), val: '+91 98765 43210', sub: t('textQuickQuery') },
-    { icon: Mail, label: t('emailProtocol'), val: 'support@medipharm.in', sub: t('responseTime') }
+    { icon: Landmark, label: 'Office Address', val: '12, Market Road, Karaikal, Tamil Nadu - 609602', sub: 'Near SBI' },
+    { icon: Phone, label: 'Support Hotline', val: '+91 98765 43210', sub: 'Available 24/7' },
+    { icon: MessageCircle, label: 'WhatsApp Support', val: '+91 98765 43210', sub: 'Quick text support' },
+    { icon: Mail, label: 'Email Address', val: 'support@medipharm.in', sub: '24 hour response time' }
   ];
 
-  const EMERGENCY_NODES = [
+  const EMERGENCY_CONTACTS = [
     { label: t('ambulanceSupport'), val: '108', color: 'text-red-500' },
     { label: t('govtHospitalKKL'), val: '04368-222288', color: 'text-amber-500' },
     { label: t('fireRescue'), val: '101', color: 'text-brand-teal' }
@@ -44,10 +44,10 @@ export default function Contact() {
          <div className="max-w-7xl mx-auto px-10 space-y-12 relative z-10">
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="space-y-10 group">
                <div className="px-8 py-3 bg-brand-teal/10 border border-brand-teal/20 rounded-[2rem] inline-flex items-center gap-4 text-[11px] font-black text-brand-teal uppercase tracking-[0.4em] italic backdrop-blur-3xl group-hover:scale-105 transition-transform duration-700">
-                  <Activity size={18} className="animate-pulse" /> {t('districtCommsNetwork')} v4.2
+                  <Activity size={18} className="animate-pulse" /> Communications
                </div>
                <h1 className="font-syne font-black text-7xl md:text-[11rem] text-white tracking-[-0.05em] leading-[0.8] uppercase italic drop-shadow-2xl">
-                  {t('contact')} <br /><span className="text-brand-teal drop-shadow-[0_0_80px_rgba(2,195,154,0.3)]">{t('enclave')}</span>
+                  {t('contact')} <br /><span className="text-brand-teal drop-shadow-[0_0_80px_rgba(2,195,154,0.3)]">Team</span>
                </h1>
                <p className="text-white/40 font-dm text-2xl max-w-2xl mx-auto italic font-bold leading-relaxed">{t('reachOutDesc')}</p>
             </motion.div>
@@ -65,22 +65,22 @@ export default function Contact() {
                   <div className="space-y-8">
                      <div className="flex items-center gap-6">
                         <div className="h-2 w-20 bg-brand-teal rounded-full" />
-                        <span className="text-[11px] font-black text-brand-teal uppercase tracking-[0.4em] italic">{t('secureTransmission')}</span>
+                        <span className="text-[11px] font-black text-brand-teal uppercase tracking-[0.4em] italic">Secure Message</span>
                      </div>
                      <h2 className="font-syne font-black text-6xl text-[#0a1628] uppercase italic leading-[0.9] tracking-tighter">
                         {t('digital')} <br /><span className="text-brand-teal underline decoration-brand-teal decoration-8 underline-offset-12">{t('consultation')}</span>
                      </h2>
-                     <p className="text-gray-300 font-dm text-2xl italic font-bold tracking-wide">{t('sendAuthorizedMsg')}</p>
+                     <p className="text-gray-300 font-dm text-2xl italic font-bold tracking-wide">Reach out to our support team.</p>
                   </div>
                   
                   <form onSubmit={handleSubmit} className="space-y-12">
                      <div className="grid md:grid-cols-2 gap-12">
                         <Input label={t('yourFullName')} placeholder="e.g. Anand Kumar" variant="flat" required />
-                        <Input label={t('emailProtocolNode')} type="email" placeholder="e.g. kark@email.com" variant="flat" required />
+                        <Input label="Email" type="email" placeholder="e.g. kark@email.com" variant="flat" required />
                      </div>
                      <div className="space-y-4">
-                        <label className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-200 ml-10 italic">{t('messageArchitecture')}</label>
-                        <textarea rows="6" placeholder={t('shareExperiencePlaceholder')} className="w-full bg-gray-50 border-4 border-transparent rounded-[3.5rem] px-12 py-12 outline-none focus:bg-white focus:border-brand-teal/20 transition-all duration-700 shadow-inner font-dm text-xl italic font-bold text-[#0a1628] resize-none" required />
+                        <label className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-200 ml-10 italic">Your Message</label>
+                        <textarea rows="6" placeholder="How can we help you?" className="w-full bg-gray-50 border-4 border-transparent rounded-[3.5rem] px-12 py-12 outline-none focus:bg-white focus:border-brand-teal/20 transition-all duration-700 shadow-inner font-dm text-xl italic font-bold text-[#0a1628] resize-none" required />
                      </div>
                      
                      <div className="relative group/btn pt-10">
@@ -93,7 +93,7 @@ export default function Contact() {
                                  type="button" 
                                  className="w-full h-28 bg-brand-teal text-[#0a1628] rounded-[3rem] font-syne font-black text-2xl uppercase tracking-[0.3em] flex items-center justify-center gap-6 transition shadow-4xl italic shadow-brand-teal/20"
                               >
-                                 <CheckCircle size={32} /> {t('msgSynchronized')} &rarr;
+                                 <CheckCircle size={32} /> Message Sent &rarr;
                               </motion.button>
                            ) : (
                               <motion.button 
@@ -103,13 +103,13 @@ export default function Contact() {
                                  type="submit" 
                                  className="w-full h-28 bg-[#0a1628] text-white rounded-[3rem] font-syne font-black text-2xl uppercase tracking-[0.3em] hover:bg-brand-teal transition-all shadow-4xl flex items-center justify-center gap-6 hover:scale-[1.02] active:scale-95 duration-700 italic group/tx"
                               >
-                                 {t('transmitInquiry')} <Send size={32} className="group-hover/tx:translate-x-6 group-hover/tx:-translate-y-4 transition-transform duration-700" />
+                                 Send Message <Send size={32} className="group-hover/tx:translate-x-6 group-hover/tx:-translate-y-4 transition-transform duration-700" />
                               </motion.button>
                            )}
                         </AnimatePresence>
                         <div className="flex items-center justify-center gap-4 mt-10">
                            <Activity size={16} className="text-brand-teal animate-pulse" />
-                           <p className="text-[10px] text-gray-200 font-black uppercase tracking-[0.3em] text-center italic">{t('avgResponseTime')} 2.4 Architecture Hours</p>
+                           <p className="text-[10px] text-gray-200 font-black uppercase tracking-[0.3em] text-center italic">Response time: ~2.4 Hours</p>
                         </div>
                      </div>
                   </form>
@@ -127,12 +127,12 @@ export default function Contact() {
                         <span className="text-[11px] font-black text-red-500 uppercase tracking-[0.4em] italic">{t('priorityNode')}</span>
                      </div>
                      <h3 className="font-syne font-black text-5xl flex items-center gap-8 uppercase italic leading-none tracking-tighter">
-                        <LifeBuoy className="text-red-500 animate-spin-slow" size={48} /> {t('emergency')} <span className="text-white/10">{t('nodes')}</span>
+                        <LifeBuoy className="text-red-500 animate-spin-slow" size={48} /> Emergency Contacts
                      </h3>
                      <p className="text-white/40 font-dm text-lg italic font-bold leading-relaxed">{t('criticalSupportDesc')}</p>
                   </div>
                   <div className="space-y-8 relative z-10">
-                     {EMERGENCY_NODES.map((node, idx) => (
+                     {EMERGENCY_CONTACTS.map((node, idx) => (
                         <motion.div 
                            key={node.label}
                            initial={{ opacity: 0, x: 20 }}
@@ -179,10 +179,10 @@ export default function Contact() {
          <div className="space-y-24">
             <div className="text-center space-y-8 group">
                <div className="px-8 py-3 bg-brand-teal/10 border border-brand-teal/20 rounded-[2rem] inline-flex items-center gap-4 text-[11px] font-black text-brand-teal uppercase tracking-[0.4em] italic backdrop-blur-3xl group-hover:scale-105 transition-transform duration-700">
-                  <Globe size={18} className="animate-spin-slow" /> {t('geospatialMapping')}
+                  <Globe size={18} className="animate-spin-slow" /> Find Us
                </div>
                <h2 className="font-syne font-black text-6xl lg:text-7xl text-[#0a1628] text-center uppercase italic leading-none tracking-tighter">
-                  {t('enclaveGeographic')} <br /><span className="text-brand-teal">{t('mappingProtocol')}</span>
+                  Our <span className="text-brand-teal">Location</span>
                </h2>
             </div>
             
@@ -194,7 +194,7 @@ export default function Contact() {
                <div className="absolute top-20 left-20 space-y-4 opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
                   <div className="flex items-center gap-4 bg-[#0a1628] px-8 py-4 rounded-2xl border border-brand-teal/30 shadow-4xl">
                      <div className="h-2 w-2 bg-brand-teal rounded-full animate-ping" />
-                     <span className="text-[10px] font-black text-white uppercase tracking-[0.4em] italic">{t('satLinkActive')}</span>
+                     <span className="text-[10px] font-black text-white uppercase tracking-[0.4em] italic">GPS ACTIVE</span>
                   </div>
                </div>
 
@@ -213,7 +213,7 @@ export default function Contact() {
                </div>
                
                <button className="absolute bottom-16 right-16 h-24 px-16 bg-[#0a1628] text-white rounded-[2.5rem] font-syne font-black text-sm uppercase tracking-[0.4em] hover:bg-brand-teal hover:scale-110 transition-all duration-700 shadow-4xl flex items-center gap-6 italic border-4 border-white/5">
-                  {t('openArchitectureMaps')} <ArrowRight size={24} />
+                  Open Maps <ArrowRight size={24} />
                </button>
             </div>
          </div>
@@ -230,7 +230,7 @@ export default function Contact() {
                      <span className="text-[11px] font-black text-brand-teal uppercase tracking-[0.4em] italic">{t('immediateSupport')}</span>
                   </div>
                   <h2 className="font-syne font-black text-6xl lg:text-7xl text-[#0a1628] uppercase italic leading-[0.9] tracking-tighter">
-                     {t('enclaveQuick')} <br /><span className="text-brand-teal">{t('supportProtocol')}</span>
+                     Quick <br /><span className="text-brand-teal">Support</span>
                   </h2>
                   <p className="text-2xl font-dm text-gray-300 italic font-bold leading-relaxed border-l-[12px] border-gray-100 pl-12 py-4">{t('accessImmediateInsights')}</p>
                </div>

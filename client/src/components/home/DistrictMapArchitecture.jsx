@@ -5,12 +5,12 @@ import { useLanguage } from '../../context/LanguageContext.jsx';
 export default function DistrictMapArchitecture() {
   const { t } = useLanguage();
 
-  const NODES = [
-    { id: 1, x: '25%', y: '30%', name: 'Nagore Node', type: 'regional', status: 'online' },
+  const LOCATIONS = [
+    { id: 1, x: '25%', y: '30%', name: 'Nagore Station', type: 'regional', status: 'online' },
     { id: 2, x: '65%', y: '20%', name: 'Karaikal Central', type: 'central', status: 'online' },
-    { id: 3, x: '80%', y: '60%', name: 'Poompuhar Enclave', type: 'regional', status: 'online' },
+    { id: 3, x: '80%', y: '60%', name: 'Poompuhar Hub', type: 'regional', status: 'online' },
     { id: 4, x: '40%', y: '75%', name: 'Tirumalairayanpattinam', type: 'regional', status: 'maintenance' },
-    { id: 5, x: '15%', y: '65%', name: 'Keezhavur Terminal', type: 'regional', status: 'online' }
+    { id: 5, x: '15%', y: '65%', name: 'Keezhavur Center', type: 'regional', status: 'online' }
   ];
 
   return (
@@ -25,20 +25,20 @@ export default function DistrictMapArchitecture() {
           <div className="space-y-16">
             <div className="space-y-6 md:space-y-8 text-center lg:text-left">
               <div className="inline-flex items-center gap-4 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-brand-teal font-syne font-black text-[10px] uppercase tracking-[0.4em] italic shadow-2xl mx-auto lg:mx-0">
-                <Globe size={14} className="animate-spin-slow" /> District_Architecture_Live
+                <Globe size={14} className="animate-spin-slow" /> Live Coverage
               </div>
               <h2 className="font-syne font-black text-white text-4xl md:text-6xl lg:text-8xl leading-[0.9] uppercase italic tracking-tighter drop-shadow-4xl">
-                Mapping the <br /> <span className="text-brand-teal">Enclave Pulse.</span>
+                Mapping the <br /> <span className="text-brand-teal">Region Pulse.</span>
               </h2>
-              <p className="text-white/30 font-dm text-lg md:text-2xl italic font-bold max-w-xl leading-relaxed mx-auto lg:mx-0">Our proprietary logistics architecture synchronizes 12 regional nodes to ensure sub-30 minute medical delivery across Karaikal.</p>
+              <p className="text-white/30 font-dm text-lg md:text-2xl italic font-bold max-w-xl leading-relaxed mx-auto lg:mx-0">Our delivery network synchronizes multiple hubs to ensure sub-30 minute medical delivery across Karaikal.</p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-8">
                {[
-                 { label: 'Real-time Telemetry', desc: '14 Active logistics streams tracked via GPS handshake.', icon: Truck },
-                 { label: 'Verified Terminals', icon: Store, desc: '8 Licensed pharmacy nodes bonded to the command center.' },
-                 { label: 'System Integrity', icon: ShieldCheck, desc: '99.9% Architecture uptime across all district enclaves.' },
-                 { label: 'Node Distribution', icon: Navigation, desc: 'Optimized node placement for zero-latency delivery.' }
+                 { label: 'Live Tracking', desc: 'Active logistics tracked via GPS.', icon: Truck },
+                 { label: 'Verified Pharmacies', icon: Store, desc: 'Licensed pharmacy centers connected to our dashboard.' },
+                 { label: 'System Integrity', icon: ShieldCheck, desc: '99.9% uptime across all district regions.' },
+                 { label: 'Hub Locations', icon: Navigation, desc: 'Optimized hub placement for fast delivery.' }
                ].map((f, i) => (
                  <motion.div 
                    key={i} 
@@ -60,7 +60,7 @@ export default function DistrictMapArchitecture() {
           </div>
 
           <div className="relative w-full overflow-hidden">
-             {/* Styled SVG Map Architecture */}
+             {/* Styled SVG Delivery Map */}
              <div className="relative aspect-square md:aspect-[4/3] bg-white/5 border-4 border-white shadow-4xl rounded-[2.5rem] md:rounded-[5rem] overflow-hidden group">
                 <div className="absolute inset-0 bg-[linear-gradient(white/5_1px,transparent_1px),linear-gradient(90deg,white/5_1px,transparent_1px)] bg-[size:50px_50px] opacity-20" />
                 
@@ -71,13 +71,13 @@ export default function DistrictMapArchitecture() {
 
                 {/* Pulse Connections */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100">
-                   {NODES.map((n, i) => i > 0 && (
+                   {LOCATIONS.map((n, i) => i > 0 && (
                      <motion.path
                         key={i}
                         initial={{ pathLength: 0, opacity: 0 }}
                         whileInView={{ pathLength: 1, opacity: 0.2 }}
                         transition={{ duration: 2, delay: i * 0.2 }}
-                        d={`M${NODES[0].x.replace('%','')},${NODES[0].y.replace('%','')} L${n.x.replace('%','')},${n.y.replace('%','')}`}
+                        d={`M${LOCATIONS[0].x.replace('%','')},${LOCATIONS[0].y.replace('%','')} L${n.x.replace('%','')},${n.y.replace('%','')}`}
                         stroke="#02C39A"
                         strokeWidth="0.5"
                         fill="none"
@@ -85,8 +85,8 @@ export default function DistrictMapArchitecture() {
                    ))}
                 </svg>
 
-                {/* Node Points */}
-                {NODES.map(n => (
+                {/* Location Points */}
+                {LOCATIONS.map(n => (
                   <motion.div
                     key={n.id}
                     style={{ left: n.x, top: n.y }}
@@ -117,12 +117,12 @@ export default function DistrictMapArchitecture() {
                  <div className="absolute top-4 right-4 md:top-10 md:right-10 bg-[#0a1628]/80 backdrop-blur-2xl p-4 md:p-6 rounded-[2rem] md:rounded-[2.5rem] border border-white/10 space-y-4 shadow-4xl group-hover:scale-105 transition duration-700 max-w-[180px] md:max-w-none">
                     <div className="flex items-center gap-3 md:gap-4">
                        <div className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]" />
-                       <span className="text-[8px] md:text-[10px] font-black text-white/40 uppercase tracking-widest italic leading-none">Global_Sync_Protocol</span>
+                       <span className="text-[8px] md:text-[10px] font-black text-white/40 uppercase tracking-widest italic leading-none">Live Sync</span>
                     </div>
                     <div className="h-px bg-white/5" />
                     <div className="space-y-2">
                        <div className="flex justify-between gap-6 md:gap-12 items-center">
-                          <span className="text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-widest italic">Node Activity</span>
+                          <span className="text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-widest italic">Hub Activity</span>
                           <span className="text-[10px] md:text-xs font-black text-brand-teal italic">98.4%</span>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
@@ -136,14 +136,14 @@ export default function DistrictMapArchitecture() {
              <div className="mt-12 flex justify-between items-center px-10">
                 <div className="flex gap-6">
                    <div className="flex items-center gap-2 text-[10px] font-black text-white/20 uppercase tracking-[0.2em] italic">
-                      <div className="h-2 w-2 rounded-full bg-brand-teal" /> Active Terminals
+                      <div className="h-2 w-2 rounded-full bg-brand-teal" /> Active Hubs
                    </div>
                    <div className="flex items-center gap-2 text-[10px] font-black text-white/20 uppercase tracking-[0.2em] italic">
                       <div className="h-2 w-2 rounded-full bg-red-500" /> Maintenance Sync
                    </div>
                 </div>
                 <div className="text-[10px] font-black text-white opacity-20 uppercase tracking-[0.4em] italic leading-none">
-                   Last_Architecture_Repaint: 0.04ms
+                   Last Update: 0.04ms
                 </div>
              </div>
           </div>

@@ -76,7 +76,7 @@ export default function About() {
                   </div>
                   <div className="space-y-2">
                      <div className="text-brand-teal font-syne font-black text-3xl italic">4.9/5</div>
-                     <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Clinical Rating</div>
+                     <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Quality Rating</div>
                   </div>
                </div>
             </div>
@@ -96,7 +96,7 @@ export default function About() {
                   <Store size={16} /> Pharmacy Network
                </div>
                <h2 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic tracking-tighter leading-tight">
-                  Hyper-Local <br /><span className="text-brand-teal">Healthcare Points</span>.
+                  Hyper-Local <br /><span className="text-brand-teal">Healthcare Centers</span>.
                </h2>
                <p className="text-gray-400 font-dm italic font-bold text-xl leading-relaxed">
                   Our delivery network spans across Karaikal. From Market Road to Nagore, every pharmacy is verified, offering safe transport, real-time inventory updates, and essential services like vaccines and diabetic care.
@@ -138,7 +138,7 @@ export default function About() {
                   </div>
                   <div className="space-y-3">
                      <div className="text-brand-teal font-syne font-black text-2xl italic">Encrypted</div>
-                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Medical Logs</div>
+                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Health Records</div>
                   </div>
                   <div className="space-y-3">
                      <div className="text-brand-teal font-syne font-black text-2xl italic">Immediate</div>
@@ -149,7 +149,7 @@ export default function About() {
          </div>
       </section>
 
-      {/* Our Story Enclave */}
+      {/* Our Story */}
       <section className="max-w-7xl mx-auto px-10 py-56">
          <div className="grid lg:grid-cols-2 gap-40 items-center">
             <div className="relative group perspective-1000">
@@ -160,7 +160,7 @@ export default function About() {
                </div>
                <div className="absolute -bottom-16 -right-16 h-64 w-64 bg-brand-teal rounded-[3rem] p-10 flex flex-col items-center justify-center text-[#0a1628] shadow-4xl group-hover:scale-110 group-hover:-translate-y-4 transition-all duration-1000 rotate-6 group-hover:rotate-12 border-8 border-[#f8fafc]">
                   <span className="font-syne font-black text-7xl italic leading-none">23</span>
-                  <span className="font-dm text-[11px] uppercase font-black tracking-widest text-center italic">{t('enclaveFounding')}</span>
+                  <span className="font-dm text-[11px] uppercase font-black tracking-widest text-center italic">FOUNDED 2023</span>
                </div>
             </div>
 
@@ -220,14 +220,14 @@ export default function About() {
          </div>
       </section>
 
-      {/* Team Architecture */}
+      {/* Leadership Team */}
       <section className="max-w-7xl mx-auto px-10 py-56 space-y-32">
          <div className="text-center space-y-10 group">
             <div className="px-8 py-3 bg-[#0a1628] rounded-[2rem] inline-flex items-center gap-4 text-[11px] font-black text-brand-teal uppercase tracking-[0.4em] italic backdrop-blur-3xl group-hover:scale-105 transition-transform duration-700">
-               <Users size={18} /> {t('districtPersonnel')}
+               <Users size={18} /> Our Team
             </div>
             <h2 className="font-syne font-black text-7xl lg:text-9xl text-[#0a1628] uppercase italic leading-[0.85] tracking-tighter">
-               {t('meetThe')} <br /><span className="text-brand-teal">{t('enclaveArchitects')}</span>
+               {t('meetThe')} <br /><span className="text-brand-teal">Leadership Team</span>
             </h2>
             <p className="text-gray-300 font-dm text-2xl italic font-bold max-w-3xl mx-auto leading-relaxed">{t('teamSubtitle')}</p>
          </div>
@@ -291,14 +291,14 @@ export default function About() {
          </div>
       </section>
 
-      {/* Milestones / Chronos-Sync Timeline */}
+      {/* History Timeline */}
       <section className="max-w-7xl mx-auto px-10 py-56 space-y-32">
          <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
             <h2 className="font-syne font-black text-6xl lg:text-7xl text-[#0a1628] uppercase italic leading-[0.9] tracking-tighter">
                {t('theJourney')} <br /><span className="text-brand-teal">{t('enclaveChronoview')}</span>
             </h2>
             <div className="px-8 py-3 bg-[#0a1628] rounded-[1.5rem] inline-flex items-center gap-4 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic shadow-4xl animate-pulse">
-               <Activity size={18} /> {t('realtimeHistoricalSync')}
+               <Activity size={18} /> Platform History
             </div>
          </div>
          
@@ -318,7 +318,7 @@ export default function About() {
          </div>
       </section>
 
-      {/* Partner Network Telemetry */}
+      {/* Partner Network */}
       <section className="max-w-7xl mx-auto px-10 py-32 border-t border-gray-100">
          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-10 items-center opacity-10 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-1000">
             {pharmacies.map(p => (

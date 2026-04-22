@@ -164,7 +164,7 @@ export default function SearchResults() {
                {(activeTab === 'All' || activeTab === 'Pharmacies') && results.pharmacies.length > 0 && (
                   <section className="space-y-12">
                      <div className="flex items-center justify-between border-b border-gray-50 pb-8">
-                        <h2 className="font-syne font-black text-3xl text-[#0a1628] flex items-center gap-6"><Store className="text-[#02C39A]" size={36}/> {t('pharmaciesNodes')}</h2>
+                        <h2 className="font-syne font-black text-3xl text-[#0a1628] flex items-center gap-6"><Store className="text-[#02C39A]" size={36}/> Pharmacies</h2>
                      </div>
                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {results.pharmacies.map(p => (
@@ -179,7 +179,7 @@ export default function SearchResults() {
                                  <p className="text-white/40 font-dm text-sm flex items-center gap-2 italic"><MapPin size={14}/> {p.location}</p>
                               </div>
                               <div className="flex items-center justify-between pt-4 border-t border-white/5 relative z-10">
-                                 <div className="text-[10px] font-black uppercase tracking-widest text-[#02C39A]">Open 24/7 Enclave</div>
+                                 <div className="text-[10px] font-black uppercase tracking-widest text-[#02C39A]">Open 24/7</div>
                                  <div className="text-sm font-dm font-black">{p.distance}</div>
                               </div>
                            </Link>
@@ -192,7 +192,7 @@ export default function SearchResults() {
                {(activeTab === 'All' || activeTab === 'Doctors') && results.doctors.length > 0 && (
                   <section className="space-y-12">
                      <div className="flex items-center justify-between border-b border-gray-50 pb-8">
-                        <h2 className="font-syne font-black text-3xl text-[#0a1628] flex items-center gap-6"><User className="text-[#028090]" size={36}/> {t('doctorsAuthorities')}</h2>
+                        <h2 className="font-syne font-black text-3xl text-[#0a1628] flex items-center gap-6"><User className="text-[#028090]" size={36}/> Doctors</h2>
                      </div>
                      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {results.doctors.map(d => (
@@ -217,7 +217,7 @@ export default function SearchResults() {
                {(activeTab === 'All' || activeTab === 'Blog') && results.blog.length > 0 && (
                   <section className="space-y-12">
                      <div className="flex items-center justify-between border-b border-gray-50 pb-8">
-                        <h2 className="font-syne font-black text-3xl text-[#0a1628] flex items-center gap-6"><BookOpen className="text-[#02C39A]" size={36}/> {t('blogData')}</h2>
+                        <h2 className="font-syne font-black text-3xl text-[#0a1628] flex items-center gap-6"><BookOpen className="text-[#02C39A]" size={36}/> Health Articles</h2>
                      </div>
                      <div className="grid md:grid-cols-2 gap-8">
                         {results.blog.map(b => (

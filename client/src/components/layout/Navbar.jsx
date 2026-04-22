@@ -499,7 +499,7 @@ export default function Navbar() {
                      ? 'bg-white/90 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] py-3 border-b border-black/[0.04]' 
                      : 'bg-white py-4 md:py-5 border-b border-transparent'}`}
       >
-        <div className="max-w-[1400px] mx-auto px-4 md:px-6 lg:px-10 h-full flex items-center gap-2 md:gap-4 xl:gap-12">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-6 lg:px-10 h-full flex items-center gap-2 md:gap-4 xl:gap-12 pr-6 md:pr-10">
 
           {/* Logo */}
           <LogoZone />

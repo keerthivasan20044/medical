@@ -71,7 +71,7 @@ export function FeaturedMedicines() {
   const currentItems = items.slice(currentPage * perPage, (currentPage + 1) * perPage);
 
   return (
-    <section className="py-16 md:py-32 bg-[#f8fafc] overflow-hidden min-h-[800px] flex flex-col justify-center relative">
+    <section className="py-8 md:py-16 bg-[#f8fafc] overflow-hidden min-h-[800px] flex flex-col justify-center relative">
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#0a1628 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
       
       <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10 w-full">
@@ -79,12 +79,12 @@ export function FeaturedMedicines() {
            <div className="space-y-6">
               <div className="flex items-center gap-4">
                  <div className={`h-4 w-4 rounded-full shadow-[0_0_10px_rgba(2,195,154,0.5)] ${loading ? 'bg-amber-500 animate-pulse' : 'bg-brand-teal'}`} />
-                 <span className="text-[12px] font-black text-brand-teal uppercase tracking-[0.4em] italic">{t('liveSync')}</span>
+                 <span className="text-[12px] font-black text-brand-teal uppercase tracking-[0.4em] italic">Live Status</span>
               </div>
               <h2 className="font-syne font-black text-[#0a1628] text-5xl md:text-7xl leading-[0.9] uppercase italic tracking-tighter">
                 {(t('popularMeds') || '').includes('.') ? t('popularMeds').split('.').slice(0, -1).join('.') : t('popularMeds')} <span className="text-brand-teal">.</span>
               </h2>
-              <p className="text-gray-400 font-dm text-xl max-w-xl italic font-bold leading-relaxed">{t('verifiedHealthArchitecture')}</p>
+              <p className="text-gray-400 font-dm text-xl max-w-xl italic font-bold leading-relaxed">Browse our verified pharmacy products.</p>
            </div>
            <div className="flex gap-6">
               <button 
@@ -110,7 +110,7 @@ export function FeaturedMedicines() {
                 <div className="h-24 w-24 border-4 border-brand-teal/20 border-t-brand-teal rounded-full animate-spin" />
                 <Activity size={32} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-brand-teal animate-pulse" />
              </div>
-             <span className="text-brand-teal font-syne font-black uppercase italic tracking-[0.3em]">{t('initializingTelemetry')}</span>
+             <span className="text-brand-teal font-syne font-black uppercase italic tracking-[0.3em]">Connecting...</span>
           </div>
         ) : (
           <div className="space-y-20">
@@ -131,7 +131,7 @@ export function FeaturedMedicines() {
                ))}
             </motion.div>
 
-            {/* Pagination HUD */}
+            {/* Navigation */}
             <div className="flex items-center justify-center gap-10">
                <div className="h-[2px] bg-black/[0.05] flex-1 max-w-[200px]" />
                <div className="flex gap-4">
@@ -159,7 +159,7 @@ export function KaraikalPharmacies() {
   const TABS = ['All', 'Open Now', 'Free Delivery', 'Top Rated', '24 Hours'];
 
   return (
-    <section className="py-16 md:py-32 bg-white relative overflow-hidden">
+    <section className="py-8 md:py-16 bg-white relative overflow-hidden">
        {/* Background Noise & HUD */}
        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(10,22,40,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(10,22,40,0.1) 1px, transparent 1px)', backgroundSize: '100px 100px' }} />
 
@@ -174,14 +174,24 @@ export function KaraikalPharmacies() {
              <p className="text-gray-400 font-dm text-2xl italic font-bold">{t('verifiedLicensedPharmacies')}</p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4 mb-20">
-             {TABS.map(tab => (
+          <div className="flex gap-2 overflow-x-auto px-4 pb-4 hide-scrollbar justify-start md:justify-center mb-12">
+             {[
+               { id: 'All', label: 'All' },
+               { id: 'Open Now', label: 'Open Now' },
+               { id: 'Free Delivery', label: 'Free Delivery' },
+               { id: 'Top Rated', label: 'Top Rated' },
+               { id: '24 Hours', label: '24 Hours' }
+             ].map(f => (
                <button 
-                 key={tab}
-                 onClick={() => setActiveTab(tab)}
-                 className={`px-10 py-5 rounded-[2rem] font-syne font-black text-[11px] uppercase tracking-[0.2em] italic transition-all duration-700 border-2 ${activeTab === tab ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-4xl scale-110 z-10' : 'bg-gray-50 text-gray-400 hover:bg-white hover:border-brand-teal/20 border-transparent'}`}
+                 key={f.id}
+                 onClick={() => setActiveTab(f.id)}
+                 className={`flex-shrink-0 px-6 py-3 rounded-full text-sm font-bold transition-all border-2 ${
+                   activeTab === f.id 
+                     ? 'bg-[#0a1628] text-brand-teal border-[#0a1628] shadow-lg' 
+                     : 'bg-white text-gray-400 border-gray-100 hover:border-brand-teal/30'
+                 }`}
                >
-                  {t(tab.toLowerCase().replace(' ', '')) || tab}
+                  {f.label}
                </button>
              ))}
           </div>
@@ -209,25 +219,31 @@ export function KaraikalPharmacies() {
 
                   <div className="p-10 flex-1 flex flex-col justify-between space-y-8 relative z-10">
                      <div className="space-y-4">
-                        <div className="flex items-start justify-between">
-                           <h3 className="font-syne font-black text-[#0a1628] text-2xl uppercase italic tracking-tighter leading-tight group-hover:text-brand-teal transition-colors truncate pr-4">{p.name}</h3>
-                           <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-400 rounded-xl text-[#0a1628] font-black text-xs shadow-xl rotate-3">
+                        <div className="flex items-start justify-between gap-2 w-full">
+                           <h3 className="font-syne font-black text-[#0a1628] text-xl md:text-2xl uppercase italic tracking-tighter leading-tight group-hover:text-brand-teal transition-colors flex-1 min-w-0 break-words">{p.name}</h3>
+                           <div className="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 bg-amber-400 rounded-xl text-[#0a1628] font-black text-xs shadow-xl rotate-3">
                               <Star size={14} fill="currentColor" /> {p.rating}
                            </div>
                         </div>
                         <div className="flex items-center gap-3 text-xs text-gray-400 font-syne font-black uppercase italic tracking-widest leading-none">
-                           <MapPin size={16} className="text-brand-teal animate-bounce" /> {p.location || 'Karaikal Node'} · <span className="text-brand-teal">{p.distance || '0.5'} KM</span>
+                           <MapPin size={16} className="text-brand-teal animate-bounce" /> {p.location || 'Karaikal Center'} · <span className="text-brand-teal">{p.distance || '0.5'} KM</span>
                         </div>
                         <div className="flex flex-wrap gap-2 pt-2">
-                           {['Verified_Node', 'Licensed_Terminal', '24/7_Pulse'].map(tag => (
-                             <span key={tag} className="text-[8px] font-black text-gray-300 uppercase tracking-[0.3em] px-3 py-1 bg-gray-50 rounded-lg group-hover:bg-brand-teal/5 group-hover:text-brand-teal transition-colors">{tag}</span>
+                           {[
+                             { icon: '✓', label: 'Verified' },
+                             { icon: '🏥', label: 'Licensed' },
+                             { icon: '🕐', label: '24/7' }
+                           ].map(badge => (
+                             <span key={badge.label} className="text-[10px] font-bold text-teal-600 bg-teal-50 px-3 py-1 rounded-full flex items-center gap-1 group-hover:bg-brand-teal group-hover:text-white transition-all">
+                               {badge.icon} {badge.label}
+                             </span>
                            ))}
                         </div>
                      </div>
 
                      <div className="pt-8 border-t-2 border-dashed border-black/[0.05] flex items-center justify-between">
                         <div className="space-y-1">
-                           <div className="text-[9px] text-gray-300 font-black uppercase tracking-widest italic leading-none">{t('nodeRef')}</div>
+                           <div className="text-[9px] text-gray-300 font-black uppercase tracking-widest italic leading-none">ID</div>
                            <div className="text-[#0a1628] font-black font-syne text-sm uppercase italic tracking-tighter">KKL-{33+i}-TX</div>
                         </div>
                         <Link to={`/pharmacies/${p.id}`} className="h-16 w-16 bg-[#0a1628] text-brand-teal rounded-2xl flex items-center justify-center transition-all duration-500 hover:scale-110 active:scale-95 shadow-4xl group/link">

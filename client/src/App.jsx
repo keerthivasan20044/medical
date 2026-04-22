@@ -11,6 +11,7 @@ import { fetchMe } from './store/authSlice.js';
 import ErrorBoundary from './components/common/ErrorBoundary.jsx';
 import { loadGoogleMaps } from './services/mapLoader.js';
 import ScrollToTop from './components/common/ScrollToTop.jsx';
+import ScrollToTopButton from './components/common/ScrollToTopButton.jsx';
 import InstallPrompt from './components/InstallPrompt.jsx';
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
       <ScrollToTop />
       <InstallPrompt />
       <SocketListener />
+      <ScrollToTopButton />
       <AppRouter />
       {!hideBars && (
         <>

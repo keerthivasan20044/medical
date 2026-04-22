@@ -74,7 +74,7 @@ export default function DoctorsListPage() {
               </p>
            </div>
 
-           {/* Hero Functional Bar */}
+           {/* Search Bar */}
            <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-stretch pt-8 md:pt-12">
               <div className="flex-1 h-20 md:h-24 bg-white/5 backdrop-blur-3xl rounded-[2rem] md:rounded-[2.5rem] shadow-4xl flex items-center px-6 md:px-10 border border-white/10 focus-within:border-brand-teal transition-all group overflow-hidden">
                  <div className="h-12 w-12 md:h-16 md:w-16 bg-brand-teal rounded-xl md:rounded-2xl flex items-center justify-center text-[#0a1628] shadow-mint group-focus-within:bg-white transition-all duration-700 shrink-0">
@@ -104,7 +104,7 @@ export default function DoctorsListPage() {
       {/* Doctors Grid Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-10 mt-0 md:-mt-32 relative z-[100] space-y-10 md:space-y-16">
          
-         {/* Specialty Chip Matrix */}
+         {/* Specialties */}
          <div className="bg-white border border-black/[0.03] p-3 md:p-4 rounded-[2.5rem] md:rounded-[3rem] shadow-soft overflow-x-auto no-scrollbar whitespace-nowrap">
             <div className="flex gap-2 md:gap-3">
                {specialties.map(spec => (
@@ -119,7 +119,7 @@ export default function DoctorsListPage() {
             </div>
          </div>
 
-         {/* Content Hub */}
+         {/* Doctors List */}
          <div className="flex flex-col lg:flex-row gap-8 md:gap-16 bg-white rounded-[2.5rem] md:rounded-[4rem] p-6 md:p-12 shadow-2xl relative z-10 border border-black/[0.02]">
             
             {/* Results Grid */}
@@ -127,7 +127,7 @@ export default function DoctorsListPage() {
                <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 bg-white border border-black/[0.03] rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-10 shadow-soft">
                   <div className="flex items-center gap-4 md:gap-6">
                      <div className="h-1.5 w-12 bg-brand-teal rounded-full" />
-                     <h2 className="font-syne font-black text-xl md:text-4xl text-[#0a1628] uppercase tracking-tighter italic leading-none">{doctors.length} Verified Doctors</h2>
+                     <h2 className="font-syne font-black text-xl md:text-4xl text-[#0a1628] uppercase tracking-tighter italic leading-none">{doctors.length} Certified Doctors</h2>
                   </div>
                   
                   <div className="flex bg-gray-50/50 p-1.5 md:p-2 rounded-2xl border border-black/[0.01]">
