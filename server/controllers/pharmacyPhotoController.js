@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { v2 as cloudinary } from 'cloudinary';
+import cloudinary from '../config/cloudinary.js';
 import Pharmacy from '../models/Pharmacy.js';
 
 const PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
