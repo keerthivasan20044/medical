@@ -487,8 +487,6 @@ const translations = {
     sidebarMetrics: 'Statistics',
     commandTerminal: 'App Dashboard',
     nodeVerifiedSide: 'Node Verified',
-    sidebarSupport: 'District Support',
-    sidebarSupportDesc: 'Direct architectural bridge to district headquarters.',
 
     // Settings
     settingsTitle: 'Settings.',
