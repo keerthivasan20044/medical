@@ -89,8 +89,80 @@ export default function PharmacyDetailPage() {
     );
   }
 
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentPhotoIdx, setCurrentPhotoIdx] = useState(0);
+
+  const allPhotos = useMemo(() => {
+    const list = [];
+    if (pharmacy?.customPhotos?.length) list.push(...pharmacy.customPhotos);
+    if (pharmacy?.photos?.length) list.push(...pharmacy.photos);
+    if (!list.length && pharmacy?.image) list.push(pharmacy.image);
+    return list.length ? list : ['https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=1200&q=80'];
+  }, [pharmacy]);
+
+  const openLightbox = (idx) => {
+    setCurrentPhotoIdx(idx);
+    setLightboxOpen(true);
+  };
+
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-36 w-full max-w-full overflow-x-hidden">
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {lightboxOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-10"
+          >
+            <button 
+              onClick={() => setLightboxOpen(false)}
+              className="absolute top-6 right-6 h-12 w-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all z-30"
+            >
+              <Plus size={24} className="rotate-45" />
+            </button>
+            
+            <div className="relative w-full max-w-6xl aspect-[4/3] md:aspect-video flex items-center justify-center">
+              <motion.img 
+                key={currentPhotoIdx}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                src={normalizeUrl(allPhotos[currentPhotoIdx])} 
+                className="max-w-full max-h-full object-contain rounded-3xl shadow-2xl"
+              />
+              
+              {allPhotos.length > 1 && (
+                <>
+                  <button 
+                    onClick={() => setCurrentPhotoIdx((prev) => (prev - 1 + allPhotos.length) % allPhotos.length)}
+                    className="absolute left-4 h-14 w-14 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all"
+                  >
+                    <ChevronRight size={32} className="rotate-180" />
+                  </button>
+                  <button 
+                    onClick={() => setCurrentPhotoIdx((prev) => (prev + 1) % allPhotos.length)}
+                    className="absolute right-4 h-14 w-14 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all"
+                  >
+                    <ChevronRight size={32} />
+                  </button>
+                </>
+              )}
+            </div>
+            
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3">
+              {allPhotos.map((_, i) => (
+                <button 
+                  key={i}
+                  onClick={() => setCurrentPhotoIdx(i)}
+                  className={`h-2 transition-all duration-500 rounded-full ${currentPhotoIdx === i ? 'w-10 bg-brand-teal' : 'w-2 bg-white/20'}`}
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Breadcrumb Terminal */}
       <section className="bg-white/30 backdrop-blur-sm border-b border-black/[0.02] py-4 mt-16 md:mt-24">
          <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -113,8 +185,8 @@ export default function PharmacyDetailPage() {
            autoplay={{ delay: 5000 }}
            className="h-full w-full"
          >
-           {(pharmacy.images || ['/assets/pharmacy_pro.png']).map((img, i) => (
-             <SwiperSlide key={i}>
+           {allPhotos.map((img, i) => (
+             <SwiperSlide key={i} onClick={() => openLightbox(i)} className="cursor-zoom-in">
                 <img src={normalizeUrl(img)} alt={pharmacy.name} className="h-full w-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" />
              </SwiperSlide>
            ))}
@@ -161,6 +233,7 @@ export default function PharmacyDetailPage() {
              </h1>
           </div>
       </section>
+
 
       {/* Pharmacy Information Bar */}
       <section className="sticky top-0 z-40 bg-white border-b border-black/[0.03] shadow-soft">

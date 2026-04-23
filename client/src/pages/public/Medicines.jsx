@@ -134,26 +134,6 @@ export default function MedicinesListPage() {
     return result;
   }, [medicines, searchQuery, selectedCategories, selectedPharmacies, priceRange, rxFilter, availability, sortBy]);
 
-  const toggleCategory = (cat) => {
-    setSelectedCategories(prev => 
-      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
-    );
-  };
-
-  const togglePharmacy = (id) => {
-    setSelectedPharmacies(prev => 
-      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
-    );
-  };
-
-  const resetFilters = () => {
-    setSelectedCategories([]);
-    setSelectedPharmacies([]);
-    setPriceRange(2500);
-    setRxFilter('Both');
-    setAvailability('All');
-    setSortBy('Most Popular');
-  };
 
   const FilterPanel = ({ isMobile = false }) => (
     <div className={`space-y-10 ${isMobile ? 'p-8 pb-32' : ''}`}>

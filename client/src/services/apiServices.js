@@ -85,6 +85,21 @@ export const pharmacyService = {
   getNearby: async (lat, lng) => {
     const res = await api.get('/api/pharmacies/nearby', { params: { lat, lng } });
     return res.data;
+  },
+
+  fetchPhoto: async (id) => {
+    const res = await api.post(`/api/pharmacies/${id}/fetch-photo`);
+    return res.data;
+  },
+
+  setMainPhoto: async (id, photoUrl) => {
+    const res = await api.put(`/api/pharmacies/${id}/set-main-photo`, { photoUrl });
+    return res.data;
+  },
+
+  deletePhoto: async (id, photoUrl) => {
+    const res = await api.delete(`/api/pharmacies/${id}/photos`, { data: { photoUrl } });
+    return res.data;
   }
 };
 

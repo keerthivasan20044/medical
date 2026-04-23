@@ -236,6 +236,7 @@ export const pharmacies = [
     verified: true,
     is24hr: false,
     images: ['/assets/apollo pharmacy.jpeg'],
+    mainPhoto: '/assets/apollo pharmacy.jpeg',
     services: ['Home Delivery', 'Prescription', 'UPI']
   },
   { 
@@ -249,7 +250,8 @@ export const pharmacies = [
     rating: 4.5, 
     deliveryFee: 40,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1576602976047-174e57a47881?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?w=800&q=80',
     services: ['Home Delivery', 'Card Payment', 'UPI']
   },
   { 
@@ -264,7 +266,8 @@ export const pharmacies = [
     deliveryFee: 0,
     verified: true,
     is24hr: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80',
     services: ['Home Delivery', 'COD', '24/7']
   },
   { 
@@ -278,7 +281,8 @@ export const pharmacies = [
     rating: 4.4, 
     deliveryFee: 25,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80',
     services: ['Home Delivery', 'UPI', 'Prescription']
   },
   { 
@@ -292,7 +296,8 @@ export const pharmacies = [
     rating: 4.3, 
     deliveryFee: 20,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=800&q=80',
     services: ['Home Delivery', 'COD']
   },
   { 
@@ -306,7 +311,8 @@ export const pharmacies = [
     rating: 4.5, 
     deliveryFee: 30,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=800&q=80',
     services: ['Home Delivery', 'Prescription', 'Card Payment']
   },
   { 
@@ -320,7 +326,8 @@ export const pharmacies = [
     rating: 4.2, 
     deliveryFee: 30,
     verified: false,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80',
     services: ['Prescription', 'COD']
   },
   { 
@@ -334,7 +341,8 @@ export const pharmacies = [
     rating: 4.6, 
     deliveryFee: 25,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1612776572997-76cc42e058c3?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1612776572997-76cc42e058c3?w=800&q=80',
     services: ['Home Delivery', 'UPI', 'Prescription']
   },
   { 
@@ -348,7 +356,8 @@ export const pharmacies = [
     rating: 4.4, 
     deliveryFee: 0,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=800&q=80',
     services: ['Generic Medicines', 'Low Cost', 'Government']
   },
   { 
@@ -362,7 +371,8 @@ export const pharmacies = [
     rating: 4.3, 
     deliveryFee: 20,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&q=80',
     services: ['Home Delivery', 'COD']
   },
   { 
@@ -376,7 +386,8 @@ export const pharmacies = [
     rating: 4.5, 
     deliveryFee: 25,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1628363602988-4afbe3573b33?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1628363602988-4afbe3573b33?w=800&q=80',
     services: ['Home Delivery', 'UPI']
   },
   { 
@@ -390,7 +401,8 @@ export const pharmacies = [
     rating: 4.6, 
     deliveryFee: 30,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&q=80',
     services: ['Lab Tests', 'Home Delivery', 'Prescription']
   },
   { 
@@ -404,7 +416,8 @@ export const pharmacies = [
     rating: 4.4, 
     deliveryFee: 35,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1576602976047-174e57a47881?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?w=800&q=80',
     services: ['Surgical Items', 'Medical Equipment', 'UPI']
   },
   { 
@@ -418,7 +431,8 @@ export const pharmacies = [
     rating: 4.7, 
     deliveryFee: 0,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80',
     services: ['Mission Hospital', 'Subsidized', 'Prescription']
   },
   { 
@@ -432,7 +446,8 @@ export const pharmacies = [
     rating: 4.3, 
     deliveryFee: 20,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80',
     services: ['Home Delivery', 'COD']
   },
   { 
@@ -447,7 +462,8 @@ export const pharmacies = [
     deliveryFee: 0,
     verified: true,
     is24hr: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=800&q=80',
     services: ['Emergency', 'Night Delivery', '24/7']
   },
   { 
@@ -461,7 +477,8 @@ export const pharmacies = [
     rating: 4.5, 
     deliveryFee: 25,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=800&q=80',
     services: ['Ayurvedic Specialist', 'Herbal', 'UPI']
   },
   { 
@@ -475,7 +492,8 @@ export const pharmacies = [
     rating: 4.6, 
     deliveryFee: 20,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80',
     services: ['Baby Care', 'Home Delivery', 'UPI']
   },
   {
@@ -489,7 +507,8 @@ export const pharmacies = [
     rating: 4.5,
     deliveryFee: 30,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1612776572997-76cc42e058c3?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1612776572997-76cc42e058c3?w=800&q=80',
     services: ['Home Delivery', 'UPI', 'Prescription']
   },
   {
@@ -503,7 +522,8 @@ export const pharmacies = [
     rating: 4.4,
     deliveryFee: 25,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=800&q=80',
     services: ['Home Delivery', 'COD']
   },
   {
@@ -517,7 +537,8 @@ export const pharmacies = [
     rating: 4.6,
     deliveryFee: 20,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&q=80',
     services: ['Home Delivery', 'UPI']
   },
   {
@@ -531,7 +552,8 @@ export const pharmacies = [
     rating: 4.3,
     deliveryFee: 30,
     verified: false,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1628363602988-4afbe3573b33?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1628363602988-4afbe3573b33?w=800&q=80',
     services: ['Prescription', 'COD']
   },
   {
@@ -545,7 +567,8 @@ export const pharmacies = [
     rating: 4.5,
     deliveryFee: 25,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&q=80',
     services: ['Home Delivery', 'UPI', 'Prescription']
   },
   {
@@ -559,7 +582,8 @@ export const pharmacies = [
     rating: 4.4,
     deliveryFee: 0,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1576602976047-174e57a47881?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?w=800&q=80',
     services: ['Generic Medicines', 'Jan Aushadhi', 'Government']
   },
   {
@@ -572,7 +596,8 @@ export const pharmacies = [
     status: 'OPEN NOW',
     rating: 4.3,
     deliveryFee: 20,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80',
     services: ['Local Delivery', 'COD']
   },
   {
@@ -585,7 +610,8 @@ export const pharmacies = [
     status: 'OPEN NOW',
     rating: 4.2,
     deliveryFee: 25,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80',
     services: ['Prescription', 'COD']
   },
   {
@@ -598,7 +624,8 @@ export const pharmacies = [
     status: 'OPEN NOW',
     rating: 4.4,
     deliveryFee: 20,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=800&q=80',
     services: ['Home Delivery', 'UPI']
   },
   {
@@ -611,7 +638,8 @@ export const pharmacies = [
     status: 'OPEN NOW',
     rating: 4.5,
     deliveryFee: 30,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=800&q=80',
     services: ['Home Delivery', 'COD', 'UPI']
   },
   {
@@ -624,7 +652,8 @@ export const pharmacies = [
     status: 'OPEN NOW',
     rating: 4.4,
     deliveryFee: 25,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80',
     services: ['Prescription', 'Home Delivery']
   },
   {
@@ -637,7 +666,8 @@ export const pharmacies = [
     status: 'OPEN NOW',
     rating: 4.3,
     deliveryFee: 30,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1612776572997-76cc42e058c3?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1612776572997-76cc42e058c3?w=800&q=80',
     services: ['Prescription', 'COD', 'UPI']
   },
   {
@@ -650,7 +680,8 @@ export const pharmacies = [
     status: 'OPEN NOW',
     rating: 4.5,
     deliveryFee: 25,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=800&q=80',
     services: ['Home Delivery', 'Prescription', 'UPI']
   },
   {
@@ -663,7 +694,8 @@ export const pharmacies = [
     status: 'OPEN NOW',
     rating: 4.4,
     deliveryFee: 35,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&q=80',
     services: ['Home Delivery', 'COD', 'Prescription']
   },
   {
@@ -676,7 +708,8 @@ export const pharmacies = [
     status: 'OPEN NOW',
     rating: 4.6,
     deliveryFee: 30,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1628363602988-4afbe3573b33?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1628363602988-4afbe3573b33?w=800&q=80',
     services: ['Surgical Items', 'Home Delivery', 'UPI']
   },
   {
@@ -690,7 +723,8 @@ export const pharmacies = [
     rating: 4.8,
     deliveryFee: 20,
     verified: true,
-    images: ['/assets/pharmacy_pro.png'],
+    images: ['https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&q=80'],
+    mainPhoto: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&q=80',
     services: ['All Vaccines', 'Home Delivery', 'UPI']
   },
   {
@@ -705,6 +739,7 @@ export const pharmacies = [
     deliveryFee: 30,
     verified: true,
     images: ['/assets/apollo pharmacy.jpeg'],
+    mainPhoto: '/assets/apollo pharmacy.jpeg',
     services: ['Home Delivery', 'Prescription', 'UPI']
   }
 ];
