@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, Pill, Stethoscope, User, ShoppingBag } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function MobileTabBar() {
   const location = useLocation();

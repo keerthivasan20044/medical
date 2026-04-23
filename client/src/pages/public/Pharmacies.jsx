@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 import { pharmacyService } from '../../services/apiServices';
 import { normalizeUrl } from '../../utils/url';
-import PharmacyCard_v2 from '../../components/pharmacy/PharmacyCard_v2.jsx';
-import KaraikalMap from '../../components/pharmacy/KaraikalMap.jsx';
+import PharmacyCard_v2 from '../../components/pharmacy/PharmacyCard_v2';
+import KaraikalMap from '../../components/pharmacy/KaraikalMap';
 
 const demandData = [
   { time: '08:00', volume: 45 }, { time: '10:00', volume: 85 },

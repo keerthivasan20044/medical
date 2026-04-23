@@ -6,7 +6,7 @@ import {
   Settings, ChevronRight, LogIn, UserPlus
 } from 'lucide-react';
 import { logoutUser, clearAuth } from '../../store/authSlice';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function ProfileDropdown() {
   const [open, setOpen] = useState(false);

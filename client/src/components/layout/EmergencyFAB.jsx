@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { Phone, AlertTriangle, Shield, Heart, Zap, X, ArrowRight, MessageCircle } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import useScrollDirection from '../../hooks/useScrollDirection.js';
 
 export default function EmergencyFAB() {

@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { blogPosts, doctors } from '../../utils/data';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function BlogDetail() {
   const { t } = useLanguage();

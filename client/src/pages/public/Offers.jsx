@@ -7,7 +7,7 @@ import {
   Percent, Zap, Info, Share2 
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 const OFFERS = [
   { id: 1, pharmacy: 'Apollo Pharmacy', title: 'Buy ₹500 worth → FREE delivery', sub: 'No delivery fee', valid: 'Today only', code: 'APOLLO500', category: 'Medicines', color: 'from-[#028090] to-teal-500' },

@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { prescriptionService } from '../../services/apiServices';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function Prescriptions() {
   const { t } = useLanguage();

@@ -9,7 +9,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { doctors as mockDoctors } from '../../utils/data.js';
 import { toast } from 'react-hot-toast';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { doctorService } from '../../services/apiServices';
 import { Loader2 } from 'lucide-react';
 

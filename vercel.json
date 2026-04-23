@@ -22,15 +22,7 @@
       "destination": "/assets/$1"
     },
     {
-      "source": "/favicon.ico",
-      "destination": "/favicon.ico"
-    },
-    {
-      "source": "/manifest.json",
-      "destination": "/manifest.json"
-    },
-    {
-      "source": "/((?!api|socket.io|assets|favicon.ico|manifest.json).*)",
+      "source": "/((?!api|socket.io|assets|favicon|manifest|pwa-|sw\\.js|registerSW\\.js|robots\\.txt).*)",
       "destination": "/index.html"
     }
   ],

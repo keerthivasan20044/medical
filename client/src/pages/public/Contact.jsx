@@ -6,7 +6,7 @@ import {
   ArrowRight, Landmark, MessageCircle, 
   LifeBuoy, CheckCircle, Info, ChevronRight, X, Activity, Zap, Globe
 } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { Input } from '../../components/common/Core';
 
 export default function Contact() {

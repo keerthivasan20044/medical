@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { Eye, EyeOff, KeyRound } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { resetPassword } from '../../store/authSlice.js';
-import StatusBanner from '../../components/common/StatusBanner.jsx';
-import FormField from '../../components/common/FormField.jsx';
+import StatusBanner from '../../components/common/StatusBanner';
+import FormField from '../../components/common/FormField';
 import { toastSuccess } from '../../utils/toast.js';
 
 export default function ResetPassword() {

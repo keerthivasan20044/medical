@@ -6,7 +6,7 @@ import { addOrder, updateOrderInList } from '../../store/ordersSlice.js';
 import { newOrderReceived, updateOrderStatus as updatePharmacistOrderStatus } from '../../store/pharmacistOrderSlice.js';
 import { setPrescriptionStatus } from '../../store/orderFlowSlice.js';
 import { updateMedicineStock } from '../../store/stockSlice.js';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { toast } from 'react-hot-toast';
 import { Activity, Bell, Zap, Truck, ShieldCheck, MapPin, XCircle, CreditCard, Gift, Heart } from 'lucide-react';
 

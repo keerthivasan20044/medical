@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Star, MapPin, ChevronLeft, MessageSquare, Filter, ShieldCheck, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { pharmacies } from '../../utils/data.js';
-import PageShell from '../../components/layout/PageShell.jsx';
+import PageShell from '../../components/layout/PageShell';
 
 export default function PharmacyReviewsPage() {
   const { id } = useParams();

@@ -1,7 +1,7 @@
 import { Search, MapPin, ArrowRight, Star, Pill, Package, Truck, Zap, Activity, Cpu, Globe, HeartPulse } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 const CheckCircle = ({ size, className }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>

@@ -10,8 +10,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { fetchOrders, updateOrderStatus, addOrder } from '../../store/ordersSlice.js';
-import PrescriptionModal from '../../components/pharmacist/PrescriptionModal.jsx';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import PrescriptionModal from '../../components/pharmacist/PrescriptionModal';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function PharmacistDashboard() {
   const { t } = useLanguage();

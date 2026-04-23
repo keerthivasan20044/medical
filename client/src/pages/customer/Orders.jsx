@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { fetchOrders } from '../../store/ordersSlice.js';
 import api from '../../services/api.js';
-import { SkeletonBox } from '../../components/common/Skeleton.jsx';
+import { SkeletonBox } from '../../components/common/Skeleton';
 
 const statusMap = {
   'pending': { label: 'Placed', icon: Package, color: 'text-amber-500 bg-amber-50', step: 0 },

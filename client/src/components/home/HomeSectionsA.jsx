@@ -2,7 +2,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import { Pill, Users, Truck, Store, MapPin, ChevronRight, ArrowRight, Activity, Zap, Cpu, Database } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { systemService } from '../../services/apiServices.js';
 
 const DEFAULT_STATS = [

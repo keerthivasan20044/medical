@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchOrderById } from '../../store/ordersSlice.js';
-import { SkeletonBox } from '../../components/common/Skeleton.jsx';
+import { SkeletonBox } from '../../components/common/Skeleton';
 
 export default function OrderDetail() {
   const { id } = useParams();

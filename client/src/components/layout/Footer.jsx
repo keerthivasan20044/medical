@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Pill, Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, Send, Apple, PlayCircle, ShieldCheck, Heart, Store, Activity, Globe, Zap, Cpu, ChevronRight } from 'lucide-react';
-import { useSocket } from '../../context/SocketContext.jsx';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useSocket } from '../../context/SocketContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();

@@ -1,6 +1,6 @@
 import { Sparkles, Tag, ShieldCheck, Zap, Activity, Info, CreditCard } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const TIP_PRESETS = [0, 20, 50, 100];

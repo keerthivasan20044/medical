@@ -7,7 +7,7 @@ import {
   Linkedin, Twitter, Mail, ArrowRight, Biohazard
 } from 'lucide-react';
 import { pharmacies } from '../../utils/data';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { Stethoscope, Store } from 'lucide-react';
 
 export default function About() {

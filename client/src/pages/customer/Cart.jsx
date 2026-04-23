@@ -1,12 +1,12 @@
 import { ShoppingCart, Trash2, Activity, ShieldCheck, Zap, Info, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
-import CartItem from '../../components/cart/CartItem.jsx';
-import CartSummary from '../../components/cart/CartSummary.jsx';
-import EmptyState from '../../components/common/EmptyState.jsx';
+import CartItem from '../../components/cart/CartItem';
+import CartSummary from '../../components/cart/CartSummary';
+import EmptyState from '../../components/common/EmptyState';
 import { useCart } from '../../hooks/useCart.js';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import PrescriptionPrompt from '../../components/cart/PrescriptionPrompt.jsx';
+import PrescriptionPrompt from '../../components/cart/PrescriptionPrompt';
 import { useMemo } from 'react';
 
 export default function Cart() {

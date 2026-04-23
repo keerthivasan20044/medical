@@ -1,9 +1,9 @@
-﻿import { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Search, X, Star, ShoppingBag, Plus, Info, Globe, ShieldCheck, FileText, ChevronRight, Activity, Zap, Award, ArrowRightLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { medicines } from '../../utils/data.js';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 
 export default function MedicineComparePage() {
@@ -40,7 +40,7 @@ export default function MedicineComparePage() {
     { label: 'Terminal MRP', icon: Award, val: m => `\u20B9${m.mrp}` },
     { label: 'Rx Protocol', icon: FileText, val: m => m.requiresRx ? 'Required' : 'Not Req.' },
     { label: 'Therapeutic Enclave', icon: Info, val: m => m.category },
-    { label: 'Audit Performance', icon: Star, val: m => `${m.rating} â˜… (${m.reviewsCount})` },
+    { label: 'Audit Performance', icon: Star, val: m => `${m.rating} ★ (${m.reviewsCount})` },
     { label: 'Inventory State', icon: Activity, val: m => m.stockCount > 0 ? 'Optimal' : 'Offline' }
   ];
 

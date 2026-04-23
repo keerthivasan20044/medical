@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { medicines, pharmacies, doctors, blogPosts } from '../../utils/data';
 import { Link } from 'react-router-dom';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 const POPULAR_SEARCHES = ['Paracetamol', 'Vitamin D', 'Insulin', 'Cetirizine', 'Dolo 650'];
 

@@ -11,7 +11,7 @@ import { toast } from 'react-hot-toast';
 import { pharmacies } from '../../utils/data.js';
 import { medicineService } from '../../services/apiServices';
 import { addToCart } from '../../store/cartSlice.js';
-import MedicineCard from '../../components/medicine/MedicineCard.jsx';
+import MedicineCard from '../../components/medicine/MedicineCard';
 
 export default function MedicinesListPage() {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -10,7 +10,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, LineChart, Line, AreaChart, Area 
 } from 'recharts';
-import { useSocket } from '../../context/SocketContext.jsx';
+import { useSocket } from '../../context/SocketContext';
 import { adminService } from '../../services/apiServices';
 
 const REVENUE_DATA = [

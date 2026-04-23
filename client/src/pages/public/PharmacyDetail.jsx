@@ -9,13 +9,13 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 import { pharmacies as mockPharmacies, medicines as mockMedicines } from '../../utils/data.js';
-import MedicineCard from '../../components/medicine/MedicineCard.jsx';
-import PageShell from '../../components/layout/PageShell.jsx';
+import MedicineCard from '../../components/medicine/MedicineCard';
+import PageShell from '../../components/layout/PageShell';
 import { pharmacyService, medicineService } from '../../services/apiServices';
 import { normalizeUrl } from '../../utils/url';
 import { Loader2 } from 'lucide-react';
 
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function PharmacyDetailPage() {
   const { id } = useParams();

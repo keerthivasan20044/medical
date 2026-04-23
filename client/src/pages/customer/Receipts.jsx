@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AlertCircle } from 'lucide-react';
 import { fetchReceipts } from '../../store/paymentsSlice.js';
 import api from '../../services/api.js';
-import { SkeletonBox } from '../../components/common/Skeleton.jsx';
+import { SkeletonBox } from '../../components/common/Skeleton';
 
 export default function Receipts() {
   const dispatch = useDispatch();

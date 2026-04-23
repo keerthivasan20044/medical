@@ -1,5 +1,5 @@
 import { Minus, Plus, Trash2, Activity, ShieldCheck, Zap } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
   const { t } = useLanguage();

@@ -7,10 +7,10 @@ import {
   Cpu, Zap, Lock, Globe, Sparkles
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import OTPInput from '../../components/common/OTPInput.jsx';
+import OTPInput from '../../components/common/OTPInput';
 import { useOtpConfirm } from '../../hooks/useOtpConfirm.js';
 import { useOtpTimer } from '../../hooks/useOtpTimer.js';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { Button } from '../../components/common/Core';
 
 const EMPTY_DIGITS = ['', '', '', '', '', ''];

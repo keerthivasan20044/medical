@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { createOrder, confirmPayment, createPaymentIntent } from '../../store/paymentsSlice.js';
 import { Button, Input } from '../../components/common/Core';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 function loadRazorpay() {
   return new Promise((resolve) => {

@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { doctors } from '../../utils/data.js';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { medicineService } from '../../services/apiServices';
 import { normalizeUrl } from '../../utils/url';
 const vaccineImg = '/assets/vaccine_pro.png';

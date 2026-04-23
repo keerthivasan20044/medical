@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App.jsx';
+import App from './App';
 import { store } from './store/store.js';
 import './index.css';
 
-import { SocketProvider } from './context/SocketContext.jsx';
-import { LanguageProvider } from './context/LanguageContext.jsx';
+import { SocketProvider } from './context/SocketContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { checkClientEnv } from './utils/envCheck.js';
 
 // Perform health checks on client environment

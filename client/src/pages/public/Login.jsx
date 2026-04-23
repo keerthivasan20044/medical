@@ -10,7 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuth } from '../../store/authSlice';
 import { Button, Input } from '../../components/common/Core';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { authService } from '../../services/apiServices';
 import { useToast } from '../../hooks/core';
 

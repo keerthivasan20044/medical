@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Activity, MapPin, Zap, User, Package, ShieldCheck } from 'lucide-react';
-import { useSocket } from '../../context/SocketContext.jsx';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useSocket } from '../../context/SocketContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function LiveActivityPulse() {
   const { socket } = useSocket();

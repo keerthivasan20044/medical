@@ -1,9 +1,9 @@
 import React from 'react';
-import Navbar from './Navbar.jsx';
-import MobileBottomNav from './MobileBottomNav.jsx';
-import DistrictCommandBar from './DistrictCommandBar.jsx';
-import ScrollToTopButton from '../common/ScrollToTopButton.jsx';
-import EmergencyFAB from './EmergencyFAB.jsx';
+import Navbar from './Navbar';
+import MobileBottomNav from './MobileBottomNav';
+import DistrictCommandBar from './DistrictCommandBar';
+import ScrollToTopButton from '../common/ScrollToTopButton';
+import EmergencyFAB from './EmergencyFAB';
 
 const Layout = ({ children, isAuthPage = false }) => {
   return (

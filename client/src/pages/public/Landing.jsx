@@ -1,6 +1,6 @@
-import Hero from '../../components/home/Hero.jsx';
-import { StatsCounter, Categories } from '../../components/home/HomeSectionsA.jsx';
-import { FeaturedMedicines, KaraikalPharmacies } from '../../components/home/HomeSectionsB.jsx';
+import Hero from '../../components/home/Hero';
+import { StatsCounter, Categories } from '../../components/home/HomeSectionsA';
+import { FeaturedMedicines, KaraikalPharmacies } from '../../components/home/HomeSectionsB';
 import { 
   VaccineShowcase, 
   HowItWorks, 
@@ -14,13 +14,13 @@ import {
   AppDownload, 
   EmergencyBanner,
   DistrictBackdrop
-} from '../../components/home/HomeSectionsC.jsx';
-import LiveActivityPulse from '../../components/home/LiveActivityPulse.jsx';
-import DistrictMapArchitecture from '../../components/home/DistrictMapArchitecture.jsx';
-import PrescriptionScannerPreview from '../../components/home/PrescriptionScannerPreview.jsx';
+} from '../../components/home/HomeSectionsC';
+import LiveActivityPulse from '../../components/home/LiveActivityPulse';
+import DistrictMapArchitecture from '../../components/home/DistrictMapArchitecture';
+import PrescriptionScannerPreview from '../../components/home/PrescriptionScannerPreview';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import useScrollAnimation from '../../hooks/useScrollAnimation.js';
-import SEO from '../../components/common/SEO.jsx';
+import SEO from '../../components/common/SEO';
 
 export default function Landing() {
   useScrollAnimation();

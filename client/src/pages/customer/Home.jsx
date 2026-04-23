@@ -24,7 +24,7 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { medicineService, doctorService, orderService, prescriptionService } from '../../services/apiServices';
 
 export default function Home() {

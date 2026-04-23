@@ -2,19 +2,19 @@ import { Toaster } from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import AppRouter from './routes/AppRouter.jsx';
-import DistrictCommandBar from './components/layout/DistrictCommandBar.jsx';
-import EmergencyFAB from './components/layout/EmergencyFAB.jsx';
-import MobileBottomNav from './components/layout/MobileBottomNav.jsx';
-import SocketListener from './components/layout/SocketListener.jsx';
+import AppRouter from './routes/AppRouter';
+import DistrictCommandBar from './components/layout/DistrictCommandBar';
+import EmergencyFAB from './components/layout/EmergencyFAB';
+import MobileBottomNav from './components/layout/MobileBottomNav';
+import SocketListener from './components/layout/SocketListener';
 import { fetchMe } from './store/authSlice.js';
-import ErrorBoundary from './components/common/ErrorBoundary.jsx';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import { loadGoogleMaps } from './services/mapLoader.js';
-import ScrollToTop from './components/common/ScrollToTop.jsx';
-import ScrollToTopButton from './components/common/ScrollToTopButton.jsx';
-import InstallPrompt from './components/InstallPrompt.jsx';
+import ScrollToTop from './components/common/ScrollToTop';
+import ScrollToTopButton from './components/common/ScrollToTopButton';
+import InstallPrompt from './components/InstallPrompt';
 
-import Layout from './components/layout/Layout.jsx';
+import Layout from './components/layout/Layout';
 
 export default function App() {
   const location = useLocation();

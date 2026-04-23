@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { doctors as mockDoctors } from '../../utils/data.js';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { doctorService } from '../../services/apiServices';
 import { Loader2 } from 'lucide-react';
 

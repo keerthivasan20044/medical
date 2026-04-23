@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { Mail, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { requestPasswordReset } from '../../store/authSlice.js';
-import StatusBanner from '../../components/common/StatusBanner.jsx';
-import FormField from '../../components/common/FormField.jsx';
+import StatusBanner from '../../components/common/StatusBanner';
+import FormField from '../../components/common/FormField';
 import { toastSuccess } from '../../utils/toast.js';
 
 export default function ForgotPassword() {

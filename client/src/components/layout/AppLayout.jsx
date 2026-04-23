@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
-import Navbar from './Navbar.jsx';
-import Sidebar from './Sidebar.jsx';
-import MobileBottomNav from './MobileBottomNav.jsx';
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
+import MobileBottomNav from './MobileBottomNav';
 
 export default function AppLayout() {
   return (

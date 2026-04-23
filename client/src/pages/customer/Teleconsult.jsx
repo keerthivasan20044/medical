@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Video, Phone, MessageSquare, Clock, ShieldCheck, Star, Calendar, ArrowRight, Activity, Zap } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { Button } from '../../components/common/Core';
 
 const DOCTORS = [

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { ChevronRight, ArrowRight, Pill, Loader2, Store, Truck, Activity, User, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 /**
  * Standard page title architecture with breadcrumbs.

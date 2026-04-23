@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { MapPin, Store, Truck, Activity, ShieldCheck, Zap, Globe, Navigation } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function DistrictMapArchitecture() {
   const { t } = useLanguage();

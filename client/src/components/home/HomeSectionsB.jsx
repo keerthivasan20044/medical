@@ -4,10 +4,10 @@ import { ChevronLeft, ChevronRight, Star, ShoppingBag, Store, MapPin, Clock, Tru
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { addToCart } from '../../store/cartSlice.js';
 import { medicines as mockMedicines, pharmacies } from '../../utils/data.js';
-import MedicineCard from '../medicine/MedicineCard.jsx';
+import MedicineCard from '../medicine/MedicineCard';
 import { medicineService } from '../../services/apiServices';
 import { normalizeUrl } from '../../utils/url';
 

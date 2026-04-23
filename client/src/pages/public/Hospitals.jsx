@@ -3,7 +3,7 @@ import { Search, MapPin, Phone, Clock, Activity, ShieldCheck, ChevronRight, Awar
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { hospitals } from '../../utils/data.js';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function HospitalsPage() {
   const { t } = useLanguage();

@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 const MOCK_MEDICINES = [
   { id: 1, name: 'Paracetamol 500mg', category: 'tablets', stock: 85, price: 45, mrp: 60, expiry: 'Mar 2027', batch: 'B25001', status: 'normal', demand: 'high' },

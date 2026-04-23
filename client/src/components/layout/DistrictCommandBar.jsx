@@ -6,7 +6,7 @@ import {
   Activity, Map, Bell, Settings, Heart, Truck
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import useScrollDirection from '../../hooks/useScrollDirection.js';
 
 export default function DistrictCommandBar() {

@@ -7,7 +7,7 @@ import {
   Navigation, MoreVertical, ChevronUp, Star, Map as MapIcon, Activity
 } from 'lucide-react';
 import { useOrderTracking } from '../../hooks/useOrderTracking.js';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 const STEPS = [
   { key: 'placed', label: 'Placed', icon: Package },

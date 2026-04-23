@@ -7,11 +7,11 @@ import {
   Home, Stethoscope, Info, Store, LogOut,
   Bell, FileText, Package, Wallet
 } from 'lucide-react';
-import { useSocket } from '../../context/SocketContext.jsx';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useSocket } from '../../context/SocketContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { logoutUser } from '../../store/authSlice';
 import { setCartOpen } from '../../store/uiSlice';
-import CartDrawer from '../cart/CartDrawer.jsx';
+import CartDrawer from '../cart/CartDrawer';
 
 // ─── Theme helper (inline, no ThemeContext needed) ────────────────────────────
 const getInitialTheme = () => {

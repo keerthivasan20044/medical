@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { logoutUser } from '../../store/authSlice.js';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 const NAV_ITEMS = [
   { id: 'personal', labelKey: 'personalInfo', icon: User, roles: ['customer', 'pharmacist', 'doctor', 'delivery', 'admin'] },

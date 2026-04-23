@@ -8,7 +8,7 @@ import {
   Clock, CreditCard, HelpCircle
 } from 'lucide-react';
 import { Button, Input } from '../../components/common/Core';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function Settings() {
   const { t, lang, setLang } = useLanguage();

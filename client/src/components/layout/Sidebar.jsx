@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 const NAV = (t) => ({
   customer: [

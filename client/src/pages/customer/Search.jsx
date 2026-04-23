@@ -12,8 +12,8 @@ import {
 } from 'lucide-react';
 import { fetchMedicines } from '../../store/medicinesSlice.js';
 import { pharmacyService, doctorService } from '../../services/apiServices.js';
-import MedicineCard from '../../components/medicine/MedicineCard.jsx';
-import { SkeletonBox } from '../../components/common/Skeleton.jsx';
+import MedicineCard from '../../components/medicine/MedicineCard';
+import { SkeletonBox } from '../../components/common/Skeleton';
 
 const TABS = ['All', 'Medicines', 'Pharmacies', 'Doctors'];
 

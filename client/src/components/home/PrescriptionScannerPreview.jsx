@@ -4,7 +4,7 @@ import {
   FileText, Upload, CheckCircle, Zap, ShieldCheck, 
   Search, Pill, Activity, Terminal, ExternalLink 
 } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import prescriptionImg from '../../assets/images/prescription-ocr.png';
 
 export default function PrescriptionScannerPreview() {

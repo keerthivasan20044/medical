@@ -11,7 +11,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Button, Input, OTPInput } from '../../components/common/Core';
 import { useGeolocation, useToast } from '../../hooks/core';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { authService } from '../../services/apiServices';
 
 export default function Register() {

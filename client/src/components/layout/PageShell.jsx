@@ -7,7 +7,7 @@ import {
   Database, Terminal, Cpu, MessageSquare, Plus, Edit, Trash, Download,
   Eye, Calendar, Pill, Wallet, Map, Settings, HelpCircle, Info
 } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 
 /**
  * High-Fidelity Page Shell for MediReach Command Center

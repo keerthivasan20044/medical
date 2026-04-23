@@ -8,7 +8,7 @@ import {
   Info, ArrowUpRight
 } from 'lucide-react';
 import { useState } from 'react';
-import { useLanguage } from '../../context/LanguageContext.jsx';
+import { useLanguage } from '../../context/LanguageContext';
 import { Button, Input } from '../../components/common/Core';
 
 const CATEGORIES = ['All Topics', 'First Aid', 'Chronic Care', 'Wellness', 'Pandemic Safety', 'District Archive'];
