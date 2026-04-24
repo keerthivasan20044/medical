@@ -16,13 +16,13 @@ export const useSocket = (userId) => {
     });
 
     newSocket.on('connect', () => {
-      console.log('[Socket] Connected to Master Node Architecture');
+if (import.meta.env.DEV) { console.log('[Socket] Connected to Master Node Architecture'); }
       setIsConnected(true);
       newSocket.emit('join:user', userId);
     });
 
     newSocket.on('disconnect', () => {
-      console.log('[Socket] Disconnected from Architecture');
+if (import.meta.env.DEV) { console.log('[Socket] Disconnected from Architecture'); }
       setIsConnected(false);
     });
 
@@ -48,7 +48,7 @@ export const useOrderLiveTracking = (orderId, userId) => {
     socket.on('order:status', (data) => {
       if (data.orderId === orderId) {
         setStatus(data.status);
-        console.log(`[Order] Status Synchronized: ${data.status}`);
+if (import.meta.env.DEV) { console.log(`[Order] Status Synchronized: ${data.status}`); }
       }
     });
 
@@ -56,7 +56,7 @@ export const useOrderLiveTracking = (orderId, userId) => {
       if (data.orderId === orderId) {
         setLocation(data.location);
         setEta(data.eta);
-        console.log(`[Order] GPS Ping Received: ${data.location.lat}, ${data.location.lng}`);
+if (import.meta.env.DEV) { console.log(`[Order] GPS Ping Received: ${data.location.lat}, ${data.location.lng}`); }
       }
     });
 

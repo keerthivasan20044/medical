@@ -151,7 +151,7 @@ export default function MedicineDetailPage() {
                <div className="space-y-2">
                   <div className="text-gray-400 font-dm font-bold italic text-base md:text-xl">{medicine.brand}</div>
                   <h1 className="font-syne font-black text-3xl md:text-6xl text-[#0a1628] leading-[0.9] tracking-tighter uppercase italic">{medicine.name}</h1>
-                  <div className="text-brand-teal font-dm font-black italic text-lg md:text-2xl uppercase tracking-tighter opacity-60">FORMULA: {medicine.generic}</div>
+                  <div className="text-brand-teal font-dm font-black italic text-lg md:text-2xl uppercase tracking-tighter opacity-60">Active Ingredient: {medicine.generic}</div>
                </div>
             </div>
 

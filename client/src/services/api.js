@@ -8,7 +8,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // API Request Interceptor
-    console.log(`[API] Request: ${config.method.toUpperCase()} ${config.url}`);
+if (import.meta.env.DEV) { console.log(`[API] Request: ${config.method.toUpperCase()} ${config.url}`); }
     return config;
   },
   (error) => Promise.reject(error)
@@ -16,7 +16,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (res) => {
-    console.log(`[API] Response: ${res.status} ${res.config.url}`);
+if (import.meta.env.DEV) { console.log(`[API] Response: ${res.status} ${res.config.url}`); }
     return res;
   },
   async (error) => {

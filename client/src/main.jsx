@@ -69,9 +69,7 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
-
-console.log("MediPharm Hub: Initializing App...");
-
+if (import.meta.env.DEV) { console.log("MediPharm Hub: Initializing App..."); }
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -92,5 +90,4 @@ root.render(
     </ErrorBoundary>
   </React.StrictMode>
 );
-
-console.log("MediPharm Hub: App Loaded Successfully.");
+if (import.meta.env.DEV) { console.log("MediPharm Hub: App Loaded Successfully."); }

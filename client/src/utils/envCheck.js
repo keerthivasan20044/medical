@@ -17,8 +17,7 @@ export const checkClientEnv = () => {
       console.warn('⚠️ Missing Client Environment Variables:', missing);
       return { success: false, missing };
     }
-  
-    console.log('✅ Client environment variables verified.');
+if (import.meta.env.DEV) { console.log('✅ Client environment variables verified.'); }
     return { success: true, missing: [] };
   };
   

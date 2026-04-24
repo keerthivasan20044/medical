@@ -141,7 +141,7 @@ export default function Cart() {
                         <div className="h-10 w-10 md:h-16 md:w-16 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-teal-400"><Info size={20} /></div>
                         <div className="space-y-0.5">
                            <h3 className="font-syne font-black text-lg md:text-2xl uppercase tracking-tighter italic leading-none">{t('deliveryNotes')}</h3>
-                           <div className="text-[8px] font-black text-teal-400 uppercase tracking-widest italic">DISTRICT LOGISTICS</div>
+                           <div className="text-[8px] font-black text-teal-400 uppercase tracking-widest italic">DISTRICT Delivery</div>
                         </div>
                      </div>
                      <p className="text-white/40 font-dm italic font-bold text-xs md:text-base">{t('deliveryNotesInstructions')}</p>
@@ -217,7 +217,7 @@ export default function Cart() {
                      <Zap size={16} className="text-amber-500" /> Secure Delivery Protocol
                   </div>
                   <div className="flex items-center gap-3">
-                     <ShieldCheck size={16} className="text-emerald-500" /> KARAIKAL MESH
+                     <ShieldCheck size={16} className="text-emerald-500" /> KARAIKAL Network
                   </div>
                </div>
             </div>

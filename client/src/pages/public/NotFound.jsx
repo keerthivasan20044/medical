@@ -49,7 +49,7 @@ export default function NotFound() {
          <div className="pt-20 flex items-center justify-center gap-10">
             <div className="flex flex-col items-center gap-2">
                <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">Protocol ID</div>
-               <div className="font-syne font-black text-white/40 text-xs">/ ENCLAVE_MISSING_ERR_04</div>
+               <div className="font-syne font-black text-white/40 text-xs">/ Section_MISSING_ERR_04</div>
             </div>
             <div className="h-10 w-px bg-white/5" />
             <div className="flex flex-col items-center gap-2">

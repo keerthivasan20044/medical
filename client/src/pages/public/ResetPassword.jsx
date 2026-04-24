@@ -133,7 +133,7 @@ export default function ResetPassword() {
               <button onClick={() => navigate('/login')} className="hover:text-teal-500 transition-colors">Back to Login</button>
               <button onClick={() => navigate('/')} className="hover:text-teal-500 transition-colors">Go Home</button>
            </div>
-           <div className="flex items-center gap-2"><Sparkles size={14} className="text-teal-500 animate-pulse"/> SECURE ENCLAVE</div>
+           <div className="flex items-center gap-2"><Sparkles size={14} className="text-teal-500 animate-pulse"/> SECURE Section</div>
         </div>
       </div>
     </div>

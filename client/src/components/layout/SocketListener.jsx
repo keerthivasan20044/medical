@@ -136,7 +136,7 @@ export default function SocketListener() {
        }
     });
 
-    // --- LOGISTICS COORDINATION EVENTS ---
+    // --- Delivery COORDINATION EVENTS ---
     socket.on('delivery:assigned', (data) => {
        if (user?.role === 'delivery') {
           dispatch(addNotification({ id: Date.now(), title: t('newMissionAssigned'), message: t('deliveryAssignmentMsg', { pharmacyName: data.pharmacyName, address: data.address, total: data.total }), type: 'assignment' }));

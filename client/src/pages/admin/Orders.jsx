@@ -87,7 +87,7 @@ export default function Orders() {
                   <td>{o.customer}</td>
                   <td className="text-brand-muted">{o.pharmacy}</td>
                   <td><span className={`inline-flex px-2 py-0.5 rounded-full text-[11px] ${STATUS_TONE[o.status]}`}>{o.status}</span></td>
-                  <td className="font-heading text-sm">{`\u20B9${o.amount}`}</td>
+                  <td className="font-heading text-sm">{`?${o.amount}`}</td>
                   <td>
                     <div className="flex items-center gap-2">
                       <button className="px-3 py-1 rounded-full border border-brand-border text-xs flex items-center gap-1">

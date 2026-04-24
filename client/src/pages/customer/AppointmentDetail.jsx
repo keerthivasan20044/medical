@@ -25,7 +25,7 @@ export default function AppointmentDetail() {
                   <div className="h-20 w-20 bg-[#0a1628] rounded-[2rem] flex items-center justify-center text-brand-teal shadow-2xl animate-spin-slow"><Clock size={32}/></div>
                   <div className="space-y-1">
                      <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">Sync Lockdown</div>
-                     <div className="font-syne font-black text-[#0a1628] text-xl uppercase italic flex items-center gap-3">CONFIRMED_ENCLAVE <CheckCircle size={18} className="text-brand-teal"/></div>
+                     <div className="font-syne font-black text-[#0a1628] text-xl uppercase italic flex items-center gap-3">CONFIRMED_Section <CheckCircle size={18} className="text-brand-teal"/></div>
                   </div>
                </div>
                

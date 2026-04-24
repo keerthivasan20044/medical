@@ -105,7 +105,7 @@ export default function ForgotPassword() {
               <Link to="/login" className="hover:text-brand-teal transition-colors">Back to Login</Link>
               <Link to="/" className="hover:text-brand-teal transition-colors">Go Home</Link>
            </div>
-           <div className="flex items-center gap-2"><Sparkles size={14} className="text-brand-teal animate-pulse"/> SECURE ENCLAVE</div>
+           <div className="flex items-center gap-2"><Sparkles size={14} className="text-brand-teal animate-pulse"/> SECURE Section</div>
         </div>
       </div>
     </div>

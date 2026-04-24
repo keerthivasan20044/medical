@@ -82,7 +82,7 @@ export default function Analytics() {
             </div>
             <div className="border border-brand-border rounded-xl p-4">
               <div className="text-xs text-brand-muted">Avg Order Value</div>
-              <div className="font-heading text-xl text-brand-navy">\u20B9320</div>
+              <div className="font-heading text-xl text-brand-navy">?320</div>
             </div>
             <div className="border border-brand-border rounded-xl p-4">
               <div className="text-xs text-brand-muted">Active Customers</div>

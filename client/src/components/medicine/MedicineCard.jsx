@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import { Heart, ShoppingBag, Activity } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/cartSlice';
-import { getMedicineImage } from '../../data/medicineImages';
+import { getMedicineImage } from '../../utils/medicineImages';
 
 const MedicineCard = forwardRef(({ item: medicine }, ref) => {
   const dispatch = useDispatch();

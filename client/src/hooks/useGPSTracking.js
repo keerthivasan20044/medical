@@ -20,7 +20,7 @@ export const useGPSTracking = (orderId) => {
 
     // Listen for live trajectory updates
     socket.on('location:live', (data) => {
-      console.log(`[GPS Terminal] Live update for ${orderId}:`, data);
+if (import.meta.env.DEV) { console.log(`[GPS Terminal] Live update for ${orderId}:`, data); }
       setLocation(data);
     });
 

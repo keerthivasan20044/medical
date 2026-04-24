@@ -15,8 +15,7 @@ class SocketService {
     });
 
     this.socket.on('connect', () => {
-      console.log(`[Socket] Connected as ${role} (ID: ${userId})`);
-      
+if (import.meta.env.DEV) { console.log(`[Socket] Connected as ${role} (ID: ${userId})`); }
       // Join specific rooms
       this.socket.emit('join', { userId, role });
       if (role === 'admin') this.socket.emit('join', { room: 'admin' });
@@ -24,7 +23,7 @@ class SocketService {
     });
 
     this.socket.on('disconnect', () => {
-      console.log('[Socket] Disconnected');
+if (import.meta.env.DEV) { console.log('[Socket] Disconnected'); }
     });
 
     return this.socket;

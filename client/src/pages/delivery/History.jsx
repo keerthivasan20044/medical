@@ -29,7 +29,7 @@ export default function History() {
               </div>
               <div className="flex items-center gap-4 text-sm text-brand-muted">
                 <span className="flex items-center gap-1"><MapPin size={12} /> {h.distance}</span>
-                <span className="font-heading text-brand-navy">{`\u20B9${h.amount}`}</span>
+                <span className="font-heading text-brand-navy">{`?${h.amount}`}</span>
                 <span className="flex items-center gap-1 text-amber-500"><Star size={12} /> {h.rating}.0</span>
               </div>
               <button className="px-3 py-1 rounded-full border border-brand-border text-xs">View Receipt</button>

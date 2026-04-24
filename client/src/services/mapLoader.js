@@ -24,7 +24,7 @@ export const loadGoogleMaps = () => {
   document.head.appendChild(script);
 
   script.onload = () => {
-    console.log('✅ Maps Loaded: Map features ready.');
+if (import.meta.env.DEV) { console.log('✅ Maps Loaded: Map features ready.'); }
   };
 
   script.onerror = () => {

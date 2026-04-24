@@ -170,7 +170,7 @@ export default function UploadPrescription() {
                   disabled={!file}
                   className="w-full h-18 bg-white text-[#0a1628] rounded-[2rem] font-syne font-black text-sm uppercase tracking-[0.2em] shadow-xl hover:scale-[1.02] active:scale-[0.98] transition disabled:opacity-30 flex items-center justify-center gap-3 group"
                >
-                  SUBMIT TO MESH <ArrowRight size={20} className="group-hover:translate-x-1 transition" />
+                  SUBMIT TO Network <ArrowRight size={20} className="group-hover:translate-x-1 transition" />
                </button>
             </div>
 
