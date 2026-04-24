@@ -22,9 +22,9 @@ export default function App() {
   const isDashboard = location.pathname.startsWith('/admin') || 
                       location.pathname.startsWith('/pharmacist') || 
                       location.pathname.startsWith('/delivery');
-  const hideBottomNav = isDashboard || ['/otp', '/forgot-password'].includes(location.pathname);
+  const hideBottomNav = ['/otp', '/forgot-password'].includes(location.pathname);
   const hideNavbar = isDashboard;
-  const hideExtras = isDashboard || ['/otp', '/forgot-password'].includes(location.pathname);
+  const hideExtras = ['/otp', '/forgot-password'].includes(location.pathname);
 
   useEffect(() => {
     dispatch(fetchMe());

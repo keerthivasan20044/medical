@@ -20,7 +20,7 @@ export default function EmergencyFAB() {
     <motion.div
       initial={{ x: 100, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      className="fixed bottom-36 md:bottom-36 right-4 z-[99] flex flex-col items-end gap-3"
+      className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-[99] flex flex-col items-end gap-3"
     >
       <AnimatePresence>
         {isOpen && (

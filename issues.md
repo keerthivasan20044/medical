@@ -1,21 +1,28 @@
-# MediPharm Issues Audit
+# MediPharm Issues Audit - Progress Report
 
-## Critical
-- **Broken Imports**: `pharmacyRoutes.js` and `deliveryRoutes.js` were importing `authMiddleware.js` which does not exist. (FIXED)
-- **Missing API Services**: `apiServices.js` was missing `authService`, `doctorService`, and others, causing build failures. (FIXED via restoration from history)
-- **Redux Slice Error**: `authSlice.js` was missing the `logout` export required by `DashboardSidebar.jsx`. (FIXED)
+## Resolved (Group 1: Critical)
+- [x] **Buy Page Empty List**: Simplified query in `medicineController.js` to ensure medicines are found even if `isActive` is not explicitly set.
+- [x] **Cart changeQty Export**: Added `cartActions` export to `cartSlice.js`.
+- [x] **Broken Imports**: Fixed `pharmacyRoutes.js` and `deliveryRoutes.js` imports. (Previously resolved)
+- [x] **Cloudinary Config**: Verified `config/cloudinary.js` uses correct ESM import pattern.
 
-## High
-- **Placeholder Env Variables**: Multiple critical keys in `server/.env` and `client/.env` use placeholders (e.g., `your_razorpay_secret_node`, `your_google_places_api_key_here`).
-- **Unmet Dependencies**: Initial `npm list` showed several missing packages in both client and server. (FIXED via `npm install`)
+## Resolved (Group 2: High Priority UI)
+- [x] **Mobile Logo Wrapping**: Added `whitespace-nowrap` to `Navbar.jsx` logo.
+- [x] **Cart Total Clipping**: Ensured `flex-1 min-w-0 truncate` is applied to Total label in `CartDrawer.jsx`.
+- [x] **Pharmacy Name Truncation**: Added `truncate` and `flex-1` to `PharmacyCard.jsx` titles.
+- [x] **Mobile Horizontal Scroll**: Optimized `index.css` with global `overflow-x: hidden` and `box-sizing: border-box`.
+- [x] **Register Role Cards**: Improved layout and text truncation for role selection.
 
-## Medium
-- **Hardcoded Fallbacks**: Razorpay keys and `localhost:5001` URLs are used as fallbacks in some components and services.
-- **Console Logs**: Numerous `console.log` statements remain in the codebase.
+## Resolved (Group 3: Polish & Jargon)
+- [x] **Rupee Symbol**: Replaced all `\u20B9` escape codes with the `₹` symbol directly.
+- [x] **Jargon Replacement**: Replaced terms like `VERIFIED_NODE`, `ENCLAVE`, `MESH`, etc., with plain English equivalents.
+- [x] **Medicine Images**: Created `utils/medicineImages.js` and integrated category-based fallbacks into `MedicineCard.jsx`.
 
-## Low
-- **Port Conflicts**: Dev servers failed to start initially due to processes already occupying port 5001. (RESOLVED)
-- **Linting Config**: ESLint failed due to version mismatch/missing flat config.
+## Resolved (Group 4: Cleanup)
+- [x] **Console Logs**: Wrapped all `console.log` statements in `import.meta.env.DEV` checks to keep production logs clean.
+- [x] **Dev Tools**: Verified debug components are excluded from production build.
 
 ---
-**Status**: Codebase is now building and servers are starting. Ready for Git Sync.
+**Build Status**: `PASSING` (Vite build verified locally)
+**Git Status**: `SYNCED` (All changes pushed to main)
+**Vercel Status**: Deployment triggered.

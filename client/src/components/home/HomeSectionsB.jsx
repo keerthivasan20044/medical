@@ -209,7 +209,7 @@ export function KaraikalPharmacies() {
                      <div className="space-y-4">
                         <div className="flex items-start justify-between gap-2 w-full">
                            <h3 className="font-syne font-black text-[#0a1628] text-xl md:text-2xl uppercase italic tracking-tighter leading-tight group-hover:text-brand-teal transition-colors flex-1 min-w-0 break-words line-clamp-1">{p.name}</h3>
-                           <div className="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 bg-amber-400 rounded-xl text-[#0a1628] font-black text-xs shadow-xl rotate-3">
+                           <div className="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 bg-amber-400 rounded-xl text-[#0a1628] font-black text-xs shadow-xl rotate-3 ml-2">
                               <Star size={14} fill="currentColor" /> {p.rating}
                            </div>
                         </div>
