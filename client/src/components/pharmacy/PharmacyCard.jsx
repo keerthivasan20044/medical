@@ -52,7 +52,7 @@ export default function PharmacyCard({ pharmacy, idx }) {
       {/* Content */}
       <div className="p-8 flex-1 flex flex-col space-y-4">
         <div>
-           <h3 className="font-syne font-black text-xl text-navy uppercase italic group-hover:text-brand-teal transition-colors leading-tight">
+           <h3 className="font-syne font-black text-xl text-navy uppercase italic group-hover:text-brand-teal transition-colors leading-tight flex-1 min-w-0 truncate">
              {pharmacy.name}
            </h3>
            <div className="flex items-center gap-2 text-xs font-dm font-bold text-navy/40 italic mt-1">

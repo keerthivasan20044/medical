@@ -207,17 +207,17 @@ export default function Register() {
                            <h2 className="font-syne font-black text-3xl md:text-4xl text-[#0a1628]">Choose your role</h2>
                            <p className="text-gray-400 font-dm italic text-base md:text-lg opacity-60">Select how you want to use the platform.</p>
                         </div>
-                         <div className="grid grid-cols-2 gap-3">
+                         <div className="grid grid-cols-2 gap-3 flex-wrap">
                             {ROLES.map(r => (
                               <button
                                 key={r.id}
                                 onClick={() => { setFormData({ ...formData, role: r.id }); handleNext(); }}
-                                className="flex flex-col items-center gap-3 p-4 rounded-xl border-2 border-gray-50 bg-gray-50 hover:border-teal-500 hover:bg-white transition-all duration-300 group text-center shadow-sm"
+                                className="flex flex-col items-center gap-3 p-4 rounded-xl border-2 border-gray-50 bg-gray-50 hover:border-teal-500 hover:bg-white transition-all duration-300 group text-center shadow-sm flex-1 min-w-0"
                               >
                                  <div className="h-10 w-10 bg-white rounded-lg flex items-center justify-center text-navy group-hover:bg-navy group-hover:text-teal-400 transition duration-300 shadow-sm flex-shrink-0"><r.icon size={18}/></div>
-                                 <div className="w-full">
-                                    <div className="font-syne font-black text-[9px] text-navy uppercase tracking-tight leading-tight mb-1 truncate">{r.label}</div>
-                                    <div className="text-[7px] font-dm text-gray-400 italic line-clamp-1 leading-tight hidden sm:block">{r.desc}</div>
+                                 <div className="w-full min-w-0">
+                                    <div className="font-syne font-black text-xs text-navy uppercase tracking-tight leading-tight mb-1 truncate">{r.label}</div>
+                                    <div className="text-[10px] font-dm text-gray-400 italic line-clamp-2 leading-tight hidden sm:block">{r.desc}</div>
                                  </div>
                               </button>
                             ))}

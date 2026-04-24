@@ -163,7 +163,7 @@ export default function Navbar() {
           <div className="w-9 h-9 bg-teal-500/20 rounded-xl flex items-center justify-center">
             <Pill size={18} className="text-teal-400" />
           </div>
-          <span className="font-black text-xl text-white max-w-[140px] truncate">
+          <span className="font-black text-xl text-white max-w-[140px] truncate whitespace-nowrap">
             Medi<span className="text-teal-400">Pharm</span>
           </span>
         </Link>
@@ -277,7 +277,7 @@ export default function Navbar() {
           <div className="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center">
             <Pill size={16} className="text-teal-400" />
           </div>
-          <span className="font-black text-lg text-white">
+          <span className="font-black text-lg text-white whitespace-nowrap">
             Medi<span className="text-teal-400">Pharm</span>
           </span>
         </Link>
