@@ -105,7 +105,7 @@ export default function PharmacyCard_v2({ item, layout = 'grid' }) {
            <div className="flex flex-col gap-3 justify-center">
               <Link to={`/pharmacies/${id}`} className="block">
                 <button className="h-14 px-8 bg-white border border-brand-teal text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-widest rounded-xl hover:bg-brand-teal hover:text-white transition-all flex items-center justify-center gap-3">
-                  <Pill size={16}/> View Node
+                   <Pill size={16}/> View Pharmacy
                 </button>
               </Link>
               <button className="h-14 px-8 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-xl shadow-mint flex items-center justify-center gap-3">
@@ -136,7 +136,7 @@ export default function PharmacyCard_v2({ item, layout = 'grid' }) {
             </div>
             {is24hr && (
               <div className="px-4 py-1.5 bg-blue-500 rounded-full text-[9px] font-black text-white uppercase tracking-widest italic shadow-lg">
-                 24 Hours Node
+                 24 Hours Open
               </div>
             )}
          </div>
@@ -238,18 +238,18 @@ export default function PharmacyCard_v2({ item, layout = 'grid' }) {
 
          <div className="space-y-4">
             <div className="flex items-center justify-between text-[10px] font-black uppercase italic tracking-widest text-gray-400">
-               <div className="flex items-center gap-2"><Truck size={12}/> Delivery: \u20B9{deliveryFee}</div>
+               <div className="flex items-center gap-2"><Truck size={12}/> Delivery: ₹{deliveryFee}</div>
                <div className="flex items-center gap-2"><Timer size={12}/> {eta}</div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
                <Link to={`/pharmacies/${id}`} className="block">
                  <button className="w-full h-14 bg-white border border-brand-teal text-brand-teal font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl hover:bg-brand-teal hover:text-white transition-all flex items-center justify-center gap-3">
-                    <Pill size={16}/> Node Hub
+                    <Pill size={16}/> Details
                  </button>
                </Link>
                <button className="w-full h-14 bg-[#0a1628] text-brand-teal font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl shadow-4xl flex items-center justify-center gap-3 hover:bg-brand-teal hover:text-[#0a1628] transition-all">
-                  <ShoppingCart size={16}/> Uplink
+                  <ShoppingCart size={16}/> Order Now
                </button>
             </div>
          </div>

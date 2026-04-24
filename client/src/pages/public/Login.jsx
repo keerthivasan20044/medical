@@ -4,7 +4,8 @@ import {
   Mail, Lock, LogIn, ChevronRight, 
   ArrowRight, Heart, Star, 
   ShieldCheck, Smartphone, User, 
-  Stethoscope, Store, Truck, Globe
+  Stethoscope, Store, Truck, Globe,
+  Eye, EyeOff
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,6 +30,7 @@ export default function Login() {
   const [method, setMethod] = useState('email'); // 'email' or 'phone'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [otpStep, setOtpStep] = useState('request'); // 'request' or 'verify'
@@ -154,7 +156,7 @@ export default function Login() {
       </section>
 
       {/* Right: Login Form Panel */}
-      <section className="flex-1 flex flex-col items-center justify-center p-8 md:p-16 space-y-12">
+      <section className="flex-1 flex flex-col items-center justify-center p-8 md:p-16 pb-20 md:pb-6 space-y-12">
          <div className="w-full max-w-lg space-y-8 md:space-y-12 px-4 md:px-0">
             {/* Mobile logo — only visible on small screens */}
             <div className="flex md:hidden items-center gap-3 pb-2">
@@ -176,9 +178,9 @@ export default function Login() {
                       key={r.id}
                       type="button"
                       onClick={() => setRole(r.id)}
-                      className={`flex flex-col items-center justify-center gap-2 md:gap-4 p-4 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-2 transition-all duration-500 group ${role === r.id ? 'bg-[#0a1628] border-[#0a1628] text-white shadow-3xl' : 'bg-gray-50 border-gray-100 text-gray-400 hover:bg-white hover:border-[#028090]/20'}`}
+                      className={`flex flex-col items-center justify-center gap-2 md:gap-4 p-4 md:p-8 rounded-2xl md:rounded-[2rem] border-2 transition-all duration-300 group ${role === r.id ? 'bg-navy border-navy text-white shadow-xl' : 'bg-gray-50 border-gray-100 text-gray-400 hover:bg-white hover:border-teal-500/20'}`}
                     >
-                       <r.icon size={role === r.id ? 20 : 18} className={role === r.id ? 'text-[#02C39A]' : 'group-hover:text-[#028090]'} />
+                       <r.icon size={role === r.id ? 20 : 18} className={role === r.id ? 'text-teal-400' : 'group-hover:text-teal-600'} />
                        <span className="font-syne font-black text-[9px] md:text-[10px] uppercase tracking-widest text-center">{r.label}</span>
                     </button>
                   ))}
@@ -194,23 +196,35 @@ export default function Login() {
                      exit={{ opacity: 0, x: 20 }}
                      className="space-y-6"
                    >
-                      <Input 
-                        label="Email Address" 
-                        icon={Mail} 
-                        placeholder="user@example.com" 
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                      <Input 
-                        label="Password" 
-                        icon={Lock} 
-                        type="password" 
-                        placeholder="••••••••" 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                      />
+                       <Input 
+                         label="Email Address" 
+                         icon={Mail} 
+                         type="email"
+                         placeholder="user@example.com" 
+                         value={email}
+                         onChange={(e) => setEmail(e.target.value)}
+                         className="py-3 text-base"
+                         required
+                       />
+                       <div className="relative">
+                         <Input 
+                           label="Password" 
+                           icon={Lock} 
+                           type={showPassword ? "text" : "password"} 
+                           placeholder="••••••••" 
+                           value={password}
+                           onChange={(e) => setPassword(e.target.value)}
+                           className="py-3 text-base"
+                           required
+                         />
+                         <button 
+                           type="button"
+                           onClick={() => setShowPassword(!showPassword)}
+                           className="absolute right-4 top-[38px] text-gray-400 hover:text-[#0a1628] transition-colors"
+                         >
+                           {showPassword ? <EyeOff size={16}/> : <Eye size={16}/>}
+                         </button>
+                       </div>
                    </motion.div>
                  ) : (
                    <motion.div 
@@ -255,7 +269,7 @@ export default function Login() {
                </AnimatePresence>
 
                 <div className="flex items-center justify-between">
-                   <label className="flex items-center gap-4 cursor-pointer group">
+                   <label className="flex items-center gap-4 cursor-pointer group py-2 px-1">
                       <div className={`h-6 w-6 rounded-lg border flex items-center justify-center transition shadow-inner ${rememberMe ? 'bg-[#0a1628] border-brand-teal' : 'bg-gray-50 border-gray-100'}`}>
                          <input 
                            type="checkbox" 
@@ -265,10 +279,10 @@ export default function Login() {
                          />
                          <div className={`h-2 w-2 bg-[#02C39A] rounded-full transition ${rememberMe ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`} />
                       </div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#0a1628]">Remember Me</span>
+                      <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-[#0a1628]">Remember Me</span>
                    </label>
                   {method === 'email' && (
-                    <Link to="/forgot-password" title="Forgot Password" className="text-[10px] font-black uppercase tracking-widest text-[#028090] hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">Forgot Password?</Link>
+                    <Link to="/forgot-password" title="Forgot Password" className="text-xs md:text-sm font-black uppercase tracking-widest text-[#028090] hover:underline decoration-2 underline-offset-4 decoration-[#02C39A] py-2">Forgot Password?</Link>
                   )}
                </div>
 

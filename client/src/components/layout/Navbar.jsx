@@ -150,29 +150,29 @@ export default function Navbar() {
       ================================================================ */}
       <nav className={`
         hidden md:flex
-        fixed top-0 left-0 right-0 z-50 h-[64px]
+        fixed top-0 left-0 right-0 z-50 h-16
         items-center justify-between px-6 lg:px-8
         transition-all duration-300
         ${scrolled
-          ? 'bg-[#0a0f1e]/95 backdrop-blur-md shadow-lg border-b border-white/10'
-          : 'bg-[#0a0f1e]'
+          ? 'bg-slate-900/95 backdrop-blur-md shadow-lg border-b border-white/10'
+          : 'bg-slate-900'
         }
       `}>
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 flex-shrink-0">
+        <Link to="/" className="flex items-center gap-2 flex-shrink-0 whitespace-nowrap">
           <div className="w-9 h-9 bg-teal-500/20 rounded-xl flex items-center justify-center">
             <Pill size={18} className="text-teal-400" />
           </div>
-          <span className="font-black text-xl text-white">
+          <span className="font-black text-xl text-white max-w-[140px] truncate">
             Medi<span className="text-teal-400">Pharm</span>
           </span>
         </Link>
 
         {/* Desktop Nav Links */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-6">
           {navLinks.map(link => (
             <Link key={link.path} to={link.path}>
-              <button className={`px-4 py-2 rounded-xl font-bold text-sm transition-all ${
+              <button className={`px-2 py-2 rounded-xl font-bold text-sm transition-all ${
                 isActive(link.path)
                   ? 'bg-teal-500/20 text-teal-400'
                   : 'text-gray-400 hover:text-white hover:bg-white/10'
@@ -186,7 +186,7 @@ export default function Navbar() {
         {/* Desktop Right Actions */}
         <div className="flex items-center gap-2">
           {/* Live indicator */}
-          <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full mr-1">
+          <div className="hidden lg:flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full mr-1">
             <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-teal-400 animate-pulse' : 'bg-red-500'}`} />
             <span className={`text-xs font-bold ${isConnected ? 'text-teal-400' : 'text-red-400'}`}>
               {isConnected ? 'LIVE' : 'OFFLINE'}
@@ -254,7 +254,7 @@ export default function Navbar() {
           {/* Hamburger */}
           <button
             onClick={() => setMenuOpen(true)}
-            className="w-10 h-10 bg-[#12151f] hover:bg-white/10 rounded-xl flex items-center justify-center transition-all ml-1 border border-white/10"
+            className="w-11 h-11 bg-[#12151f] hover:bg-white/10 rounded-xl flex items-center justify-center transition-all ml-1 border border-white/10"
             aria-label="Menu"
           >
             <Menu size={18} className="text-white" />
@@ -267,13 +267,13 @@ export default function Navbar() {
       ================================================================ */}
       <nav className={`
         flex md:hidden
-        fixed top-0 left-0 right-0 z-50 h-[56px]
+        fixed top-0 left-0 right-0 z-50 h-14
         items-center justify-between px-4
         transition-all duration-300
-        bg-[#0a0f1e] border-b border-white/10
+        bg-slate-900 border-b border-white/10
       `}>
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2 whitespace-nowrap">
           <div className="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center">
             <Pill size={16} className="text-teal-400" />
           </div>
@@ -283,28 +283,26 @@ export default function Navbar() {
         </Link>
 
         {/* Mobile Right — minimal */}
-        <div className="flex items-center gap-1.5">
-          <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-teal-400 animate-pulse' : 'bg-red-500'}`} />
-
+        <div className="flex items-center gap-1">
           {/* Search */}
           <button
             onClick={() => setSearchOpen(true)}
-            className="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center"
+            className="w-11 h-11 bg-white/10 rounded-xl flex items-center justify-center min-h-11 min-w-11"
             aria-label="Search"
           >
-            <Search size={16} className="text-white" />
+            <Search size={20} className="text-white" />
           </button>
 
           {/* Cart */}
           {!isCheckoutPage && !isAuthPage && (
             <button
               onClick={() => dispatch(setCartOpen(true))}
-              className="relative w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center"
+              className="relative w-11 h-11 bg-white/10 rounded-xl flex items-center justify-center min-h-11 min-w-11"
               aria-label="Cart"
             >
-              <ShoppingCart size={16} className="text-white" />
+              <ShoppingCart size={20} className="text-white" />
               {totalQuantity > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-teal-500 rounded-full text-white text-[9px] font-black flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs font-black flex items-center justify-center min-w-5 h-5">
                   {totalQuantity > 9 ? '9+' : totalQuantity}
                 </span>
               )}
@@ -313,18 +311,18 @@ export default function Navbar() {
 
           {/* Profile */}
           <Link to={isAuthenticated ? '/profile' : '/login'}>
-            <button className="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center" aria-label="Profile">
-              <User size={16} className="text-white" />
+            <button className="w-11 h-11 bg-white/10 rounded-xl flex items-center justify-center min-h-11 min-w-11" aria-label="Profile">
+              <User size={20} className="text-white" />
             </button>
           </Link>
 
           {/* Menu */}
           <button
             onClick={() => setMenuOpen(true)}
-            className="w-9 h-9 bg-[#12151f] rounded-xl flex items-center justify-center border border-white/10"
+            className="w-11 h-11 bg-slate-800 rounded-xl flex items-center justify-center border border-white/10 min-h-11 min-w-11"
             aria-label="Menu"
           >
-            <Menu size={16} className="text-white" />
+            <Menu size={24} className="text-white" />
           </button>
         </div>
       </nav>
@@ -341,7 +339,7 @@ export default function Navbar() {
           />
 
           {/* Drawer */}
-          <div className="w-[300px] h-full bg-[#0a0f1e] border-l border-white/10 flex flex-col overflow-y-auto">
+          <div className="w-80 max-w-[85vw] h-screen bg-slate-900 border-l border-white/10 flex flex-col overflow-y-auto min-h-screen">
             {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-white/10 shrink-0">
               <div>

@@ -106,7 +106,7 @@ export default function PharmacyDetailPage() {
   };
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-36 w-full max-w-full overflow-x-hidden">
+    <div className="bg-slate-50 min-h-screen pb-24 md:pb-8 w-full max-w-full overflow-x-hidden">
       {/* Lightbox Modal */}
       <AnimatePresence>
         {lightboxOpen && (
@@ -177,7 +177,7 @@ export default function PharmacyDetailPage() {
       </section>
 
       {/* Hero: Image Slider */}
-      <section className="relative h-[65vh] overflow-hidden group">
+      <section className="relative h-[45vh] md:h-[65vh] overflow-hidden group w-full max-w-full">
          <Swiper
            modules={[SwiperNav, Pagination, Autoplay]}
            navigation
@@ -205,29 +205,29 @@ export default function PharmacyDetailPage() {
           </div>
 
           {/* Action buttons - top RIGHT, not overlapping breadcrumb */}
-          <div className="absolute top-6 right-6 z-20 flex gap-3">
-             <button className="h-10 w-10 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#0a1628] transition-all active:scale-95">
-                <Share2 size={18} />
+          <div className="absolute top-4 right-4 md:top-6 md:right-6 z-20 flex gap-2 md:gap-3">
+             <button className="h-9 w-9 md:h-10 md:w-10 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#0a1628] transition-all active:scale-95">
+                <Share2 size={16} />
              </button>
-             <button className="h-10 w-10 bg-red-500 rounded-full flex items-center justify-center text-white transition-all active:scale-95 shadow-lg">
-                <Heart size={18} fill="white" />
+             <button className="h-9 w-9 md:h-10 md:w-10 bg-red-500 rounded-full flex items-center justify-center text-white transition-all active:scale-95 shadow-lg">
+                <Heart size={16} fill="white" />
              </button>
           </div>
 
           {/* Hero Text */}
-          <div className="absolute bottom-6 left-6 right-6 z-20 space-y-4 overflow-hidden">
+          <div className="absolute bottom-4 left-4 right-4 md:bottom-8 md:left-10 md:right-10 z-20 space-y-3 md:space-y-4 overflow-hidden">
              <div className="flex flex-wrap gap-2">
-                <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest italic flex items-center gap-2 backdrop-blur-md border ${pharmacy.is24hr ? 'bg-red-500/20 text-red-100 border-red-500/30' : 'bg-emerald-500/20 text-emerald-100 border-emerald-500/30'}`}>
-                   <div className={`h-1.5 w-1.5 rounded-full animate-pulse ${pharmacy.is24hr ? 'bg-red-500' : 'bg-emerald-500'}`} />
-                   {pharmacy.is24hr ? '24/7 EMERGENCY' : 'TRUSTED PHARMACY'}
+                <div className={`px-3 md:px-4 py-1.5 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest italic flex items-center gap-1.5 md:gap-2 backdrop-blur-md border ${pharmacy.is24hr ? 'bg-red-500/20 text-red-100 border-red-500/30' : 'bg-teal-500/20 text-teal-100 border-teal-500/30'}`}>
+                   <div className={`h-1.5 w-1.5 rounded-full animate-pulse ${pharmacy.is24hr ? 'bg-red-500' : 'bg-teal-400'}`} />
+                   {pharmacy.is24hr ? 'Open 24 Hours Emergency' : 'TRUSTED PHARMACY'}
                 </div>
-                <div className="px-4 py-1.5 bg-brand-teal/90 text-[#0a1628] text-[9px] font-black uppercase tracking-widest italic flex items-center gap-1.5 rounded-full">
-                   <Star size={12} fill="currentColor" /> {pharmacy.rating}
+                <div className="px-3 md:px-4 py-1.5 bg-teal-500/90 text-navy text-[8px] md:text-[9px] font-black uppercase tracking-widest italic flex items-center gap-1.5 rounded-full">
+                   <Star size={10} fill="currentColor" /> {pharmacy.rating}
                 </div>
              </div>
              <h1
                className="font-black text-white leading-[0.9] break-words w-full"
-               style={{ fontSize: 'clamp(2.2rem, 12vw, 5rem)' }}
+               style={{ fontSize: 'clamp(2rem, 10vw, 5rem)' }}
              >
                 {pharmacy.name}
              </h1>
@@ -235,56 +235,56 @@ export default function PharmacyDetailPage() {
       </section>
 
 
-      {/* Pharmacy Information Bar */}
-      <section className="sticky top-0 z-40 bg-white border-b border-black/[0.03] shadow-soft">
-         <div className="max-w-7xl mx-auto px-10 h-32 flex items-center justify-between gap-12 overflow-x-auto whitespace-nowrap no-scrollbar">
-            <div className="flex items-center gap-12">
-               <div className="flex items-center gap-4 group cursor-default">
-                  <div className="h-12 w-12 bg-gray-50 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all duration-500 shadow-inner"><MapPin size={20}/></div>
-                  <div className="space-y-0.5">
-                     <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">{pharmacy.area}</div>
-                     <div className="font-dm font-black text-[#0a1628] text-sm italic">{(pharmacy.location || pharmacy.address || 'Karaikal').split(',')[0]}</div>
-                  </div>
-               </div>
-               
-               <div className="flex items-center gap-4 group cursor-default border-l border-black/[0.03] pl-12">
-                  <div className="h-12 w-12 bg-gray-50 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all duration-500 shadow-inner"><Truck size={20}/></div>
-                  <div className="space-y-0.5">
-                     <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">Delivery Time</div>
-                     <div className="font-dm font-black text-[#0a1628] text-sm italic">
-                        {pharmacy.deliveryTime || '25-35'} Min &bull; {pharmacy.deliveryFee === 0 ? 'Free Delivery' : `₹${pharmacy.deliveryFee || 30}`}
-                     </div>
-                  </div>
-               </div>
-
-               <div className="flex items-center gap-4 group cursor-default border-l border-black/[0.03] pl-12">
-                  <div className="h-12 w-12 bg-gray-50 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all duration-500 shadow-inner"><Clock size={20}/></div>
-                  <div className="space-y-0.5">
-                     <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">Opening Hours</div>
-                     <div className="font-dm font-black text-[#0a1628] text-sm italic uppercase">{pharmacy.timings}</div>
-                  </div>
-               </div>
-            </div>
-
-            <div className="flex items-center gap-6 shrink-0">
-               <a href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.gps?.lat || 10.9254},${pharmacy.gps?.lng || 79.8386}`} target="_blank" rel="noreferrer">
-                  <button className="h-16 px-10 bg-gray-50 border border-black/[0.02] text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl hover:bg-[#0a1628] hover:text-white transition-all duration-500 flex items-center gap-3">
-                     <Navigation size={18} /> View Map
-                  </button>
-               </a>
-               <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-mint hover:scale-[1.05] active:scale-95 transition-all flex items-center justify-center gap-3">
-                   <Plus size={18}/> Order Now
-               </button>
-            </div>
-         </div>
-      </section>
+       {/* Pharmacy Information Bar */}
+       <section className="sticky top-14 md:top-16 z-40 bg-white border-b border-black/[0.03] shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 md:px-10 h-auto md:h-32 py-4 md:py-0 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 md:gap-12">
+             <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-12 overflow-x-auto no-scrollbar pb-2 md:pb-0">
+                <div className="flex items-center gap-4 group cursor-default shrink-0">
+                   <div className="h-10 w-10 md:h-12 md:w-12 bg-gray-50 rounded-xl flex items-center justify-center text-teal-600 group-hover:bg-navy transition-all duration-500 shadow-inner"><MapPin size={18}/></div>
+                   <div className="space-y-0.5">
+                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">{pharmacy.area}</div>
+                      <div className="font-dm font-black text-navy text-sm italic truncate max-w-[150px]">{(pharmacy.location || pharmacy.address || 'Karaikal').split(',')[0]}</div>
+                   </div>
+                </div>
+                
+                <div className="flex items-center gap-4 group cursor-default md:border-l border-black/[0.03] md:pl-12 shrink-0">
+                   <div className="h-10 w-10 md:h-12 md:w-12 bg-gray-50 rounded-xl flex items-center justify-center text-teal-600 group-hover:bg-navy transition-all duration-500 shadow-inner"><Truck size={18}/></div>
+                   <div className="space-y-0.5">
+                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">Delivery Time</div>
+                      <div className="font-dm font-black text-navy text-sm italic">
+                         {pharmacy.deliveryTime || '25-35'} Min &bull; {pharmacy.deliveryFee === 0 ? 'Free Delivery' : `₹${pharmacy.deliveryFee || 30}`}
+                      </div>
+                   </div>
+                </div>
+ 
+                <div className="flex items-center gap-4 group cursor-default md:border-l border-black/[0.03] md:pl-12 shrink-0">
+                   <div className="h-10 w-10 md:h-12 md:w-12 bg-gray-50 rounded-xl flex items-center justify-center text-teal-600 group-hover:bg-navy transition-all duration-500 shadow-inner"><Clock size={18}/></div>
+                   <div className="space-y-0.5">
+                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest italic leading-none">Opening Hours</div>
+                      <div className="font-dm font-black text-navy text-sm italic uppercase">{pharmacy.timings}</div>
+                   </div>
+                </div>
+             </div>
+ 
+             <div className="flex items-center gap-3 md:gap-6 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-black/[0.03]">
+                <a href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.gps?.lat || 10.9254},${pharmacy.gps?.lng || 79.8386}`} target="_blank" rel="noreferrer" className="flex-1 md:flex-none">
+                   <button className="w-full h-12 md:h-16 px-6 md:px-10 bg-gray-50 border border-black/[0.02] text-navy font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest rounded-xl md:rounded-2xl hover:bg-navy hover:text-white transition-all duration-500 flex items-center justify-center gap-2 md:gap-3">
+                      <Navigation size={16} /> <span className="md:inline">View Map</span>
+                   </button>
+                </a>
+                <button className="flex-1 md:flex-none h-12 md:h-16 px-6 md:px-10 bg-teal-500 text-navy font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest rounded-xl md:rounded-2xl shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 md:gap-3">
+                    <Plus size={16}/> Order Now
+                </button>
+             </div>
+          </div>
+       </section>
 
       {/* Pharmacy Details */}
-      <div className="max-w-7xl mx-auto px-10 py-20 lg:py-32 grid lg:grid-cols-12 gap-20">
+      <div className="max-w-7xl mx-auto px-4 md:px-10 py-8 md:py-20 lg:py-32 grid lg:grid-cols-12 gap-8 md:gap-20">
          
          <div className="lg:col-span-8 space-y-16">
             {/* Navigation Tabs */}
-            <div className="flex w-full overflow-x-auto hide-scrollbar border-b border-gray-200 bg-white sticky top-[60px] z-20">
+            <div className="flex w-full overflow-x-auto hide-scrollbar border-b border-gray-100 bg-white sticky top-28 md:top-36 z-20 px-0">
                {[
                  { id: 'Medicines', label: 'Medicines', icon: ShoppingBag },
                  { id: 'About', label: 'About', icon: Info },
@@ -294,13 +294,13 @@ export default function PharmacyDetailPage() {
                  <button
                    key={tab.id}
                    onClick={() => setActiveTab(tab.id)}
-                   className={`flex-1 flex flex-col items-center gap-1 py-4 text-[10px] font-black uppercase italic tracking-widest transition-all duration-300 min-w-[80px] ${
+                   className={`flex-1 flex flex-col items-center gap-1.5 py-4 text-[9px] md:text-[10px] font-black uppercase italic tracking-widest transition-all duration-300 min-w-[90px] ${
                      activeTab === tab.id
-                       ? 'text-brand-teal border-b-2 border-brand-teal bg-brand-teal/5'
+                       ? 'text-teal-600 border-b-2 border-teal-500 bg-teal-50/30'
                        : 'text-gray-300'
                    }`}
                  >
-                   <tab.icon size={18} />
+                   <tab.icon size={16} className="md:size-[18px]" />
                    {tab.label}
                  </button>
                ))}
@@ -319,13 +319,13 @@ export default function PharmacyDetailPage() {
                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none flex items-center gap-6">
                            <div className="h-2 w-16 bg-brand-teal rounded-full" /> Pharmacy Medicines
                        </h3>
-                       <div className="flex gap-4 w-full md:w-auto">
-                          <div className="h-16 flex-1 md:w-72 bg-gray-50 border border-black/[0.03] rounded-2xl flex items-center px-6 text-[#0a1628] focus-within:border-brand-teal transition-all group">
-                             <Search size={20} className="text-gray-300 group-focus-within:text-brand-teal transition-colors" />
-                             <input type="text" placeholder="Search medicines..." className="bg-transparent flex-1 px-4 font-dm italic font-bold text-lg outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-                          </div>
-                          <button className="h-16 w-16 bg-[#0a1628] rounded-2xl flex items-center justify-center text-brand-teal shadow-4xl"><Filter size={24}/></button>
-                       </div>
+                       <div className="flex gap-2 w-full md:w-auto">
+                           <div className="h-11 flex-1 md:w-72 bg-slate-100 border border-slate-200 rounded-xl flex items-center px-3 text-[#0a1628] focus-within:border-teal-500 transition-all group">
+                              <Search size={16} className="text-gray-400 group-focus-within:text-teal-500 transition-colors" />
+                              <input type="text" placeholder="Search medicines..." className="bg-transparent flex-1 px-3 font-medium text-sm outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                           </div>
+                           <button className="h-11 w-11 bg-slate-900 rounded-xl flex items-center justify-center text-teal-400 shadow-md"><Filter size={18}/></button>
+                        </div>
                     </div>
 
                     <div className="flex flex-wrap gap-3">
@@ -411,24 +411,24 @@ export default function PharmacyDetailPage() {
 
                {activeTab === 'Reviews' && (
                  <div className="space-y-20">
-                    <div className="bg-[#0a1628] rounded-[5rem] p-16 text-white grid md:grid-cols-[1fr_2fr] gap-20 items-center relative overflow-hidden border-l-[20px] border-brand-teal shadow-4xl">
-                       <div className="text-center space-y-4">
-                          <div className="font-syne font-black text-9xl text-brand-teal leading-none italic">{pharmacy.rating}</div>
-                          <div className="flex justify-center text-brand-teal gap-1"><Star fill="currentColor" size={24}/><Star fill="currentColor" size={24}/><Star fill="currentColor" size={24}/><Star fill="currentColor" size={24}/><Star fill="currentColor" size={12} className="opacity-50"/></div>
-                          <div className="text-xs font-black uppercase italic tracking-widest text-white/40">{pharmacy.reviewsCount} CUSTOMER REVIEWS</div>
+                    <div className="bg-navy rounded-3xl md:rounded-[5rem] p-8 md:p-16 text-white grid md:grid-cols-[1fr_2fr] gap-10 md:gap-20 items-center relative overflow-hidden border-l-[12px] md:border-l-[20px] border-teal-500 shadow-2xl">
+                       <div className="text-center space-y-3 md:space-y-4">
+                          <div className="font-syne font-black text-7xl md:text-9xl text-teal-400 leading-none italic">{pharmacy.rating}</div>
+                          <div className="flex justify-center text-teal-400 gap-1"><Star fill="currentColor" size={20}/><Star fill="currentColor" size={20}/><Star fill="currentColor" size={20}/><Star fill="currentColor" size={20}/><Star fill="currentColor" size={10} className="opacity-50"/></div>
+                          <div className="text-[9px] md:text-xs font-black uppercase italic tracking-widest text-white/40">{pharmacy.reviewsCount} CUSTOMER REVIEWS</div>
                        </div>
-                       <div className="space-y-4">
+                       <div className="space-y-3 md:space-y-4">
                           {[5, 4, 3, 2, 1].map(s => (
-                            <div key={s} className="flex items-center gap-6">
-                               <span className="text-xs font-black font-syne italic w-4">{s}</span>
-                               <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+                            <div key={s} className="flex items-center gap-4 md:gap-6">
+                               <span className="text-[10px] md:text-xs font-black font-syne italic w-4">{s}</span>
+                               <div className="flex-1 h-1.5 md:h-2 bg-white/5 rounded-full overflow-hidden">
                                   <motion.div 
                                     initial={{ width: 0 }}
                                     whileInView={{ width: s === 5 ? '60%' : s === 4 ? '28%' : '8%' }}
-                                    className="h-full bg-brand-teal shadow-mint"
+                                    className="h-full bg-teal-500 shadow-xl"
                                   />
                                </div>
-                               <span className="text-[10px] font-black font-syne text-white/40 italic w-10 text-right">{s === 5 ? '60%' : s === 4 ? '28%' : s === 3 ? '8%' : '2%'}</span>
+                               <span className="text-[9px] md:text-[10px] font-black font-syne text-white/40 italic w-10 text-right">{s === 5 ? '60%' : s === 4 ? '28%' : s === 3 ? '8%' : '2%'}</span>
                             </div>
                           ))}
                        </div>
@@ -471,7 +471,7 @@ export default function PharmacyDetailPage() {
                  <div className="grid md:grid-cols-2 gap-12">
                      {[
                         { title: 'Vitamin Offer', text: '20% off on Multivitamins this weekend.', color: 'from-brand-teal to-[#1a3a4a]', expiry: '2h 45m' },
-                        { title: 'Delivery Offer', text: 'Free delivery on all orders above \u20B9300 today.', color: 'from-[#0a1628] to-[#1a3a4a]', expiry: '5h 12m' }
+                        { title: 'Delivery Offer', text: 'Free delivery on all orders above ₹300 today.', color: 'from-[#0a1628] to-[#1a3a4a]', expiry: '5h 12m' }
                      ].map((offer, i) => (
                        <div key={i} className={`p-12 rounded-[4.5rem] bg-gradient-to-br ${offer.color} text-white space-y-12 relative overflow-hidden group shadow-4xl`}>
                           <div className="absolute top-0 right-0 h-40 w-40 bg-white opacity-0 group-hover:opacity-5 rounded-full blur-[80px] transition-opacity" />

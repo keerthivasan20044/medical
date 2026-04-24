@@ -19,8 +19,12 @@ import Layout from './components/layout/Layout';
 export default function App() {
   const location = useLocation();
   const dispatch = useDispatch();
-  const hideBars = ['/verify-otp', '/forgot-password', '/reset-password'].includes(location.pathname);
-  const isAuthPage = ['/login', '/register'].includes(location.pathname);
+  const isDashboard = location.pathname.startsWith('/admin') || 
+                      location.pathname.startsWith('/pharmacist') || 
+                      location.pathname.startsWith('/delivery');
+  const hideBottomNav = isDashboard || ['/otp', '/forgot-password'].includes(location.pathname);
+  const hideNavbar = isDashboard;
+  const hideExtras = isDashboard || ['/otp', '/forgot-password'].includes(location.pathname);
 
   useEffect(() => {
     dispatch(fetchMe());
@@ -33,13 +37,9 @@ export default function App() {
       <InstallPrompt />
       <SocketListener />
       
-      {hideBars ? (
+      <Layout hideNavbar={hideNavbar} hideBottomNav={hideBottomNav} hideExtras={hideExtras}>
         <AppRouter />
-      ) : (
-        <Layout isAuthPage={isAuthPage}>
-          <AppRouter />
-        </Layout>
-      )}
+      </Layout>
 
       <Toaster
         position="top-right"

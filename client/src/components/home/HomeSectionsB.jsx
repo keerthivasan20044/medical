@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Star, ShoppingBag, Store, MapPin, Clock, Truck, ShieldCheck, Heart, RefreshCw, Activity, Globe, Package } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, ShoppingBag, Store, MapPin, Clock, Truck, ShieldCheck, Heart, RefreshCw, Activity, Globe, Package, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
@@ -107,45 +107,33 @@ export function FeaturedMedicines() {
         {loading ? (
           <div className="flex flex-col items-center justify-center h-[500px] space-y-8">
              <div className="relative">
-                <div className="h-24 w-24 border-4 border-brand-teal/20 border-t-brand-teal rounded-full animate-spin" />
-                <Activity size={32} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-brand-teal animate-pulse" />
+                <div className="h-24 w-24 border-4 border-teal-500/20 border-t-teal-500 rounded-full animate-spin" />
+                <Activity size={32} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-teal-500 animate-pulse" />
              </div>
-             <span className="text-brand-teal font-syne font-black uppercase italic tracking-[0.3em]">Connecting...</span>
+             <span className="text-teal-500 font-syne font-black uppercase italic tracking-[0.3em]">Connecting...</span>
           </div>
         ) : (
-          <div className="space-y-20">
-            <motion.div 
-              key={currentPage}
-              initial={{ opacity: 0, x: 60 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10"
-            >
-               {currentItems.map((m, idx) => (
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-8 px-4 md:px-0">
+              {items.slice(0, 8).map((med, idx) => (
                  <MedicineCard 
-                    key={m._id || m.id} 
-                    item={m} 
-                    onAdd={handleAddToCart}
-                    isAdded={cartItems.some(item => item.id === (m._id || m.id))}
+                   key={med.id || med._id} 
+                   item={med} 
+                   index={idx} 
+                   onAdd={handleAddToCart} 
+                   isAdded={cartItems.some(i => i.id === (med._id || med.id))} 
                  />
-               ))}
-            </motion.div>
+              ))}
+           </div>
 
-            {/* Navigation */}
-            <div className="flex items-center justify-center gap-10">
-               <div className="h-[2px] bg-black/[0.05] flex-1 max-w-[200px]" />
-               <div className="flex gap-4">
-                  {[...Array(totalPages)].map((_, i) => (
-                    <button
-                       key={i}
-                       onClick={() => setCurrentPage(i)}
-                       className={`h-3 transition-all duration-700 rounded-full shadow-lg ${currentPage === i ? 'w-16 bg-brand-teal shadow-brand-teal/20' : 'w-3 bg-black/[0.1] hover:bg-brand-teal/40'}`}
-                    />
-                  ))}
-               </div>
-               <div className="h-[2px] bg-black/[0.05] flex-1 max-w-[200px]" />
-            </div>
-          </div>
+           <div className="flex justify-center pt-8 px-4 md:px-0">
+              <Link to="/medicines" className="w-full sm:w-64">
+                 <button className="w-full h-14 bg-slate-900 text-teal-400 font-bold text-xs uppercase tracking-widest rounded-xl shadow-xl flex items-center justify-center gap-4 border border-white/5">
+                    View All Medicines <ArrowRight size={18} />
+                 </button>
+              </Link>
+           </div>
+          </>
         )}
       </div>
     </section>
@@ -196,8 +184,8 @@ export function KaraikalPharmacies() {
              ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12">
-             {pharmacies.map((p, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
+             {pharmacies.slice(0, 6).map((p, i) => (
                <motion.div
                  key={p.id}
                  initial={{ opacity: 0, y: 40 }}
@@ -220,7 +208,7 @@ export function KaraikalPharmacies() {
                   <div className="p-10 flex-1 flex flex-col justify-between space-y-8 relative z-10">
                      <div className="space-y-4">
                         <div className="flex items-start justify-between gap-2 w-full">
-                           <h3 className="font-syne font-black text-[#0a1628] text-xl md:text-2xl uppercase italic tracking-tighter leading-tight group-hover:text-brand-teal transition-colors flex-1 min-w-0 break-words">{p.name}</h3>
+                           <h3 className="font-syne font-black text-[#0a1628] text-xl md:text-2xl uppercase italic tracking-tighter leading-tight group-hover:text-brand-teal transition-colors flex-1 min-w-0 break-words line-clamp-1">{p.name}</h3>
                            <div className="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 bg-amber-400 rounded-xl text-[#0a1628] font-black text-xs shadow-xl rotate-3">
                               <Star size={14} fill="currentColor" /> {p.rating}
                            </div>
@@ -232,10 +220,10 @@ export function KaraikalPharmacies() {
                            {[
                              { icon: '✓', label: 'Verified' },
                              { icon: '🏥', label: 'Licensed' },
-                             { icon: '🕐', label: '24/7' }
+                             { icon: '🕐', label: 'Open 24 Hours' }
                            ].map(badge => (
                              <span key={badge.label} className="text-[10px] font-bold text-teal-600 bg-teal-50 px-3 py-1 rounded-full flex items-center gap-1 group-hover:bg-brand-teal group-hover:text-white transition-all">
-                               {badge.icon} {badge.label}
+                                {badge.icon} {badge.label}
                              </span>
                            ))}
                         </div>
@@ -253,6 +241,15 @@ export function KaraikalPharmacies() {
                   </div>
                </motion.div>
              ))}
+          </div>
+
+          <div className="flex justify-center mt-12">
+             <Link 
+               to="/pharmacies" 
+               className="mx-auto bg-brand-teal text-[#0a1628] font-black py-4 px-10 rounded-full flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-brand-teal/20 uppercase tracking-widest text-sm italic"
+             >
+               View All Pharmacies <ArrowRight size={20} />
+             </Link>
           </div>
        </div>
     </section>

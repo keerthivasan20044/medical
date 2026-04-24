@@ -1,132 +1,86 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ChevronRight, Star, MapPin, Truck, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Store, MapPin, Star, Clock, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const PharmacyCard = ({ item: pharmacy, loading }) => {
-  const navigate = useNavigate();
-  const [imgLoaded, setImgLoaded] = useState(false);
-
-  // Shimmer Skeleton State
-  if (loading) {
-    return (
-      <div className="w-full bg-[#12151f] rounded-[2.5rem] overflow-hidden mb-6 border border-white/5 animate-pulse">
-        <div className="w-full h-48 bg-white/5" />
-        <div className="p-6 space-y-4">
-          <div className="flex gap-4">
-            <div className="h-8 bg-white/5 rounded-xl flex-1" />
-            <div className="h-8 w-16 bg-white/5 rounded-xl" />
-          </div>
-          <div className="h-4 bg-white/5 rounded-full w-3/4" />
-          <div className="flex gap-2">
-            <div className="h-6 w-20 bg-white/5 rounded-full" />
-            <div className="h-6 w-20 bg-white/5 rounded-full" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const mainImg = pharmacy.mainPhoto || pharmacy.image || '/assets/pharmacy_pro.png';
+export default function PharmacyCard({ pharmacy, idx }) {
+  const isOpen = pharmacy.isOpen !== false;
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -8 }}
-      className="w-full bg-[#12151f] rounded-[2.5rem] overflow-hidden mb-6 border border-white/5 hover:border-teal-500/30 transition-all duration-500 group shadow-2xl"
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: idx * 0.05 }}
+      className="bg-white rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-navy/5 transition-all group overflow-hidden flex flex-col h-full"
     >
-      {/* Image Container */}
-      <div className="relative w-full h-52 overflow-hidden">
-        {/* Loading shimmer for image */}
-        {!imgLoaded && <div className="absolute inset-0 bg-white/5 animate-pulse" />}
-        
+      {/* Photo Header */}
+      <div className="relative aspect-[16/10] overflow-hidden">
         <img 
-          src={mainImg} 
+          src={pharmacy.mainPhoto || 'https://images.unsplash.com/photo-1586015555751-63bb77f4322a?q=80&w=1000&auto=format&fit=crop'} 
           alt={pharmacy.name}
-          onLoad={() => setImgLoaded(true)}
-          className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onError={e => {
-            e.target.src = 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80';
-            setImgLoaded(true);
-          }}
-          loading="lazy"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy/60 via-transparent to-transparent" />
         
-        {/* Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#12151f] via-transparent to-transparent" />
-        
-        <div className="absolute top-4 right-4 flex flex-col gap-2">
-          <span className={`backdrop-blur-md border px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest italic flex items-center gap-2 ${pharmacy.isOpen || pharmacy.status?.includes('OPEN') ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30'}`}>
-            <div className={`h-1.5 w-1.5 rounded-full animate-pulse ${pharmacy.isOpen || pharmacy.status?.includes('OPEN') ? 'bg-emerald-500' : 'bg-red-500'}`} />
-            {pharmacy.isOpen || pharmacy.status?.includes('OPEN') ? 'Active' : 'Closed'}
-          </span>
+        {/* Badges */}
+        <div className="absolute top-4 left-4 flex gap-2">
+           <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest backdrop-blur-md border ${
+             isOpen ? 'bg-emerald-500/80 text-white border-white/20' : 'bg-red-500/80 text-white border-white/20'
+           }`}>
+             {isOpen ? 'Open Now' : 'Closed'}
+           </div>
+           {pharmacy.isVerified && (
+             <div className="h-8 w-8 bg-brand-teal text-navy rounded-full flex items-center justify-center border-2 border-white shadow-lg">
+                <ShieldCheck size={16} />
+             </div>
+           )}
         </div>
 
-        <div className="absolute bottom-4 left-4">
-          <div className="flex items-center gap-2 bg-black/40 backdrop-blur-xl border border-white/10 px-3 py-1.5 rounded-2xl">
-            <Truck size={14} className="text-teal-400" />
-            <span className="text-white text-[10px] font-black uppercase tracking-tighter italic">
-              {pharmacy.deliveryFee === 0 ? 'Free Delivery' : `₹${pharmacy.deliveryFee || 30} Delivery`}
-            </span>
-          </div>
+        <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between text-white">
+           <div>
+              <div className="flex items-center gap-1 text-amber-400 mb-1">
+                 <Star size={12} fill="currentColor" />
+                 <span className="text-xs font-syne font-black italic">{pharmacy.rating || '4.8'}</span>
+                 <span className="text-[10px] text-white/60 font-bold ml-1">({pharmacy.reviewCount || 120})</span>
+              </div>
+           </div>
+           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest italic">
+              <Zap size={12} className="text-brand-teal" /> {pharmacy.deliveryTime || '15 min'}
+           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        <div className="flex items-start justify-between gap-4 mb-3">
-          <h3 className="font-syne font-black text-xl text-white group-hover:text-teal-400 transition-colors uppercase italic leading-none tracking-tighter truncate">
-            {pharmacy.name}
-          </h3>
-          <div className="flex items-center gap-1.5 bg-teal-500 text-[#0a1628] px-2.5 py-1 rounded-xl shadow-lg shadow-teal-500/20">
-            <Star size={12} fill="currentColor" />
-            <span className="font-syne font-black text-xs italic">{pharmacy.rating || '4.5'}</span>
-          </div>
+      <div className="p-8 flex-1 flex flex-col space-y-4">
+        <div>
+           <h3 className="font-syne font-black text-xl text-navy uppercase italic group-hover:text-brand-teal transition-colors leading-tight">
+             {pharmacy.name}
+           </h3>
+           <div className="flex items-center gap-2 text-xs font-dm font-bold text-navy/40 italic mt-1">
+              <MapPin size={14} className="text-brand-teal" />
+              {pharmacy.address?.split(',').slice(0, 2).join(',')}
+           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-gray-500 mb-4">
-          <MapPin size={14} className="shrink-0" />
-          <p className="text-[11px] font-medium truncate uppercase tracking-wider italic">
-            {pharmacy.area || (pharmacy.address?.city) || 'Karaikal'}
-          </p>
+        <div className="flex flex-wrap gap-2 pt-2">
+           {pharmacy.services?.slice(0, 3).map(service => (
+             <span key={service} className="px-3 py-1 bg-gray-50 border border-gray-100 rounded-lg text-[8px] font-black text-navy/40 uppercase tracking-widest italic">
+                {service}
+             </span>
+           ))}
         </div>
 
-        {/* Badges Row */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          <div className="px-3 py-1.5 bg-white/5 border border-white/5 rounded-xl flex items-center gap-1.5 group/badge hover:bg-teal-500/10 transition-colors">
-            <ShieldCheck size={12} className="text-teal-400" />
-            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest italic group-hover/badge:text-teal-400">Verified</span>
-          </div>
-          <div className="px-3 py-1.5 bg-white/5 border border-white/5 rounded-xl flex items-center gap-1.5">
-            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest italic">Licensed</span>
-          </div>
-          {pharmacy.is24hr && (
-            <div className="px-3 py-1.5 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-1.5">
-              <span className="text-[9px] font-black text-red-400 uppercase tracking-widest italic">24/7</span>
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-white/5">
-          <div className="space-y-0.5">
-            <p className="text-gray-500 text-[8px] font-black uppercase tracking-[0.2em] italic leading-none">Distance</p>
-            <p className="text-white font-syne font-black text-lg italic tracking-tighter">{pharmacy.distance || '1.2'} <span className="text-[10px] text-gray-500 ml-0.5 uppercase">km</span></p>
-          </div>
-          
-          <button
-            onClick={() => navigate(`/pharmacies/${pharmacy.id || pharmacy._id}`)}
-            className="h-12 w-12 bg-teal-500 rounded-2xl flex items-center justify-center text-[#0a1628] shadow-xl shadow-teal-500/20 hover:scale-110 active:scale-95 transition-all"
-          >
-            <ChevronRight size={22} strokeWidth={3} />
-          </button>
+        <div className="pt-6 mt-auto flex items-center justify-between border-t border-gray-50">
+           <div className="text-navy/40 text-[10px] font-black uppercase tracking-widest italic">
+              {pharmacy.city || 'Karaikal'}
+           </div>
+           <Link 
+             to={`/pharmacies/${pharmacy._id}`}
+             className="h-10 w-10 bg-navy text-brand-teal rounded-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg shadow-navy/10"
+           >
+              <ArrowRight size={18} />
+           </Link>
         </div>
       </div>
     </motion.div>
   );
-};
-
-export default PharmacyCard;
-
+}

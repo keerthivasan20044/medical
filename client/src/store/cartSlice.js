@@ -135,6 +135,17 @@ const cartSlice = createSlice({
       }
       recalc(state);
     },
+    changeQuantity(state, action) {
+      const { id, quantity } = action.payload;
+      const existing = state.items.find((i) => (i._id || i.id) === id);
+      if (existing) {
+        existing.quantity = Math.max(0, quantity);
+        if (existing.quantity === 0) {
+          state.items = state.items.filter((i) => (i._id || i.id) !== id);
+        }
+      }
+      recalc(state);
+    },
     clearCart() {
       return { ...defaultState };
     },
@@ -182,6 +193,7 @@ export const {
   removeFromCart,
   incrementQuantity,
   decrementQuantity,
+  changeQuantity,
   clearCart,
   clearCoupon,
   setTip,

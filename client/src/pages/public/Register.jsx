@@ -5,7 +5,8 @@ import {
   MapPin, CheckCircle, Camera, 
   ArrowRight, ArrowLeft, ShieldCheck, 
   Stethoscope, Store, Truck, Navigation,
-  Upload, Sparkles, Smartphone
+  Upload, Sparkles, Smartphone,
+  Eye, EyeOff
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -18,6 +19,7 @@ export default function Register() {
   const { t } = useLanguage();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     role: 'customer',
     name: '',
@@ -67,6 +69,9 @@ export default function Register() {
   };
 
   const initiateVerification = async () => {
+    if (!formData.address || !formData.city || !formData.pincode) {
+      return toast.error('Location details are required');
+    }
     setLoading(true);
     try {
       await authService.register(formData);
@@ -140,11 +145,11 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a1628] flex items-center justify-center p-6 md:p-12 relative overflow-hidden">
-       <div className="absolute inset-0 bg-grid opacity-5" />
-       <div className="absolute top-0 right-0 h-96 w-96 bg-[#028090] rounded-full blur-[150px] opacity-10 animate-pulse" />
-       
-       <div className="w-full max-w-4xl bg-white rounded-[2rem] md:rounded-[5rem] shadow-4xl overflow-hidden relative z-10 grid md:grid-cols-[1fr_2fr]">
+     <div className="min-h-screen bg-navy flex items-center justify-center p-4 md:p-12 relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid opacity-5" />
+        <div className="absolute top-0 right-0 h-96 w-96 bg-teal-500 rounded-full blur-[150px] opacity-10 animate-pulse" />
+        
+        <div className="w-full max-w-4xl bg-white rounded-2xl md:rounded-[5rem] shadow-2xl overflow-hidden relative z-10 grid md:grid-cols-[1fr_2fr]">
           <aside className="bg-gray-50 p-8 md:p-12 space-y-12 border-r border-gray-100 hidden lg:block relative">
              <div className="space-y-4">
                 <Link to="/" className="flex items-center gap-3 flex-shrink-0">
@@ -181,18 +186,18 @@ export default function Register() {
              </div>
           </aside>
 
-          <section className="p-6 md:p-12 lg:p-16 space-y-10 md:space-y-16 relative">
-             <div className="flex justify-between items-center lg:hidden border-b border-gray-100 pb-6 mb-6">
-                <Link to="/" className="flex items-center gap-2 flex-shrink-0">
-                   <div className="h-8 w-8 bg-[#0a1628] rounded-lg flex items-center justify-center -rotate-[5deg] shadow-lg shadow-[#02C39A]/20 flex-shrink-0">
-                      <ShieldCheck className="text-[#02C39A]" size={16} />
-                   </div>
-                   <span className="font-syne font-black text-lg text-[#0a1628] tracking-tighter whitespace-nowrap">MediPharm.</span>
-                </Link>
-                <div className="px-4 py-1.5 bg-gray-50 border border-gray-200 rounded-full text-[9px] font-black text-[#028090] uppercase tracking-widest">
-                   {t('step') || 'Step'} {step}/5
-                </div>
-             </div>
+           <section className="p-5 md:p-12 lg:p-16 pb-20 md:pb-6 space-y-10 md:space-y-16 relative">
+              <div className="flex justify-between items-center lg:hidden border-b border-gray-50 pb-5 mb-5">
+                 <Link to="/" className="flex items-center gap-2 flex-shrink-0">
+                    <div className="h-8 w-8 bg-navy rounded-lg flex items-center justify-center -rotate-[5deg] shadow-lg shadow-teal-500/20 flex-shrink-0">
+                       <ShieldCheck className="text-teal-400" size={16} />
+                    </div>
+                    <span className="font-syne font-black text-lg text-navy tracking-tighter whitespace-nowrap">MediPharm.</span>
+                 </Link>
+                 <div className="px-3 py-1 bg-gray-50 border border-gray-200 rounded-full text-[8px] font-black text-teal-600 uppercase tracking-widest">
+                    {t('step') || 'Step'} {step}/5
+                 </div>
+              </div>
 
              <div className="min-h-[400px]">
                 <AnimatePresence mode="wait" custom={step}>
@@ -202,21 +207,21 @@ export default function Register() {
                            <h2 className="font-syne font-black text-3xl md:text-4xl text-[#0a1628]">Choose your role</h2>
                            <p className="text-gray-400 font-dm italic text-base md:text-lg opacity-60">Select how you want to use the platform.</p>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                           {ROLES.map(r => (
-                             <button
-                               key={r.id}
-                               onClick={() => { setFormData({ ...formData, role: r.id }); handleNext(); }}
-                               className="flex items-center gap-4 p-5 rounded-2xl border-2 border-gray-50 bg-gray-50 hover:border-[#02C39A] hover:bg-white transition-all duration-500 group text-left shadow-sm"
-                             >
-                                <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center text-[#0a1628] group-hover:bg-[#0a1628] group-hover:text-[#02C39A] transition duration-500 shadow-sm flex-shrink-0"><r.icon size={20}/></div>
-                                <div className="flex-1 min-w-0">
-                                   <div className="font-syne font-black text-sm text-[#0a1628] uppercase tracking-tight leading-tight mb-1">{r.label}</div>
-                                   <div className="text-[10px] font-dm text-gray-400 italic line-clamp-2 leading-tight">{r.desc}</div>
-                                </div>
-                             </button>
-                           ))}
-                        </div>
+                         <div className="grid grid-cols-2 gap-3">
+                            {ROLES.map(r => (
+                              <button
+                                key={r.id}
+                                onClick={() => { setFormData({ ...formData, role: r.id }); handleNext(); }}
+                                className="flex flex-col items-center gap-3 p-4 rounded-xl border-2 border-gray-50 bg-gray-50 hover:border-teal-500 hover:bg-white transition-all duration-300 group text-center shadow-sm"
+                              >
+                                 <div className="h-10 w-10 bg-white rounded-lg flex items-center justify-center text-navy group-hover:bg-navy group-hover:text-teal-400 transition duration-300 shadow-sm flex-shrink-0"><r.icon size={18}/></div>
+                                 <div className="w-full">
+                                    <div className="font-syne font-black text-[9px] text-navy uppercase tracking-tight leading-tight mb-1 truncate">{r.label}</div>
+                                    <div className="text-[7px] font-dm text-gray-400 italic line-clamp-1 leading-tight hidden sm:block">{r.desc}</div>
+                                 </div>
+                              </button>
+                            ))}
+                         </div>
 
                      </motion.div>
                    )}
@@ -242,14 +247,31 @@ export default function Register() {
                              value={formData.email}
                              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                            />
-                           <Input 
-                             label={t('secretAccess')} 
-                             icon={Lock} 
-                             type="password" 
-                             placeholder="••••••••" 
-                             value={formData.password}
-                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                           />
+                           <div className="relative">
+                              <Input 
+                                label={t('secretAccess')} 
+                                icon={Lock} 
+                                type={showPassword ? "text" : "password"} 
+                                placeholder="••••••••" 
+                                value={formData.password}
+                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                className="py-3 text-base"
+                              />
+                               <button 
+                                 type="button"
+                                 onClick={() => setShowPassword(!showPassword)}
+                                 className="absolute right-4 top-[36px] text-gray-400 hover:text-navy transition-colors"
+                               >
+                                 {showPassword ? <EyeOff size={14}/> : <Eye size={14}/>}
+                               </button>
+                              {formData.password && (
+                                <div className="mt-2 flex gap-1 h-1">
+                                  <div className={`flex-1 rounded-full ${formData.password.length > 0 ? 'bg-red-500' : 'bg-gray-100'}`} />
+                                  <div className={`flex-1 rounded-full ${formData.password.length > 5 ? 'bg-amber-500' : 'bg-gray-100'}`} />
+                                  <div className={`flex-1 rounded-full ${formData.password.length > 8 ? 'bg-emerald-500' : 'bg-gray-100'}`} />
+                                </div>
+                              )}
+                           </div>
                         </div>
                         <div className="flex gap-4 pt-8">
                            <Button variant="ghost" onClick={handleBack} className="flex-1">{t('back') || 'Back'}</Button>
@@ -332,46 +354,46 @@ export default function Register() {
                             </div>
                          </div>
 
-                         <div className="flex flex-col items-center gap-10">
-                            <label className="h-56 w-56 rounded-[5rem] bg-gray-50 border-4 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 group hover:border-[#02C39A] hover:bg-white transition-all cursor-pointer relative overflow-hidden shadow-soft">
-                               <input 
-                                 type="file" 
-                                 className="hidden" 
-                                 accept="image/*"
-                                 onChange={handlePhotoChange}
-                               />
-                               {formData.photo ? (
-                                  <img src={URL.createObjectURL(formData.photo)} alt="Preview" className="h-full w-full object-cover group-hover:scale-105 transition duration-1000" />
-                               ) : (
-                                  <>
-                                     <Camera size={48} className="group-hover:scale-110 group-hover:text-[#02C39A] transition duration-500" />
-                                     <span className="text-[9px] font-black uppercase tracking-[0.4em] mt-4 opacity-30">UPLOAD ID PHOTO</span>
-                                  </>
-                                )}
-                            </label>
-
-                            <div className="w-full p-10 bg-[#0a1628] rounded-[3.5rem] border border-gray-100 flex items-center justify-between text-white shadow-2xl relative overflow-hidden group/status">
-                               <div className="absolute top-0 right-0 h-32 w-32 bg-brand-teal opacity-5 rounded-full blur-[40px] group-hover/status:opacity-20 transition-all duration-1000" />
-                               <div className="flex items-center gap-6 relative z-10">
-                                  <div className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center text-[#02C39A] border border-white/5 shadow-inner"><Upload size={24}/></div>
-                                  <div className="space-y-1">
-                                     <div className="font-syne font-black text-xs text-white uppercase tracking-tighter max-w-[180px] truncate">
-                                        {formData.photo ? formData.photo.name : t('pendingLog')}
-                                     </div>
-                                     <div className="text-[10px] text-white/20 font-black uppercase tracking-widest italic animate-pulse">
-                                        {formData.photo ? t('syncedStatus', { size: (formData.photo.size / (1024 * 1024)).toFixed(1) }) : t('awaitingHandshake')}
-                                     </div>
-                                  </div>
-                               </div>
-                               <button 
-                                 type="button"
-                                 onClick={() => setFormData({ ...formData, photo: null })}
-                                 className={`h-12 w-12 rounded-xl flex items-center justify-center transition-all duration-500 ${formData.photo ? 'bg-red-500 text-white' : 'bg-white/5 text-white/20'}`}
-                               >
-                                  <CheckCircle size={24} className={formData.photo ? 'rotate-0' : 'rotate-45'} />
-                                </button>
-                            </div>
-                         </div>
+                          <div className="flex flex-col items-center gap-8">
+                             <label className="h-48 w-48 rounded-[4rem] bg-gray-50 border-4 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 group hover:border-teal-500 hover:bg-white transition-all cursor-pointer relative overflow-hidden shadow-sm">
+                                <input 
+                                  type="file" 
+                                  className="hidden" 
+                                  accept="image/*"
+                                  onChange={handlePhotoChange}
+                                />
+                                {formData.photo ? (
+                                   <img src={URL.createObjectURL(formData.photo)} alt="Preview" className="h-full w-full object-cover group-hover:scale-105 transition duration-700" />
+                                ) : (
+                                   <>
+                                      <Camera size={40} className="group-hover:scale-110 group-hover:text-teal-500 transition duration-300" />
+                                      <span className="text-[8px] font-black uppercase tracking-widest mt-4 opacity-30">UPLOAD ID PHOTO</span>
+                                   </>
+                                 )}
+                             </label>
+ 
+                             <div className="w-full p-6 md:p-10 bg-navy rounded-2xl md:rounded-[3.5rem] border border-white/5 flex items-center justify-between text-white shadow-xl relative overflow-hidden group/status">
+                                <div className="absolute top-0 right-0 h-32 w-32 bg-teal-500 opacity-5 rounded-full blur-[40px] group-hover/status:opacity-20 transition-all duration-1000" />
+                                <div className="flex items-center gap-4 md:gap-6 relative z-10 min-w-0">
+                                   <div className="h-12 w-12 md:h-14 md:w-14 bg-white/5 rounded-xl flex items-center justify-center text-teal-400 border border-white/5 shrink-0"><Upload size={20}/></div>
+                                   <div className="space-y-0.5 min-w-0">
+                                      <div className="font-syne font-black text-[10px] md:text-xs text-white uppercase tracking-tighter truncate">
+                                         {formData.photo ? formData.photo.name : t('pendingLog')}
+                                      </div>
+                                      <div className="text-[8px] md:text-[10px] text-white/20 font-black uppercase tracking-widest italic animate-pulse">
+                                         {formData.photo ? t('syncedStatus', { size: (formData.photo.size / (1024 * 1024)).toFixed(1) }) : t('awaitingHandshake')}
+                                      </div>
+                                   </div>
+                                </div>
+                                <button 
+                                  type="button"
+                                  onClick={() => setFormData({ ...formData, photo: null })}
+                                  className={`h-10 w-10 md:h-12 md:w-12 rounded-xl flex items-center justify-center transition-all duration-300 shrink-0 ${formData.photo ? 'bg-red-500 text-white' : 'bg-white/5 text-white/20'}`}
+                                >
+                                   <CheckCircle size={20} className={formData.photo ? 'rotate-0' : 'rotate-45'} />
+                                 </button>
+                             </div>
+                          </div>
 
                          <div className="pt-16">
                             <Button 

@@ -1,4 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { 
+  persistStore, 
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
 import authReducer from './authSlice.js';
 import cartReducer from './cartSlice.js';
 import uiReducer from './uiSlice.js';
@@ -15,33 +27,42 @@ import trackingReducer from './trackingSlice.js';
 import stockReducer from './stockSlice.js';
 import orderFlowReducer from './orderFlowSlice.js';
 import pharmacistOrdersReducer from './pharmacistOrderSlice.js';
-import { saveState } from '../utils/storage.js';
-import { selectCartPersist } from './cartSlice.js';
-import { selectAuthPersist } from './authSlice.js';
+
+const rootReducer = combineReducers({
+  auth: authReducer,
+  cart: cartReducer,
+  ui: uiReducer,
+  medicines: medicinesReducer,
+  pharmacies: pharmaciesReducer,
+  doctors: doctorsReducer,
+  orders: ordersReducer,
+  prescriptions: prescriptionsReducer,
+  notifications: notificationsReducer,
+  payments: paymentsReducer,
+  upload: uploadReducer,
+  otp: otpReducer,
+  tracking: trackingReducer,
+  stock: stockReducer,
+  orderFlow: orderFlowReducer,
+  pharmacistOrders: pharmacistOrdersReducer
+});
+
+const persistConfig = {
+  key: 'medipharm_v1',
+  storage,
+  whitelist: ['auth', 'cart'] // Persist auth and cart as requested
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    cart: cartReducer,
-    ui: uiReducer,
-    medicines: medicinesReducer,
-    pharmacies: pharmaciesReducer,
-    doctors: doctorsReducer,
-    orders: ordersReducer,
-    prescriptions: prescriptionsReducer,
-    notifications: notificationsReducer,
-    payments: paymentsReducer,
-    upload: uploadReducer,
-    otp: otpReducer,
-    tracking: trackingReducer,
-    stock: stockReducer,
-    orderFlow: orderFlowReducer,
-    pharmacistOrders: pharmacistOrdersReducer
-  }
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
-store.subscribe(() => {
-  const { cart, auth } = store.getState();
-  saveState('medireach_cart_v1', selectCartPersist(cart));
-  saveState('medireach_auth_v1', selectAuthPersist(auth));
-});
+export const persistor = persistStore(store);

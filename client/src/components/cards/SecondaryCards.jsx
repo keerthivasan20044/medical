@@ -18,22 +18,22 @@ export function ReviewCard({ review = {} }) {
   const date = review.date || 'Recent';
 
   return (
-    <div className="bg-[#f8fafc] p-10 rounded-[3rem] border border-gray-100 flex flex-col justify-between hover:bg-white hover:shadow-2xl hover:-translate-y-2 transition duration-500 group">
-       <div className="space-y-6">
-          <div className="flex items-center gap-2">
+    <div className="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 flex flex-col gap-3 hover:border-teal-500/30 transition-all duration-300">
+       <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+             <div className="h-10 w-10 bg-slate-800 text-teal-400 rounded-full flex items-center justify-center font-bold text-sm shrink-0 border border-white/5">{user[0]}</div>
+             <div className="min-w-0">
+                <div className="text-sm font-semibold text-white truncate max-w-[150px]">{user}</div>
+                <div className="text-[10px] text-slate-500">{date}</div>
+             </div>
+          </div>
+          <div className="flex items-center gap-0.5 shrink-0">
              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={14} className={i < rating ? 'text-amber-400 fill-amber-400' : 'text-gray-200'} />
+                <Star key={i} size={10} className={i < rating ? 'text-amber-400 fill-amber-400' : 'text-slate-700'} />
              ))}
           </div>
-          <p className="text-xl font-dm text-gray-400 italic leading-relaxed group-hover:text-[#0a1628] transition duration-500">"{comment}"</p>
        </div>
-       <div className="pt-10 border-t border-gray-50 flex items-center gap-6">
-          <div className="h-14 w-14 bg-[#0a1628] text-white rounded-2xl flex items-center justify-center font-black text-xl shadow-lg">{user[0]}</div>
-          <div>
-             <div className="font-syne font-black text-lg text-[#0a1628] uppercase tracking-tighter">{user}</div>
-             <div className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">{date} Enclave</div>
-          </div>
-       </div>
+       <p className="text-sm text-slate-400 italic leading-relaxed line-clamp-3">"{comment}"</p>
     </div>
   );
 }
@@ -42,20 +42,20 @@ export function ReviewCard({ review = {} }) {
  * System notification stream card.
  */
 export function NotificationCard({ notification = {} }) {
-  const { title = 'System Update', desc = 'No details available.', time = 'Recent', read = true } = notification;
+  const { title = 'System Update', desc = 'No details available.', time = 'Recent', read = true, type = 'system' } = notification;
   return (
-    <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 flex items-start gap-8 hover:bg-gray-50 transition group cursor-pointer">
-       <div className="h-14 w-14 bg-gray-50 border border-gray-100 rounded-2xl flex items-center justify-center text-[#028090] group-hover:bg-[#0a1628] group-hover:text-white transition shadow-sm">
-          <Bell size={24} className="group-hover:animate-shake" />
+    <div className="bg-white p-3 rounded-2xl border border-gray-50 flex items-start gap-4 hover:bg-gray-50 transition group cursor-pointer relative overflow-hidden">
+       <div className="h-11 w-11 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center text-teal-600 group-hover:bg-navy group-hover:text-white transition shrink-0">
+          <Bell size={20} className="group-hover:animate-shake" />
        </div>
-       <div className="space-y-2 flex-1 relative">
-          <div className="flex items-center justify-between">
-             <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">{time} Enclave</div>
-             {!read && <div className="h-2 w-2 bg-red-500 rounded-full animate-ping-slow" />}
+       <div className="space-y-1 flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2">
+             <h4 className="font-syne font-black text-sm text-navy truncate">{title}</h4>
+             <div className="text-[9px] text-gray-400 font-black uppercase tracking-widest italic shrink-0">{time}</div>
           </div>
-          <h4 className="font-syne font-black text-lg text-[#0a1628] leading-tight">{title}</h4>
-          <p className="text-xs font-dm text-gray-400 italic leading-relaxed">{desc}</p>
+          <p className="text-[11px] font-dm text-gray-500 italic leading-tight line-clamp-2">{desc}</p>
        </div>
+       {!read && <div className="absolute top-3 right-3 h-2 w-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_#ef4444]" />}
     </div>
   );
 }
@@ -67,29 +67,29 @@ export function OfferCard({ offer = {}, onCopy }) {
   const { code = 'N/A', type = 'Promo', valid = 'Limited Time', title = 'District Offer', sub = 'No description' } = offer;
   const handleCopy = () => {
     navigator.clipboard.writeText(code);
-    toast.success(`${code} architecture copied!`);
+    toast.success(`${code} copied!`);
     if (onCopy) onCopy(code);
   };
 
   return (
-    <div className="bg-[#0a1628] p-10 rounded-[3.5rem] text-white relative overflow-hidden group hover:shadow-4xl transition-all duration-700">
-       <div className="absolute top-0 right-0 h-40 w-40 bg-[#028090] rounded-full blur-[80px] opacity-20" />
-       <div className="space-y-8 relative z-10">
+    <div className="bg-navy p-6 rounded-3xl text-white relative overflow-hidden group hover:shadow-2xl transition-all duration-500">
+       <div className="absolute top-0 right-0 h-32 w-32 bg-teal-500 rounded-full blur-[60px] opacity-10" />
+       <div className="space-y-6 relative z-10">
           <div className="flex items-center justify-between">
-             <div className="px-6 py-2 bg-white/10 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest italic flex items-center gap-2 border border-white/5 shadow-lg">
-                <Tag size={12} className="text-[#02C39A]" /> {type} Enclave
+             <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[9px] font-black uppercase tracking-widest italic flex items-center gap-1.5 border border-white/5">
+                <Tag size={10} className="text-teal-400" /> {type}
              </div>
-             <div className="text-[10px] text-white/30 font-black uppercase tracking-widest">{valid}</div>
+             <div className="text-[9px] text-white/40 font-black uppercase tracking-widest">{valid}</div>
           </div>
-          <div className="space-y-3">
-             <h3 className="font-syne font-black text-3xl leading-tight group-hover:text-[#02C39A] transition">{title}</h3>
-             <p className="text-white/40 font-dm text-sm italic">{sub}</p>
+          <div className="space-y-2">
+             <h3 className="font-syne font-black text-2xl leading-tight group-hover:text-teal-400 transition">{title}</h3>
+             <p className="text-white/40 font-dm text-xs italic line-clamp-1">{sub}</p>
           </div>
-          <div className="flex gap-4 pt-4">
-             <button onClick={handleCopy} className="flex-1 py-4 bg-white/10 hover:bg-white hover:text-[#0a1628] transition rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest border border-white/5 flex items-center justify-center gap-3">
-                <Copy size={16} /> {code}
+          <div className="flex gap-3 pt-2">
+             <button onClick={handleCopy} className="flex-1 py-3 bg-white/10 hover:bg-white hover:text-navy transition rounded-xl font-syne font-black text-[9px] uppercase tracking-widest border border-white/5 flex items-center justify-center gap-2">
+                <Copy size={14} /> {code}
              </button>
-             <button className="h-14 w-14 bg-[#02C39A] text-[#0a1628] rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all"><ArrowRight size={20}/></button>
+             <button className="h-11 w-11 bg-teal-500 text-navy rounded-xl flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all"><ArrowRight size={18}/></button>
           </div>
        </div>
     </div>
@@ -102,30 +102,30 @@ export function OfferCard({ offer = {}, onCopy }) {
 export function VaccineCard({ vaccine = {}, onBook }) {
   const { image = '/assets/medicine_default.png', name = 'Authorized Vaccine', type = 'Protocol', recommended = false, desc = 'Authorized immunization.', price = 0 } = vaccine;
   return (
-    <div className="bg-white p-10 rounded-[4rem] border border-gray-100 flex flex-col md:flex-row gap-12 group hover:shadow-3xl transition duration-500 overflow-hidden relative">
-       <div className="absolute top-0 right-0 h-24 w-24 bg-teal-500 rounded-full blur-[60px] opacity-0 group-hover:opacity-10 transition duration-1000" />
-       <div className="h-40 w-40 rounded-[3rem] overflow-hidden shrink-0 shadow-2xl relative">
+    <div className="bg-white p-5 md:p-8 rounded-3xl border border-gray-100 flex flex-col md:flex-row gap-6 md:gap-8 group hover:shadow-xl transition duration-500 overflow-hidden relative">
+       <div className="h-40 w-full md:w-40 rounded-2xl overflow-hidden shrink-0 shadow-lg relative bg-gray-50">
           <img src={image} alt="Vaccine" className="h-full w-full object-cover group-hover:scale-110 transition duration-1000" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/40 to-transparent" />
-          <div className="absolute bottom-4 left-4 text-white font-syne font-black text-[10px] uppercase tracking-widest italic">{type}</div>
+          <div className="absolute inset-0 bg-gradient-to-t from-navy/40 to-transparent" />
+          <div className="absolute bottom-3 left-3 text-white font-syne font-black text-[9px] uppercase tracking-widest italic">{type}</div>
        </div>
-       <div className="flex-1 space-y-6 flex flex-col justify-center">
-          <div className="space-y-2">
-             <div className="flex items-center gap-6">
-                <div className="px-4 py-1.5 bg-[#f8fafc] border border-gray-50 rounded-xl text-[10px] font-black text-[#028090] uppercase tracking-widest flex items-center gap-2 shadow-sm"><Syringe size={12}/> Protocol Enclave</div>
-                {recommended && <div className="text-[10px] text-emerald-500 font-dm italic font-bold">Highly Recommended Architecture</div>}
+       <div className="flex-1 space-y-4 flex flex-col justify-center">
+          <div className="space-y-1">
+             <div className="flex items-center gap-3">
+                <div className="px-3 py-1 bg-gray-50 border border-gray-100 rounded-lg text-[9px] font-black text-teal-600 uppercase tracking-widest flex items-center gap-1.5 shadow-sm"><Syringe size={10}/> Protocol</div>
+                {recommended && <div className="text-[9px] text-emerald-500 font-dm italic font-bold">Recommended</div>}
              </div>
-             <h3 className="font-syne font-black text-3xl text-[#0a1628] group-hover:text-[#028090] transition">{name}</h3>
-             <p className="text-gray-400 font-dm italic text-lg leading-relaxed line-clamp-2">{desc}</p>
+             <h3 className="font-syne font-black text-xl md:text-2xl text-navy group-hover:text-teal-600 transition leading-tight">{name}</h3>
+             <p className="text-gray-400 font-dm italic text-xs leading-relaxed line-clamp-2">{desc}</p>
           </div>
-          <div className="pt-6 border-t border-gray-50 flex items-center justify-between">
-             <div className="text-2xl font-syne font-black text-[#0a1628]">₹{price} <span className="text-[10px] text-gray-200 font-black uppercase tracking-widest ml-4 italic underline decoration-[#02C39A]">Architecture Fee</span></div>
-             <button onClick={onBook} className="px-10 py-4 bg-[#0a1628] text-white rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-[#028090] transition shadow-xl shadow-[#0a1628]/20">Book Authorized Enclave &rarr;</button>
+          <div className="pt-4 border-t border-gray-50 flex items-center justify-between gap-4">
+             <div className="text-xl font-syne font-black text-navy">₹{price} <span className="text-[8px] text-gray-300 font-black uppercase tracking-widest ml-2 italic">Architecture Fee</span></div>
+             <button onClick={onBook} className="px-6 py-3 bg-navy text-white rounded-xl font-syne font-black text-[9px] uppercase tracking-widest hover:bg-teal-600 transition shadow-lg shadow-navy/10">Book Enclave &rarr;</button>
           </div>
        </div>
     </div>
   );
 }
+
 
 /**
  * ARCHITECTURE STATUS BADGES

@@ -3,12 +3,23 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import { store } from './store/store.js';
+import { store, persistor } from './store/store.js';
+import { PersistGate } from 'redux-persist/integration/react';
 import './index.css';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SocketProvider } from './context/SocketContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { checkClientEnv } from './utils/envCheck.js';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 // Perform health checks on client environment
 checkClientEnv();
@@ -66,13 +77,17 @@ root.render(
   <React.StrictMode>
     <ErrorBoundary>
       <Provider store={store}>
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <SocketProvider>
-            <LanguageProvider>
-              <App />
-            </LanguageProvider>
-          </SocketProvider>
-        </BrowserRouter>
+        <PersistGate loading={null} persistor={persistor}>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <SocketProvider>
+                <LanguageProvider>
+                  <App />
+                </LanguageProvider>
+              </SocketProvider>
+            </BrowserRouter>
+          </QueryClientProvider>
+        </PersistGate>
       </Provider>
     </ErrorBoundary>
   </React.StrictMode>

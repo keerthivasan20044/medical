@@ -23,6 +23,7 @@ export function useCart() {
     removeFromCart: (id) => dispatch(removeFromCart(id)),
     incrementQty: (id) => dispatch(incrementQuantity(id)),
     decrementQty: (id) => dispatch(decrementQuantity(id)),
+    changeQty: (id, quantity) => dispatch(changeQuantity({ id, quantity })),
     clearCart: () => dispatch(clearCart()),
     applyCoupon: (code) => dispatch(validateCoupon({ code, subtotal: cart.subtotal })),
     clearCoupon: () => dispatch(clearCoupon()),

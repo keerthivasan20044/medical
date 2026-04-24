@@ -61,10 +61,10 @@ export default function DoctorProfilePage() {
   const tabs = ['About', 'Schedule', 'Reviews'];
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-64 font-dm">
+    <div className="bg-slate-50 min-h-screen pb-32 overflow-x-hidden">
       {/* Profile Clinical Header Terminal */}
-      <section className="bg-gradient-to-br from-[#0a1628] to-[#1a3a4a] pt-24 pb-32 md:pt-32 md:pb-48 relative overflow-hidden">
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#f8fafc] to-transparent z-0" />
+      <section className="bg-slate-900 pt-20 pb-20 md:pt-32 md:pb-48 relative overflow-hidden">
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-50 to-transparent z-0" />
         
         <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
            <div className="flex items-center gap-3 text-[9px] md:text-[10px] font-black text-white/40 uppercase tracking-[0.4em] italic mb-10">
@@ -101,11 +101,11 @@ export default function DoctorProfilePage() {
                     </div>
                  </div>
 
-                 <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 pt-4">
-                    <div className="h-16 md:h-20 bg-white/5 backdrop-blur-3xl rounded-2xl md:rounded-[2.2rem] flex items-center px-8 md:px-10 justify-between md:gap-10 border border-white/5">
-                       <div className="text-[9px] font-black text-white/20 uppercase tracking-widest italic">Fee</div>
-                       <div className="font-syne font-black text-brand-teal text-xl md:text-3xl italic">₹{doctor.fee}</div>
-                    </div>
+                  <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 pt-4">
+                     <div className="h-14 md:h-20 bg-white/5 backdrop-blur-3xl rounded-xl md:rounded-[2.2rem] flex items-center px-6 md:px-10 justify-between md:gap-10 border border-white/5">
+                        <div className="text-[9px] font-black text-white/20 uppercase tracking-widest italic">Fee</div>
+                        <div className="font-syne font-black text-teal-400 text-xl md:text-3xl italic">₹{doctor.fee}</div>
+                     </div>
                     <button 
                       onClick={() => setShowBookingModal(true)}
                       className="h-16 md:h-20 px-8 md:px-12 bg-white text-[#0a1628] font-syne font-black text-[10px] md:text-xs uppercase italic tracking-[0.3em] rounded-2xl md:rounded-[2.2rem] shadow-mint active:scale-95 transition-all flex items-center justify-center gap-4 grow"
@@ -122,12 +122,12 @@ export default function DoctorProfilePage() {
       </section>
 
       {/* Profile Detail Matrix */}
-      <div className="max-w-7xl mx-auto px-6 md:px-10 mt-0 md:-mt-20 relative z-20">
-         <div className="grid lg:grid-cols-12 gap-10 md:gap-20">
+      <div className="max-w-7xl mx-auto px-4 md:px-10 mt-6 md:-mt-20 relative z-20">
+         <div className="grid lg:grid-cols-12 gap-8 md:gap-20">
             
-            <div className="lg:col-span-8 space-y-10 md:space-y-12">
+            <div className="lg:col-span-8 space-y-6 md:space-y-12">
                {/* Tab Switcher */}
-               <div className="bg-white border border-black/[0.03] p-2 md:p-3 rounded-[2rem] md:rounded-[3.5rem] shadow-soft overflow-x-auto no-scrollbar">
+               <div className="bg-white border border-slate-100 p-2 rounded-2xl md:rounded-[3.5rem] shadow-sm overflow-x-auto no-scrollbar">
                   <div className="flex gap-2">
                      {tabs.map(tab => (
                        <button

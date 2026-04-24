@@ -44,7 +44,7 @@ export default function OTPInput({ length = 6, value = [], onChange, onComplete,
           onChange={(e) => handleChange(i, e.target.value)}
           onKeyDown={(e) => handleKeyDown(i, e)}
           onPaste={(e) => handlePaste(i, e)}
-          className="w-10 h-12 text-center border border-brand-border rounded-xl text-lg"
+          className="w-12 h-14 md:w-16 md:h-20 text-center border-2 border-gray-100 rounded-2xl text-2xl font-syne font-black text-[#0a1628] focus:border-brand-teal focus:ring-4 focus:ring-brand-teal/10 transition-all outline-none bg-white shadow-soft"
           maxLength={1}
           autoFocus={autoFocus && i === 0}
           inputMode="numeric"

@@ -32,14 +32,14 @@ export default function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-screen w-full max-w-[480px] bg-white shadow-4xl z-[50] flex flex-col"
+            className="fixed right-0 top-0 h-screen w-full sm:max-w-[400px] md:max-w-[480px] bg-white shadow-4xl z-[50] flex flex-col"
           >
             {/* Header */}
-            <div className="p-8 border-b border-gray-50 flex items-center justify-between">
+            <div className="p-6 md:p-8 border-b border-gray-50 flex items-center justify-between">
               <div className="space-y-1">
                 <div className="flex items-center gap-3">
                   <ShoppingBag className="text-brand-teal" size={24} />
-                  <h2 className="font-syne font-black text-2xl text-[#0a1628]">
+                  <h2 className="font-syne font-black text-xl md:text-2xl text-[#0a1628] truncate">
                     My Cart <span className="text-gray-300">/</span> {totalQuantity}
                   </h2>
                 </div>
@@ -50,13 +50,13 @@ export default function CartDrawer() {
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => { if (window.confirm('Clear all items?')) dispatch(clearCart()); }}
-                  className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:underline"
+                  className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:underline hidden sm:block"
                 >
                   Clear Items
                 </button>
                 <button
                   onClick={onClose}
-                  className="h-12 w-12 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:text-brand-teal transition hover:rotate-90 duration-500"
+                  className="h-11 w-11 md:h-12 md:w-12 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:text-brand-teal transition hover:rotate-90 duration-500"
                 >
                   <X size={24} />
                 </button>
@@ -64,15 +64,15 @@ export default function CartDrawer() {
             </div>
 
             {/* Free Delivery Progress */}
-            <div className="px-8 py-6 bg-gray-50/50 border-b border-gray-50">
+            <div className="px-6 md:px-8 py-4 md:py-6 bg-gray-50/50 border-b border-gray-50">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#0a1628]">
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#0a1628] truncate pr-2">
                   {progressToFree > 0
                     ? `Add ₹${progressToFree} more for FREE delivery`
                     : 'FREE Delivery Unlocked!'}
                 </span>
                 <Truck
-                  className={progressToFree > 0 ? 'text-gray-300' : 'text-emerald-500 animate-bounce'}
+                  className={progressToFree > 0 ? 'text-gray-300 flex-shrink-0' : 'text-emerald-500 animate-bounce flex-shrink-0'}
                   size={14}
                 />
               </div>
@@ -86,22 +86,22 @@ export default function CartDrawer() {
             </div>
 
             {/* Items */}
-            <div className="flex-1 overflow-y-auto no-scrollbar p-8 space-y-8">
+            <div className="flex-1 overflow-y-auto no-scrollbar p-6 md:p-8 space-y-6 md:space-y-8">
               {items.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center p-8 space-y-8">
-                  <div className="h-32 w-32 rounded-full bg-gray-50 flex items-center justify-center text-gray-200">
-                    <ShoppingBag size={64} />
+                  <div className="h-24 w-24 md:h-32 md:w-32 rounded-full bg-gray-50 flex items-center justify-center text-gray-200">
+                    <ShoppingBag size={48} />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="font-syne font-bold text-xl text-[#0a1628]">Your cart is empty</h3>
-                    <p className="text-sm text-gray-400 font-dm">
+                    <h3 className="font-syne font-bold text-lg md:text-xl text-[#0a1628]">Your cart is empty</h3>
+                    <p className="text-xs md:text-sm text-gray-400 font-dm">
                       Looks like you haven&apos;t added any medicines yet.
                     </p>
                   </div>
                   <Link
                     to="/medicines"
                     onClick={onClose}
-                    className="px-10 py-4 bg-[#0a1628] text-white rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-brand-teal transition shadow-xl"
+                    className="px-8 py-3 bg-[#0a1628] text-white rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-brand-teal transition shadow-xl"
                   >
                     Browse Medicines
                   </Link>
@@ -113,9 +113,9 @@ export default function CartDrawer() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05 }}
-                    className="flex gap-6 group"
+                    className="flex gap-4 md:gap-6 group"
                   >
-                    <div className="h-24 w-24 bg-gray-50 rounded-3xl p-4 flex items-center justify-center border border-transparent group-hover:border-brand-teal/20 transition duration-500 overflow-hidden shrink-0">
+                    <div className="h-20 w-20 md:h-24 md:w-24 bg-gray-50 rounded-3xl p-3 md:p-4 flex items-center justify-center border border-transparent group-hover:border-brand-teal/20 transition duration-500 overflow-hidden shrink-0">
                       <img
                         src={item.image || item.imageUrl || '/assets/medicine_default.png'}
                         alt={item.name}
@@ -123,29 +123,29 @@ export default function CartDrawer() {
                         className="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-110 transition duration-500"
                       />
                     </div>
-                    <div className="flex-1 space-y-3">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h4 className="font-syne font-black text-[#0a1628] flex items-center gap-2">
-                            {item.name}
-                            <div className="h-2 w-2 bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                    <div className="flex-1 min-w-0 space-y-2 md:space-y-3">
+                      <div className="flex justify-between items-start gap-2">
+                        <div className="min-w-0 flex-1">
+                          <h4 className="font-syne font-black text-[#0a1628] flex items-center gap-2 truncate">
+                            <span className="truncate">{item.name}</span>
+                            <div className="h-1.5 w-1.5 bg-emerald-500 rounded-full flex-shrink-0" />
                           </h4>
-                          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none mt-1">
+                          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none mt-1 truncate">
                             {item.brand}
                           </p>
                         </div>
                         <button
                           onClick={() => dispatch(removeFromCart(item._id || item.id))}
-                          className="text-gray-200 hover:text-red-500 transition-colors p-1"
+                          className="text-gray-200 hover:text-red-500 transition-colors p-1 flex-shrink-0"
                         >
-                          <Trash2 size={18} />
+                          <Trash2 size={16} />
                         </button>
                       </div>
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
+                        <div className="flex items-center gap-3 bg-gray-50 rounded-xl border border-gray-100 overflow-hidden">
                           <button
                             onClick={() => dispatch(decrementQuantity(item._id || item.id))}
-                            className="text-gray-400 hover:text-[#0a1628] transition p-1"
+                            className="w-11 h-11 flex items-center justify-center text-gray-400 hover:text-[#0a1628] transition"
                           >
                             <Minus size={14} />
                           </button>
@@ -154,12 +154,12 @@ export default function CartDrawer() {
                           </span>
                           <button
                             onClick={() => dispatch(incrementQuantity(item._id || item.id))}
-                            className="text-gray-400 hover:text-[#0a1628] transition p-1"
+                            className="w-11 h-11 flex items-center justify-center text-gray-400 hover:text-[#0a1628] transition"
                           >
                             <Plus size={14} />
                           </button>
                         </div>
-                        <div className="font-syne font-black text-[#0a1628]">
+                        <div className="font-syne font-black text-[#0a1628] ml-2">
                           ₹{(item.price * item.quantity).toLocaleString()}
                         </div>
                       </div>
@@ -170,8 +170,8 @@ export default function CartDrawer() {
             </div>
 
             {/* Footer */}
-            <div className="p-8 bg-white border-t border-gray-50 space-y-8 pb-safe">
-              <div className="space-y-4">
+            <div className="p-6 md:p-8 bg-white border-t border-gray-50 space-y-6 md:space-y-8 pb-safe">
+              <div className="space-y-3 md:space-y-4">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-400 font-dm">Subtotal</span>
                   <span className="font-syne font-black text-[#0a1628]">₹{(subtotal || 0).toLocaleString()}</span>
@@ -183,9 +183,9 @@ export default function CartDrawer() {
                   </span>
                 </div>
                 <div className="h-px w-full bg-gray-50" />
-                <div className="flex justify-between items-center pt-2">
-                  <span className="font-syne font-black text-xl text-[#0a1628]">Total</span>
-                  <span className="font-syne font-black text-3xl text-brand-teal shrink-0">
+                <div className="flex justify-between items-center pt-2 gap-4">
+                  <span className="font-syne font-black text-lg md:text-xl text-[#0a1628] flex-1 min-w-0 truncate">Total</span>
+                  <span className="font-syne font-black text-2xl md:text-3xl text-brand-teal shrink-0">
                     ₹{(totalAmount || 0).toLocaleString()}
                   </span>
                 </div>
@@ -194,10 +194,10 @@ export default function CartDrawer() {
                 <Link
                   to="/checkout"
                   onClick={onClose}
-                  className="w-full h-16 bg-[#0a1628] text-white rounded-[2rem] flex items-center justify-between px-10 font-syne font-black text-[11px] uppercase tracking-[0.2em] shadow-4xl hover:bg-brand-teal transition-all group active:scale-95"
+                  className="w-full h-14 md:h-16 bg-[#0a1628] text-white rounded-[2rem] flex items-center justify-between px-8 md:px-10 font-syne font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] shadow-4xl hover:bg-brand-teal transition-all group active:scale-95"
                 >
-                  Proceed to Checkout
-                  <ArrowRight className="group-hover:translate-x-2 transition" size={18} />
+                  <span className="truncate mr-2">Proceed to Checkout</span>
+                  <ArrowRight className="group-hover:translate-x-2 transition shrink-0" size={18} />
                 </Link>
                 <div className="flex items-center justify-center gap-2 text-[8px] font-black text-gray-300 uppercase tracking-widest">
                   <ShieldCheck size={12} className="text-emerald-500" /> SECURED CHECKOUT

@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ChevronRight } from 'lucide-react';
 
 /**
  * Standard button architecture for MediPharm.
@@ -16,13 +16,13 @@ export function Button({
   className = '', 
   ...props 
 }) {
-  const base = "h-14 px-8 rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-3 relative overflow-hidden group active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed";
+  const base = "h-12 md:h-14 px-6 md:px-8 rounded-xl md:rounded-2xl font-syne font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 md:gap-3 relative overflow-hidden group active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed";
   
   const variants = {
-    primary: "bg-gradient-to-r from-[#02C39A] to-[#028090] text-white shadow-mint hover:shadow-2xl hover:-translate-y-px",
-    outline: "bg-white border-2 border-[#028090] text-[#028090] hover:bg-gray-50",
-    ghost: "bg-transparent text-gray-400 hover:bg-gray-50 hover:text-[#0a1628]",
-    danger: "bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-xl hover:shadow-2xl"
+    primary: "bg-navy text-teal-400 shadow-lg hover:shadow-2xl hover:bg-teal-500 hover:text-white",
+    outline: "bg-white border-2 border-navy text-navy hover:bg-gray-50",
+    ghost: "bg-transparent text-gray-400 hover:bg-gray-50 hover:text-navy",
+    danger: "bg-red-500 text-white shadow-xl hover:bg-red-600"
   };
 
   return (
@@ -32,11 +32,11 @@ export function Button({
       {...props}
     >
       {loading ? (
-        <Loader2 className="animate-spin" size={18} />
+        <Loader2 className="animate-spin" size={16} />
       ) : (
         <>
-          {icon && <span className="group-hover:translate-x-[-2px] transition-transform">{icon}</span>}
-          {children}
+          {icon && <span className="group-hover:translate-x-[-2px] transition-transform shrink-0">{icon}</span>}
+          <span className="truncate">{children}</span>
         </>
       )}
     </motion.button>
@@ -48,19 +48,19 @@ export function Button({
  */
 export function Input({ label, icon: Icon, error, helperText, className = '', ...props }) {
   return (
-    <div className={`space-y-4 w-full ${className}`}>
-      {label && <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300 ml-4">{label}</label>}
+    <div className={`space-y-2 md:space-y-4 w-full ${className}`}>
+      {label && <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-gray-300 ml-3 md:ml-4">{label}</label>}
       <div className="relative group">
-        <div className={`absolute left-6 top-1/2 -translate-y-1/2 transition-colors ${error ? 'text-red-500' : 'text-gray-300 group-focus-within:text-[#02C39A]'}`}>
-          {Icon && <Icon size={20} />}
+        <div className={`absolute left-5 md:left-6 top-1/2 -translate-y-1/2 transition-colors ${error ? 'text-red-500' : 'text-gray-300 group-focus-within:text-teal-600'}`}>
+          {Icon && <Icon size={18} />}
         </div>
         <input 
-          className={`w-full bg-gray-50 border-2 border-transparent rounded-2xl py-6 pr-8 outline-none transition-all font-dm text-lg italic shadow-inner focus:bg-white ${Icon ? 'pl-20' : 'pl-8'} ${error ? 'border-red-500/20' : 'focus:border-[#02C39A]/20'}`}
+          className={`w-full bg-gray-50 border-2 border-transparent rounded-xl md:rounded-2xl py-4 md:py-6 pr-6 md:pr-8 outline-none transition-all font-dm text-base md:text-lg italic shadow-inner focus:bg-white ${Icon ? 'pl-14 md:pl-20' : 'pl-6 md:pl-8'} ${error ? 'border-red-500/20' : 'focus:border-teal-500/20'}`}
           {...props}
         />
       </div>
       {(error || helperText) && (
-        <p className={`text-[10px] font-black uppercase tracking-widest ml-4 ${error ? 'text-red-500' : 'text-gray-300 italic'}`}>
+        <p className={`text-[9px] md:text-[10px] font-black uppercase tracking-widest ml-3 md:ml-4 ${error ? 'text-red-500' : 'text-gray-300 italic'}`}>
           {error || helperText}
         </p>
       )}
@@ -68,19 +68,21 @@ export function Input({ label, icon: Icon, error, helperText, className = '', ..
   );
 }
 
-/**
- * Multiple-choice selector architecture.
- */
 export function Select({ label, options = [], ...props }) {
   return (
-    <div className="space-y-4 w-full">
-      {label && <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300 ml-4">{label}</label>}
-      <select 
-        className="w-full bg-gray-50 border-2 border-transparent rounded-2xl py-6 px-8 outline-none transition-all font-dm text-lg italic shadow-inner appearance-none cursor-pointer focus:bg-white focus:border-[#02C39A]/20"
-        {...props}
-      >
-        {options.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-      </select>
+    <div className="space-y-2 md:space-y-4 w-full">
+      {label && <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-gray-300 ml-3 md:ml-4">{label}</label>}
+      <div className="relative">
+        <select 
+          className="w-full bg-gray-50 border-2 border-transparent rounded-xl md:rounded-2xl py-4 md:py-6 px-6 md:px-8 outline-none transition-all font-dm text-base md:text-lg italic shadow-inner appearance-none cursor-pointer focus:bg-white focus:border-teal-500/20"
+          {...props}
+        >
+          {options.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+        </select>
+        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+           <ChevronRight size={18} className="rotate-90" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -132,7 +134,7 @@ export function OTPInput({ length = 6, onComplete }) {
   };
 
   return (
-    <div className="flex gap-3 justify-center">
+    <div className="flex gap-2 md:gap-3 justify-center">
       {Array.from({ length }).map((_, i) => (
         <input
           key={i}
@@ -143,7 +145,7 @@ export function OTPInput({ length = 6, onComplete }) {
           onChange={e => handleChange(e, i)}
           onKeyDown={e => handleKeyDown(e, i)}
           onPaste={handlePaste}
-          className="h-16 w-12 text-center text-2xl font-syne font-black bg-gray-50 border-2 border-transparent rounded-2xl outline-none transition-all focus:bg-white focus:border-[#02C39A]/40 shadow-inner text-[#0a1628]"
+          className="h-12 w-9 md:h-16 md:w-12 text-center text-xl md:text-2xl font-syne font-black bg-gray-50 border-2 border-transparent rounded-xl md:rounded-2xl outline-none transition-all focus:bg-white focus:border-teal-500/40 shadow-inner text-navy"
         />
       ))}
     </div>
@@ -155,10 +157,10 @@ export function OTPInput({ length = 6, onComplete }) {
  */
 export function Textarea({ label, ...props }) {
   return (
-    <div className="space-y-4 w-full">
-      {label && <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300 ml-4">{label}</label>}
+    <div className="space-y-2 md:space-y-4 w-full">
+      {label && <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-gray-300 ml-3 md:ml-4">{label}</label>}
       <textarea 
-        className="w-full bg-gray-50 border-2 border-transparent rounded-[3rem] p-8 outline-none transition-all font-dm text-lg italic shadow-inner focus:bg-white focus:border-[#02C39A]/20 resize-none"
+        className="w-full bg-gray-50 border-2 border-transparent rounded-2xl md:rounded-[3rem] p-6 md:p-8 outline-none transition-all font-dm text-base md:text-lg italic shadow-inner focus:bg-white focus:border-teal-500/20 resize-none"
         {...props}
       />
     </div>

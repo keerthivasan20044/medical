@@ -61,49 +61,34 @@ export default function PharmacistDashboard() {
   };
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-48 pt-24 px-6 md:px-10">
-      <div className="max-w-7xl mx-auto space-y-12 md:space-y-20">
+    <div className="bg-slate-50 min-h-screen pb-24 pt-4 md:pt-6 px-3 md:px-10">
+      <div className="max-w-7xl mx-auto space-y-6 md:space-y-10">
         
-        {/* District Command Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 pb-12 border-b border-black/[0.03]">
-           <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                 <div className="h-4 w-4 bg-brand-teal rounded-full animate-ping" />
-                 <span className="text-[10px] font-black text-brand-teal uppercase tracking-[0.5em] italic">{t('liveClinicalTerminal')}</span>
-              </div>
-              <h1 className="font-syne font-black text-6xl lg:text-8xl text-[#0a1628] leading-[0.85] tracking-tighter uppercase italic">
-                 {t('pharmacy')} <br/><span className="text-brand-teal">{t('enclaveNode')}</span>
-              </h1>
+        {/* Header */}
+        <div className="flex items-center justify-between gap-3">
+           <div>
+              <h1 className="text-xl md:text-3xl font-bold text-slate-900">Pharmacy Dashboard</h1>
+              <p className="text-sm text-slate-400 mt-0.5">Manage orders and inventory</p>
            </div>
-           
-           <div className="flex items-center gap-8 bg-white border border-black/[0.03] p-4 rounded-[3rem] shadow-soft">
-              <div className="flex items-center gap-6 px-4 border-r border-black/[0.03]">
-                 <div className="h-20 w-20 bg-gray-50 rounded-[2rem] flex items-center justify-center text-brand-teal shadow-inner"><User size={32}/></div>
-                 <div className="space-y-1">
-                    <div className="font-syne font-black text-2xl text-[#0a1628] uppercase italic leading-none">{t('apolloHub')}</div>
-                    <div className="text-[10px] font-black text-gray-300 uppercase italic tracking-widest">{t('administratorNode')}</div>
-                 </div>
-              </div>
-              <button onClick={() => dispatch(fetchOrders())} className="h-16 w-16 bg-[#0a1628] text-brand-teal rounded-2xl flex items-center justify-center shadow-4xl hover:rotate-180 transition-all duration-1000 active:scale-95"><RefreshCw size={24}/></button>
-           </div>
+           <button onClick={() => dispatch(fetchOrders())} className="h-10 w-10 bg-slate-900 text-teal-400 rounded-xl flex items-center justify-center shadow-md hover:rotate-180 transition-all duration-700 active:scale-95 flex-shrink-0"><RefreshCw size={18}/></button>
         </div>
 
-        {/* Telemetry Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
            {stats.map((s, i) => (
              <motion.div 
                key={s.label}
                initial={{ opacity: 0, scale: 0.95 }}
                animate={{ opacity: 1, scale: 1 }}
                transition={{ delay: i * 0.1 }}
-               className="bg-white border border-black/[0.03] p-10 rounded-[3.5rem] shadow-soft flex items-center justify-between group hover:shadow-4xl transition-all duration-500"
+               className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm flex items-center justify-between"
              >
-                <div className="space-y-2">
-                   <div className="text-[10px] font-black text-gray-300 uppercase italic tracking-widest leading-none group-hover:text-brand-teal transition-colors">{s.label}</div>
-                   <div className="font-syne font-black text-4xl text-[#0a1628] uppercase italic tracking-tighter">{s.value}</div>
+                <div className="min-w-0">
+                   <div className="text-xs font-medium text-slate-400 truncate">{s.label}</div>
+                   <div className="text-xl font-bold text-slate-900 mt-0.5">{s.value}</div>
                 </div>
-                <div className={`h-16 w-16 rounded-2xl flex items-center justify-center shadow-inner group-hover:bg-[#0a1628] group-hover:text-white transition-all duration-700 ${s.color}`}>
-                   <s.icon size={28} />
+                <div className={`h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0 ${s.color}`}>
+                   <s.icon size={20} />
                 </div>
              </motion.div>
            ))}
@@ -136,7 +121,7 @@ export default function PharmacistDashboard() {
                           initial={{ opacity: 0, y: 30 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95 }}
-                          className={`bg-white border p-12 rounded-[4.5rem] flex flex-col lg:flex-row gap-12 items-start lg:items-center justify-between shadow-soft hover:shadow-4xl transition-all duration-1000 relative overflow-hidden group/card ${ord.status === 'placed' ? 'border-brand-teal/20 border-l-[16px] border-l-brand-teal' : 'border-black/[0.03]'}`}
+                          className={`bg-white border p-4 md:p-8 rounded-xl flex flex-col gap-4 shadow-sm hover:shadow-md transition-all relative overflow-hidden ${ord.status === 'placed' ? 'border-teal-500/30 border-l-4 border-l-teal-500' : 'border-slate-200'}`}
                        >
                           {ord.status === 'placed' && (
                              <div className="absolute top-0 right-0 py-2 px-8 bg-brand-teal text-[#0a1628] font-syne font-black text-[9px] uppercase italic tracking-[0.4em] rounded-bl-[2rem] shadow-mint animate-pulse z-10">{t('uplinked')}</div>

@@ -57,7 +57,7 @@ export const medicineService = {
   
   getById: async (id) => {
     const res = await api.get(`/api/medicines/${id}`);
-    return res.data.item || res.data;
+    return res.data;
   },
   
   getSuggestions: async (q) => {
@@ -79,26 +79,11 @@ export const pharmacyService = {
   
   getById: async (id) => {
     const res = await api.get(`/api/pharmacies/${id}`);
-    return res.data.item || res.data;
+    return res.data;
   },
   
   getNearby: async (lat, lng) => {
     const res = await api.get('/api/pharmacies/nearby', { params: { lat, lng } });
-    return res.data;
-  },
-
-  fetchPhoto: async (id) => {
-    const res = await api.post(`/api/pharmacies/${id}/fetch-photo`);
-    return res.data;
-  },
-
-  setMainPhoto: async (id, photoUrl) => {
-    const res = await api.put(`/api/pharmacies/${id}/set-main-photo`, { photoUrl });
-    return res.data;
-  },
-
-  deletePhoto: async (id, photoUrl) => {
-    const res = await api.delete(`/api/pharmacies/${id}/photos`, { data: { photoUrl } });
     return res.data;
   }
 };
@@ -157,7 +142,7 @@ export const prescriptionService = {
 
   getById: async (id) => {
     const res = await api.get(`/api/prescriptions/${id}`);
-    return res.data.item || res.data;
+    return res.data;
   },
 
   delete: async (id) => {
@@ -170,8 +155,8 @@ export const prescriptionService = {
     return res.data;
   },
 
-  approve: async (id) => {
-    const res = await api.put(`/api/prescriptions/${id}/approve`);
+  verify: async (id) => {
+    const res = await api.put(`/api/prescriptions/${id}/verify`);
     return res.data;
   },
 
@@ -189,8 +174,8 @@ export const doctorService = {
   
   getById: async (id) => {
     const res = await api.get(`/api/users/doctors/${id}`);
-    return res.data.user || res.data.item || res.data;
-  },
+    return res.data;
+  }
 };
 
 export const appointmentService = {
@@ -206,7 +191,7 @@ export const appointmentService = {
   
   getById: async (id) => {
     const res = await api.get(`/api/appointments/${id}`);
-    return res.data.item || res.data;
+    return res.data;
   },
 
   getDoctorAppointments: async () => {
@@ -225,4 +210,13 @@ export const systemService = {
     const res = await api.get('/api/public/stats');
     return res.data;
   }
+};
+
+export const deliveryService = {
+  getAvailableTasks: () => api.get('/api/delivery/available').then(res => res.data),
+  acceptTask: (id) => api.post(`/api/delivery/tasks/${id}/accept`).then(res => res.data),
+  getActiveTask: () => api.get('/api/delivery/active').then(res => res.data),
+  updateTaskStatus: (id, status, data) => api.patch(`/api/delivery/tasks/${id}/status`, { status, ...data }).then(res => res.data),
+  getEarnings: () => api.get('/api/delivery/earnings').then(res => res.data),
+  getHistory: () => api.get('/api/delivery/history').then(res => res.data),
 };

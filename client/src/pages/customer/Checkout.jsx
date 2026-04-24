@@ -31,6 +31,7 @@ export default function CheckoutPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { user } = useSelector((s) => s.auth);
   const { items, totalAmount, note, prescription } = useSelector((s) => s.cart);
   const { status } = useSelector((s) => s.payments);
   const [method, setMethod] = useState('upi');
@@ -47,12 +48,13 @@ export default function CheckoutPage() {
   }, [items, navigate]);
 
   const payload = useMemo(() => ({
-    items: items.map((i) => ({ medicine: i.id || i._id, qty: i.qty, price: i.price })),
+    pharmacyId: items[0]?.pharmacyId || 'ph-1', // Derive from first item or default
+    items: items.map((i) => ({ medicine: i.id || i._id, quantity: i.quantity, price: i.price })),
     totalAmount: finalTotal,
     deliveryAddress: SAVED_ADDRESSES.find(a => a.id === selectedAddress)?.address || '',
     paymentMethod: method,
     note,
-    prescription
+    prescriptionUrl: prescription?.url || ''
   }), [items, finalTotal, method, note, prescription, selectedAddress]);
 
   const handlePay = async () => {
@@ -93,11 +95,22 @@ export default function CheckoutPage() {
         }));
         return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError('Node synchronization failed.');
       },
-      prefill: { name: 'User', email: 'user@karaikal.in', contact: '9876543210' },
-      theme: { color: '#028090' }
     };
 
-    const rzp = new window.Razorpay(options);
+    const rzp = new window.Razorpay({
+      ...options,
+      prefill: {
+        name: user?.name || 'MediPharm User',
+        email: user?.email || '',
+        contact: user?.phone || ''
+      }
+    });
+
+    rzp.on('payment.failed', (response) => {
+      setError(response.error.description || 'Payment failed during satellite handshake.');
+      dispatch(logPaymentRetry({ orderId, reason: response.error.reason }));
+    });
+
     rzp.open();
   };
 
@@ -108,115 +121,113 @@ export default function CheckoutPage() {
         <div className="grid lg:grid-cols-[1fr_1.2fr] gap-12 md:gap-20 items-start">
           
           {/* Left Column: Order Summary */}
-          <section className="space-y-12">
-             <div className="space-y-4">
-                <div className="px-5 py-2 bg-[#0a1628] rounded-xl w-fit flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic">
-                   <Activity size={14} className="animate-pulse" /> Order Summary
+          <section className="space-y-8 md:space-y-12">
+             <div className="space-y-3 md:space-y-4">
+                <div className="px-4 py-1.5 bg-navy rounded-xl w-fit flex items-center gap-2 text-[9px] md:text-[10px] font-black text-teal-400 uppercase tracking-widest italic leading-none">
+                   <Activity size={12} className="animate-pulse" /> Order Sync
                 </div>
-                <h1 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic leading-none tracking-tighter">
+                <h1 className="font-syne font-black text-4xl md:text-7xl text-navy uppercase italic leading-tight tracking-tighter">
                    Checkout
                 </h1>
-                <div className="bg-brand-teal/5 border border-brand-teal/10 p-4 rounded-2xl flex items-center gap-4 text-brand-teal shrink-0">
-                   <Truck size={20} className="animate-bounce-slow" />
-                   <div className="font-syne font-black text-[10px] md:text-xs uppercase italic tracking-widest leading-none">Estimated Delivery: <span className="text-[#0a1628]">25–35 Mins</span></div>
+                <div className="bg-teal-500/5 border border-teal-500/10 p-3 md:p-4 rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-4 text-teal-600 shrink-0">
+                   <Truck size={18} className="animate-bounce-slow" />
+                   <div className="font-syne font-black text-[9px] md:text-xs uppercase italic tracking-widest leading-none">Estimated Delivery: <span className="text-navy">25–35 Mins</span></div>
                 </div>
              </div>
 
-             <div className="bg-white border border-black/[0.03] rounded-[3.5rem] p-8 md:p-12 shadow-soft space-y-10 relative overflow-hidden">
-                <div className="absolute top-0 right-0 h-48 w-48 bg-brand-teal opacity-[0.02] rounded-full blur-[80px]" />
+             <div className="bg-white border border-gray-100 rounded-2xl md:rounded-[3.5rem] p-5 md:p-12 shadow-xl space-y-8 md:space-y-10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 h-40 w-40 bg-teal-500 opacity-[0.02] rounded-full blur-[80px]" />
                 
-                <div className="flex items-center justify-between border-b border-gray-50 pb-8">
-                   <div className="flex items-center gap-4">
-                      <div className="h-1.5 w-10 bg-brand-teal rounded-full" />
-                      <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic">Item List</h3>
+                <div className="flex items-center justify-between border-b border-gray-50 pb-6 md:pb-8">
+                   <div className="flex items-center gap-3 md:gap-4">
+                      <div className="h-1 w-8 md:w-16 bg-teal-500 rounded-full" />
+                      <h3 className="font-syne font-black text-xl md:text-2xl text-navy uppercase italic">Item List</h3>
                    </div>
-                   <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">{items.length} Modules</span>
+                   <span className="text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest">{items.length} Modules</span>
                 </div>
 
-                <div className="space-y-8 max-h-[500px] overflow-y-auto pr-4 no-scrollbar">
+                <div className="space-y-6 md:space-y-8 max-h-[400px] md:max-h-[500px] overflow-y-auto pr-2 no-scrollbar">
                    {items.map((i) => (
-                      <div key={i.id || i._id} className="flex items-center gap-6 group">
-                         <div className="h-20 w-20 bg-gray-50 rounded-2xl overflow-hidden shrink-0 border border-black/[0.02] p-2">
+                      <div key={i.id || i._id} className="flex items-center gap-4 md:gap-6 group">
+                         <div className="h-14 w-14 md:h-20 md:w-20 bg-gray-50 rounded-xl md:rounded-2xl overflow-hidden shrink-0 border border-gray-100 p-1.5 md:p-2">
                             <img src={i.image} alt={i.name} className="h-full w-full object-contain group-hover:scale-110 transition duration-500" />
                          </div>
-                         <div className="flex-1 space-y-1">
-                            <div className="font-syne font-black text-[#0a1628] text-lg uppercase italic tracking-tight leading-tight">{i.name}</div>
-                            <div className="flex justify-between items-center text-[10px] font-black uppercase text-gray-300 tracking-widest">
+                         <div className="flex-1 min-w-0 space-y-0.5 md:space-y-1">
+                            <div className="font-syne font-black text-navy text-sm md:text-lg uppercase italic tracking-tight leading-tight truncate">{i.name}</div>
+                            <div className="flex justify-between items-center text-[8px] md:text-[10px] font-black uppercase text-gray-300 tracking-widest">
                                <span>Qty: {i.qty}</span>
-                               <span className="text-brand-teal">₹{i.price * i.qty}</span>
+                               <span className="text-teal-600">₹{i.price * i.qty}</span>
                             </div>
                          </div>
                       </div>
                    ))}
-                </div>
-
-                <div className="pt-10 border-t border-gray-50 space-y-6">
-                   <div className="space-y-4">
-                      <div className="flex justify-between text-gray-400 font-syne font-black text-[10px] uppercase italic tracking-widest">
+                </div>                 <div className="pt-6 md:pt-10 border-t border-gray-50 space-y-4 md:space-y-6">
+                   <div className="space-y-3 md:space-y-4">
+                      <div className="flex justify-between text-gray-400 font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest">
                          <span>Subtotal</span>
                          <span>₹{totalAmount}</span>
                       </div>
-                      <div className="flex justify-between text-gray-400 font-syne font-black text-[10px] uppercase italic tracking-widest">
+                      <div className="flex justify-between text-gray-400 font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest">
                          <span>Delivery Fee</span>
                          <span className="text-emerald-500">₹{deliveryFee}</span>
                       </div>
                       {discount > 0 && (
-                        <div className="flex justify-between text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-widest">
+                        <div className="flex justify-between text-teal-600 font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest">
                            <span>Discount</span>
                            <span>-₹{discount}</span>
                         </div>
                       )}
                    </div>
-                   <div className="h-px bg-black/[0.03]" />
-                   <div className="flex justify-between items-end pt-4">
-                      <div className="font-syne font-black text-2xl text-[#0a1628] uppercase italic">Grand Total</div>
-                      <div className="font-syne font-black text-5xl text-brand-teal italic tracking-tighter shadow-mint-text">₹{finalTotal}</div>
+                   <div className="h-px bg-gray-50" />
+                   <div className="flex justify-between items-end pt-2 md:pt-4">
+                      <div className="font-syne font-black text-lg md:text-2xl text-navy uppercase italic">Grand Total</div>
+                      <div className="font-syne font-black text-3xl md:text-5xl text-teal-600 italic tracking-tighter">₹{finalTotal}</div>
                    </div>
                 </div>
              </div>
           </section>
 
           {/* Right Column: Payment & Address */}
-          <section className="space-y-12">
-             <div className="bg-[#0a1628] rounded-[3.5rem] md:rounded-[4.5rem] p-8 md:p-16 text-white space-y-12 shadow-4xl relative overflow-hidden border-t-[20px] border-brand-teal">
-                <div className="absolute top-0 right-0 h-64 w-64 bg-brand-teal opacity-5 rounded-full blur-[100px]" />
+          <section className="space-y-8 md:space-y-12">
+             <div className="bg-navy rounded-2xl md:rounded-[4.5rem] p-6 md:p-16 text-white space-y-10 md:space-y-12 shadow-2xl relative overflow-hidden border-t-[12px] md:border-t-[20px] border-teal-500">
+                <div className="absolute top-0 right-0 h-48 w-48 bg-teal-500 opacity-5 rounded-full blur-[100px]" />
                 
                 {/* Address Section */}
-                <div className="space-y-8 relative z-10">
-                   <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-6">
-                         <div className="h-14 w-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-brand-teal"><MapPin size={24}/></div>
-                         <h2 className="font-syne font-black text-2xl uppercase italic tracking-tighter">Delivery Address</h2>
+                <div className="space-y-6 md:space-y-8 relative z-10">
+                   <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-4 md:gap-6">
+                         <div className="h-10 w-10 md:h-14 md:w-14 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-teal-400 shrink-0"><MapPin size={20}/></div>
+                         <h2 className="font-syne font-black text-lg md:text-2xl uppercase italic tracking-tighter">Delivery Address</h2>
                       </div>
-                      <button className="h-10 w-10 md:h-12 md:w-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-brand-teal hover:bg-brand-teal hover:text-[#0a1628] transition-all"><Plus size={20}/></button>
+                      <button className="h-9 w-9 md:h-12 md:w-12 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-teal-400 hover:bg-teal-500 hover:text-navy transition-all shrink-0"><Plus size={18}/></button>
                    </div>
 
-                   <div className="grid gap-4">
+                   <div className="grid gap-3 md:gap-4">
                       {SAVED_ADDRESSES.map(addr => (
                          <button 
                             key={addr.id}
                             onClick={() => setSelectedAddress(addr.id)}
-                            className={`p-6 rounded-[2rem] border-2 text-left transition-all duration-700 relative group ${selectedAddress === addr.id ? 'bg-white/10 border-brand-teal ring-8 ring-brand-teal/5' : 'bg-transparent border-white/10 hover:border-white/30'}`}
+                            className={`p-4 md:p-6 rounded-2xl md:rounded-[2rem] border-2 text-left transition-all duration-500 relative group ${selectedAddress === addr.id ? 'bg-white/10 border-teal-500 ring-4 md:ring-8 ring-teal-500/5' : 'bg-transparent border-white/10 hover:border-white/30'}`}
                          >
-                            <div className="flex justify-between items-start mb-2">
-                               <div className="text-[9px] font-black uppercase text-brand-teal tracking-[0.3em] italic">{addr.label}</div>
-                               {selectedAddress === addr.id && <CheckCircle size={16} className="text-brand-teal" />}
+                            <div className="flex justify-between items-start mb-1.5 md:mb-2">
+                               <div className="text-[8px] md:text-[9px] font-black uppercase text-teal-400 tracking-widest italic">{addr.label}</div>
+                               {selectedAddress === addr.id && <CheckCircle size={14} className="text-teal-500" />}
                             </div>
-                            <div className="font-dm font-black text-sm md:text-lg italic text-white/80 group-hover:text-white transition-colors">{addr.address}</div>
-                            <div className="text-[10px] font-black text-white/40 uppercase tracking-widest">{addr.city} &bull; {addr.zip}</div>
+                            <div className="font-dm font-black text-sm md:text-lg italic text-white/80 group-hover:text-white transition-colors truncate">{addr.address}</div>
+                            <div className="text-[8px] md:text-[10px] font-black text-white/40 uppercase tracking-widest">{addr.city} &bull; {addr.zip}</div>
                          </button>
                       ))}
                    </div>
                 </div>
 
                 {/* Payment Section */}
-                <div className="space-y-8 relative z-10 pt-10 border-t border-white/5">
-                   <div className="flex items-center gap-6">
-                      <div className="h-14 w-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-brand-teal"><CreditCard size={24}/></div>
-                      <h2 className="font-syne font-black text-2xl uppercase italic tracking-tighter">Payment Method</h2>
+                <div className="space-y-6 md:space-y-8 relative z-10 pt-8 md:pt-10 border-t border-white/5">
+                   <div className="flex items-center gap-4 md:gap-6">
+                      <div className="h-10 w-10 md:h-14 md:w-14 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-teal-400 shrink-0"><CreditCard size={20}/></div>
+                      <h2 className="font-syne font-black text-lg md:text-2xl uppercase italic tracking-tighter">Payment Method</h2>
                    </div>
 
-                   <div className="grid grid-cols-3 gap-4">
+                   <div className="grid grid-cols-3 gap-3 md:gap-4">
                       {[
                          { id: 'upi', icon: Smartphone, label: 'UPI' },
                          { id: 'card', icon: CreditCard, label: 'CARD' },
@@ -225,28 +236,28 @@ export default function CheckoutPage() {
                          <button 
                             key={m.id}
                             onClick={() => setMethod(m.id)}
-                            className={`py-6 rounded-[1.8rem] border-2 transition-all duration-700 flex flex-col items-center gap-3 ${method === m.id ? 'bg-white text-[#0a1628] border-white' : 'bg-transparent border-white/10 text-white/40 hover:text-white hover:border-white/30'}`}
+                            className={`py-4 md:py-6 rounded-xl md:rounded-[1.8rem] border-2 transition-all duration-500 flex flex-col items-center gap-2 md:gap-3 ${method === m.id ? 'bg-white text-navy border-white' : 'bg-transparent border-white/10 text-white/40 hover:text-white hover:border-white/30'}`}
                          >
-                            <m.icon size={20} />
-                            <span className="text-[9px] font-black uppercase tracking-widest">{m.label}</span>
+                            <m.icon size={18} className="md:size-5" />
+                            <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest">{m.label}</span>
                          </button>
                       ))}
                    </div>
 
                    {error && (
-                      <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-4 text-red-500 text-[10px] font-black uppercase tracking-widest italic animate-shake">
-                         <AlertCircle size={16}/> {error}
+                      <div className="p-3 md:p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 md:gap-4 text-red-500 text-[8px] md:text-[10px] font-black uppercase tracking-widest italic animate-shake">
+                         <AlertCircle size={14}/> {error}
                       </div>
                    )}
 
                    <button 
                       onClick={handlePay}
                       disabled={status === 'loading'}
-                      className="w-full h-20 md:h-24 bg-brand-teal text-[#0a1628] rounded-[2rem] md:rounded-[3rem] font-syne font-black text-sm md:text-xl uppercase tracking-[0.4em] shadow-mint-large hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-6 italic overflow-hidden relative group"
+                      className="w-full h-16 md:h-24 bg-teal-500 text-navy rounded-xl md:rounded-[3rem] font-syne font-black text-sm md:text-xl uppercase tracking-[0.2em] md:tracking-[0.4em] shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 md:gap-6 italic overflow-hidden relative group"
                    >
                       <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
                       {status === 'loading' ? 'PROCESSING...' : 'PAY NOW'} 
-                      <ArrowRight size={24} />
+                      <ArrowRight size={20} className="md:size-6" />
                    </button>
                    
                    <div className="flex items-center justify-center gap-4 text-[9px] font-black text-white/20 uppercase tracking-[0.4em] italic">

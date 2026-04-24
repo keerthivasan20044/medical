@@ -24,19 +24,19 @@ export default function ComparePharmaciesPage() {
   };
 
   const features = [
-    { label: 'Clinical Rating', key: 'rating', type: 'rating' },
-    { label: 'Grid Distance', key: 'distance', type: 'distance' },
-    { label: 'Delivery Protocol', key: 'deliveryFee', type: 'fee' },
-    { label: 'ETA Payload', key: 'eta', type: 'text' },
-    { label: 'Temporal Window', key: 'timings', type: 'text' },
-    { label: '24/7 Redundancy', key: 'is24hr', type: 'boolean' },
-    { label: 'Tablet Stock', key: 'tablets', type: 'stock' },
-    { label: 'Vaccine Node', key: 'vaccines', type: 'stock' },
-    { label: 'Ayurvedic Node', key: 'ayurvedic', icon: 'special' },
-    { label: 'UPI Protocol', key: 'upi', type: 'service' },
-    { label: 'COD Protocol', key: 'cod', type: 'service' },
-    { label: 'Parking Bay', key: 'parking', type: 'facility' },
-    { label: 'Climate Control (AC)', key: 'ac', type: 'facility' }
+    { label: 'Rating', key: 'rating', type: 'rating' },
+    { label: 'Distance', key: 'distance', type: 'distance' },
+    { label: 'Delivery Fee', key: 'deliveryFee', type: 'fee' },
+    { label: 'Delivery Time', key: 'eta', type: 'text' },
+    { label: 'Opening Hours', key: 'timings', type: 'text' },
+    { label: 'Open 24 Hours', key: 'is24hr', type: 'boolean' },
+    { label: 'Tablets', key: 'tablets', type: 'stock' },
+    { label: 'Vaccines', key: 'vaccines', type: 'stock' },
+    { label: 'Ayurvedic', key: 'ayurvedic', icon: 'special' },
+    { label: 'UPI Payment', key: 'upi', type: 'service' },
+    { label: 'COD Payment', key: 'cod', type: 'service' },
+    { label: 'Parking', key: 'parking', type: 'facility' },
+    { label: 'AC', key: 'ac', type: 'facility' }
   ];
 
   return (
@@ -69,8 +69,8 @@ export default function ComparePharmaciesPage() {
          <div className="bg-white border border-black/[0.03] p-12 rounded-[4.5rem] shadow-soft overflow-x-auto no-scrollbar">
             <div className="flex items-center gap-12 min-w-max">
                <div className="space-y-2 shrink-0">
-                  <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Selector Protocol</div>
-                  <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic leading-none">Active Matrix</h3>
+                  <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Selection</div>
+                  <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic leading-none">Select Pharmacies</h3>
                </div>
                <div className="flex gap-4">
                   {pharmacies.map(p => (
@@ -96,9 +96,9 @@ export default function ComparePharmaciesPage() {
                      <tr>
                         <th className="w-80 px-10 pb-10 text-left">
                            <div className="space-y-4">
-                              <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic leading-none">Clinical Matrix</h3>
+                              <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic leading-none">Comparison</h3>
                               <div className="px-4 py-2 bg-brand-teal text-[#0a1628] rounded-xl text-[9px] font-black uppercase italic tracking-widest inline-block whitespace-nowrap">
-                                 AUDIT SESSION: MARCH 2026
+                                 LIVE DATA
                               </div>
                            </div>
                         </th>
@@ -108,11 +108,11 @@ export default function ComparePharmaciesPage() {
                                 <div className="h-40 w-full rounded-[2.5rem] overflow-hidden border border-black/[0.03] shadow-inner"><img src={p.images[0]} className="h-full w-full object-cover grayscale-[0.5]" /></div>
                                 <div className="space-y-1">
                                    <div className="font-syne font-black text-2xl text-[#0a1628] uppercase italic tracking-tighter truncate">{p.name}</div>
-                                   <div className="text-[10px] font-black text-gray-300 uppercase italic tracking-widest">{p.area} Node</div>
+                                   <div className="text-[10px] font-black text-gray-300 uppercase italic tracking-widest">{p.area}</div>
                                 </div>
                                 {winner?.id === p.id && (
                                   <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-10 w-[90%] bg-amber-500 text-white font-syne font-black text-[9px] uppercase italic tracking-[0.3em] py-2 rounded-xl shadow-4xl flex items-center justify-center gap-3">
-                                     <Award size={14}/> Best Overall Node
+                                     <Award size={14}/> Best Choice
                                   </div>
                                 )}
                              </div>
@@ -135,7 +135,7 @@ export default function ComparePharmaciesPage() {
                                   </div>
                                 )}
                                 {f.type === 'distance' && <div className="font-syne font-black text-xl text-[#0a1628] italic">{p.distance}KM</div>}
-                                {f.type === 'fee' && <div className="font-syne font-black text-xl text-brand-teal italic">{p.deliveryFee === 0 ? 'FREE' : `\u20B9${p.deliveryFee}`}</div>}
+                                {f.type === 'fee' && <div className="font-syne font-black text-xl text-brand-teal italic">{p.deliveryFee === 0 ? 'FREE' : `₹${p.deliveryFee}`}</div>}
                                 {f.type === 'text' && <div className="text-xs font-dm font-bold text-gray-400 italic uppercase">{p[f.key]}</div>}
                                 {f.type === 'boolean' && (
                                   <div className="flex justify-center">
@@ -189,15 +189,15 @@ export default function ComparePharmaciesPage() {
                         <div className="h-20 w-20 bg-amber-500 rounded-[2rem] flex items-center justify-center text-[#0a1628] shadow-4xl animate-pulse"><Award size={48}/></div>
                         <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.5em] italic">District Audit Results</div>
                      </div>
-                     <h2 className="font-syne font-black text-5xl lg:text-7xl uppercase italic tracking-tighter leading-none">Best District <br/><span className="text-brand-teal">{winner.name} Hub</span></h2>
-                     <p className="text-white/40 font-dm italic font-bold text-2xl max-w-xl">Identified as the optimal pharmacological node based on current availability, rating, and distance metrics.</p>
+                     <h2 className="font-syne font-black text-5xl lg:text-7xl uppercase italic tracking-tighter leading-none">Best <br/><span className="text-brand-teal">{winner.name}</span></h2>
+                     <p className="text-white/40 font-dm italic font-bold text-2xl max-w-xl">Identified as the best pharmacy based on current availability, rating, and distance metrics.</p>
                   </div>
                   <div className="flex flex-col gap-6 w-full lg:w-96">
                      <button className="h-24 bg-brand-teal text-[#0a1628] font-syne font-black text-xs uppercase italic tracking-[0.4em] rounded-[3rem] shadow-mint hover:scale-[1.05] active:scale-95 transition-all flex items-center justify-center gap-6 group">
-                        Enter Node Hub <Zap size={24} className="group-hover:rotate-12 transition-all"/>
+                        Visit Pharmacy <Zap size={24} className="group-hover:rotate-12 transition-all"/>
                      </button>
                      <button className="h-24 bg-white/5 border border-white/10 text-white font-syne font-black text-[10px] uppercase italic tracking-[0.3em] rounded-[3rem] hover:bg-white/10 transition-all flex items-center justify-center gap-6">
-                        Order Emergency Payload <ShoppingCart size={20}/>
+                        Order Now <ShoppingCart size={20}/>
                      </button>
                   </div>
                </div>

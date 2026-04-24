@@ -17,14 +17,10 @@ export default function EmergencyFAB() {
   ];
 
   return (
-    <motion.div 
-      initial={false}
-      animate={{ 
-        y: scrollDirection === 'down' && !isOpen ? 120 : 0,
-        opacity: scrollDirection === 'down' && !isOpen ? 0 : 1
-      }}
-      transition={{ duration: 0.4, ease: "easeInOut" }}
-      className="fixed bottom-[72px] right-4 md:bottom-10 md:right-8 z-[3000]"
+    <motion.div
+      initial={{ x: 100, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      className="fixed bottom-36 md:bottom-36 right-4 z-[99] flex flex-col items-end gap-3"
     >
       <AnimatePresence>
         {isOpen && (

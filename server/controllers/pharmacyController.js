@@ -1,122 +1,110 @@
-import mongoose from 'mongoose';
 import Pharmacy from '../models/Pharmacy.js';
 import Medicine from '../models/Medicine.js';
+import Order from '../models/Order.js';
 
-export async function getAllPharmacies(req, res) {
+// GET /api/pharmacies
+export const getPharmacies = async (req, res) => {
   try {
-    const { page = 1, limit = 20, search = '', isOpen, lat, lng } = req.query;
-    const skip = (page - 1) * limit;
-    
-    const query = {};
-    if (search) query.name = { $regex: search, $options: 'i' };
-    if (isOpen !== undefined) query.isOpen = isOpen === 'true';
+    const { search, city, rating, service, sort, page = 1, limit = 10 } = req.query;
+    const query = { status: 'active' };
 
-    let items;
-    if (lat && lng) {
-       // Sort by distance (simplified version)
-       items = await Pharmacy.find(query);
-       items.sort((a, b) => {
-         const coordsA = a.address?.coordinates || { lat: 0, lng: 0 };
-         const coordsB = b.address?.coordinates || { lat: 0, lng: 0 };
-         const distA = Math.sqrt(Math.pow(coordsA.lat - lat, 2) + Math.pow(coordsA.lng - lng, 2));
-         const distB = Math.sqrt(Math.pow(coordsB.lat - lat, 2) + Math.pow(coordsB.lng - lng, 2));
-         return distA - distB;
-       });
-       items = items.slice(skip, skip + Number(limit));
-    } else {
-       items = await Pharmacy.find(query).limit(Number(limit)).skip(Number(skip)).sort('-rating');
+    if (search) query.name = { $regex: search, $options: 'i' };
+    if (city) query.city = city;
+    if (rating) query.rating = { $gte: parseFloat(rating) };
+    if (service) query.services = { $in: [service] };
+
+    let sortQuery = { rating: -1 };
+    if (sort === 'nearest') {
+       // Logic for nearest would need user location, handled in separate 'nearby' endpoint
+    } else if (sort === 'alphabetical') {
+       sortQuery = { name: 1 };
     }
-    
-    const total = await Pharmacy.countDocuments(query);
-    res.json({ 
-      items, 
-      pagination: { total, pages: Math.ceil(total / limit), currentPage: Number(page) }
+
+    const pharmacies = await Pharmacy.find(query)
+      .sort(sortQuery)
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    const count = await Pharmacy.countDocuments(query);
+
+    res.json({
+      pharmacies,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page
     });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to retrieve pharmacies.', error: err.message });
+    res.status(500).json({ message: err.message });
   }
-}
+};
 
-export async function getPharmacyById(req, res) {
+// GET /api/pharmacies/nearby
+export const getNearbyPharmacies = async (req, res) => {
   try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(404).json({ message: 'Invalid pharmacy identifier.' });
-    }
-    const item = await Pharmacy.findById(req.params.id).populate('medicines');
-    if (!item) return res.status(404).json({ message: 'Pharmacy not found.' });
-    res.json({ item });
+    const { lat, lng, radius = 5000 } = req.query; // radius in meters
+
+    const pharmacies = await Pharmacy.find({
+      location: {
+        $near: {
+          $geometry: { type: "Point", coordinates: [parseFloat(lng), parseFloat(lat)] },
+          $maxDistance: parseInt(radius)
+        }
+      },
+      status: 'active'
+    });
+
+    res.json(pharmacies);
   } catch (err) {
-    res.status(500).json({ message: 'Error fetching pharmacy details.', error: err.message });
+    res.status(500).json({ message: err.message });
   }
-}
+};
 
-export async function getPharmacyMedicines(req, res) {
+// GET /api/pharmacies/:id
+export const getPharmacyById = async (req, res) => {
   try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(404).json({ message: 'Invalid pharmacy identifier.' });
-    }
-    const items = await Medicine.find({ pharmacyId: req.params.id, isActive: { $ne: false } });
-    res.json({ items });
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to fetch inventory.', error: err.message });
-  }
-}
-
-export async function createPharmacy(req, res) {
-  try {
-    const data = { ...req.body };
-    if (req.user) {
-      data.pharmacistId = req.user.id;
-    }
-    data.isVerified = false;
-    
-    if (req.files && req.files.length > 0) {
-      data.images = req.files.map(f => ({
-        url: f.path,
-        publicId: f.filename
-      }));
-      data.image = data.images[0].url;
-    }
-    const item = await Pharmacy.create(data);
-    res.status(201).json({ item });
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to create pharmacy.', error: err.message });
-  }
-}
-
-export async function updatePharmacy(req, res) {
-  try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(404).json({ message: 'Invalid pharmacy identifier.' });
-    }
-    
     const pharmacy = await Pharmacy.findById(req.params.id);
     if (!pharmacy) return res.status(404).json({ message: 'Pharmacy not found' });
-    
-    if (req.user.role !== 'admin' && pharmacy.pharmacistId?.toString() !== req.user.id) {
-       return res.status(403).json({ message: 'Permission denied: Ownership mismatch' });
-    }
-
-    const data = { ...req.body };
-    if (req.files && req.files.length > 0) {
-      data.images = req.files.map(f => ({
-        url: f.path,
-        publicId: f.filename
-      }));
-      data.image = data.images[0].url;
-    }
-    const item = await Pharmacy.findByIdAndUpdate(req.params.id, data, { new: true });
-    res.json({ item });
+    res.json(pharmacy);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to update pharmacy.', error: err.message });
+    res.status(500).json({ message: err.message });
   }
-}
+};
 
-export async function getKaraikalPharmacies(req, res) {
+// GET /api/pharmacies/:id/medicines
+export const getPharmacyMedicines = async (req, res) => {
   try {
-    const items = await Pharmacy.find({ 'address.city': 'Karaikal' });
-    res.json({ items });
+    const { search, category, sort } = req.query;
+    // Assuming medicines are linked to pharmacy either in Pharmacy model or Medicine model
+    // Let's check Medicine model or assume a simple query
+    const query = { pharmacyId: req.params.id };
+    if (search) query.name = { $regex: search, $options: 'i' };
+    if (category) query.category = category;
+
+    const medicines = await Medicine.find(query).sort(sort === 'price_low' ? { price: 1 } : { createdAt: -1 });
+    res.json(medicines);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to retrieve regional pharmacies.', error: err.message });
+    res.status(500).json({ message: err.message });
   }
-}
+};
+
+// POST /api/pharmacies/:id/reviews
+export const addPharmacyReview = async (req, res) => {
+  try {
+    const { rating, text } = req.body;
+    const pharmacy = await Pharmacy.findById(req.params.id);
+    if (!pharmacy) return res.status(404).json({ message: 'Pharmacy not found' });
+
+    // In a real app, we'd have a separate Review model. 
+    // For now, let's update the pharmacy rating summary (mocked)
+    const newCount = pharmacy.reviewCount + 1;
+    const newRating = (pharmacy.rating * pharmacy.reviewCount + rating) / newCount;
+
+    pharmacy.rating = newRating;
+    pharmacy.reviewCount = newCount;
+    await pharmacy.save();
+
+    res.status(201).json({ message: 'Review added successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

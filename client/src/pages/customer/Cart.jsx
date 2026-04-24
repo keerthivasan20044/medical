@@ -66,21 +66,21 @@ export default function Cart() {
   }
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-64 md:pb-48 pt-20 md:pt-24">
-      <div className="max-w-7xl mx-auto px-6 md:px-10">
-         <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8 mb-12 md:mb-20">
-            <div className="space-y-4 md:space-y-6 w-full">
-               <div className="px-5 py-2 bg-[#0a1628] rounded-xl w-fit flex items-center gap-3 text-[9px] md:text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">
-                  <Activity size={14} className="animate-pulse" /> {t('shoppingCart')}
+    <div className="bg-[#f8fafc] min-h-screen pb-48 pt-16 md:pt-24">
+      <div className="max-w-7xl mx-auto px-4 md:px-10">
+         <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-8 md:mb-20">
+            <div className="space-y-3 md:space-y-6 w-full">
+               <div className="px-4 py-1.5 bg-navy rounded-xl w-fit flex items-center gap-2 text-[9px] md:text-[10px] font-black text-teal-400 uppercase tracking-widest italic leading-none">
+                  <Activity size={12} className="animate-pulse" /> {t('shoppingCart')}
                </div>
-               <h1 className="font-syne font-black text-5xl md:text-7xl lg:text-9xl text-[#0a1628] leading-[0.85] tracking-tighter uppercase italic">
-                  {t('my')} <span className="text-brand-teal">{t('inventory')}</span>
+               <h1 className="font-syne font-black text-4xl md:text-7xl lg:text-9xl text-navy leading-tight tracking-tighter uppercase italic">
+                  {t('my')} <span className="text-teal-600">{t('inventory')}</span>
                </h1>
             </div>
             <button
                type="button"
                onClick={clearCart}
-               className="h-14 md:h-16 px-8 md:px-10 bg-white border border-red-500/10 text-red-500 rounded-2xl font-syne font-black text-[9px] md:text-[10px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all duration-500 flex items-center gap-3 md:gap-4 italic group shadow-soft w-full md:w-auto justify-center"
+               className="h-12 md:h-16 px-6 md:px-10 bg-white border border-red-100 text-red-500 rounded-xl md:rounded-2xl font-syne font-black text-[9px] md:text-[10px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all duration-300 flex items-center justify-center gap-3 italic group shadow-sm w-full md:w-auto"
             >
                <Trash2 size={16} /> {t('clearManifestRegistry')}
             </button>
@@ -99,15 +99,15 @@ export default function Cart() {
                   />
                )}
                {/* Item Registry Container */}
-               <div className="bg-white border border-black/[0.03] rounded-[2.5rem] md:rounded-[5rem] p-6 md:p-12 shadow-4xl relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 h-64 w-64 bg-brand-teal opacity-[0.02] rounded-full blur-[100px]" />
-                  <div className="space-y-8 md:space-y-10 relative z-10">
-                     <div className="flex items-center justify-between border-b border-gray-50 pb-8 px-2 md:px-4">
-                        <div className="flex items-center gap-4 md:gap-6">
-                           <div className="h-1.5 w-10 md:w-16 bg-brand-teal rounded-full" />
-                           <h2 className="font-syne font-black text-xl md:text-2xl text-[#0a1628] uppercase tracking-tighter italic">{t('selectedItems')}</h2>
+               <div className="bg-white border border-gray-100 rounded-2xl md:rounded-[5rem] p-4 md:p-12 shadow-xl relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 h-48 w-48 bg-teal-500 opacity-[0.02] rounded-full blur-[100px]" />
+                  <div className="space-y-6 md:space-y-10 relative z-10">
+                     <div className="flex items-center justify-between border-b border-gray-50 pb-4 md:pb-8 px-2 md:px-4">
+                        <div className="flex items-center gap-3 md:gap-6">
+                           <div className="h-1 w-8 md:w-16 bg-teal-500 rounded-full" />
+                           <h2 className="font-syne font-black text-lg md:text-2xl text-navy uppercase tracking-tighter italic">{t('selectedItems')}</h2>
                         </div>
-                        <div className="text-[9px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{items.length} {t('activeSyncs')}</div>
+                        <div className="text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{items.length} {t('activeSyncs')}</div>
                      </div>
                      
                      <div className="space-y-4 md:space-y-6">
@@ -134,23 +134,23 @@ export default function Cart() {
                </div>
 
                {/* Logistics Synchronization Notes */}
-               <div className="bg-[#0a1628] rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-12 text-white relative overflow-hidden border-l-[12px] md:border-l-[16px] border-brand-teal shadow-4xl">
-                  <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-[0.03] rounded-full blur-[100px]" />
-                  <div className="space-y-6 md:space-y-8 relative z-10">
-                     <div className="flex items-center gap-6">
-                        <div className="h-12 w-12 md:h-16 md:w-16 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-brand-teal"><Info size={24} /></div>
+               <div className="bg-navy rounded-2xl md:rounded-[4rem] p-6 md:p-12 text-white relative overflow-hidden border-l-8 md:border-l-[16px] border-teal-500 shadow-xl">
+                  <div className="absolute top-0 right-0 h-32 w-32 bg-teal-500 opacity-[0.03] rounded-full blur-[100px]" />
+                  <div className="space-y-4 md:space-y-8 relative z-10">
+                     <div className="flex items-center gap-4 md:gap-6">
+                        <div className="h-10 w-10 md:h-16 md:w-16 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-teal-400"><Info size={20} /></div>
                         <div className="space-y-0.5">
-                           <h3 className="font-syne font-black text-xl md:text-2xl uppercase tracking-tighter italic leading-none">{t('deliveryNotes')}</h3>
-                           <div className="text-[9px] font-black text-brand-teal uppercase tracking-[0.2em] italic">DISTRICT LOGISTICS</div>
+                           <h3 className="font-syne font-black text-lg md:text-2xl uppercase tracking-tighter italic leading-none">{t('deliveryNotes')}</h3>
+                           <div className="text-[8px] font-black text-teal-400 uppercase tracking-widest italic">DISTRICT LOGISTICS</div>
                         </div>
                      </div>
-                     <p className="text-white/40 font-dm italic font-bold text-sm md:text-base">{t('deliveryNotesInstructions')}</p>
+                     <p className="text-white/40 font-dm italic font-bold text-xs md:text-base">{t('deliveryNotesInstructions')}</p>
                      <textarea
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
                         placeholder="Ex: Entrance door code: 128-Sync..."
-                        rows={4}
-                        className="w-full bg-white/5 border border-white/10 rounded-[1.5rem] md:rounded-[2.5rem] px-6 md:px-10 py-6 md:py-8 text-white font-syne font-black text-[10px] md:text-xs uppercase tracking-widest focus:border-brand-teal outline-none transition-all placeholder:text-white/10 italic resize-none"
+                        rows={3}
+                        className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-[2.5rem] px-4 md:px-10 py-4 md:py-8 text-white font-syne font-black text-[10px] md:text-xs uppercase tracking-widest focus:border-teal-500 outline-none transition-all placeholder:text-white/10 italic resize-none"
                      />
                   </div>
                </div>
@@ -230,15 +230,15 @@ export default function Cart() {
             <motion.div 
               initial={{ y: 200 }}
               animate={{ y: 0 }}
-              className="lg:hidden fixed bottom-[90px] inset-x-4 z-[100] bg-[#0a1628] h-20 rounded-2xl border border-white/10 shadow-4xl flex items-center justify-between px-6 gap-6"
+              className="lg:hidden fixed bottom-[80px] inset-x-2 z-[100] bg-navy h-20 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between px-4 gap-4"
             >
-               <div className="flex flex-col">
-                  <span className="text-[8px] font-black text-white/30 uppercase italic tracking-widest">TOTAL AMOUNT</span>
-                  <div className="font-syne font-black text-brand-teal text-3xl italic leading-none">₹{totalAmount}</div>
+               <div className="flex flex-col min-w-0">
+                  <span className="text-[7px] font-black text-white/30 uppercase italic tracking-widest">TOTAL_SYNC</span>
+                  <div className="font-syne font-black text-teal-400 text-2xl italic leading-none truncate">₹{totalAmount}</div>
                </div>
                <button 
                  onClick={handleCheckout}
-                 className="flex-1 h-12 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-xl shadow-mint active:scale-95 transition-transform"
+                 className="flex-1 h-12 bg-teal-500 text-white font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl shadow-lg active:scale-95 transition-transform truncate"
                >
                   PROCEED TO CHECKOUT
                </button>

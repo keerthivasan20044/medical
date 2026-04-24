@@ -260,7 +260,7 @@ export const pharmacies = [
     location: 'Near New Bus Stand, Karaikal', 
     area: 'Karaikal Town',
     phone: '+91 94432 33333',
-    timings: '24/7 Open',
+    timings: 'Open 24 Hours',
     status: 'OPEN NOW',
     rating: 4.9, 
     deliveryFee: 0,
@@ -268,7 +268,7 @@ export const pharmacies = [
     is24hr: true,
     images: ['https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80'],
     mainPhoto: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80',
-    services: ['Home Delivery', 'COD', '24/7']
+    services: ['Home Delivery', 'COD', 'Open 24 Hours']
   },
   { 
     id: 'ph-4', 
@@ -456,7 +456,7 @@ export const pharmacies = [
     location: 'Market Road, Karaikal', 
     area: 'Karaikal Town',
     phone: '+91 94432 16160',
-    timings: '24/7 Open',
+    timings: 'Open 24 Hours',
     status: 'OPEN 24HR',
     rating: 4.8,
     deliveryFee: 0,
@@ -464,7 +464,7 @@ export const pharmacies = [
     is24hr: true,
     images: ['https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=800&q=80'],
     mainPhoto: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=800&q=80',
-    services: ['Emergency', 'Night Delivery', '24/7']
+    services: ['Emergency', 'Night Delivery', 'Open 24 Hours']
   },
   { 
     id: 'ph-17', 

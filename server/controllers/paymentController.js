@@ -198,15 +198,18 @@ export async function logPaymentRetry(req, res) {
 export async function razorpayWebhook(req, res) {
   try {
     const signature = req.headers['x-razorpay-signature'];
-    const rawBody = req.body;
+    const rawBody = req.body.toString(); // Ensure it's a string for HMAC
+    
     if (!verifyWebhookSignature(rawBody, signature || '')) {
+      console.warn('[Razorpay Webhook] Invalid signature');
       return res.status(400).json({ message: 'Invalid webhook signature' });
     }
 
     let payload;
     try {
-      payload = typeof rawBody === 'string' ? JSON.parse(rawBody) : rawBody;
+      payload = JSON.parse(rawBody);
     } catch (parseError) {
+      console.error('[Razorpay Webhook] Parse error:', parseError);
       return res.status(400).json({ message: 'Invalid webhook payload' });
     }
     

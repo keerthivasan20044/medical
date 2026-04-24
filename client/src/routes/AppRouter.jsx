@@ -21,8 +21,8 @@ const ContactPage = lazy(() => import('../pages/public/Contact'));
 const BlogListPage = lazy(() => import('../pages/public/Blog'));
 const BlogDetailPage = lazy(() => import('../pages/public/BlogDetail'));
 const FAQPage = lazy(() => import('../pages/public/FAQ'));
-const PharmaciesListPage = lazy(() => import('../pages/public/Pharmacies'));
-const PharmacyDetailPage = lazy(() => import('../pages/public/PharmacyDetail'));
+const PharmaciesListPage = lazy(() => import('../pages/PharmaciesPage'));
+const PharmacyDetailPage = lazy(() => import('../pages/PharmacyDetailPage'));
 const PharmacyReviewsPage = lazy(() => import('../pages/public/PharmacyReviews'));
 const MedicinesListPage = lazy(() => import('../pages/public/Medicines'));
 const MedicineDetailPage = lazy(() => import('../pages/public/MedicineDetail'));
@@ -73,15 +73,7 @@ const ChatPage = lazy(() => import('../pages/customer/Chat'));
 const PrescriptionUploadFlow = lazy(() => import('../pages/customer/PrescriptionUploadFlow'));
 
 // PHARMACIST PAGES
-const PharmacistDashboard = lazy(() => import('../pages/pharmacist/Dashboard'));
-const InventoryPage = lazy(() => import('../pages/pharmacist/Inventory'));
-const AddMedicinePage = lazy(() => import('../pages/pharmacist/AddMedicine'));
-const IncomingOrdersPage = lazy(() => import('../pages/pharmacist/Orders'));
-const OrderManagePage = lazy(() => import('../pages/pharmacist/OrderManage'));
-const PrescriptionVerifyPage = lazy(() => import('../pages/pharmacist/PrescriptionVerify'));
-const CustomersListPage = lazy(() => import('../pages/pharmacist/Customers'));
-const PharmacistAnalyticsPage = lazy(() => import('../pages/pharmacist/Analytics'));
-const PharmacySettingsPage = lazy(() => import('../pages/pharmacist/Settings'));
+const PharmacistDashPage = lazy(() => import('../pages/pharmacist/PharmacistDashPage'));
 
 // DOCTOR PAGES
 const DoctorDashboard = lazy(() => import('../pages/doctor/Dashboard'));
@@ -92,21 +84,10 @@ const WritePrescriptionPage = lazy(() => import('../pages/doctor/Prescriptions')
 const SchedulePage = lazy(() => import('../pages/doctor/Schedule'));
 
 // DELIVERY PAGES
-const DeliveryDashboard = lazy(() => import('../pages/delivery/Dashboard'));
-const ActiveDeliveryPage = lazy(() => import('../pages/delivery/Active'));
-const DeliveryHistoryPage = lazy(() => import('../pages/delivery/History'));
-const EarningsPage = lazy(() => import('../pages/delivery/Earnings'));
+const DeliveryDashPage = lazy(() => import('../pages/delivery/DeliveryDashPage'));
 
 // ADMIN PAGES
-const AdminDashboard = lazy(() => import('../pages/admin/Dashboard'));
-const UsersManagePage = lazy(() => import('../pages/admin/Users'));
-const PharmaciesManagePage = lazy(() => import('../pages/admin/Pharmacies'));
-const MedicinesManagePage = lazy(() => import('../pages/admin/Medicines'));
-const AllOrdersPage = lazy(() => import('../pages/admin/Orders'));
-const DoctorsManagePage = lazy(() => import('../pages/admin/Doctors'));
-const AnalyticsPage = lazy(() => import('../pages/admin/Analytics'));
-const ReportsPage = lazy(() => import('../pages/admin/Reports'));
-const AdminSettingsPage = lazy(() => import('../pages/admin/Settings'));
+const AdminDashPage = lazy(() => import('../pages/admin/AdminDashPage'));
 
 // UTILITY / ERROR PAGES
 import { NotFound as NotFoundPage, Offline as OfflinePage, Maintenance as MaintenancePage, ServerError as ServerErrorPage } from '../pages/utility/UtilityPages';
@@ -189,15 +170,7 @@ export default function AppRouter() {
 
             {/* PHARMACIST ROUTES */}
             <Route element={<RoleRoute allow={['pharmacist']} />}>
-              <Route path="/pharmacist/dashboard" element={<PharmacistDashboard />} />
-              <Route path="/pharmacist/inventory" element={<InventoryPage />} />
-              <Route path="/pharmacist/inventory/add" element={<AddMedicinePage />} />
-              <Route path="/pharmacist/orders" element={<IncomingOrdersPage />} />
-              <Route path="/pharmacist/orders/:id" element={<OrderManagePage />} />
-              <Route path="/pharmacist/prescriptions" element={<PrescriptionVerifyPage />} />
-              <Route path="/pharmacist/customers" element={<CustomersListPage />} />
-              <Route path="/pharmacist/analytics" element={<PharmacistAnalyticsPage />} />
-              <Route path="/pharmacist/settings" element={<PharmacySettingsPage />} />
+              <Route path="/pharmacist/*" element={<PharmacistDashPage />} />
             </Route>
 
             {/* DOCTOR ROUTES */}
@@ -212,23 +185,12 @@ export default function AppRouter() {
 
             {/* DELIVERY ROUTES */}
             <Route element={<RoleRoute allow={['delivery']} />}>
-              <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
-              <Route path="/delivery/active" element={<ActiveDeliveryPage />} />
-              <Route path="/delivery/history" element={<DeliveryHistoryPage />} />
-              <Route path="/delivery/earnings" element={<EarningsPage />} />
+              <Route path="/delivery/*" element={<DeliveryDashPage />} />
             </Route>
 
             {/* ADMIN ROUTES */}
             <Route element={<RoleRoute allow={['admin']} />}>
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
-              <Route path="/admin/users" element={<UsersManagePage />} />
-              <Route path="/admin/pharmacies" element={<PharmaciesManagePage />} />
-              <Route path="/admin/medicines" element={<MedicinesManagePage />} />
-              <Route path="/admin/orders" element={<AllOrdersPage />} />
-              <Route path="/admin/doctors" element={<DoctorsManagePage />} />
-              <Route path="/admin/analytics" element={<AnalyticsPage />} />
-              <Route path="/admin/reports" element={<ReportsPage />} />
-              <Route path="/admin/settings" element={<AdminSettingsPage />} />
+              <Route path="/admin/*" element={<AdminDashPage />} />
             </Route>
           </Route>
         </Route>

@@ -53,9 +53,9 @@ export default function DoctorsListPage() {
   const filteredDoctors = doctors;
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-64 overflow-x-hidden">
+    <div className="bg-[#f8fafc] min-h-screen pb-32 overflow-x-hidden">
       {/* Doctor Search Section */}
-      <section className="bg-[#0a1628] pt-24 pb-32 md:pt-32 md:pb-60 relative overflow-hidden">
+      <section className="bg-slate-900 pt-20 pb-20 md:pt-32 md:pb-60 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid opacity-5" />
         <div className="absolute top-0 right-0 h-full w-1/3 bg-brand-teal/10 blur-[120px]" />
         
@@ -74,10 +74,9 @@ export default function DoctorsListPage() {
               </p>
            </div>
 
-           {/* Search Bar */}
-           <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-stretch pt-8 md:pt-12">
-              <div className="flex-1 h-20 md:h-24 bg-white/5 backdrop-blur-3xl rounded-[2rem] md:rounded-[2.5rem] shadow-4xl flex items-center px-6 md:px-10 border border-white/10 focus-within:border-brand-teal transition-all group overflow-hidden">
-                 <div className="h-12 w-12 md:h-16 md:w-16 bg-brand-teal rounded-xl md:rounded-2xl flex items-center justify-center text-[#0a1628] shadow-mint group-focus-within:bg-white transition-all duration-700 shrink-0">
+           <div className="flex flex-col lg:flex-row gap-4 md:gap-8 items-stretch pt-4 md:pt-12">
+              <div className="flex-1 h-16 md:h-24 bg-white/5 backdrop-blur-3xl rounded-2xl md:rounded-[2.5rem] shadow-4xl flex items-center px-4 md:px-10 border border-white/10 focus-within:border-teal-500 transition-all group overflow-hidden">
+                 <div className="h-10 w-10 md:h-16 md:w-16 bg-teal-500 rounded-xl md:rounded-2xl flex items-center justify-center text-slate-900 shadow-lg group-focus-within:bg-white transition-all duration-700 shrink-0">
                     <Search size={22} className="md:w-7 md:h-7" />
                  </div>
                  <input 
@@ -92,9 +91,9 @@ export default function DoctorsListPage() {
               <div className="flex gap-4">
                  <button 
                    onClick={() => setShowFilters(!showFilters)}
-                   className={`h-20 md:h-24 px-8 md:px-10 flex-1 lg:flex-none rounded-[2rem] md:rounded-[2.5rem] font-syne font-black text-[10px] md:text-xs uppercase italic tracking-widest transition-all duration-700 active:scale-95 shadow-4xl border flex items-center justify-center gap-4 md:gap-6 ${showFilters ? 'bg-brand-teal text-[#0a1628] border-brand-teal' : 'bg-white/5 text-white border-white/10 hover:bg-white/10'}`}
+                   className={`h-16 md:h-24 px-8 md:px-10 flex-1 lg:flex-none rounded-2xl md:rounded-[2.5rem] font-syne font-black text-[10px] md:text-xs uppercase italic tracking-widest transition-all duration-700 active:scale-95 shadow-4xl border flex items-center justify-center gap-4 md:gap-6 ${showFilters ? 'bg-teal-500 text-slate-900 border-teal-500' : 'bg-white/5 text-white border-white/10 hover:bg-white/10'}`}
                  >
-                    <Sliders size={20}/> {showFilters ? 'Hide Filters' : 'Filters'}
+                    <Sliders size={18}/> {showFilters ? 'Hide Filters' : 'Filters'}
                  </button>
               </div>
            </div>
@@ -102,10 +101,10 @@ export default function DoctorsListPage() {
       </section>
 
       {/* Doctors Grid Section */}
-      <div className="max-w-7xl mx-auto px-6 md:px-10 mt-0 md:-mt-32 relative z-[100] space-y-10 md:space-y-16">
+      <div className="max-w-7xl mx-auto px-4 md:px-10 mt-6 md:-mt-32 relative z-[50] space-y-6 md:space-y-16">
          
          {/* Specialties */}
-         <div className="bg-white border border-black/[0.03] p-3 md:p-4 rounded-[2.5rem] md:rounded-[3rem] shadow-soft overflow-x-auto no-scrollbar whitespace-nowrap">
+         <div className="bg-white border border-slate-100 p-2 md:p-4 rounded-2xl md:rounded-[3rem] shadow-sm overflow-x-auto no-scrollbar whitespace-nowrap">
             <div className="flex gap-2 md:gap-3">
                {specialties.map(spec => (
                  <button
@@ -200,7 +199,7 @@ export default function DoctorsListPage() {
                              </button>
                           </Link>
                           <button className="w-full h-14 md:h-16 bg-brand-teal text-[#0a1628] font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest rounded-xl md:rounded-2xl shadow-mint hover:scale-[1.05] active:scale-95 transition-all flex items-center justify-center gap-2">
-                             <Video size={16} /> Book <span className="opacity-40">\u20B9{dr.fee}</span>
+                             <Video size={16} /> Book <span className="opacity-40">₹{dr.fee}</span>
                           </button>
                        </div>
                     </motion.div>

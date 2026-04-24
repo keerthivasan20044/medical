@@ -1,123 +1,141 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Eye, EyeOff, KeyRound } from 'lucide-react';
+import { Eye, EyeOff, KeyRound, ArrowRight, ShieldCheck, Globe, Sparkles, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { resetPassword } from '../../store/authSlice.js';
-import StatusBanner from '../../components/common/StatusBanner';
-import FormField from '../../components/common/FormField';
-import { toastSuccess } from '../../utils/toast.js';
+import { Button, Input } from '../../components/common/Core';
+import { useToast } from '../../hooks/core';
 
 export default function ResetPassword() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toast = useToast();
   const [contact, setContact] = useState('');
   const [token, setToken] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [show, setShow] = useState(false);
-  const [localError, setLocalError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLocalError('');
     if (!contact.trim() || !token.trim() || !password) {
-      setLocalError('All fields are required.');
+      toast.error('All fields are required.');
       return;
     }
     if (password !== confirm) {
-      setLocalError('Passwords do not match.');
+      toast.error('Passwords do not match.');
       return;
     }
 
+    setLoading(true);
     const payload = contact.includes('@')
       ? { email: contact.trim(), token: token.trim(), password }
       : { phone: contact.trim(), token: token.trim(), password };
 
-    const res = await dispatch(resetPassword(payload));
-    if (res.meta.requestStatus === 'fulfilled') {
-      setDone(true);
-      toastSuccess('Password updated. Please sign in.');
-      setTimeout(() => navigate('/login'), 800);
+    try {
+      const res = await dispatch(resetPassword(payload));
+      if (res.meta.requestStatus === 'fulfilled') {
+        setDone(true);
+        toast.success('Password updated. Please sign in.');
+        setTimeout(() => navigate('/login'), 800);
+      }
+    } catch (err) {
+      toast.error('Failed to reset password.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-brand-off flex items-center">
-      <div className="mx-auto max-w-md w-full px-6 py-10">
-        <div className="bg-white border border-brand-border rounded-3xl p-6 shadow-soft">
-          <h1 className="font-heading text-2xl text-brand-navy">Reset Password</h1>
-          <p className="text-sm text-brand-muted mt-2">
-            Enter your reset code and choose a new password.
+    <div className="min-h-screen bg-navy flex items-center justify-center p-4 md:p-12 relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-5" />
+      <div className="absolute top-0 right-0 h-96 w-96 bg-teal-500 rounded-full blur-[150px] opacity-10 animate-pulse" />
+      
+      <div className="w-full max-w-2xl bg-white rounded-2xl md:rounded-[5rem] shadow-2xl overflow-hidden relative z-10 p-6 md:p-12 lg:p-20 space-y-10 md:space-y-12">
+        <div className="flex items-center justify-between border-b border-gray-50 pb-8 md:pb-10">
+           <div className="space-y-3 md:space-y-4">
+              <div className="px-4 md:px-5 py-1.5 md:py-2 bg-navy rounded-xl w-fit flex items-center gap-2 md:gap-3 text-[9px] md:text-[10px] font-black text-teal-400 uppercase tracking-[0.3em] md:tracking-[0.4em] italic">
+                 <ShieldCheck size={14} className="animate-pulse" /> Final Verification
+              </div>
+              <h1 className="font-syne font-black text-3xl md:text-5xl lg:text-6xl text-navy leading-[0.85] tracking-tighter uppercase italic">
+                 Reset <br /><span className="text-teal-500">Security Key.</span>
+              </h1>
+           </div>
+           <div className="h-12 w-12 md:h-14 md:w-14 bg-gray-50 rounded-xl md:rounded-2xl flex items-center justify-center text-navy shadow-inner">
+              <Lock size={20} md:size={24} />
+           </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-8 md:space-y-10">
+          <p className="text-gray-400 font-dm italic text-base md:text-lg opacity-60">
+            Establish a new security protocol for your identification node.
           </p>
+          
+          <div className="space-y-6">
+            <Input 
+              label="Email or Phone" 
+              placeholder="you@email.com or +91 98765 43210"
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
+              required
+            />
+            
+            <Input 
+              label="Reset Code" 
+              icon={KeyRound}
+              placeholder="Paste reset token"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+              required
+            />
 
-          {done && (
-            <div className="mt-4">
-              <StatusBanner tone="success" title="Password updated" description="Redirecting to login..." />
-            </div>
-          )}
-
-          {localError && (
-            <div className="mt-4">
-              <StatusBanner tone="error" title="Reset failed" description={localError} />
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-            <FormField label="Email or Phone" required>
-              <input
-                value={contact}
-                onChange={(e) => setContact(e.target.value)}
-                className="w-full border border-brand-border rounded-xl px-3 py-2 text-sm"
-                placeholder="you@email.com or +91 98765 43210"
-              />
-            </FormField>
-            <FormField label="Reset Code" required>
-              <div className="relative">
-                <KeyRound size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-muted" />
-                <input
-                  value={token}
-                  onChange={(e) => setToken(e.target.value)}
-                  className="w-full border border-brand-border rounded-xl px-9 py-2 text-sm"
-                  placeholder="Paste reset token"
-                />
-              </div>
-            </FormField>
-            <FormField label="New Password" required>
-              <div className="relative">
-                <input
-                  type={show ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full border border-brand-border rounded-xl px-3 py-2 text-sm"
-                  placeholder="New password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShow((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted"
-                >
-                  {show ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-            </FormField>
-            <FormField label="Confirm Password" required>
-              <input
+            <div className="relative">
+              <Input 
+                label="New Password" 
                 type={show ? 'text' : 'password'}
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
-                className="w-full border border-brand-border rounded-xl px-3 py-2 text-sm"
-                placeholder="Confirm password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="New password"
+                required
               />
-            </FormField>
+              <button
+                type="button"
+                onClick={() => setShow((v) => !v)}
+                className="absolute right-4 top-[36px] text-gray-400 hover:text-navy transition-colors"
+              >
+                {show ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
 
-            <button type="submit" className="w-full px-4 py-2 rounded-2xl bg-brand-teal text-white text-sm">
-              Reset Password
-            </button>
-          </form>
+            <Input 
+              label="Confirm Password" 
+              type={show ? 'text' : 'password'}
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              placeholder="Confirm password"
+              required
+            />
+          </div>
+
+          <Button 
+            loading={loading}
+            className="w-full py-8 text-xl font-syne font-black uppercase tracking-[0.2em] italic shadow-4xl"
+            icon={<ArrowRight size={20}/>}
+          >
+            Reset Password
+          </Button>
+        </form>
+
+        <div className="pt-10 border-t border-gray-50 flex items-center justify-between gap-6 text-[10px] font-black uppercase italic tracking-widest text-gray-300">
+           <div className="flex items-center gap-6">
+              <button onClick={() => navigate('/login')} className="hover:text-teal-500 transition-colors">Back to Login</button>
+              <button onClick={() => navigate('/')} className="hover:text-teal-500 transition-colors">Go Home</button>
+           </div>
+           <div className="flex items-center gap-2"><Sparkles size={14} className="text-teal-500 animate-pulse"/> SECURE ENCLAVE</div>
         </div>
       </div>
     </div>
   );
 }
-

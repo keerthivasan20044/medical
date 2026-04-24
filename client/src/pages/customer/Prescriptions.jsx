@@ -94,54 +94,35 @@ export default function Prescriptions() {
   };
 
   return (
-    <div className="px-4 py-8 md:px-10 md:py-16 overflow-x-hidden w-full max-w-screen pb-24 md:pb-32 space-y-10">
+    <div className="px-3 py-4 md:px-10 md:py-12 overflow-x-hidden w-full max-w-screen pb-24 md:pb-16 space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div className="space-y-4 w-full">
-          <h1 className="font-syne font-black text-2xl md:text-5xl text-[#0a1628] leading-tight break-words w-full">
-            {t('myPrescriptions')}
-          </h1>
-          <p className="text-sm md:text-base text-gray-400 font-dm italic w-full">
-            {t('prescriptionVaultDesc')}
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-           <button className="p-3 bg-white border border-gray-100 rounded-full shadow-sm text-gray-400 hover:text-brand-teal transition-all">
-             <span className="sr-only">Search Prescriptions</span>
-             <Search size={22} />
-           </button>
-           <button className="p-3 bg-white border border-gray-100 rounded-full shadow-sm text-gray-400 hover:text-brand-teal transition-all">
-             <span className="sr-only">Filter History</span>
-             <Filter size={22} />
-           </button>
-        </div>
+      <div>
+        <h1 className="text-2xl md:text-4xl font-bold text-slate-900">My Prescriptions</h1>
+        <p className="text-sm text-slate-400 mt-1">Upload and manage your medical prescriptions</p>
       </div>
 
       {/* Upload Section */}
-      <section className="bg-[#028090]/5 border border-[#028090]/10 rounded-[3rem] p-8 md:p-12">
-        <div className="max-w-2xl mx-auto text-center space-y-8 relative z-10">
+      <section className="bg-teal-50 border border-teal-100 rounded-2xl md:rounded-[3rem] p-4 md:p-12">
+        <div className="max-w-2xl mx-auto text-center space-y-6 relative z-10">
            {!isUploading ? (
              <div 
-               className="border-2 border-dashed border-[#028090]/30 rounded-[2.5rem] p-8 md:p-16 bg-white transition-all cursor-pointer group hover:border-[#02C39A] min-h-[220px] flex flex-col items-center justify-center gap-3"
-               onClick={() => fileInputRef.current?.click()}
-               onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('border-[#02C39A]', 'bg-gray-50'); }}
-               onDragLeave={(e) => { e.preventDefault(); e.currentTarget.classList.remove('border-[#02C39A]', 'bg-gray-50'); }}
-               onDrop={(e) => { e.preventDefault(); e.currentTarget.classList.remove('border-[#02C39A]', 'bg-gray-50'); performRealUpload(e.dataTransfer.files[0]); }}
+                className="border-2 border-dashed border-teal-200 rounded-xl md:rounded-[2.5rem] p-6 md:p-16 bg-white transition-all cursor-pointer group hover:border-teal-400 min-h-[180px] flex flex-col items-center justify-center gap-3"
+                onClick={() => fileInputRef.current?.click()}
              >
-                <div className="h-16 w-16 md:h-20 md:w-20 bg-[#028090]/10 text-[#028090] rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-[#02C39A] group-hover:text-white transition duration-500 shadow-xl">
-                   <Upload size={32} />
+                <div className="h-14 w-14 md:h-20 md:w-20 bg-teal-50 text-teal-600 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-teal-500 group-hover:text-white transition duration-500 shadow-lg">
+                   <Upload size={24} />
                 </div>
-                <div className="text-center px-4">
-                   <h3 className="font-syne font-black text-lg md:text-2xl text-[#0a1628] leading-tight">Drag prescription here or click to upload</h3>
-                   <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-2">{t('acceptedFormats')}</p>
+                <div className="text-center px-2">
+                   <h3 className="font-syne font-black text-base md:text-2xl text-navy leading-tight">Upload Prescription</h3>
+                   <p className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">PDF, JPG, PNG (Max 5MB)</p>
                 </div>
                 
-                <div className="mt-10 flex flex-wrap justify-center gap-6">
-                   <button className="px-10 py-5 bg-gradient-to-r from-[#02C39A] to-[#028090] text-white font-syne font-black text-sm uppercase tracking-widest rounded-3xl shadow-2xl shadow-[#02C39A]/40 hover:scale-105 active:scale-95 transition">
-                      {t('uploadNow')} &rarr;
+                <div className="mt-6 flex flex-wrap justify-center gap-4">
+                   <button className="px-6 md:px-10 py-3 md:py-5 bg-navy text-teal-400 font-syne font-black text-[10px] md:text-sm uppercase tracking-widest rounded-xl md:rounded-3xl shadow-xl hover:bg-teal-500 hover:text-white transition">
+                      Upload Now
                    </button>
-                   <button className="px-10 py-5 bg-white border border-gray-100 text-gray-400 font-syne font-black text-sm uppercase tracking-widest rounded-3xl hover:bg-gray-50 hover:text-[#028090] transition flex items-center gap-3">
-                      <Camera size={20} /> {t('cameraCapture')}
+                   <button className="px-6 md:px-10 py-3 md:py-5 bg-white border border-gray-100 text-gray-400 font-syne font-black text-[10px] md:text-sm uppercase tracking-widest rounded-xl md:rounded-3xl hover:bg-gray-50 hover:text-teal-600 transition flex items-center gap-2">
+                      <Camera size={16} /> Scan
                    </button>
                 </div>
                 <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileUpload} accept="image/*,.pdf" />
@@ -173,15 +154,15 @@ export default function Prescriptions() {
       </section>
 
       {/* List Section */}
-      <section className="space-y-8">
-         <div className="flex items-center justify-between border-b border-gray-50 pb-6">
-            <h2 className="font-syne font-black text-3xl text-[#0a1628]">{t('myHistory')}</h2>
-            <div className="flex gap-2">
+      <section className="space-y-4">
+         <div className="flex flex-col gap-3">
+            <h2 className="text-lg font-bold text-slate-900">History</h2>
+            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                {['All', 'Verified', 'Pending', 'Dispensed'].map(filterItem => (
                  <button 
                     key={filterItem}
                     onClick={() => setFilter(filterItem)}
-                    className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${filter === filterItem ? 'bg-[#0a1628] text-white shadow-xl' : 'bg-gray-50 text-gray-400 hover:bg-gray-100'}`}
+                    className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold tracking-wide transition-all ${filter === filterItem ? 'bg-slate-900 text-teal-400' : 'bg-slate-100 text-slate-500'}`}
                  >
                     {filterItem}
                  </button>
@@ -189,7 +170,7 @@ export default function Prescriptions() {
             </div>
          </div>
 
-         <div className="grid gap-8">
+         <div className="grid gap-3">
             <AnimatePresence mode="popLayout">
                {prescriptions.map((rx, idx) => (
                  <motion.div
@@ -199,86 +180,73 @@ export default function Prescriptions() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ delay: idx * 0.05 }}
-                    className="bg-white border border-gray-100 rounded-[3rem] p-8 md:p-10 flex flex-col md:flex-row gap-10 shadow-sm hover:shadow-2xl hover:border-[#028090]/20 transition-all group"
+                    className="bg-white border border-gray-100 rounded-2xl md:rounded-[3rem] p-5 md:p-10 flex flex-col md:flex-row gap-6 md:gap-10 shadow-sm hover:shadow-xl transition-all group"
                  >
                     {/* Thumbnail */}
-                    <div className="h-56 w-full md:w-48 bg-gray-50 rounded-[2.5rem] overflow-hidden border border-gray-100 shrink-0 relative group-hover:ring-4 ring-[#02C39A]/10 transition duration-500">
+                    <div className="h-40 md:h-56 w-full md:w-48 bg-gray-50 rounded-xl md:rounded-[2.5rem] overflow-hidden border border-gray-100 shrink-0 relative group-hover:ring-4 ring-teal-500/10 transition duration-500">
                        <img src={rx.img} alt="Rx" className="h-full w-full object-cover group-hover:scale-110 transition duration-700" />
                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                          <Eye className="text-white" size={32} />
+                          <Eye className="text-white" size={24} />
                        </div>
                     </div>
 
                     {/* Content */}
-                    <div className="grow space-y-6">
-                       <div className="flex flex-wrap items-start justify-between gap-6">
-                          <div className="space-y-1">
-                             <div className="text-[10px] font-black text-[#028090] uppercase tracking-[0.2em]">{rx.id}</div>
-                             <h3 className="font-syne font-black text-2xl text-[#0a1628] leading-tight group-hover:text-[#028090] transition">
+                    <div className="grow space-y-4 md:space-y-6">
+                       <div className="flex flex-wrap items-start justify-between gap-4">
+                          <div className="space-y-0.5">
+                             <div className="text-[9px] font-black text-teal-600 uppercase tracking-widest">{rx.id}</div>
+                             <h3 className="font-syne font-black text-lg md:text-2xl text-navy group-hover:text-teal-600 transition truncate max-w-[200px] md:max-w-none">
                                 {rx.doctor}
                              </h3>
-                             <p className="text-sm text-gray-400 font-dm italic">{rx.hospital}</p>
+                             <p className="text-xs text-gray-400 font-dm italic">{rx.hospital}</p>
                           </div>
-                          <div className={`px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 ${
-                             rx.status.includes('Verified') || rx.verified ? 'bg-emerald-50 text-emerald-600 shadow-sm shadow-emerald-600/10' :
+                          <div className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${
+                             rx.status.includes('Verified') || rx.verified ? 'bg-emerald-50 text-emerald-600' :
                              rx.status.includes('Pending') ? 'bg-amber-50 text-amber-600' : 'bg-gray-50 text-gray-400'
                           }`}>
-                             {rx.verified || rx.status === 'Verified' ? <CheckCircle size={14} /> : rx.status.includes('Pending') ? <Clock size={14} /> : <AlertCircle size={14} />}
-                             {rx.verified || rx.status === 'Verified' ? `${t('verifiedBy')} ${rx.verifiedBy || t('pharmacist')}` : t(rx.status.toLowerCase()) || rx.status}
+                             {rx.verified || rx.status === 'Verified' ? <CheckCircle size={12} /> : rx.status.includes('Pending') ? <Clock size={12} /> : <AlertCircle size={12} />}
+                             {rx.verified || rx.status === 'Verified' ? `Verified` : rx.status}
                           </div>
                        </div>
 
-                       <div className="grid sm:grid-cols-2 gap-8 py-6 border-y border-gray-50">
-                          <div className="space-y-1">
-                             <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">{t('prescribedDate')}</div>
-                             <div className="text-sm font-dm font-bold text-gray-600">{rx.date}</div>
+                       <div className="grid grid-cols-2 gap-4 py-4 border-y border-gray-50">
+                          <div className="space-y-0.5">
+                             <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Date</div>
+                             <div className="text-xs font-dm font-bold text-gray-600">{rx.date}</div>
                           </div>
-                          {rx.expiry && (
-                            <div className="space-y-1">
-                               <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">{t('expiresOn')}</div>
-                               <div className="text-sm font-dm font-bold text-red-500">{rx.expiry}</div>
-                            </div>
-                          )}
-                          {!rx.expiry && rx.status === 'Dispensed (used)' && (
-                            <div className="space-y-1">
-                               <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">{t('archiveStatus')}</div>
-                               <div className="text-sm font-dm font-bold text-gray-400 italic">{t('dispensedUsed')}</div>
-                            </div>
-                          )}
+                          <div className="space-y-0.5">
+                             <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Items</div>
+                             <div className="text-xs font-dm font-bold text-navy truncate">{rx.medicines.length} Medicines</div>
+                          </div>
                        </div>
 
-                       <div className="space-y-3">
-                          <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">{t('medicinesIncluded')}</div>
-                          <div className="flex flex-wrap gap-2">
-                             {rx.medicines.map(m => (
-                               <span key={m} className="px-4 py-1.5 bg-gray-50 text-[#0a1628] rounded-xl text-[10px] font-black uppercase tracking-tighter border border-gray-100">
-                                  {m}
-                               </span>
-                             ))}
-                          </div>
+                       <div className="flex flex-wrap gap-2">
+                          {rx.medicines.slice(0, 3).map(m => (
+                            <span key={m} className="px-3 py-1 bg-gray-50 text-navy rounded-lg text-[9px] font-black uppercase tracking-tighter border border-gray-100">
+                               {m}
+                            </span>
+                          ))}
+                          {rx.medicines.length > 3 && <span className="text-[9px] text-gray-300 font-bold self-center">+{rx.medicines.length - 3} More</span>}
                        </div>
                     </div>
 
                     {/* Actions */}
-                    <div className="flex flex-row md:flex-col gap-3 shrink-0 justify-end md:justify-center">
+                    <div className="flex flex-row md:flex-col gap-3 shrink-0 justify-stretch md:justify-center">
                        {rx.status === 'Verified' && (
-                         <button className="flex-1 md:w-48 py-4 bg-[#0a1628] text-white rounded-[1.3rem] text-xs font-syne font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl hover:bg-[#028090] transition group/btn">
-                            <ShoppingBag size={18} /> {t('orderRx')}
+                         <button className="flex-1 md:w-40 py-3 bg-navy text-white rounded-xl text-[10px] font-syne font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg hover:bg-teal-600 transition">
+                            <ShoppingBag size={16} /> Order
                          </button>
                        )}
-                       {rx.status.includes('Pending') && (
-                         <button onClick={() => handleDelete(rx.id)} className="flex-1 md:w-48 py-4 border-2 border-red-50 text-red-500 rounded-[1.3rem] text-xs font-syne font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-red-500 hover:text-white transition">{t('cancelRx')}</button>
-                       )}
-                       <div className="flex gap-3">
-                          <button className="h-14 w-14 bg-gray-50 border border-gray-100 rounded-2xl flex items-center justify-center text-gray-400 hover:bg-[#0a1628] hover:text-white transition shadow-sm" title="Download">
-                             <Download size={20} />
+                       <div className="flex gap-2 flex-1 md:flex-none">
+                          <button className="h-10 w-full md:w-12 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center text-gray-400 hover:bg-navy hover:text-white transition" title="Download">
+                             <Download size={16} />
                           </button>
                           <button 
                              onClick={() => handleDelete(rx.id)}
-                             className="h-14 w-14 bg-gray-50 border border-gray-100 rounded-2xl flex items-center justify-center text-gray-400 hover:bg-red-500 hover:text-white transition shadow-sm"
+                             className="h-10 w-full md:w-12 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center text-gray-400 hover:bg-red-500 hover:text-white transition"
                              title="Delete"
                           >
-                             <Trash2 size={20} />
+                             <Trash2 size={16} />
                           </button>
                        </div>
                     </div>

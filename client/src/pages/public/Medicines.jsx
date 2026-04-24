@@ -84,15 +84,19 @@ export default function MedicinesListPage() {
   };
 
   useEffect(() => {
-    console.log('[Medicines] Loading medicines...');
     fetchMedicines();
-  }, [searchQuery]);
+  }, [searchQuery, selectedCategories, selectedPharmacies]);
 
   const fetchMedicines = async () => {
     try {
       setLoading(true);
-      const params = {};
-      if (searchQuery) params.q = searchQuery;
+      const params = {
+        limit: 100, // Fetch more for local filtering or pass all filters to API
+        q: searchQuery,
+      };
+      if (selectedCategories.length > 0) params.category = selectedCategories[0]; // Backend currently supports single category
+      if (selectedPharmacies.length > 0) params.pharmacyId = selectedPharmacies[0];
+      
       const data = await medicineService.getAll(params);
       setMedicines(data.items || []);
     } catch (err) {
@@ -114,13 +118,15 @@ export default function MedicinesListPage() {
 
   const filteredMedicines = useMemo(() => {
     let result = medicines.filter(m => {
-      const matchesSearch = m.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                           (m.brand && m.brand.toLowerCase().includes(searchQuery.toLowerCase()));
+      const name = m.name || '';
+      const brand = m.brand || '';
+      const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                           brand.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(m.category);
       const matchesPharmacy = selectedPharmacies.length === 0 || selectedPharmacies.includes(m.pharmacy?._id || m.pharmacy);
-      const matchesPrice = m.price <= priceRange;
+      const matchesPrice = (m.price || 0) <= priceRange;
       const matchesRx = rxFilter === 'Both' || (rxFilter === 'Yes' ? m.requiresPrescription : !m.requiresPrescription);
-      const matchesStock = availability === 'All' || m.stock > 0;
+      const matchesStock = availability === 'All' || (m.stock !== undefined ? m.stock > 0 : true);
       
       return matchesSearch && matchesCategory && matchesPharmacy && matchesPrice && matchesRx && matchesStock;
     });
@@ -239,65 +245,50 @@ export default function MedicinesListPage() {
   );
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-64">
-      {/* Hero Section */}
-      <section className="bg-[#0a1628] pt-24 pb-40 md:pt-32 md:pb-60 relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid opacity-5" />
-        <div className="absolute top-0 right-0 h-full w-1/3 bg-brand-teal/5 blur-[120px]" />
-        
-        <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10 space-y-10">
-           <div className="flex items-center gap-4 text-[9px] md:text-[10px] font-black text-white/40 uppercase tracking-[0.4em] italic mb-6">
-              <span>Home</span> <ChevronRight size={14} className="opacity-40" /> <span>Medicines</span>
-           </div>
-           
-           <div className="space-y-6 text-center md:text-left">
-              <h1
-                className="font-black text-white leading-[0.9] break-words w-full"
-                style={{ fontSize: 'clamp(2.2rem, 12vw, 5rem)' }}
-              >
-                 Medicine <span className="text-brand-teal">Store</span>
-              </h1>
-              <div className="flex flex-col lg:flex-row gap-8 items-center justify-between pt-10">
-                 <p className="text-white/40 font-dm text-lg md:text-2xl italic max-w-xl leading-relaxed font-bold">
-                    Browse our wide range of medicines from top verified pharmacies.
-                 </p>
-                 <Link to="/medicines/compare">
-                    <button className="h-16 md:h-20 px-8 md:px-12 bg-white/5 border border-white/10 text-white font-syne font-black text-[10px] uppercase italic tracking-[0.2em] rounded-2xl hover:bg-brand-teal hover:text-[#0a1628] transition-all duration-700 flex items-center gap-4 active:scale-95 shadow-4xl group">
-                       <ArrowUpDown size={20} className="group-hover:rotate-180 transition-transform duration-700"/> Compare Items
-                    </button>
-                 </Link>
-              </div>
-           </div>
-
-           {/* Search Bar */}
-           <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-stretch pt-12 md:pt-20">
-              <div className="flex-1 h-20 md:h-24 bg-white/5 backdrop-blur-3xl rounded-[2rem] md:rounded-[2.5rem] shadow-4xl flex items-center px-6 md:px-10 border border-white/10 focus-within:border-brand-teal transition-all group overflow-hidden">
-                 <div className="h-12 w-12 md:h-16 md:w-16 bg-brand-teal rounded-xl md:rounded-2xl flex items-center justify-center text-[#0a1628] shadow-mint group-focus-within:bg-white transition-all duration-700 shrink-0">
-                    <Search size={24} className="md:size-7" />
-                 </div>
-                 <input 
+    <div className="bg-slate-50 min-h-screen pb-20 md:pb-6">
+      {/* Search & Categories Bar */}
+      <div className="sticky top-14 md:top-16 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm py-2 px-3 md:px-10">
+         <div className="max-w-7xl mx-auto flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+               <div className="flex-1 flex items-center bg-slate-100 rounded-xl px-3 py-2.5 gap-2 border border-slate-200">
+                  <Search size={16} className="text-teal-600" />
+                  <input 
                     type="text" 
-                    placeholder="Search for medicines..." 
-                    className="flex-1 bg-transparent px-4 md:px-8 font-syne font-black text-lg md:text-2xl italic outline-none text-white placeholder-white/20 uppercase tracking-tighter"
+                    placeholder="Search name or brand..." 
+                    className="bg-transparent border-none outline-none text-sm font-semibold text-slate-900 w-full placeholder:text-slate-400"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                 />
-              </div>
-              
-              <div className="flex gap-4">
+                  />
+               </div>
+               <button 
+                 onClick={() => setShowFilters(true)}
+                 className="h-10 w-10 bg-slate-900 text-teal-400 rounded-xl flex items-center justify-center shadow-md active:scale-95"
+               >
+                 <Sliders size={18} />
+               </button>
+            </div>
+            
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth pb-1">
+               {categories.map(cat => (
                  <button 
-                   onClick={() => setShowFilters(true)}
-                   className={`h-20 md:h-24 px-8 md:px-10 flex-1 lg:flex-none rounded-[2rem] md:rounded-[2.5rem] font-syne font-black text-[10px] md:text-xs uppercase italic tracking-widest transition-all duration-700 active:scale-95 shadow-4xl border flex items-center justify-center gap-4 md:gap-6 bg-white/5 text-white border-white/10 hover:bg-white/10`}
+                   key={cat.name} 
+                   onClick={() => toggleCategory(cat.name)}
+                   className={`h-8 px-4 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all flex items-center gap-2 shrink-0 border ${
+                     selectedCategories.includes(cat.name) 
+                       ? 'bg-slate-900 text-teal-400 border-slate-900 shadow-sm' 
+                       : 'bg-white text-slate-400 border-slate-200'
+                   }`}
                  >
-                    <Sliders size={20}/> Filters
+                   <span className="whitespace-nowrap">{cat.name}</span>
+                   <span className="opacity-40 text-[8px]">{cat.count}</span>
                  </button>
-              </div>
-           </div>
-        </div>
-      </section>
+               ))}
+            </div>
+         </div>
+      </div>
 
       {/* Medicines List Section */}
-      <div className="max-w-7xl mx-auto px-6 md:px-10 -mt-20 md:-mt-32 relative z-20">
+      <div className="max-w-7xl mx-auto px-3 md:px-10 py-6 md:py-12 relative z-20">
          <div className="flex flex-col lg:flex-row gap-12 md:gap-16">
             
             {/* Desktop Sidebar */}
@@ -312,9 +303,9 @@ export default function MedicinesListPage() {
                <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 bg-white border border-black/[0.03] rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-10 shadow-soft transition-all duration-700">
                   <div className="flex items-center gap-4 md:gap-6">
                      <div className="h-2 w-16 bg-brand-teal rounded-full animate-pulse hidden md:block" />
-                     <h2 className="font-syne font-black text-xl md:text-3xl text-[#0a1628] uppercase tracking-tighter italic leading-none">
-                        {filteredMedicines.length} Medicines Found
-                     </h2>
+                      <h2 className="text-base font-bold text-slate-900 uppercase tracking-tight">
+                         {filteredMedicines.length} Medicines Found
+                      </h2>
                   </div>
                   
                   <div className="flex items-center gap-6 self-end md:self-auto">
@@ -370,7 +361,7 @@ export default function MedicinesListPage() {
                ) : (
                   <motion.div 
                     layout
-                    className={`grid gap-4 md:gap-8 px-2 md:px-0 ${viewMode === 'grid' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5' : 'grid-cols-1'}`}
+                    className={`grid gap-3 md:gap-8 px-3 md:px-0 ${viewMode === 'grid' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5' : 'grid-cols-1'}`}
                   >
                    <AnimatePresence mode="popLayout">
                      {filteredMedicines.map((m, idx) => (
@@ -424,7 +415,7 @@ export default function MedicinesListPage() {
                   animate={{ y: 0 }}
                   exit={{ y: '100%' }}
                   transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                  className="fixed inset-x-0 bottom-0 bg-white rounded-t-[3.5rem] z-[3001] shadow-[0_-20px_80px_rgba(0,0,0,0.4)] lg:hidden max-h-[85vh] overflow-y-auto no-scrollbar"
+                  className="fixed inset-x-0 bottom-0 bg-white rounded-t-3xl z-[3001] shadow-2xl lg:hidden max-h-[85vh] overflow-y-auto no-scrollbar"
                >
                   <div className="sticky top-0 bg-white p-6 border-b border-black/[0.03] flex items-center justify-between z-10">
                      <div className="h-1.5 w-16 bg-gray-100 rounded-full mx-auto absolute top-3 left-1/2 -translate-x-1/2" />

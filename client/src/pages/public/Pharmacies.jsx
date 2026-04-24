@@ -117,133 +117,58 @@ export default function PharmaciesListPage() {
   const toggleService = (s) => setSelectedServices(prev => prev.includes(s) ? prev.filter(item => item !== s) : [...prev, s]);
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-48 font-dm">
-      <section className="bg-[#0a1628] pt-24 pb-48 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(2,195,154,0.1),transparent_50%)]" />
-        <div className="absolute top-0 right-0 h-full w-1/3 bg-brand-teal/5 blur-[120px]" />
-        
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10 space-y-12 text-center lg:text-left">
-           <div className="flex items-center justify-center lg:justify-start gap-4 text-[10px] font-black text-white/40 uppercase tracking-[0.4em] italic mb-8">
-              <span>Home</span> <ChevronRight size={14} className="opacity-40" /> <span>Pharmacies</span>
-           </div>
-           
-           <div className="space-y-4">
-              <h1
-                className="font-black text-white leading-[0.9] break-words w-full"
-                style={{ fontSize: 'clamp(2.2rem, 12vw, 5rem)' }}
-              >
-                 Find <span className="text-brand-teal">Pharmacies</span> in Karaikal
-              </h1>
-              <div className="flex flex-col lg:flex-row gap-8 items-center justify-between pt-6">
-                 <p className="text-white/40 font-dm text-lg italic max-w-xl leading-relaxed mx-auto lg:mx-0">
-                    {filteredPharmacies.length} verified pharmacies available in your area.
-                 </p>
-                 <div className="bg-brand-teal/5 border border-brand-teal/10 px-5 py-2 rounded-xl text-brand-teal font-syne font-black text-[9px] uppercase italic tracking-[0.25em] flex items-center gap-3 mx-auto lg:mx-0">
-                    <div className="h-1.5 w-1.5 rounded-full bg-brand-teal animate-ping" />
-                     Verified Data
-                 </div>
-              </div>
-           </div>
-
-           <div className="flex flex-col lg:flex-row gap-4 items-stretch p-2 backdrop-blur-3xl bg-white/5 rounded-3xl md:rounded-[2.5rem] border border-white/10 shadow-4xl group max-w-2xl mx-auto lg:mx-0">
-              <div className="flex-1 h-12 md:h-14 flex items-center px-4 md:px-6 gap-3 md:gap-4 group/input transition-all">
-                 <Search className="text-brand-teal md:w-5 md:h-5" size={18} />
-                 <input 
+    <div className="bg-slate-50 min-h-screen pb-20 md:pb-6">
+      <div className="sticky top-14 md:top-16 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm py-2 px-3 md:px-10">
+         <div className="max-w-[1400px] mx-auto flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+               <div className="flex-1 flex items-center bg-slate-100 rounded-xl px-3 py-2.5 gap-2 border border-slate-200">
+                  <Search size={16} className="text-teal-600" />
+                  <input 
                     type="text" 
-                    placeholder="Search pharmacies..." 
-                    className="flex-1 bg-transparent font-syne font-black text-sm md:text-base italic outline-none text-white placeholder:text-white/20 uppercase tracking-tighter"
+                    placeholder="Search name or area..." 
+                    className="bg-transparent border-none outline-none text-sm font-semibold text-slate-900 w-full placeholder:text-slate-400"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                 />
-              </div>
-              <button 
-                onClick={() => setShowFilters(true)} 
-                className="h-12 md:h-14 px-6 md:px-8 bg-brand-teal text-[#0a1628] font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest rounded-2xl md:rounded-[1.8rem] hover:shadow-mint transition-all duration-500 flex items-center justify-center gap-2 md:gap-3 active:scale-95 shadow-4xl"
-              >
-                 <SlidersHorizontal size={14} className="md:w-4 md:h-4"/> Filter
-              </button>
-           </div>
-        </div>
-
-        {/* District Geo-Matrix Placeholder */}
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 mt-12 md:mt-20">
-           <div className="h-40 md:h-64 w-full bg-[#0a1628] rounded-[2.5rem] md:rounded-[4rem] border-4 border-white shadow-4xl relative overflow-hidden group">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(2,195,154,0.1),transparent_70%)]" />
-              <div className="absolute inset-0 bg-grid opacity-10" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4">
-                 <div className="h-12 w-12 bg-brand-teal/20 rounded-2xl flex items-center justify-center text-brand-teal animate-pulse">
-                    <MapIcon size={24} />
-                 </div>
-                 <div className="text-center">
-                    <div className="font-syne font-black text-white text-lg md:text-2xl uppercase italic tracking-tighter">Local Area Map Ready</div>
-                    <div className="text-[10px] text-white/40 font-black uppercase tracking-[0.4em] italic">Showing {filteredPharmacies.length} Pharmacies</div>
-                 </div>
-              </div>
-              <div className="absolute bottom-6 right-6">
-                 <button onClick={() => setViewMode('map')} className="h-10 px-6 bg-white/5 border border-white/10 text-white font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl hover:bg-brand-teal hover:text-[#0a1628] transition-all">View Map</button>
-              </div>
-           </div>
-        </div>
-      </section>
-
-      <div className="sticky top-16 lg:top-[72px] z-40 bg-white/80 backdrop-blur-2xl border-b border-black/[0.03] shadow-soft py-4 px-6 lg:px-10 transition-all duration-300">
-         <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-            
-            {/* Filter Bar with Navigation Arrows */}
-            <div className="flex-1 flex items-center gap-4 min-w-0">
-               <button 
-                 onClick={() => scroll('left')}
-                 className="h-10 w-8 flex items-center justify-center text-gray-400 hover:text-[#0a1628] transition-colors shrink-0"
-               >
-                 <ChevronLeft size={16} />
-               </button>
-
-               <div 
-                 ref={scrollRef} 
-                 className="flex-1 flex gap-3 overflow-x-auto no-scrollbar scroll-smooth"
-               >
-                  {[
-                    { label: 'All Pharmacies', onClick: () => { setOpenStatus('All'); setFreeDelivery(false); } },
-                    { label: 'Open Now', onClick: () => setOpenStatus('Open Now'), icon: '🟢' },
-                    { label: 'Free Delivery', onClick: () => setFreeDelivery(true), icon: '🚚' },
-                    { label: 'Top Rated', onClick: () => setSortBy('Rating'), icon: '⭐' },
-                    { label: '24 Hours', onClick: () => setOpenStatus('24 Hours'), icon: '🕐' }
-                  ].map(pill => (
-                    <button 
-                      key={pill.label} 
-                      onClick={pill.onClick} 
-                      className="h-10 px-5 bg-gray-50/50 border border-black/[0.02] rounded-full font-syne font-black text-[9px] uppercase italic tracking-widest hover:bg-[#0a1628] hover:text-brand-teal transition-all flex items-center gap-3 shrink-0"
-                    >
-                      <span className="opacity-70">{pill.icon}</span> 
-                      {pill.label}
-                    </button>
-                  ))}
+                  />
                </div>
-
                <button 
-                 onClick={() => scroll('right')}
-                 className="h-10 w-8 flex items-center justify-center text-gray-400 hover:text-[#0a1628] transition-colors shrink-0"
+                 onClick={() => setShowFilters(true)}
+                 className="h-10 w-10 bg-slate-900 text-teal-400 rounded-xl flex items-center justify-center shadow-md active:scale-95"
                >
-                 <ChevronRight size={16} />
+                 <SlidersHorizontal size={18} />
                </button>
             </div>
-            <div className="flex items-center gap-8 shrink-0">
-               <div className="flex bg-gray-100 p-1.5 rounded-2xl border border-black/[0.01]">
-                  {[{ id: 'grid', icon: Grid2X2 }, { id: 'list', icon: List }, { id: 'map', icon: MapIcon }].map(mode => (
-                     <button key={mode.id} onClick={() => setViewMode(mode.id)} className={`h-10 w-10 md:h-12 md:w-12 rounded-xl flex items-center justify-center transition-all duration-700 active:scale-95 ${viewMode === mode.id ? 'bg-[#0a1628] text-brand-teal shadow-2xl scale-[1.1] z-10' : 'text-gray-300 hover:text-[#0a1628]'}`}><mode.icon size={20}/></button>
-                  ))}
-               </div>
-               <div className="flex items-center gap-4">
-                  <span className="text-[10px] font-black text-gray-300 uppercase italic tracking-widest">Sort By</span>
-                  <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="h-12 px-6 bg-gray-50 border border-black/[0.03] rounded-xl font-syne font-black text-[10px] uppercase italic tracking-widest outline-none appearance-none cursor-pointer hover:bg-white hover:border-[#0a1628] transition-all"><option>Nearest</option><option>Rating</option><option>Delivery Time</option><option>Name</option></select>
-               </div>
+            
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth pb-1">
+               {[
+                 { id: 'Nearest', label: 'Nearest' },
+                 { id: 'Rating', label: 'Top Rated' },
+                 { id: 'Name', label: 'Alphabetical' },
+                 { id: 'Open Now', label: 'Open Now', special: true },
+                 { id: '24 Hours', label: '24 Hours', special: true }
+               ].map(pill => (
+                 <button 
+                   key={pill.id} 
+                   onClick={() => {
+                     if (pill.special) setOpenStatus(pill.id);
+                     else setSortBy(pill.id);
+                   }}
+                   className={`h-8 px-4 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all flex items-center gap-2 shrink-0 border ${
+                     (sortBy === pill.id || openStatus === pill.id) 
+                       ? 'bg-slate-900 text-teal-400 border-slate-900 shadow-sm' 
+                       : 'bg-white text-slate-400 border-slate-200'
+                   }`}
+                 >
+                   <span className="whitespace-nowrap">{pill.label}</span>
+                 </button>
+               ))}
             </div>
          </div>
       </div>
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 space-y-16">
          {/* Live District Demand Telemetry Hub */}
-         <div className="bg-white border border-black/[0.03] rounded-[4.5rem] p-12 lg:p-16 shadow-soft flex flex-col lg:flex-row items-center gap-16 relative overflow-hidden">
+         <div className="bg-white border border-slate-100 rounded-3xl md:rounded-[4.5rem] p-6 md:p-16 shadow-sm flex flex-col lg:flex-row items-center gap-8 md:gap-16 relative overflow-hidden">
             <div className="absolute top-0 right-0 h-64 w-64 bg-brand-teal opacity-[0.02] rounded-full blur-[80px]" />
             <div className="lg:w-1/3 space-y-8 text-center lg:text-left">
                <div className="h-16 w-16 bg-[#0a1628] rounded-[1.8rem] flex items-center justify-center text-brand-teal shadow-4xl mx-auto lg:mx-0"><Zap size={28}/></div>
@@ -299,13 +224,23 @@ export default function PharmaciesListPage() {
                </div>
             </div>
          ) : (
-            <AnimatePresence mode="wait">
-              {viewMode === 'map' ? (
-                <motion.div key="mapView" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="h-[800px] w-full bg-white rounded-[5rem] overflow-hidden border border-black/[0.03] shadow-soft relative"><KaraikalMap pharmacies={filteredPharmacies} /></motion.div>
-              ) : (
-                <motion.div key={viewMode} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} className={`grid gap-12 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>{filteredPharmacies.map(p => (<PharmacyCard_v2 key={p.id} item={p} layout={viewMode} />))}</motion.div>
-              )}
-            </AnimatePresence>
+            <div className="space-y-12">
+               <AnimatePresence mode="wait">
+                 {viewMode === 'map' ? (
+                   <motion.div key="mapView" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="h-[800px] w-full bg-white rounded-[5rem] overflow-hidden border border-black/[0.03] shadow-soft relative"><KaraikalMap pharmacies={filteredPharmacies} /></motion.div>
+                 ) : (
+                   <motion.div key={viewMode} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} className={`grid gap-4 md:gap-12 px-3 md:px-0 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>{filteredPharmacies.map(p => (<PharmacyCard_v2 key={p.id} item={p} layout={viewMode} />))}</motion.div>
+                 )}
+               </AnimatePresence>
+
+               {filteredPharmacies.length > 0 && (
+                  <div className="flex justify-center pt-12">
+                     <button className="h-16 px-12 bg-white border border-black/[0.05] text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-soft hover:bg-[#0a1628] hover:text-brand-teal transition-all duration-700 active:scale-95">
+                        Load More Enclaves
+                     </button>
+                  </div>
+               )}
+            </div>
          )}
       </div>
 

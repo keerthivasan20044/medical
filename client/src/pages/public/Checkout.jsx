@@ -105,21 +105,21 @@ export default function Checkout() {
   };
 
   return (
-    <div className="bg-[#f8fafb] min-h-screen pb-24">
-      {/* Premium Sticky Header Sync */}
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-50 py-6">
-         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+    <div className="bg-slate-50 min-h-screen pb-32 md:pb-8 overflow-x-hidden">
+      {/* Sticky Header */}
+      <header className="bg-white border-b border-gray-100 sticky top-14 md:top-16 z-40 py-3 md:py-5">
+         <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3">
-               <div className="h-10 w-10 bg-[#0a1628] rounded-xl flex items-center justify-center text-brand-teal"><ShieldCheck size={20} /></div>
-               <span className="font-syne font-black text-xl text-[#0a1628]">Secure Checkout</span>
+               <div className="h-9 w-9 bg-slate-900 rounded-xl flex items-center justify-center text-teal-400 flex-shrink-0"><ShieldCheck size={18} /></div>
+               <span className="font-semibold text-base text-slate-900 whitespace-nowrap">Secure Checkout</span>
             </Link>
-            <div className="flex items-center gap-2 text-[10px] font-black text-gray-300 uppercase tracking-widest">
-               <ShieldCheck size={14} className="text-emerald-500" /> Secure Connection
+            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+               <ShieldCheck size={12} className="text-emerald-500 flex-shrink-0" /> <span className="hidden sm:block">Secure</span>
             </div>
          </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 pt-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-8">
          <div className="grid lg:grid-cols-[1fr_420px] gap-12 items-start">
             
             {/* Left Column: Step-by-Step Architecture */}

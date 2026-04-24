@@ -107,16 +107,16 @@ export default function MedicineDetailPage() {
          
          {/* LEFT — Image gallery Terminal */}
          <div className="lg:col-span-6 space-y-6 md:space-y-10">
-            <div className="relative aspect-square rounded-[2.5rem] md:rounded-[4rem] bg-white border border-black/[0.03] shadow-soft overflow-hidden group">
+            <div className="relative aspect-square rounded-[2rem] md:rounded-[4rem] bg-white border border-black/[0.03] shadow-sm overflow-hidden group">
                <img 
                  src={normalizeUrl(medicine.images?.[activeImg] || medicine.images?.[0] || '/assets/medicine_default.png')} 
                  alt={medicine.name} 
                  onError={(e) => { e.target.src = '/assets/medicine_default.png'; }}
-                 className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-1000 hover:scale-110"
+                 className="w-full h-full object-cover grayscale-[0.1] hover:grayscale-0 transition-all duration-1000 hover:scale-105"
                />
                <div className="absolute top-4 right-4 md:top-10 md:right-10 flex flex-col gap-4 z-20">
-                  <button onClick={() => setIsFavorite(!isFavorite)} className={`h-12 w-12 md:h-16 md:w-16 bg-white border rounded-2xl md:rounded-3xl flex items-center justify-center transition-all duration-500 shadow-4xl ${isFavorite ? 'bg-red-500 border-red-500 text-white' : 'border-black/[0.03] text-gray-300'}`}>
-                     <Heart size={20} fill={isFavorite ? 'currentColor' : 'none'} className={isFavorite ? 'animate-heartbeat' : ''} />
+                  <button onClick={() => setIsFavorite(!isFavorite)} className={`h-11 w-11 md:h-16 md:w-16 bg-white border rounded-xl md:rounded-3xl flex items-center justify-center transition-all duration-300 shadow-xl ${isFavorite ? 'bg-red-500 border-red-500 text-white' : 'border-black/[0.03] text-gray-300'}`}>
+                     <Heart size={18} fill={isFavorite ? 'currentColor' : 'none'} className={isFavorite ? 'animate-heartbeat' : ''} />
                   </button>
                </div>
             </div>
@@ -157,19 +157,19 @@ export default function MedicineDetailPage() {
 
             <div className="space-y-8 md:space-y-10 bg-white border border-black/[0.03] p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] shadow-soft">
                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                  <div className="space-y-2">
+                  <div className="space-y-1 md:space-y-2">
                      <div className="text-[9px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Price</div>
                      <div className="flex items-center gap-4 md:gap-6">
-                        <span className="font-syne font-black text-brand-teal text-4xl md:text-6xl italic leading-none uppercase tracking-tighter select-none">₹{medicine.price}</span>
+                        <span className="font-syne font-black text-teal-600 text-4xl md:text-6xl italic leading-none uppercase tracking-tighter select-none">₹{medicine.price}</span>
                         {medicine.mrp > medicine.price && (
                            <div className="flex flex-col">
-                              <span className="text-gray-200 line-through font-dm italic text-lg md:text-2xl font-bold leading-none select-none">₹{medicine.mrp}</span>
-                              <span className="text-red-500 font-syne font-black italic text-[9px] uppercase pt-1 tracking-widest">{medicine.discount}% OFF</span>
+                              <span className="text-gray-200 line-through font-dm italic text-base md:text-2xl font-bold leading-none select-none">₹{medicine.mrp}</span>
+                              <span className="text-red-500 font-syne font-black italic text-[8px] md:text-[9px] uppercase pt-1 tracking-widest">{medicine.discount}% OFF</span>
                            </div>
                         )}
                      </div>
                   </div>
-                  <div className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest italic flex items-center gap-2 self-start md:self-auto ${medicine.stock > 0 ? 'bg-emerald-50 text-emerald-500' : 'bg-red-50 text-red-500'}`}>
+                  <div className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest italic flex items-center gap-1.5 md:gap-2 self-start md:self-auto ${medicine.stock > 0 ? 'bg-emerald-50 text-emerald-500' : 'bg-red-50 text-red-500'}`}>
                      <div className={`h-1.5 w-1.5 rounded-full animate-pulse ${medicine.stock > 0 ? 'bg-emerald-500' : 'bg-red-500'}`} />
                      {medicine.stock > 0 ? `${medicine.stock} IN STOCK` : 'UNAVAILABLE'}
                   </div>
@@ -189,16 +189,16 @@ export default function MedicineDetailPage() {
                </Link>
 
                <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-                  <div className="h-16 md:h-20 bg-gray-50 border border-black/[0.03] rounded-2xl md:rounded-[2.2rem] flex items-center px-8 md:px-10 justify-between md:gap-10">
-                     <button onClick={() => setQty(Math.max(1, qty - 1))} className="text-gray-400 hover:text-[#0a1628]"><Minus size={20}/></button>
-                     <span className="font-syne font-black text-xl md:text-2xl text-[#0a1628] italic w-8 text-center">{qty}</span>
-                     <button onClick={() => setQty(Math.min(10, qty + 1))} className="text-gray-400 hover:text-[#0a1628]"><Plus size={20}/></button>
+                  <div className="h-14 md:h-20 bg-gray-50 border border-black/[0.03] rounded-xl md:rounded-[2.2rem] flex items-center px-6 md:px-10 justify-between md:gap-10">
+                     <button onClick={() => setQty(Math.max(1, qty - 1))} className="text-gray-400 hover:text-navy"><Minus size={18}/></button>
+                     <span className="font-syne font-black text-lg md:text-2xl text-navy italic w-8 text-center">{qty}</span>
+                     <button onClick={() => setQty(Math.min(10, qty + 1))} className="text-gray-400 hover:text-navy"><Plus size={18}/></button>
                   </div>
                   <button 
                     onClick={handleAddToCart}
-                    className="flex-1 h-16 md:h-20 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] md:text-xs uppercase italic tracking-[0.3em] rounded-2xl md:rounded-[2.2rem] shadow-mint hover:bg-brand-teal hover:text-white transition-all flex items-center justify-center gap-4"
+                    className="flex-1 h-14 md:h-20 bg-navy text-teal-400 font-syne font-black text-[9px] md:text-xs uppercase italic tracking-[0.2em] rounded-xl md:rounded-[2.2rem] shadow-xl hover:bg-teal-500 hover:text-navy transition-all flex items-center justify-center gap-3 md:gap-4"
                   >
-                     <ShoppingBag size={20}/> ADD TO CART
+                     <ShoppingBag size={18} className="md:size-5"/> ADD TO CART
                   </button>
                </div>
             </div>
@@ -249,25 +249,25 @@ export default function MedicineDetailPage() {
          ))}
       </section>
 
-      {/* Sticky Quick-Action Bar Node */}
-      <AnimatePresence>
-         <motion.div 
-           initial={{ y: 200 }}
-           animate={{ y: 0 }}
-           className="fixed bottom-[110px] inset-x-4 md:hidden z-[100] bg-[#0a1628] h-20 rounded-2xl border border-white/10 shadow-4xl flex items-center justify-between px-6 gap-6"
-         >
-            <div className="flex flex-col">
-               <div className="text-[8px] font-black text-white/30 uppercase italic tracking-widest">Price</div>
-               <div className="font-syne font-black text-brand-teal text-2xl italic leading-none select-none">₹{medicine.price}</div>
-            </div>
-            <button 
-              onClick={handleAddToCart}
-              className="flex-1 h-12 bg-brand-teal text-[#0a1628] font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl shadow-mint active:scale-95 transition-all"
-            >
-               ADD TO CART
-            </button>
-         </motion.div>
-      </AnimatePresence>
+       {/* Sticky Quick-Action Bar Node */}
+       <AnimatePresence>
+          <motion.div 
+            initial={{ y: 200 }}
+            animate={{ y: 0 }}
+            className="fixed bottom-[80px] md:hidden inset-x-4 z-[100] bg-navy h-20 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between px-6 gap-6"
+          >
+             <div className="flex flex-col">
+                <div className="text-[8px] font-black text-white/30 uppercase italic tracking-widest">Price</div>
+                <div className="font-syne font-black text-teal-400 text-2xl italic leading-none select-none">₹{medicine.price}</div>
+             </div>
+             <button 
+               onClick={handleAddToCart}
+               className="flex-1 h-12 bg-teal-500 text-navy font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl shadow-lg active:scale-95 transition-all"
+             >
+                ADD TO CART
+             </button>
+          </motion.div>
+       </AnimatePresence>
     </div>
   );
 }

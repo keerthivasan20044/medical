@@ -30,33 +30,33 @@ export default function CartSummary({
   }, [coupon]);
 
   return (
-    <div className="bg-white border border-gray-100 rounded-[4rem] p-12 shadow-4xl sticky top-32 overflow-hidden group">
-      <div className="absolute top-0 right-0 h-64 w-64 bg-brand-teal opacity-[0.02] rounded-full blur-[100px]" />
+    <div className="bg-white border border-gray-100 rounded-2xl md:rounded-[4rem] p-6 md:p-12 shadow-xl sticky top-32 overflow-hidden group">
+      <div className="absolute top-0 right-0 h-48 w-48 bg-teal-500 opacity-[0.02] rounded-full blur-[100px]" />
       
-      <div className="flex items-center gap-6 relative z-10 border-b border-gray-100 pb-10 mb-10">
-         <div className="h-16 w-16 bg-[#0a1628] rounded-2xl flex items-center justify-center text-brand-teal shadow-2xl rotate-3"><Activity size={28} /></div>
-         <div className="space-y-1">
-            <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase tracking-tighter italic leading-none">{t('yieldSummary')}</h2>
-            <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em] italic">{t('manifestVerification')}</div>
+      <div className="flex items-center gap-4 md:gap-6 relative z-10 border-b border-gray-50 pb-6 md:pb-10 mb-6 md:mb-10">
+         <div className="h-12 w-12 md:h-16 md:w-16 bg-navy rounded-xl md:rounded-2xl flex items-center justify-center text-teal-400 shadow-xl rotate-3 shrink-0"><Activity size={24} /></div>
+         <div className="space-y-0.5">
+            <h2 className="font-syne font-black text-xl md:text-3xl text-navy uppercase tracking-tighter italic leading-none">{t('yieldSummary')}</h2>
+            <div className="text-[9px] md:text-[10px] font-black text-teal-600 uppercase tracking-widest italic">{t('manifestVerification')}</div>
          </div>
       </div>
 
       <div className="space-y-6 relative z-10">
-        <div className="flex items-center justify-between group/row">
-          <span className="text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-[#0a1628] transition-colors">{t('subtotalNode')}</span>
-          <span className="font-syne font-black text-2xl text-[#0a1628] italic">₹{subtotal}</span>
+         <div className="flex items-center justify-between group/row">
+          <span className="text-[10px] md:text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-navy transition-colors">{t('subtotalNode')}</span>
+          <span className="font-syne font-black text-lg md:text-2xl text-navy italic">₹{subtotal}</span>
         </div>
         <div className="flex items-center justify-between group/row">
-          <span className="text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-[#0a1628] transition-colors">{t('deliveryProtocolFee')}</span>
-          <span className="font-syne font-black text-2xl text-[#0a1628] italic">₹{deliveryFee}</span>
+          <span className="text-[10px] md:text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-navy transition-colors">{t('deliveryProtocolFee')}</span>
+          <span className="font-syne font-black text-lg md:text-2xl text-navy italic">₹{deliveryFee}</span>
         </div>
         <div className="flex items-center justify-between group/row">
-          <span className="text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-[#0a1628] transition-colors">{t('packagingSync')}</span>
-          <span className="font-syne font-black text-2xl text-[#0a1628] italic">₹{packagingFee}</span>
+          <span className="text-[10px] md:text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-navy transition-colors">{t('packagingSync')}</span>
+          <span className="font-syne font-black text-lg md:text-2xl text-navy italic">₹{packagingFee}</span>
         </div>
-        <div className="flex items-center justify-between group/row border-b border-gray-50 pb-6 mb-6">
-          <span className="text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-[#0a1628] transition-colors">{t('taxesProtocol')}</span>
-          <span className="font-syne font-black text-2xl text-[#0a1628] italic">₹{tax}</span>
+        <div className="flex items-center justify-between group/row border-b border-gray-50 pb-4 md:pb-6 mb-4 md:mb-6">
+          <span className="text-[10px] md:text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-navy transition-colors">{t('taxesProtocol')}</span>
+          <span className="font-syne font-black text-lg md:text-2xl text-navy italic">₹{tax}</span>
         </div>
         
         <AnimatePresence>
@@ -88,34 +88,34 @@ export default function CartSummary({
         </AnimatePresence>
       </div>
 
-      <div className="mt-12 p-10 bg-[#0a1628] rounded-[3.5rem] text-white flex items-center justify-between shadow-4xl border-t-[8px] border-brand-teal relative overflow-hidden group/total">
-        <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-5 rounded-full blur-[60px]" />
-        <div className="relative z-10 space-y-2">
-           <div className="text-[10px] text-white/30 font-black uppercase tracking-widest italic">{t('totalSyncAmount')}</div>
-           <div className="text-5xl font-syne font-black text-white tracking-tighter italic origin-left group-hover/total:scale-110 transition-transform duration-700">₹{totalAmount}</div>
+      <div className="mt-8 md:mt-12 p-6 md:p-10 bg-navy rounded-2xl md:rounded-[3.5rem] text-white flex items-center justify-between shadow-xl border-t-4 md:border-t-[8px] border-teal-500 relative overflow-hidden group/total">
+        <div className="absolute top-0 right-0 h-40 w-40 bg-teal-500 opacity-5 rounded-full blur-[60px]" />
+        <div className="relative z-10 space-y-1 md:space-y-2">
+           <div className="text-[8px] md:text-[10px] text-white/30 font-black uppercase tracking-widest italic">{t('totalSyncAmount')}</div>
+           <div className="text-3xl md:text-5xl font-syne font-black text-white tracking-tighter italic origin-left group-hover/total:scale-110 transition-transform duration-700">₹{totalAmount}</div>
         </div>
-        <div className="h-20 w-20 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-center text-brand-teal shadow-2xl transition-all duration-700 group-hover/total:rotate-12 group-hover/total:bg-white group-hover/total:text-[#0a1628]"><Zap size={32} /></div>
+        <div className="h-12 w-12 md:h-20 md:w-20 bg-white/5 border border-white/10 rounded-xl md:rounded-3xl flex items-center justify-center text-teal-400 shadow-2xl transition-all duration-700 group-hover/total:rotate-12 group-hover/total:bg-white group-hover/total:text-navy"><Zap size={24} /></div>
       </div>
 
       {/* Coupon Authorization */}
-      <div className="mt-12 space-y-4">
+      <div className="mt-8 md:mt-12 space-y-4">
         <div className="flex items-center gap-4 px-4">
-           <div className="h-1.5 w-6 bg-brand-teal rounded-full" />
-           <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">{t('couponAuthorization')}</div>
+           <div className="h-1 w-6 bg-teal-500 rounded-full" />
+           <div className="text-[9px] md:text-[10px] text-gray-300 font-black uppercase tracking-widest italic">{t('couponAuthorization')}</div>
         </div>
-        <div className="flex items-center gap-4 bg-gray-50 border border-gray-100 p-2 rounded-[2rem] shadow-inner transition-all duration-500 focus-within:bg-white focus-within:shadow-4xl group/coupon">
-          <div className="h-14 w-14 bg-white border border-gray-100 rounded-2xl flex items-center justify-center text-gray-200 group-focus-within/coupon:bg-[#0a1628] group-focus-within/coupon:text-brand-teal transition-all duration-500"><Tag size={20} /></div>
+        <div className="flex items-center gap-3 bg-gray-50 border border-gray-100 p-1.5 rounded-xl md:rounded-[2rem] shadow-inner transition-all duration-500 focus-within:bg-white focus-within:shadow-xl group/coupon">
+          <div className="h-10 w-10 md:h-14 md:w-14 bg-white border border-gray-100 rounded-lg md:rounded-2xl flex items-center justify-center text-gray-200 group-focus-within/coupon:bg-navy group-focus-within/coupon:text-teal-400 transition-all duration-500 shrink-0"><Tag size={18} /></div>
           <input
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder={t('enterAuthCode')}
-            className="flex-1 bg-transparent border-none outline-none text-[#0a1628] font-syne font-black text-lg uppercase tracking-widest placeholder:text-gray-200 italic pr-4"
+            className="flex-1 bg-transparent border-none outline-none text-navy font-syne font-black text-sm md:text-lg uppercase tracking-widest placeholder:text-gray-200 italic pr-2 min-w-0"
           />
           {coupon ? (
             <button
               type="button"
               onClick={onClearCoupon}
-              className="h-14 px-8 rounded-2xl bg-red-500 text-white font-syne font-black text-[10px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-all italic mr-2"
+              className="h-10 md:h-14 px-4 md:px-8 rounded-lg md:rounded-2xl bg-red-500 text-white font-syne font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all italic shrink-0"
             >
               {t('revoke')}
             </button>
@@ -123,7 +123,7 @@ export default function CartSummary({
             <button
               type="button"
               onClick={() => onApplyCoupon(code)}
-              className="h-14 px-8 rounded-2xl bg-brand-teal text-white font-syne font-black text-[10px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-all italic mr-2"
+              className="h-10 md:h-14 px-4 md:px-8 rounded-lg md:rounded-2xl bg-teal-500 text-white font-syne font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all italic shrink-0"
               disabled={couponStatus === 'loading'}
             >
               {couponStatus === 'loading' ? t('syncing') : t('authorize')}
@@ -163,11 +163,11 @@ export default function CartSummary({
       <button
         type="button"
         onClick={onCheckout}
-        className="mt-16 w-full h-24 bg-brand-teal text-white rounded-[2.5rem] font-syne font-black text-xl uppercase tracking-[0.3em] shadow-4xl hover:bg-[#0a1628] hover:scale-105 active:scale-95 transition-all duration-700 flex items-center justify-center gap-6 italic group/checkout"
+        className="mt-10 md:mt-16 w-full h-16 md:h-24 bg-teal-500 text-white rounded-xl md:rounded-[2.5rem] font-syne font-black text-sm md:text-xl uppercase tracking-[0.2em] md:tracking-[0.3em] shadow-xl hover:bg-navy hover:scale-105 active:scale-95 transition-all duration-500 flex items-center justify-center gap-4 md:gap-6 italic group/checkout"
         disabled={isCheckoutDisabled}
       >
-        <CreditCard size={28} /> {t('initializeCheckout')}
-        <div className="h-12 w-12 bg-white/20 rounded-xl flex items-center justify-center group-hover/checkout:bg-brand-teal group-hover/checkout:text-white transition-all"><ArrowRight size={24} /></div>
+        <CreditCard size={20} className="md:size-7" /> {t('initializeCheckout')}
+        <div className="h-10 w-10 md:h-12 md:w-12 bg-white/20 rounded-lg md:rounded-xl flex items-center justify-center group-hover/checkout:bg-teal-500 group-hover/checkout:text-white transition-all"><ArrowRight size={18} className="md:size-6" /></div>
       </button>
     </div>
   );

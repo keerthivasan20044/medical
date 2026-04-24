@@ -36,12 +36,12 @@ export default function MedicineComparePage() {
   };
 
   const features = [
-    { label: 'Clinical Price', icon: Zap, val: m => `\u20B9${m.price}` },
-    { label: 'Terminal MRP', icon: Award, val: m => `\u20B9${m.mrp}` },
-    { label: 'Rx Protocol', icon: FileText, val: m => m.requiresRx ? 'Required' : 'Not Req.' },
-    { label: 'Therapeutic Enclave', icon: Info, val: m => m.category },
-    { label: 'Audit Performance', icon: Star, val: m => `${m.rating} ★ (${m.reviewsCount})` },
-    { label: 'Inventory State', icon: Activity, val: m => m.stockCount > 0 ? 'Optimal' : 'Offline' }
+    { label: 'Price', icon: Zap, val: m => `₹${m.price}` },
+    { label: 'MRP', icon: Award, val: m => `₹${m.mrp}` },
+    { label: 'Prescription', icon: FileText, val: m => m.requiresRx ? 'Required' : 'Not Req.' },
+    { label: 'Category', icon: Info, val: m => m.category },
+    { label: 'Rating', icon: Star, val: m => `${m.rating} ★` },
+    { label: 'Stock', icon: Activity, val: m => m.stockCount > 0 ? 'In Stock' : 'Out of Stock' }
   ];
 
   return (
@@ -130,7 +130,7 @@ export default function MedicineComparePage() {
 
                           <div className="px-8 pt-10">
                              <button className="w-full h-20 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-[0.3em] rounded-[2.5rem] shadow-4xl hover:bg-brand-teal hover:text-[#0a1628] transition-all duration-700 flex items-center justify-center gap-6 group">
-                                <ShoppingBag size={20} className="group-hover:rotate-12 transition-transform"/> Initialize Payload
+                                <ShoppingBag size={20} className="group-hover:rotate-12 transition-transform"/> Add to Cart
                              </button>
                           </div>
                         </>
@@ -201,7 +201,7 @@ export default function MedicineComparePage() {
                             <div className="space-y-1 overflow-hidden">
                                <div className="text-[10px] font-black text-brand-teal uppercase italic tracking-widest">{m.brand}</div>
                                <h4 className="font-syne font-black text-white text-xl uppercase italic tracking-tighter truncate leading-none">{m.name}</h4>
-                               <div className="text-[9px] font-black text-white/40 italic uppercase tracking-widest">\u20B9{m.price} &bull; {m.category}</div>
+                               <div className="text-[9px] font-black text-white/40 italic uppercase tracking-widest">₹{m.price} &bull; {m.category}</div>
                             </div>
                          </div>
                       </motion.button>

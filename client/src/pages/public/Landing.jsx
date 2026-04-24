@@ -32,10 +32,7 @@ export default function Landing() {
   });
 
   return (
-    <div 
-      className="w-full min-h-screen overflow-x-hidden pb-36"
-      style={{ maxWidth: '100vw' }}
-    >
+    <div className="w-full min-h-screen overflow-x-hidden pb-20 md:pb-0">
       <SEO 
         title="Home" 
         description="Karaikal's first unified healthcare platform. Order medicines, consult doctors, and track deliveries in real-time."
@@ -83,7 +80,7 @@ export default function Landing() {
       <LogoStrip />
 
       {/* Ticker - fixed just above bottom nav */}
-      <div className="fixed bottom-[64px] left-0 right-0 z-30 bg-[#080c18] border-t border-teal-900/40 py-1.5 px-4 flex md:hidden items-center gap-3">
+      <div className="fixed bottom-16 left-0 right-0 z-30 bg-[#080c18] border-t border-teal-900/40 py-1.5 px-4 flex md:hidden items-center gap-3">
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <span className="w-1.5 h-1.5 bg-teal-400 rounded-full animate-pulse" />
           <span className="text-teal-400 text-[10px] font-black tracking-wider">LIVE</span>

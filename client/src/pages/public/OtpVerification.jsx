@@ -24,7 +24,7 @@ export default function OtpVerification() {
   const { confirmAccount, status, error, verified, resend, resendStatus, reset } = useOtpConfirm();
 
   const resendOtp = async () => {
-    if (!contact) return;
+    if (!contact || timeLeft > 0) return;
     resetTimer();
     setDigits(EMPTY_DIGITS);
     reset();
@@ -50,19 +50,19 @@ export default function OtpVerification() {
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 w-full max-w-2xl"
       >
-        <div className="bg-white rounded-[5rem] p-16 md:p-24 shadow-4xl border border-gray-100 relative overflow-hidden group">
+        <div className="bg-white rounded-2xl md:rounded-[5rem] p-6 md:p-16 lg:p-24 shadow-2xl border border-gray-100 relative overflow-hidden group">
           <div className="absolute top-0 right-0 h-64 w-64 bg-brand-teal opacity-[0.02] rounded-full blur-[80px]" />
           
           <div className="space-y-16 relative z-10">
              {/* Header */}
              <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-gray-50 pb-12">
                 <div className="space-y-6">
-                   <div className="px-6 py-2.5 bg-[#0a1628] rounded-2xl w-fit flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">
-                      <Lock size={16} className="text-brand-teal animate-pulse" /> Identity Protocol Sync
-                   </div>
-                   <h1 className="font-black text-6xl lg:text-7xl text-[#0a1628] leading-[0.85] tracking-tighter uppercase italic">
-                      Verify <br /><span className="text-brand-teal">Node Access.</span>
-                   </h1>
+                    <div className="px-6 py-2.5 bg-[#0a1628] rounded-2xl w-fit flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">
+                       <Lock size={16} className="text-brand-teal animate-pulse" /> Security Verification
+                    </div>
+                    <h1 className="font-black text-6xl lg:text-7xl text-[#0a1628] leading-[0.85] tracking-tighter uppercase italic">
+                       Verify <br /><span className="text-brand-teal">Your Account.</span>
+                    </h1>
                 </div>
                 <div className="h-24 w-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center text-[#0a1628] shadow-inner shrink-0"><ShieldCheck size={48} className="animate-float-up" /></div>
              </div>
@@ -143,7 +143,7 @@ export default function OtpVerification() {
                        ${timeLeft > 0 ? 'bg-gray-50 border-gray-100 text-gray-200 cursor-not-allowed opacity-50' : 'bg-white border-[#0a1628] text-[#0a1628] hover:bg-[#0a1628] hover:text-white shadow-soft'}
                      `}
                    >
-                     {resendStatus === 'loading' ? 'Resending...' : 'Resend Key'} <Zap size={18} />
+                     {resendStatus === 'loading' ? 'Resending...' : (timeLeft > 0 ? `Resend in ${timeLeft}s` : 'Resend Code')} <Zap size={18} />
                    </button>
                    <button 
                       onClick={submit} 

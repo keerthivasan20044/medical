@@ -15,7 +15,7 @@ export default function Wallet() {
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-brand-teal to-brand-mint text-white rounded-3xl p-6 shadow-soft">
         <div className="text-sm text-white/80">MediReach Wallet</div>
-        <div className="mt-3 text-4xl font-heading">&#8377;{balance}</div>
+        <div className="mt-3 text-4xl font-heading">₹{balance}</div>
         <div className="mt-4 flex flex-wrap gap-2">
           {[100, 200, 500, 1000].map((amt) => (
             <button
@@ -23,7 +23,7 @@ export default function Wallet() {
               className="px-4 py-2 rounded-full bg-white/15 text-white text-sm btn-hover"
               onClick={() => recharge(amt)}
             >
-              +&#8377;{amt}
+              +₹{amt}
             </button>
           ))}
         </div>
@@ -40,7 +40,7 @@ export default function Wallet() {
                   <div className="text-xs text-brand-muted">{t.date}</div>
                 </div>
                 <div className={`text-sm font-heading ${t.amount > 0 ? 'text-emerald-600' : 'text-red-500'}`}>
-                  {t.amount > 0 ? `+\u20B9${t.amount}` : `-\u20B9${Math.abs(t.amount)}`}
+                  {t.amount > 0 ? `+₹${t.amount}` : `-₹${Math.abs(t.amount)}`}
                 </div>
               </div>
             ))}
@@ -52,7 +52,7 @@ export default function Wallet() {
           <p className="text-sm text-brand-muted mt-2">You have 250 loyalty points</p>
           <div className="mt-4 border border-brand-border rounded-xl p-4">
             <div className="text-xs text-brand-muted">Redeem 200 points</div>
-            <div className="font-heading text-2xl text-brand-teal mt-2">&#8377;50</div>
+            <div className="font-heading text-2xl text-brand-teal mt-2">₹50</div>
             <button className="mt-4 w-full px-4 py-2 rounded-xl bg-brand-teal text-white btn-hover">Redeem Now</button>
           </div>
         </div>

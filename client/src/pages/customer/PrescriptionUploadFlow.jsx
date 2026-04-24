@@ -95,7 +95,7 @@ export default function PrescriptionUploadFlow() {
   ];
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-48 pt-24 px-10">
+    <div className="bg-slate-50 min-h-screen pb-32 pt-20 px-4 md:px-10">
       <div className="max-w-6xl mx-auto space-y-12">
         
         {/* Progress Navigation */}
@@ -109,16 +109,16 @@ export default function PrescriptionUploadFlow() {
         </div>
 
         {/* Hero Header */}
-        <div className="space-y-4 md:space-y-6">
-           <h1 className="font-syne font-black text-4xl md:text-5xl lg:text-7xl text-[#0a1628] uppercase italic leading-none tracking-tighter">Upload <span className="text-brand-teal text-5xl md:text-6xl block transform translate-y-1">Prescription</span></h1>
-           <p className="text-gray-400 font-dm text-sm md:text-lg font-bold italic">Medical verification required for {rxItems.length} medicines in your cart.</p>
+        <div className="space-y-3 md:space-y-6">
+           <h1 className="font-syne font-black text-3xl md:text-5xl lg:text-7xl text-slate-900 uppercase italic leading-none tracking-tighter">Upload <br className="md:hidden" /><span className="text-teal-600 block transform translate-y-1">Prescription</span></h1>
+           <p className="text-slate-400 font-dm text-xs md:text-lg font-bold italic">Medical verification required for {rxItems.length} medicines.</p>
         </div>
 
-        <div className="grid lg:grid-cols-[1.3fr_1fr] gap-16 items-start">
-           <div className="space-y-12">
+        <div className="grid lg:grid-cols-[1.3fr_1fr] gap-8 md:gap-16 items-start">
+           <div className="space-y-8 md:space-y-12">
               
               {/* Rx Items Summary Panel */}
-              <div className="bg-brand-teal/5 border border-brand-teal/10 rounded-[4rem] p-12 space-y-8 relative overflow-hidden group">
+              <div className="bg-teal-50 border border-teal-100 rounded-3xl md:rounded-[4rem] p-6 md:p-12 space-y-6 md:space-y-8 relative overflow-hidden group">
                  <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-5 rounded-full blur-[60px]" />
                  
                  <div className="flex items-center gap-4 text-brand-teal">
@@ -148,11 +148,11 @@ export default function PrescriptionUploadFlow() {
               </div>
 
               {/* Upload Matrix Control */}
-              <div className="grid md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                  {/* GALLERY PROTOCOL */}
                  <button 
                    onClick={() => fileInputRef.current?.click()}
-                   className="bg-white border-4 border-dashed border-gray-100 rounded-[4rem] p-12 text-center space-y-8 group/upload hover:border-brand-teal transition-all duration-700 hover:shadow-4xl relative overflow-hidden"
+                   className="bg-white border-2 md:border-4 border-dashed border-slate-100 rounded-3xl md:rounded-[4rem] p-8 md:p-12 text-center space-y-6 md:space-y-8 group/upload hover:border-teal-500 transition-all duration-700 hover:shadow-xl relative overflow-hidden"
                  >
                     <div className="absolute top-0 right-0 h-24 w-24 bg-brand-teal/5 rounded-full blur-[40px] opacity-0 group-hover/upload:opacity-100 transition" />
                     <div className="h-24 w-24 bg-gray-50 rounded-[2.5rem] border border-black/[0.03] flex items-center justify-center mx-auto text-brand-teal shadow-inner group-hover/upload:bg-[#0a1628] group-hover/upload:text-white transition-all duration-700 group-hover/upload:scale-110">
@@ -169,7 +169,7 @@ export default function PrescriptionUploadFlow() {
                  {/* CAMERA PROTOCOL */}
                  <button 
                    onClick={() => toast.error('Camera Hardware Handshake Failed - Manual Upload Recommended')}
-                   className="bg-white border-4 border-dashed border-gray-100 rounded-[4rem] p-12 text-center space-y-8 group/camera hover:border-brand-teal transition-all duration-700 hover:shadow-4xl relative overflow-hidden"
+                   className="bg-white border-2 md:border-4 border-dashed border-slate-100 rounded-3xl md:rounded-[4rem] p-8 md:p-12 text-center space-y-6 md:space-y-8 group/camera hover:border-teal-500 transition-all duration-700 hover:shadow-xl relative overflow-hidden"
                  >
                     <div className="absolute top-0 right-0 h-24 w-24 bg-brand-teal/5 rounded-full blur-[40px] opacity-0 group-hover/camera:opacity-100 transition" />
                     <div className="h-24 w-24 bg-gray-50 rounded-[2.5rem] border border-black/[0.03] flex items-center justify-center mx-auto text-brand-teal shadow-inner group-hover/camera:bg-[#0a1628] group-hover/camera:text-white transition-all duration-700 group-hover/camera:scale-110">
@@ -221,7 +221,7 @@ export default function PrescriptionUploadFlow() {
                        initial={{ opacity: 0, scale: 0.95, y: 30 }}
                        animate={{ opacity: 1, scale: 1, y: 0 }}
                        exit={{ opacity: 0, scale: 0.95, y: 30 }}
-                       className="bg-[#0a1628] rounded-[5rem] p-16 space-y-12 shadow-4xl relative overflow-hidden group/pre"
+                       className="bg-slate-900 rounded-3xl md:rounded-[5rem] p-6 md:p-16 space-y-8 md:space-y-12 shadow-2xl relative overflow-hidden group/pre"
                     >
                        <div className="absolute top-0 right-0 h-64 w-64 bg-brand-teal opacity-5 rounded-full blur-[100px]" />
                        
@@ -272,11 +272,11 @@ export default function PrescriptionUploadFlow() {
            <div className="space-y-16">
               
               {/* Clinical Protocol Accordion */}
-              <div className="bg-white border border-black/[0.03] rounded-[5rem] p-16 space-y-12 shadow-soft group hover:shadow-4xl transition-all duration-1000 relative overflow-hidden">
-                 <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-[0.02] rounded-full blur-[60px]" />
-                 <div className="space-y-4 relative z-10">
-                    <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic leading-none tracking-tighter">Requirements</h3>
-                    <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">Ensure these are visible</p>
+              <div className="bg-white border border-slate-100 rounded-3xl md:rounded-[5rem] p-8 md:p-16 space-y-8 md:space-y-12 shadow-sm group hover:shadow-xl transition-all duration-1000 relative overflow-hidden">
+                 <div className="absolute top-0 right-0 h-40 w-40 bg-teal-500 opacity-[0.02] rounded-full blur-[60px]" />
+                 <div className="space-y-3 relative z-10">
+                    <h3 className="font-syne font-black text-xl md:text-2xl text-slate-900 uppercase italic leading-none tracking-tighter">Requirements</h3>
+                    <p className="text-[10px] text-slate-300 font-bold uppercase tracking-widest italic">Ensure these are visible</p>
                  </div>
 
                  <div className="space-y-6 relative z-10">
@@ -313,7 +313,7 @@ export default function PrescriptionUploadFlow() {
                              <div className="text-[9px] text-gray-400 font-bold uppercase tracking-widest italic leading-none">Consult Dr. Priya Raman in 10m</div>
                           </div>
                        </div>
-                       <Link to="/doctors/dr-1" className="w-full h-16 bg-brand-teal/5 text-brand-teal rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-4 hover:bg-[#0a1628] hover:text-white transition-all shadow-soft italic">Initialize Consult - \u20B9200 <ChevronRight size={14}/></Link>
+                       <Link to="/doctors/dr-1" className="w-full h-16 bg-brand-teal/5 text-brand-teal rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-4 hover:bg-[#0a1628] hover:text-white transition-all shadow-soft italic">Initialize Consult - ₹200 <ChevronRight size={14}/></Link>
                     </div>
 
                     <button className="w-full h-16 border-2 border-red-500/10 text-red-500/40 rounded-3xl font-syne font-black text-[9px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all italic">Disconnect RX Nodes from Cart</button>
@@ -347,21 +347,21 @@ export default function PrescriptionUploadFlow() {
         </div>
 
         {/* Tactical Footer Actions */}
-        <div className="pt-24 border-t border-black/[0.03] flex flex-col md:flex-row items-center justify-between gap-12">
-            <button onClick={() => navigate(-1)} className="flex items-center gap-6 group">
-               <div className="h-16 w-16 bg-white border border-black/[0.02] rounded-2xl flex items-center justify-center text-[#0a1628] shadow-soft group-hover:bg-[#0a1628] group-hover:text-white transition-all duration-700"><ArrowLeft size={24}/></div>
+        <div className="pt-12 md:pt-24 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
+            <button onClick={() => navigate(-1)} className="flex items-center gap-4 md:gap-6 group w-full md:w-auto">
+               <div className="h-12 w-12 md:h-16 md:w-16 bg-white border border-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center text-slate-900 shadow-sm group-hover:bg-slate-900 group-hover:text-white transition-all duration-700"><ArrowLeft size={20}/></div>
                <div className="text-left">
-                  <div className="text-[10px] font-black text-gray-300 uppercase italic tracking-[0.4em] mb-1 group-hover:text-[#0a1628] transition-colors">Back</div>
-                  <div className="font-syne font-black text-sm text-[#0a1628] uppercase italic leading-none">Medicines</div>
+                  <div className="text-[9px] font-black text-slate-300 uppercase italic tracking-widest mb-1 group-hover:text-slate-900 transition-colors">Back</div>
+                  <div className="font-syne font-black text-xs md:text-sm text-slate-900 uppercase italic leading-none">Medicines</div>
                </div>
             </button>
 
             <button 
                onClick={() => navigate('/checkout')}
-               className={`h-24 px-16 rounded-[2.5rem] font-syne font-black text-lg uppercase tracking-widest transition-all duration-1000 shadow-4xl flex items-center gap-8 ${previewUrl ? 'bg-brand-teal text-white hover:bg-[#0a1628] hover:scale-105' : 'bg-gray-100 text-gray-300 cursor-not-allowed'} italic`}
+               className={`h-16 md:h-24 w-full md:w-auto px-10 md:px-16 rounded-2xl md:rounded-[2.5rem] font-syne font-black text-sm md:text-lg uppercase tracking-widest transition-all duration-1000 shadow-xl flex items-center justify-center gap-6 md:gap-8 ${previewUrl ? 'bg-teal-500 text-white hover:bg-slate-900 hover:scale-105' : 'bg-slate-100 text-slate-300 cursor-not-allowed'} italic`}
                disabled={!previewUrl}
             >
-               Confirm & Checkout <ArrowLeft size={32} className="rotate-180" />
+               Confirm & Checkout <ArrowLeft size={24} className="rotate-180 md:size-8" />
             </button>
         </div>
 

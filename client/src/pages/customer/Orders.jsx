@@ -67,45 +67,36 @@ export default function MyOrdersPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-12 pb-32 pt-8 px-4 md:px-0">
+    <div className="max-w-6xl mx-auto space-y-4 pb-24 pt-4 px-3 md:px-6">
       {/* Header & Search */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-         <div className="space-y-4">
-            <div className="px-5 py-2 bg-[#0a1628] rounded-xl w-fit flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic">
-               <Activity size={14} className="animate-pulse" /> Global Logistics Pulse
-            </div>
-            <h1 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic leading-none tracking-tighter">
-               My <span className="text-brand-teal">Procurements</span>
-            </h1>
+      <div className="flex flex-col gap-3">
+         <div>
+            <h1 className="text-2xl md:text-4xl font-bold text-slate-900">My Orders</h1>
+            <p className="text-sm text-slate-400 mt-1">Track and manage your orders</p>
          </div>
-         
-         <div className="flex gap-4">
-            <div className="h-16 w-full md:w-80 bg-white border border-black/[0.03] rounded-2xl flex items-center px-6 shadow-soft group focus-within:border-brand-teal transition-all">
-               <Search size={20} className="text-gray-300 group-focus-within:text-brand-teal transition-colors" />
+         <div className="flex gap-2">
+            <div className="flex-1 h-11 bg-white border border-slate-200 rounded-xl flex items-center px-3 gap-2 focus-within:border-teal-500 transition-all">
+               <Search size={16} className="text-slate-400 flex-shrink-0" />
                <input 
                   type="text" 
-                  placeholder="Order ID or Pharmacy..." 
-                  className="flex-1 bg-transparent px-4 font-dm italic font-bold text-sm md:text-base outline-none text-[#0a1628] placeholder:text-gray-200"
+                  placeholder="Search by order ID or pharmacy..." 
+                  className="flex-1 bg-transparent text-sm font-medium outline-none text-slate-900 placeholder:text-slate-400 min-w-0"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                />
             </div>
-            <button className="h-16 w-16 bg-[#0a1628] rounded-2xl flex items-center justify-center text-brand-teal shadow-4xl active:scale-95 transition-all"><Filter size={24}/></button>
          </div>
       </div>
 
       {/* Tabs Layout */}
-      <div className="flex bg-white border border-black/[0.03] p-2.5 rounded-[2.5rem] shadow-soft overflow-x-auto no-scrollbar whitespace-nowrap lg:justify-start">
+      <div className="flex bg-slate-100 p-1.5 rounded-2xl shadow-sm overflow-x-auto no-scrollbar whitespace-nowrap">
          {['Active', 'Past', 'Cancelled'].map(tab => (
            <button
              key={tab}
              onClick={() => setActiveTab(tab)}
-             className={`h-16 px-10 rounded-[1.8rem] font-syne font-black text-xs uppercase italic tracking-widest transition-all duration-700 active:scale-95 flex items-center gap-3 ${activeTab === tab ? 'bg-[#0a1628] text-brand-teal shadow-4xl' : 'text-gray-300 hover:text-[#0a1628]'}`}
+             className={`h-11 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95 flex items-center gap-2 ${activeTab === tab ? 'bg-slate-900 text-teal-400 shadow-md' : 'text-slate-400 hover:text-slate-900'}`}
            >
-              {tab === 'Active' && <Clock size={16}/>}
-              {tab === 'Past' && <CheckCircle size={16}/>}
-              {tab === 'Cancelled' && <AlertCircle size={16}/>}
-              {tab} Protocol
+              {tab}
            </button>
          ))}
       </div>
@@ -133,7 +124,7 @@ export default function MyOrdersPage() {
                          initial={{ opacity: 0, y: 30 }}
                          animate={{ opacity: 1, y: 0 }}
                          transition={{ delay: idx * 0.05 }}
-                         className="bg-white border border-black/[0.03] rounded-[3rem] md:rounded-[4.5rem] p-8 md:p-12 shadow-soft hover:shadow-4xl transition-all duration-700 group overflow-hidden border-l-[16px] md:border-l-[24px]"
+                         className="bg-white border border-black/[0.03] rounded-2xl p-4 md:p-8 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border-l-4"
                          style={{ borderLeftColor: currentStatus.color.includes('teal') ? '#02C39A' : currentStatus.color.includes('emerald') ? '#10b981' : currentStatus.color.includes('amber') ? '#f59e0b' : '#3b82f6' }}
                       >
                          <div className="flex flex-col md:flex-row md:items-start justify-between gap-10">
@@ -174,11 +165,11 @@ export default function MyOrdersPage() {
                                        <span className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-[0.2em]">Transmission Timeline</span>
                                        <span className={`px-4 py-1 rounded-lg text-[9px] font-black uppercase italic tracking-widest ${currentStatus.color}`}>{currentStatus.label} Node Active</span>
                                     </div>
-                                    <div className="relative h-2 md:h-3 bg-gray-50 rounded-full overflow-hidden border border-black/[0.01]">
+                                    <div className="relative h-1 bg-slate-100 rounded-full overflow-hidden">
                                        <motion.div 
                                           initial={{ width: 0 }}
                                           animate={{ width: `${((currentStatus.step + 1) / 5) * 100}%` }}
-                                          className={`h-full bg-brand-teal shadow-mint transition-all duration-1000 ${currentStatus.step === 4 ? 'bg-emerald-500 shadow-emerald-500/40' : ''}`}
+                                          className={`h-full bg-teal-500 shadow-sm transition-all duration-1000 ${currentStatus.step === 4 ? 'bg-emerald-500' : ''}`}
                                        />
                                     </div>
                                     <div className="flex justify-between px-1">

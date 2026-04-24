@@ -28,6 +28,7 @@ import notificationRoutes from './routes/notificationRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+import deliveryRoutes from './routes/deliveryRoutes.js';
 import { getPublicStats } from './controllers/publicController.js';
 
 import { errorHandler, notFound } from './middleware/errorHandler.js';
@@ -85,6 +86,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/delivery', deliveryRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
