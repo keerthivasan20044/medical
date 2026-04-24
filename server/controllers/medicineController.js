@@ -7,7 +7,7 @@ export async function getAllMedicines(req, res) {
       requiresPrescription, sort, page = 1, limit = 20 
     } = req.query;
     
-    const query = { isActive: { $ne: false } };
+    const query = {};
     if (q) query.$or = [
       { name: { $regex: q, $options: 'i' } },
       { brand: { $regex: q, $options: 'i' } }

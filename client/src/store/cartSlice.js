@@ -208,4 +208,5 @@ export const selectCartPersist = (state) => ({
   note: state.note,
   prescription: state.prescription
 });
+export const cartActions = cartSlice.actions;
 export default cartSlice.reducer;
