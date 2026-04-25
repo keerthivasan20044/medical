@@ -155,83 +155,98 @@ export default function MedicinesListPage() {
   }, []);
 
 
-  const FilterPanel = ({ isMobile = false }) => (
-    <div className={`space-y-10 ${isMobile ? 'p-8 pb-32' : ''}`}>
-       <div className="space-y-2">
-          <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Options</div>
-          <h3 className="font-syne font-black text-2xl md:text-3xl uppercase italic tracking-tighter text-[#0a1628]">Filters</h3>
-       </div>
+  const FilterPanel = ({ isMobile = false }) => {
+    const [pharmacyOptions, setPharmacyOptions] = useState([]);
 
-       {/* Categories */}
-       <div className="space-y-6 pt-8 border-t border-black/[0.03]">
-          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Category</div>
-          <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
-             {categories.map(cat => (
-                <button 
-                  key={cat.name} 
-                  onClick={() => toggleCategory(cat.name)}
-                  className="w-full flex items-center justify-between group cursor-pointer"
-                >
-                   <div className="flex items-center gap-4">
-                      <div className={`h-5 w-5 rounded-lg border-2 transition-all flex items-center justify-center ${selectedCategories.includes(cat.name) ? 'bg-brand-teal border-brand-teal text-[#0a1628]' : 'bg-white border-black/[0.1] text-transparent'}`}>
-                         <CheckCircle2 size={10}/>
-                      </div>
-                      <span className={`font-syne font-black text-[11px] uppercase italic tracking-widest transition-colors ${selectedCategories.includes(cat.name) ? 'text-brand-teal' : 'text-gray-400 group-hover:text-[#0a1628]'}`}>{cat.name}</span>
-                   </div>
-                   <span className="text-[9px] font-black text-gray-200 font-syne">{cat.count}</span>
-                </button>
-             ))}
-          </div>
-       </div>
+    useEffect(() => {
+      const fetchPharmacies = async () => {
+        try {
+          const data = await pharmacyService.getAll();
+          setPharmacyOptions(data.items || data || []);
+        } catch (err) {
+          setPharmacyOptions([]);
+        }
+      };
+      fetchPharmacies();
+    }, []);
 
-       {/* Price Slider */}
-       <div className="space-y-6 pt-8 border-t border-black/[0.03]">
-          <div className="flex justify-between items-center">
-             <span className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Price Limit</span>
-             <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold text-gray-400">₹</span>
-                <input 
-                  type="number"
-                  value={priceRange}
-                  onChange={(e) => setPriceRange(Math.min(2500, Math.max(0, parseInt(e.target.value) || 0)))}
-                  className="w-16 bg-gray-50 border-none text-brand-teal font-syne font-black italic text-sm outline-none p-0 focus:ring-0"
-                />
-             </div>
-          </div>
-          <div className="space-y-3">
-            <input 
-              type="range" min="0" max="2500" step="50" 
-              className="w-full h-1 bg-gray-100 rounded-full appearance-none accent-brand-teal cursor-pointer"
-              value={priceRange}
-              onChange={(e) => setPriceRange(parseInt(e.target.value))}
-            />
-            <div className="flex justify-between text-[10px] font-black text-gray-300 uppercase italic">
-               <span>₹0</span>
-               <span>₹2500</span>
+    return (
+      <div className={`space-y-10 ${isMobile ? 'p-8 pb-32' : ''}`}>
+         <div className="space-y-2">
+            <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Options</div>
+            <h3 className="font-syne font-black text-2xl md:text-3xl uppercase italic tracking-tighter text-[#0a1628]">Filters</h3>
+         </div>
+  
+         {/* Categories */}
+         <div className="space-y-6 pt-8 border-t border-black/[0.03]">
+            <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Category</div>
+            <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
+               {categories.map(cat => (
+                  <button 
+                    key={cat.name} 
+                    onClick={() => toggleCategory(cat.name)}
+                    className="w-full flex items-center justify-between group cursor-pointer"
+                  >
+                     <div className="flex items-center gap-4">
+                        <div className={`h-5 w-5 rounded-lg border-2 transition-all flex items-center justify-center ${selectedCategories.includes(cat.name) ? 'bg-brand-teal border-brand-teal text-[#0a1628]' : 'bg-white border-black/[0.1] text-transparent'}`}>
+                           <CheckCircle2 size={10}/>
+                        </div>
+                        <span className={`font-syne font-black text-[11px] uppercase italic tracking-widest transition-colors ${selectedCategories.includes(cat.name) ? 'text-brand-teal' : 'text-gray-400 group-hover:text-[#0a1628]'}`}>{cat.name}</span>
+                     </div>
+                     <span className="text-[9px] font-black text-gray-200 font-syne">{cat.count}</span>
+                  </button>
+               ))}
             </div>
-          </div>
-       </div>
-
-       {/* Pharmacy Filters */}
-       <div className="space-y-6 pt-8 border-t border-black/[0.03]">
-          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Available at Pharmacies</div>
-          <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
-             {pharmacies.slice(0, 10).map(p => (
-                <button 
-                  key={p.id} 
-                  onClick={() => togglePharmacy(p.id)}
-                  className="w-full flex items-center justify-between group cursor-pointer"
-                >
-                   <div className="flex items-center gap-4">
-                      <div className={`h-5 w-5 rounded-lg border-2 transition-all flex items-center justify-center ${selectedPharmacies.includes(p.id) ? 'bg-[#0a1628] border-[#0a1628] text-brand-teal' : 'bg-white border-black/[0.1] text-transparent'}`}>
-                         <CheckCircle2 size={10}/>
-                      </div>
-                      <span className={`font-syne font-black text-[11px] uppercase italic tracking-widest transition-colors ${selectedPharmacies.includes(p.id) ? 'text-[#0a1628]' : 'text-gray-400 group-hover:text-[#0a1628]'}`}>{p.name}</span>
-                   </div>
-                </button>
-             ))}
-          </div>
-       </div>
+         </div>
+  
+         {/* Price Slider */}
+         <div className="space-y-6 pt-8 border-t border-black/[0.03]">
+            <div className="flex justify-between items-center">
+               <span className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Price Limit</span>
+               <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-bold text-gray-400">₹</span>
+                  <input 
+                    type="number"
+                    value={priceRange}
+                    onChange={(e) => setPriceRange(Math.min(2500, Math.max(0, parseInt(e.target.value) || 0)))}
+                    className="w-16 bg-gray-50 border-none text-brand-teal font-syne font-black italic text-sm outline-none p-0 focus:ring-0"
+                  />
+               </div>
+            </div>
+            <div className="space-y-3">
+              <input 
+                type="range" min="0" max="2500" step="50" 
+                className="w-full h-1 bg-gray-100 rounded-full appearance-none accent-brand-teal cursor-pointer"
+                value={priceRange}
+                onChange={(e) => setPriceRange(parseInt(e.target.value))}
+              />
+              <div className="flex justify-between text-[10px] font-black text-gray-300 uppercase italic">
+                 <span>₹0</span>
+                 <span>₹2500</span>
+              </div>
+            </div>
+         </div>
+  
+         {/* Pharmacy Filters */}
+         <div className="space-y-6 pt-8 border-t border-black/[0.03]">
+            <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Available at Pharmacies</div>
+            <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
+               {pharmacyOptions.map(p => (
+                  <button 
+                    key={p.id || p._id} 
+                    onClick={() => togglePharmacy(p.id || p._id)}
+                    className="w-full flex items-center justify-between group cursor-pointer"
+                  >
+                     <div className="flex items-center gap-4">
+                        <div className={`h-5 w-5 rounded-lg border-2 transition-all flex items-center justify-center ${selectedPharmacies.includes(p.id || p._id) ? 'bg-[#0a1628] border-[#0a1628] text-brand-teal' : 'bg-white border-black/[0.1] text-transparent'}`}>
+                           <CheckCircle2 size={10}/>
+                        </div>
+                        <span className={`font-syne font-black text-[11px] uppercase italic tracking-widest transition-colors ${selectedPharmacies.includes(p.id || p._id) ? 'text-[#0a1628]' : 'text-gray-400 group-hover:text-[#0a1628]'}`}>{p.name}</span>
+                     </div>
+                  </button>
+               ))}
+            </div>
+         </div>
 
        {/* Stock Status */}
        <div className="space-y-4 pt-8 border-t border-black/[0.03]">

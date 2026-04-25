@@ -72,6 +72,9 @@ export const registerUser = createAsyncThunk('auth/register', async (payload, th
 
 export const fetchMe = createAsyncThunk('auth/me', async (_, thunkAPI) => {
   try {
+    const token = localStorage.getItem('authToken');
+    if (!token) return thunkAPI.rejectWithValue('No token');
+    
     const res = await api.get('/api/users/me');
     return res.data.user;
   } catch (e) {

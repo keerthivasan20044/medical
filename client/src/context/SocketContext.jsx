@@ -14,13 +14,17 @@ export const SocketProvider = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Connect for all users to maintain 'Sync Status'
-    if (!socket.connected) {
-      socket.connect();
-    }
-    
+    // Only connect if user is authenticated
     if (user) {
-      socket.emit('user:join', { id: user.id || user._id, role: user.role });
+      if (!socket.connected) {
+        socket.connect(user.id || user._id, user.role);
+      }
+    } else {
+      if (socket.connected) {
+        socket.disconnect();
+      }
+      setIsConnected(false);
+      return;
     }
 
     function onConnect() { setIsConnected(true); }

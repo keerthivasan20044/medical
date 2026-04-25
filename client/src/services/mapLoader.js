@@ -5,9 +5,9 @@
  */
 export const loadGoogleMaps = () => {
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-  if (!apiKey) {
-    console.warn('⚠️ Maps Error: Google Maps API Key is missing. Map features disabled.');
-    return;
+  if (!apiKey || apiKey === 'undefined' || apiKey === 'YOUR_KEY_HERE' || apiKey === 'your_google_maps_key_here') {
+    console.warn('⚠️ Maps Error: Google Maps API key not configured. Maps disabled.');
+    return Promise.resolve(null);
   }
 
   // Already fully loaded
