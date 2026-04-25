@@ -8,7 +8,8 @@
 export const checkClientEnv = () => {
     const required = [
       'VITE_API_BASE_URL',
-      'VITE_RAZORPAY_KEY_ID'
+      'VITE_RAZORPAY_KEY_ID',
+      'VITE_GOOGLE_MAPS_API_KEY'
     ];
   
     const missing = required.filter(key => !import.meta.env[key]);
