@@ -232,7 +232,7 @@ export function KaraikalPharmacies() {
                      <div className="pt-8 border-t-2 border-dashed border-black/[0.05] flex items-center justify-between">
                         <div className="space-y-1">
                            <div className="text-[9px] text-gray-300 font-black uppercase tracking-widest italic leading-none">{t('licenseNumber') || 'Pharmacy ID'}</div>
-                           <div className="text-[#0a1628] font-black font-syne text-sm uppercase italic tracking-tighter">PH-KKL-{33+idx}</div>
+                           <div className="text-[#0a1628] font-black font-syne text-sm uppercase italic tracking-tighter">PH-KKL-{33+i}</div>
                         </div>
                         <Link to={`/pharmacies/${p.id}`} className="h-16 w-16 bg-[#0a1628] text-brand-teal rounded-2xl flex items-center justify-center transition-all duration-500 hover:scale-110 active:scale-95 shadow-4xl group/link">
                            <ChevronRight size={28} className="group-hover:translate-x-1 transition-transform" />
