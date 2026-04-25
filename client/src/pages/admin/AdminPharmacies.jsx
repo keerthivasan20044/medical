@@ -1,32 +1,59 @@
 import { useState, useEffect } from 'react';
 import DataTable from '../../components/dashboard/DataTable';
-import { Store, MapPin, Star, ShieldCheck, AlertCircle, Plus, Filter } from 'lucide-react';
+import { pharmacyService } from '../../services/apiServices';
+import { Store, MapPin, Star, ShieldCheck, AlertCircle, Plus, Filter, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function AdminPharmacies() {
   const [activeTab, setActiveTab] = useState('active');
-  const [loading, setLoading] = useState(false);
+  const [pharmacies, setPharmacies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [search, setSearch] = useState('');
 
-  const PHARMACIES = [
-    { id: '1', name: 'Apollo Pharmacy', city: 'Karaikal', rating: 4.8, status: 'active', orders: 1245 },
-    { id: '2', name: 'MedPlus', city: 'Puducherry', rating: 4.5, status: 'active', orders: 890 },
-    { id: '3', name: 'Sri Murugan Medical', city: 'Nagore', rating: 4.9, status: 'pending', orders: 0 },
-    { id: '4', name: 'Karaikal Central', city: 'Karaikal', rating: 4.2, status: 'suspended', orders: 45 },
-  ];
+  const fetchPharmacies = async (pageNum = 1, searchQuery = '', status = 'active') => {
+    try {
+      setLoading(true);
+      const params = { 
+        page: pageNum, 
+        limit: 10, 
+        search: searchQuery,
+        status: status === 'all' ? '' : status
+      };
+      const data = await pharmacyService.getAll(params);
+      setPharmacies(data.items || []);
+      setPage(data.page || 1);
+      setTotalPages(data.pages || 1);
+      setTotalRecords(data.total || 0);
+    } catch (e) {
+      toast.error('Failed to load pharmacies');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const filteredData = PHARMACIES.filter(p => p.status === activeTab || activeTab === 'all');
+  useEffect(() => {
+    const timer = setTimeout(() => fetchPharmacies(1, search, activeTab), 500);
+    return () => clearTimeout(timer);
+  }, [search, activeTab]);
+
+  const handlePageChange = (newPage) => {
+    fetchPharmacies(newPage, search, activeTab);
+  };
 
   return (
     <div className="space-y-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Pharmacy Nodes</h1>
-          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Authorized Distribution Centers</p>
+          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Pharmacies</h1>
+          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Managed Pharmacies</p>
         </div>
         <button 
           className="h-14 px-8 bg-brand-teal text-navy rounded-[2rem] font-syne font-black text-xs uppercase tracking-widest flex items-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-brand-teal/20"
         >
-          <Plus size={18} /> Register New Node
+          <Plus size={18} /> Register Pharmacy
         </button>
       </div>
 
@@ -46,8 +73,13 @@ export default function AdminPharmacies() {
       </div>
 
       <DataTable 
-        title={`${activeTab} Nodes`}
+        title={`${activeTab === 'all' ? 'All' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Pharmacies`}
         isLoading={loading}
+        onSearch={setSearch}
+        currentPage={page}
+        totalPages={totalPages}
+        totalRecords={totalRecords}
+        onPageChange={handlePageChange}
         columns={[
           { 
             key: 'name', 
@@ -90,7 +122,7 @@ export default function AdminPharmacies() {
             )
           }
         ]}
-        data={filteredData}
+        data={pharmacies}
         actions={true}
       />
     </div>

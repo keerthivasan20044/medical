@@ -12,48 +12,55 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error("Enclave Crash Report:", error, errorInfo);
+    console.error("Application Error:", error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#0a1628] flex items-center justify-center p-8">
-           <div className="max-w-xl w-full bg-white rounded-[3rem] p-12 text-center space-y-8 relative overflow-hidden border-t-[12px] border-red-500 shadow-4xl">
-              <div className="absolute top-0 right-0 h-40 w-40 bg-red-500 opacity-5 rounded-full blur-[80px]" />
-              
-              <div className="h-24 w-24 bg-red-50 rounded-[2rem] flex items-center justify-center mx-auto text-red-500 shadow-inner">
-                 <ShieldX size={48} />
-              </div>
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center p-6">
+          <div className="max-w-md w-full bg-white rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 inset-x-0 h-2 bg-red-500" />
+            
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-red-50 flex items-center justify-center text-red-500">
+              <AlertTriangle size={40} />
+            </div>
 
-              <div className="space-y-4">
-                 <h2 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic leading-none tracking-tighter">Terminal <span className="text-red-500">Compromised</span></h2>
-                 <p className="text-gray-400 font-dm text-lg italic font-bold">The clinical synchronization bridge has encountered an unexpected architecture failure.</p>
-              </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Something Went Wrong</h1>
+            <p className="text-slate-600 mb-8 leading-relaxed">
+              We hit an unexpected error while loading this page. Please try refreshing or return to the home screen.
+            </p>
 
-              <div className="p-6 bg-gray-50 rounded-2xl border border-red-100/50 text-left font-mono text-[10px] text-red-400 overflow-x-auto">
-                 {this.state.error?.toString()}
-              </div>
+            {this.state.error && (
+              <details className="mb-8 text-left bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <summary className="text-xs font-semibold text-slate-500 cursor-pointer uppercase tracking-wider select-none">
+                  Error Details
+                </summary>
+                <code className="block mt-2 text-[10px] text-red-500 font-mono break-all">
+                  {this.state.error.message || this.state.error.toString()}
+                </code>
+              </details>
+            )}
 
-              <div className="grid grid-cols-2 gap-4">
-                 <button 
-                    onClick={() => window.location.reload()}
-                    className="flex items-center justify-center gap-3 h-16 bg-[#0a1628] text-white rounded-2xl font-syne font-black text-xs uppercase tracking-widest hover:bg-[#028090] transition"
-                 >
-                    <RefreshCw size={18} /> Reboot Node
-                 </button>
-                 <button 
-                    onClick={() => window.location.href = '/'}
-                    className="flex items-center justify-center gap-3 h-16 bg-gray-50 text-gray-400 rounded-2xl font-syne font-black text-xs uppercase tracking-widest hover:bg-gray-100 transition"
-                 >
-                    <Home size={18} /> Exit Enclave
-                 </button>
-              </div>
+            <div className="grid grid-cols-2 gap-4">
+              <button 
+                onClick={() => window.location.reload()}
+                className="flex items-center justify-center gap-2 py-4 bg-teal-500 text-white rounded-xl font-bold hover:bg-teal-600 transition-all shadow-lg shadow-teal-500/20"
+              >
+                <RefreshCw size={18} /> Refresh Page
+              </button>
+              <button 
+                onClick={() => window.location.href = '/'}
+                className="flex items-center justify-center gap-2 py-4 border border-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-50 transition-all"
+              >
+                <Home size={18} /> Go Home
+              </button>
+            </div>
 
-              <div className="flex items-center justify-center gap-4 text-[9px] font-black uppercase italic tracking-[0.4em] text-gray-200">
-                 <AlertTriangle size={12}/> Emergency Override Status: Active
-              </div>
-           </div>
+            <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-center gap-2 text-xs font-medium text-slate-400">
+              <ShieldX size={14} /> Error logged for review
+            </div>
+          </div>
         </div>
       );
     }

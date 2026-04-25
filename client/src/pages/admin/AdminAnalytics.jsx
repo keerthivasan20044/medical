@@ -28,8 +28,8 @@ export default function AdminAnalytics() {
     <div className="space-y-10 pb-20">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Intelligence Unit</h1>
-          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Analytical Performance Matrices</p>
+          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Analytics</h1>
+          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Track Performance and Metrics</p>
         </div>
         <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border border-gray-100">
            <Calendar size={18} className="text-navy/40 ml-2" />
@@ -50,7 +50,7 @@ export default function AdminAnalytics() {
                 <TrendingUp size={24} />
               </div>
               <div>
-                <h3 className="font-syne font-black text-xl text-navy uppercase italic">Performance Convergence</h3>
+                <h3 className="font-syne font-black text-xl text-navy uppercase italic">Revenue Trends</h3>
                 <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest">Growth vs Previous Period</p>
               </div>
             </div>
@@ -71,7 +71,7 @@ export default function AdminAnalytics() {
         </div>
 
         <div className="lg:col-span-4 bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-sm flex flex-col">
-          <h3 className="font-syne font-black text-xl text-navy uppercase italic mb-8">Niche Distribution</h3>
+          <h3 className="font-syne font-black text-xl text-navy uppercase italic mb-8">Category Breakdown</h3>
           <div className="flex-1 h-[300px]">
              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>

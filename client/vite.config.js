@@ -108,12 +108,14 @@ export default defineConfig({
   },
 
   build: {
+    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-ui': ['framer-motion', 'lucide-react', 'react-hot-toast'],
-          'vendor-store': ['@reduxjs/toolkit', 'react-redux']
+          'vendor-store': ['@reduxjs/toolkit', 'react-redux'],
+          'socket': ['socket.io-client']
         }
       }
     },

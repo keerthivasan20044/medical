@@ -3,38 +3,50 @@ import Medicine from '../models/Medicine.js';
 import Order from '../models/Order.js';
 
 // GET /api/pharmacies
-export const getPharmacies = async (req, res) => {
+export const getPharmacies = async (req, res, next) => {
   try {
-    const { search, city, rating, service, sort, page = 1, limit = 10 } = req.query;
-    const query = { status: 'active' };
+    const { search, q, city, rating, service, sort, page = 1, limit = 10 } = req.query;
+    
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 10;
+    const skip = (pageNum - 1) * limitNum;
 
-    if (search) query.name = { $regex: search, $options: 'i' };
+    const query = { status: 'active' };
+    const searchTerm = search || q;
+
+    if (searchTerm) query.name = { $regex: searchTerm, $options: 'i' };
     if (city) query.city = city;
     if (rating) query.rating = { $gte: parseFloat(rating) };
     if (service) query.services = { $in: [service] };
 
     let sortQuery = { rating: -1 };
-    if (sort === 'nearest') {
-       // Logic for nearest would need user location, handled in separate 'nearby' endpoint
-    } else if (sort === 'alphabetical') {
-       sortQuery = { name: 1 };
-    }
+    if (sort === 'rating') sortQuery = { rating: -1 };
+    if (sort === 'alphabetical') sortQuery = { name: 1 };
+    if (sort === 'newest') sortQuery = { createdAt: -1 };
 
-    const pharmacies = await Pharmacy.find(query)
-      .sort(sortQuery)
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .exec();
+    const [items, total] = await Promise.all([
+      Pharmacy.find(query)
+        .sort(sortQuery)
+        .skip(skip)
+        .limit(limitNum)
+        .lean(),
+      Pharmacy.countDocuments(query)
+    ]);
 
-    const count = await Pharmacy.countDocuments(query);
+    const pages = Math.ceil(total / limitNum);
 
     res.json({
-      pharmacies,
-      totalPages: Math.ceil(count / limit),
-      currentPage: page
+      success: true,
+      items,
+      total,
+      page: pageNum,
+      pages,
+      limit: limitNum,
+      hasNext: pageNum < pages,
+      hasPrev: pageNum > 1
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 };
 

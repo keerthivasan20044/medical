@@ -12,11 +12,17 @@ import { pharmacies } from '../../utils/data.js';
 import { medicineService } from '../../services/apiServices';
 import { addToCart } from '../../store/cartSlice.js';
 import MedicineCard from '../../components/medicine/MedicineCard';
+import Pagination from '../../components/common/Pagination';
+import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 
 export default function MedicinesListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [total, setTotal] = useState(0);
   const [viewMode, setViewMode] = useState('grid');
   const [showFilters, setShowFilters] = useState(false);
 
@@ -41,6 +47,8 @@ export default function MedicinesListPage() {
         newParams.set(key, value);
       }
     });
+    // Reset to page 1 when filters change
+    newParams.set('page', '1');
     setSearchParams(newParams);
   };
 
@@ -76,7 +84,7 @@ export default function MedicinesListPage() {
       id: item._id || item.id,
       name: item.name,
       price: item.price,
-      image: item.images?.[0] || '/assets/medicine_default.png',
+      image: item.images?.[0]?.url || item.image || '/assets/medicine_default.png',
       brand: item.brand,
       quantity: 1
     }));
@@ -84,61 +92,67 @@ export default function MedicinesListPage() {
   };
 
   useEffect(() => {
-    fetchMedicines();
-  }, [searchQuery, selectedCategories, selectedPharmacies]);
+    const currentPage = parseInt(searchParams.get('page')) || 1;
+    fetchMedicines(currentPage, false);
+  }, [searchQuery, selectedCategories, selectedPharmacies, priceRange, rxFilter, availability, sortBy, searchParams]);
 
-  const fetchMedicines = async () => {
+  const fetchMedicines = async (pageNum, append = false) => {
     try {
-      setLoading(true);
+      if (append) setLoadingMore(true);
+      else setLoading(true);
+
       const params = {
-        limit: 100, // Fetch more for local filtering or pass all filters to API
+        page: pageNum,
+        limit: 12,
         q: searchQuery,
+        sort: sortBy === 'Price ↑' ? 'price_asc' : sortBy === 'Price ↓' ? 'price_desc' : sortBy === 'Rating' ? 'rating' : 'newest'
       };
-      if (selectedCategories.length > 0) params.category = selectedCategories[0]; // Backend currently supports single category
+      
+      if (selectedCategories.length > 0) params.category = selectedCategories[0];
       if (selectedPharmacies.length > 0) params.pharmacyId = selectedPharmacies[0];
+      if (priceRange < 10000) params.maxPrice = priceRange;
+      if (rxFilter !== 'Both') params.requiresPrescription = rxFilter === 'Yes';
       
       const data = await medicineService.getAll(params);
-      setMedicines(data.items || []);
+      
+      if (append) {
+        setMedicines(prev => [...prev, ...(data.items || [])]);
+      } else {
+        setMedicines(data.items || []);
+      }
+      
+      setPages(data.pages || 1);
+      setPage(data.page || 1);
+      setTotal(data.total || 0);
     } catch (err) {
       console.error('Failed to load medicines:', err);
+      toast.error('Failed to load medicines. Please try again.');
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
+  const handlePageChange = (pageNum) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('page', pageNum.toString());
+    setSearchParams(newParams);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLoadMore = () => {
+    if (page < pages && !loadingMore) {
+      fetchMedicines(page + 1, true);
+    }
+  };
+
+  const observerTarget = useInfiniteScroll(handleLoadMore, page < pages, loading || loadingMore);
+
+  // Mock categories from items for now, ideally backend provides this
   const categories = useMemo(() => {
-    const counts = {};
-    medicines.forEach(m => {
-      counts[m.category] = (counts[m.category] || 0) + 1;
-    });
-    return Object.keys(counts).map(cat => ({ name: cat, count: counts[cat] }));
-  }, [medicines]);
-
-  const pharmacyOptions = pharmacies.map(p => ({ id: p._id || p.id, name: p.name }));
-
-  const filteredMedicines = useMemo(() => {
-    let result = medicines.filter(m => {
-      const name = m.name || '';
-      const brand = m.brand || '';
-      const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                           brand.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(m.category);
-      const matchesPharmacy = selectedPharmacies.length === 0 || selectedPharmacies.includes(m.pharmacy?._id || m.pharmacy);
-      const matchesPrice = (m.price || 0) <= priceRange;
-      const matchesRx = rxFilter === 'Both' || (rxFilter === 'Yes' ? m.requiresPrescription : !m.requiresPrescription);
-      const matchesStock = availability === 'All' || (m.stock !== undefined ? m.stock > 0 : true);
-      
-      return matchesSearch && matchesCategory && matchesPharmacy && matchesPrice && matchesRx && matchesStock;
-    });
-
-    if (sortBy === 'Price ↑') result.sort((a, b) => a.price - b.price);
-    if (sortBy === 'Price ↓') result.sort((a, b) => b.price - a.price);
-    if (sortBy === 'Rating' || sortBy === 'Popularity') result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    if (sortBy === 'Most Popular') result.sort((a, b) => (b.soldCount || 0) - (a.soldCount || 0));
-    if (sortBy === 'New arrivals') result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    
-    return result;
-  }, [medicines, searchQuery, selectedCategories, selectedPharmacies, priceRange, rxFilter, availability, sortBy]);
+    const defaultCats = ['Tablets', 'Capsules', 'Syrups', 'Injections', 'Creams', 'Vitamins'];
+    return defaultCats.map(cat => ({ name: cat, count: 'Live' }));
+  }, []);
 
 
   const FilterPanel = ({ isMobile = false }) => (
@@ -304,7 +318,7 @@ export default function MedicinesListPage() {
                   <div className="flex items-center gap-4 md:gap-6">
                      <div className="h-2 w-16 bg-brand-teal rounded-full animate-pulse hidden md:block" />
                       <h2 className="text-base font-bold text-slate-900 uppercase tracking-tight">
-                         {filteredMedicines.length} Medicines Found
+                         {total} Medicines Found
                       </h2>
                   </div>
                   
@@ -333,7 +347,7 @@ export default function MedicinesListPage() {
                             <option>Most Popular</option>
                             <option>Price ↑</option>
                             <option>Price ↓</option>
-                            <option>Popularity</option>
+                            <option>Rating</option>
                             <option>New arrivals</option>
                          </select>
                         <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-300 group-hover:text-[#0a1628]" />
@@ -341,7 +355,7 @@ export default function MedicinesListPage() {
                   </div>
                </div>
 
-               {loading ? (
+               {loading && page === 1 ? (
                   <div className="min-h-[50vh] flex flex-col items-center justify-center space-y-12">
                      <div className="relative">
                         <motion.div 
@@ -359,41 +373,61 @@ export default function MedicinesListPage() {
                      </div>
                   </div>
                ) : (
-                  <motion.div 
-                    layout
-                    className={`grid gap-3 md:gap-8 px-3 md:px-0 ${viewMode === 'grid' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5' : 'grid-cols-1'}`}
-                  >
-                   <AnimatePresence mode="popLayout">
-                     {filteredMedicines.map((m, idx) => (
-                       <MedicineCard 
-                          key={m._id || m.id}
-                          item={m} 
-                          layout={viewMode} 
-                          onAdd={handleAddToCart} 
-                          isAdded={cartItems.some(item => item.id === (m._id || m.id))}
-                       />
-                     ))}
-                   </AnimatePresence>
+                  <div className="space-y-8">
+                    <motion.div 
+                      layout
+                      className={`grid gap-3 md:gap-8 px-3 md:px-0 ${viewMode === 'grid' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5' : 'grid-cols-1'}`}
+                    >
+                     <AnimatePresence mode="popLayout">
+                       {medicines.map((m, idx) => (
+                         <MedicineCard 
+                            key={m._id || m.id}
+                            item={m} 
+                            layout={viewMode} 
+                            onAdd={handleAddToCart} 
+                            isAdded={cartItems.some(item => item.id === (m._id || m.id))}
+                         />
+                       ))}
+                     </AnimatePresence>
 
-                   {filteredMedicines.length === 0 && (
-                      <div className="col-span-full py-40 flex flex-col items-center justify-center text-center space-y-8 bg-white rounded-[4rem] border border-black/[0.03] shadow-soft relative overflow-hidden">
-                         <div className="absolute top-0 right-0 h-96 w-96 bg-brand-teal opacity-[0.02] rounded-full blur-[100px] pointer-events-none" />
-                         <div className="h-28 w-28 bg-gray-50 rounded-[2.5rem] flex items-center justify-center text-gray-200 border-2 border-dashed border-gray-100 italic">
-                            <Pill size={56} strokeWidth={1} />
-                         </div>
-                         <div className="space-y-4 max-w-sm mx-auto">
-                            <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none tracking-tighter">No Medicines Found</h3>
-                            <p className="text-gray-400 font-dm italic font-bold text-lg leading-relaxed">Try adjusting your filters or searching for something else.</p>
-                         </div>
-                         <button 
-                            onClick={resetFilters}
-                            className="h-14 px-10 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-[0.2em] rounded-2xl hover:bg-brand-teal hover:text-white transition-all duration-700 shadow-2xl active:scale-95"
-                         >
-                            Reset All Filters
-                         </button>
-                      </div>
-                   )}
-                 </motion.div>
+                     {medicines.length === 0 && (
+                        <div className="col-span-full py-40 flex flex-col items-center justify-center text-center space-y-8 bg-white rounded-[4rem] border border-black/[0.03] shadow-soft relative overflow-hidden">
+                           <div className="absolute top-0 right-0 h-96 w-96 bg-brand-teal opacity-[0.02] rounded-full blur-[100px] pointer-events-none" />
+                           <div className="h-28 w-28 bg-gray-50 rounded-[2.5rem] flex items-center justify-center text-gray-200 border-2 border-dashed border-gray-100 italic">
+                              <Pill size={56} strokeWidth={1} />
+                           </div>
+                           <div className="space-y-4 max-w-sm mx-auto">
+                              <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none tracking-tighter">No Medicines Found</h3>
+                              <p className="text-gray-400 font-dm italic font-bold text-lg leading-relaxed">Try adjusting your filters or searching for something else.</p>
+                           </div>
+                           <button 
+                              onClick={resetFilters}
+                              className="h-14 px-10 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-[0.2em] rounded-2xl hover:bg-brand-teal hover:text-white transition-all duration-700 shadow-2xl active:scale-95"
+                           >
+                              Reset All Filters
+                           </button>
+                        </div>
+                     )}
+                   </motion.div>
+
+                   {/* Pagination for Desktop */}
+                   <div className="hidden md:block">
+                     <Pagination 
+                       page={page} 
+                       pages={pages} 
+                       onPageChange={handlePageChange} 
+                     />
+                   </div>
+
+                   {/* Infinite Scroll Target for Mobile */}
+                   <div className="md:hidden py-10 flex justify-center">
+                      {loadingMore ? (
+                         <Loader2 size={24} className="animate-spin text-brand-teal" />
+                      ) : (
+                         <div ref={observerTarget} className="h-10 w-full" />
+                      )}
+                   </div>
+                 </div>
                )}
             </div>
          </div>

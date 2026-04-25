@@ -53,7 +53,7 @@ export function VaccineShowcase() {
                </h2>
                <div className="hidden lg:flex items-center gap-4 bg-white/50 backdrop-blur-xl px-8 py-4 rounded-[2rem] border border-black/[0.03]">
                   <Activity size={24} className="text-teal-400 animate-pulse" />
-                  <span className="text-[10px] font-black text-[navy] uppercase tracking-[0.3em] italic">Everything Ready</span>
+                  <span className="text-[10px] font-black text-[navy] uppercase tracking-[0.3em] italic">{t('readyStatus') || 'Everything Ready'}</span>
                </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
@@ -129,7 +129,7 @@ export function HowItWorks() {
                <h2 className="font-syne font-black text-white text-4xl md:text-8xl leading-none uppercase italic tracking-tighter drop-shadow-4xl">
                   {t('howItWorks')}
                </h2>
-               <p className="text-white/30 font-dm text-lg md:text-2xl italic font-bold max-w-3xl mx-auto">Karaikal Healthcare Network</p>
+               <p className="text-white/30 font-dm text-lg md:text-2xl italic font-bold max-w-3xl mx-auto">{t('karaikalNetwork') || 'Karaikal Healthcare Network'}</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-12 relative">
@@ -166,10 +166,10 @@ export function HowItWorks() {
 export function DoctorsConsultation() {
    const { t } = useLanguage();
    const DOCS = [
-      { name: 'Dr. S. Priya Raman', spec: 'General Physician', rating: 4.8, fee: 200, status: 'Online Now', color: 'bg-emerald-500', img: doctorImg },
-      { name: 'Dr. K. Anand Kumar', spec: 'Cardiologist', rating: 4.9, fee: 500, status: 'Online', color: 'bg-teal-400', img: doctorImg },
-      { name: 'Dr. M. Meena Krishnan', spec: 'Pediatrician', rating: 4.7, fee: 300, status: 'Busy', color: 'bg-amber-500', img: doctorImg },
-      { name: 'Dr. R. Suresh Prabhu', spec: 'Dermatologist', rating: 4.6, fee: 350, status: 'Offline', color: 'bg-gray-400', img: doctorImg }
+      { name: 'Dr. S. Priya Raman', spec: 'General Physician', rating: 4.8, fee: 200, status: t('onlineNow') || 'Online Now', color: 'bg-emerald-500', img: doctorImg },
+      { name: 'Dr. K. Anand Kumar', spec: 'Cardiologist', rating: 4.9, fee: 500, status: t('activeStatus') || 'Online', color: 'bg-teal-400', img: doctorImg },
+      { name: 'Dr. M. Meena Krishnan', spec: 'Pediatrician', rating: 4.7, fee: 300, status: t('busyStatus') || 'Busy', color: 'bg-amber-500', img: doctorImg },
+      { name: 'Dr. R. Suresh Prabhu', spec: 'Dermatologist', rating: 4.6, fee: 350, status: t('offlineStatus') || 'Offline', color: 'bg-gray-400', img: doctorImg }
    ];
 
    return (
@@ -219,7 +219,7 @@ export function DoctorsConsultation() {
                            </div>
                         </div>
              </div>
-                        <button className="w-full py-5 bg-gray-50 text-[navy] group-hover:bg-[navy] group-hover:text-teal-400 rounded-[2rem] font-syne font-black text-xs uppercase italic tracking-[0.2em] transition-all duration-700 shadow-inner group-hover:shadow-4xl">Book Now</button>
+                        <button className="w-full py-5 bg-gray-50 text-[navy] group-hover:bg-[navy] group-hover:text-teal-400 rounded-[2rem] font-syne font-black text-xs uppercase italic tracking-[0.2em] transition-all duration-700 shadow-inner group-hover:shadow-4xl">{t('bookNow') || 'Book Now'}</button>
                      </div>
                   </motion.div>
                ))}
@@ -281,7 +281,7 @@ export function GPSTracking() {
                   {/* Customer Node */}
                   <div className="absolute left-[20px] md:left-[50px] bottom-[20px] md:bottom-[50px] space-y-2 md:space-y-4 z-20 scale-75 md:scale-100">
                      <div className="bg-navy text-white text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-xl flex items-center gap-3 md:gap-4 border-2 border-white/10 italic">
-                        <div className="h-1.5 w-1.5 md:h-2 md:w-2 bg-red-500 rounded-full animate-ping" /> YOUR HOUSE
+                        <div className="h-1.5 w-1.5 md:h-2 md:w-2 bg-red-500 rounded-full animate-ping" /> {t('yourHouse') || 'YOUR HOUSE'}
                      </div>
                      <div className="h-12 w-12 md:h-16 md:w-16 bg-white rounded-xl md:rounded-[1.5rem] shadow-xl flex items-center justify-center text-red-500 border-2 md:border-4 border-red-500/10 scale-110"><MapPin size={24} md:size={32} fill="currentColor" /></div>
                   </div>
@@ -289,7 +289,7 @@ export function GPSTracking() {
                   {/* Terminal Node */}
                   <div className="absolute right-[30px] md:right-[80px] top-[30px] md:top-[60px] space-y-2 md:space-y-4 z-20 scale-75 md:scale-100">
                      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 10, ease: "linear" }} className="h-12 w-12 md:h-16 md:w-16 bg-navy rounded-xl md:rounded-[1.5rem] shadow-xl flex items-center justify-center text-teal-400 border-2 border-teal-500/40"><Store size={24} md:size={32} /></motion.div>
-                     <div className="bg-white/90 backdrop-blur-3xl text-navy text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl border-2 border-gray-100 shadow-xl italic">PHARMACY</div>
+                     <div className="bg-white/90 backdrop-blur-3xl text-navy text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl border-2 border-gray-100 shadow-xl italic">{t('pharmacy') || 'PHARMACY'}</div>
                   </div>
 
                   {/* Biker Transmission Animation */}
@@ -325,7 +325,7 @@ export function PrescriptionUpload() {
             <div className="space-y-12 text-white text-center lg:text-left">
                <div className="space-y-6">
                   <div className="inline-flex items-center gap-4 px-6 py-2 bg-white/10 border border-white/20 rounded-full text-white font-syne font-black text-[10px] uppercase tracking-[0.4em] italic backdrop-blur-3xl shadow-2xl mx-auto lg:mx-0">
-                     <Heart size={14} className="fill-white animate-pulse" /> Safe & Secure
+                     <Heart size={14} className="fill-white animate-pulse" /> {t('verifiedSecurity') || 'Safe & Secure'}
                   </div>
                   <h2 className="font-syne font-black text-4xl md:text-8xl leading-[0.9] text-white uppercase italic tracking-tighter">
                      {t('prescriptionTitle')}
@@ -534,26 +534,26 @@ export function AppDownload() {
             <div className="space-y-12 text-white">
                <div className="space-y-8">
                   <div className="inline-flex items-center gap-4 px-6 py-2 bg-teal-400 text-[navy] rounded-xl font-syne font-black text-[10px] uppercase tracking-[0.4em] italic shadow-4xl rotate-3">
-                     <Terminal size={14} /> AVAILABLE NOW
+                     <Terminal size={14} /> {t('availableNow') || 'AVAILABLE NOW'}
                   </div>
                   <h2 className="font-syne font-black text-6xl md:text-8xl leading-none text-white uppercase italic tracking-tighter">
                      Your Health. <br /> Your Pocket.
                   </h2>
-                  <p className="text-white/30 font-dm text-2xl italic font-bold leading-relaxed max-w-xl">Download the MediReach app for faster checkout, live order tracking, and emergency health alerts.</p>
+                  <p className="text-white/30 font-dm text-2xl italic font-bold leading-relaxed max-w-xl">{t('appDownloadDesc') || 'Download the MediReach app for faster checkout, live order tracking, and emergency health alerts.'}</p>
                </div>
                
                <div className="flex flex-wrap gap-8">
                   <button className="px-12 py-6 bg-white/[0.03] border-2 border-white/10 text-white rounded-[2rem] shadow-4xl flex items-center gap-5 hover:bg-teal-400 hover:text-[navy] hover:border-teal-400 transition-all duration-700 group active:scale-95 outline-none backdrop-blur-3xl">
                      <div className="h-14 w-14 flex items-center justify-center shrink-0 bg-white/5 rounded-2xl group-hover:bg-[navy]/10 transition-colors"><Globe size={32} /></div>
                      <div className="text-left">
-                        <div className="text-[10px] uppercase tracking-[0.3em] font-black italic opacity-40 group-hover:opacity-100 mb-1">Get it on</div>
+                        <div className="text-[10px] uppercase tracking-[0.3em] font-black italic opacity-40 group-hover:opacity-100 mb-1">{t('getItOn') || 'Get it on'}</div>
                         <div className="font-syne font-black text-2xl leading-none uppercase tracking-tighter italic">Play Store</div>
                      </div>
                   </button>
                   <button className="px-12 py-6 bg-white/[0.03] border-2 border-white/10 text-white rounded-[2rem] shadow-4xl flex items-center gap-5 hover:bg-teal-400 hover:text-[navy] hover:border-teal-400 transition-all duration-700 group active:scale-95 outline-none backdrop-blur-3xl">
                      <div className="h-14 w-14 flex items-center justify-center shrink-0 bg-white/5 rounded-2xl group-hover:bg-[navy]/10 transition-colors"><ShieldCheck size={32} /></div>
                      <div className="text-left">
-                        <div className="text-[10px] uppercase tracking-[0.3em] font-black italic opacity-40 group-hover:opacity-100 mb-1">Download for</div>
+                        <div className="text-[10px] uppercase tracking-[0.3em] font-black italic opacity-40 group-hover:opacity-100 mb-1">{t('downloadFor') || 'Download for'}</div>
                         <div className="font-syne font-black text-2xl leading-none uppercase tracking-tighter italic">iOS App Store</div>
                      </div>
                   </button>
@@ -613,7 +613,7 @@ export function EmergencyBanner() {
          <div className="max-w-7xl mx-auto">
             <div className="flex items-center gap-2 mb-3">
                <AlertCircle className="text-white" size={20} />
-               <h3 className="text-white font-black text-lg uppercase tracking-tight">Emergency</h3>
+               <h3 className="text-white font-black text-lg uppercase tracking-tight">{t('emergency') || 'Emergency'}</h3>
             </div>
             <p className="text-white text-sm mb-1">🚑 Ambulance: <strong>108</strong></p>
             <p className="text-white text-sm mb-4">

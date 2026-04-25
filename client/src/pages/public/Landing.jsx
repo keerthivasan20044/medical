@@ -21,8 +21,10 @@ import PrescriptionScannerPreview from '../../components/home/PrescriptionScanne
 import { motion, useScroll, useSpring } from 'framer-motion';
 import useScrollAnimation from '../../hooks/useScrollAnimation.js';
 import SEO from '../../components/common/SEO';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function Landing() {
+  const { t } = useLanguage();
   useScrollAnimation();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -78,21 +80,23 @@ export default function Landing() {
       <AppDownload />
       <BlogPreview />
       <LogoStrip />
-
-      {/* Ticker - fixed just above bottom nav */}
+ 
+       {/* Ticker - fixed just above bottom nav */}
       <div className="fixed bottom-16 left-0 right-0 z-30 bg-[#080c18] border-t border-teal-900/40 py-1.5 px-4 flex md:hidden items-center gap-3">
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <span className="w-1.5 h-1.5 bg-teal-400 rounded-full animate-pulse" />
           <span className="text-teal-400 text-[10px] font-black tracking-wider">LIVE</span>
         </div>
         <div className="overflow-x-auto flex gap-5 no-scrollbar">
-          <span className="text-gray-400 text-[10px] whitespace-nowrap">Platform Updated</span>
+          <span className="text-gray-400 text-[10px] whitespace-nowrap">{t('platformStatus') || 'Platform Status'}</span>
           <span className="text-gray-500 text-[10px]">•</span>
-          <span className="text-gray-400 text-[10px] whitespace-nowrap">Dispatch Active</span>
+          <span className="text-gray-400 text-[10px] whitespace-nowrap">{t('deliveryLabel') || 'Delivery'} {t('activeStatus') || 'Active'}</span>
           <span className="text-gray-500 text-[10px]">•</span>
-          <span className="text-gray-400 text-[10px] whitespace-nowrap">12 Pharmacies Online</span>
+          <span className="text-gray-400 text-[10px] whitespace-nowrap">{t('shopsOnline', { count: 12 }) || '12 Pharmacies Online'}</span>
         </div>
       </div>
+
+      {/* Ticker - fixed just above bottom nav */}
     </div>
   );
 }

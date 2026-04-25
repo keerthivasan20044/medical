@@ -14,8 +14,8 @@ export default function AdminPromotions() {
     <div className="space-y-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Promotions Engine</h1>
-          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Growth Incentives & Campaigns</p>
+          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Promotions</h1>
+          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Manage Coupons and Campaigns</p>
         </div>
         <button 
           className="h-14 px-8 bg-navy text-brand-teal rounded-[2rem] font-syne font-black text-xs uppercase tracking-widest flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-navy/20"
@@ -27,9 +27,9 @@ export default function AdminPromotions() {
       {/* Campaign Types */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {[
-          { label: 'Discount Matrix', icon: Ticket, count: 12, color: 'bg-blue-500' },
-          { label: 'Notification Blast', icon: MessageSquare, count: 4, color: 'bg-brand-teal' },
-          { label: 'Flash Events', icon: Zap, count: 2, color: 'bg-orange-500' },
+          { label: 'Discount Coupons', icon: Ticket, count: 12, color: 'bg-blue-500' },
+          { label: 'Notifications', icon: MessageSquare, count: 4, color: 'bg-brand-teal' },
+          { label: 'Flash Sales', icon: Zap, count: 2, color: 'bg-orange-500' },
         ].map((type) => (
           <div key={type.label} className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group overflow-hidden relative">
             <div className={`absolute top-0 right-0 h-2 w-full ${type.color} opacity-10 group-hover:opacity-100 transition-opacity`} />
@@ -47,11 +47,11 @@ export default function AdminPromotions() {
       </div>
 
       <DataTable 
-        title="Coupon Manifest"
+        title="Coupons"
         columns={[
           { 
             key: 'code', 
-            label: 'Promotion Code',
+            label: 'Coupon Code',
             render: (val) => (
               <div className="flex items-center gap-2">
                 <div className="px-3 py-1 bg-navy/5 border border-navy/10 rounded-lg font-syne font-black text-xs text-navy tracking-widest uppercase italic">
@@ -62,22 +62,22 @@ export default function AdminPromotions() {
           },
           { 
             key: 'discount', 
-            label: 'Value Impact',
+            label: 'Discount',
             render: (val) => (
               <span className="font-syne font-black text-brand-teal italic">{val}</span>
             )
           },
-          { key: 'uses', label: 'Activation Count' },
+          { key: 'uses', label: 'Uses' },
           { 
             key: 'expiry', 
-            label: 'Temporal Limit',
+            label: 'Expiry Date',
             render: (val) => (
               <span className="text-[10px] font-bold text-navy/40 uppercase tracking-widest italic">{val}</span>
             )
           },
           { 
             key: 'status', 
-            label: 'Operational',
+            label: 'Status',
             render: (val) => (
               <div className={`px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest w-fit border ${
                 val === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'

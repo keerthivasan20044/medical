@@ -123,11 +123,11 @@ export default function DistrictCommandBar() {
                       </motion.div>
                     ))
                   ) : (
-                    <div className="py-20 text-center space-y-6 opacity-30">
-                       <Map size={64} className="mx-auto" />
-                       <div className="font-syne font-black text-xl uppercase tracking-widest italic leading-none">Node_Query_Underspecified</div>
-                       <p className="text-xs font-bold font-dm">The requested protocol is not available in the current enclave.</p>
-                    </div>
+                     <div className="py-20 text-center space-y-6 opacity-30">
+                        <Map size={64} className="mx-auto" />
+                        <div className="font-syne font-black text-xl uppercase tracking-widest italic leading-none">No Results Found</div>
+                        <p className="text-xs font-bold font-dm">We couldn't find what you're looking for in our system.</p>
+                     </div>
                   )}
                 </div>
               </div>

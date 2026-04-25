@@ -3,13 +3,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, Map as MapIcon, List, Zap, SlidersHorizontal, Store, AlertCircle, X } from 'lucide-react';
 import PharmacyCard from '../components/pharmacy/PharmacyCard';
 import PharmacyMap from '../components/pharmacy/PharmacyMap';
-import { adminService } from '../services/apiServices'; 
-import api from '../services/api';
+import { pharmacyService } from '../services/apiServices'; 
 import toast from 'react-hot-toast';
+import Pagination from '../components/common/Pagination';
+import useInfiniteScroll from '../hooks/useInfiniteScroll';
+import { Loader2 } from 'lucide-react';
 
 export default function PharmaciesPage() {
   const [pharmacies, setPharmacies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [total, setTotal] = useState(0);
   const [search, setSearch] = useState('');
   const [viewMode, setViewMode] = useState('grid');
   const [showFilters, setShowFilters] = useState(false);
@@ -19,22 +25,53 @@ export default function PharmaciesPage() {
     sort: 'rating'
   });
 
-  const fetchPharmacies = async () => {
+  const fetchPharmacies = async (pageNum = 1, append = false) => {
     try {
-      setLoading(true);
-      const res = await api.get('/api/pharmacies', { params: { search, ...filters } });
-      setPharmacies(res.data.pharmacies || []);
+      if (append) setLoadingMore(true);
+      else setLoading(true);
+      
+      const params = { 
+        search, 
+        page: pageNum,
+        limit: 9,
+        ...filters 
+      };
+      const data = await pharmacyService.getAll(params);
+      
+      if (append) {
+        setPharmacies(prev => [...prev, ...(data.items || [])]);
+      } else {
+        setPharmacies(data.items || []);
+      }
+      
+      setPages(data.pages || 1);
+      setPage(data.page || 1);
+      setTotal(data.total || 0);
     } catch (err) {
       toast.error('Failed to load nodes');
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
   useEffect(() => {
-    const timer = setTimeout(fetchPharmacies, 500);
+    const timer = setTimeout(() => fetchPharmacies(1, false), 500);
     return () => clearTimeout(timer);
   }, [search, filters]);
+
+  const handlePageChange = (pageNum) => {
+    fetchPharmacies(pageNum, false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLoadMore = () => {
+    if (page < pages && !loadingMore) {
+      fetchPharmacies(page + 1, true);
+    }
+  };
+
+  const observerTarget = useInfiniteScroll(handleLoadMore, page < pages, loading || loadingMore);
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-24">
@@ -147,10 +184,28 @@ export default function PharmaciesPage() {
              </div>
            ) : pharmacies.length > 0 ? (
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {pharmacies.map((p, idx) => (
-                  <PharmacyCard key={p._id} pharmacy={p} idx={idx} />
-                ))}
-             </div>
+                 {pharmacies.map((p, idx) => (
+                   <PharmacyCard key={p._id} pharmacy={p} idx={idx} />
+                 ))}
+
+                 {/* Pagination for Desktop */}
+                 <div className="col-span-full hidden md:block mt-12">
+                   <Pagination 
+                     page={page} 
+                     pages={pages} 
+                     onPageChange={handlePageChange} 
+                   />
+                 </div>
+
+                 {/* Infinite Scroll for Mobile */}
+                 <div className="col-span-full md:hidden py-10 flex justify-center">
+                    {loadingMore ? (
+                       <Loader2 size={24} className="animate-spin text-brand-teal" />
+                    ) : (
+                       <div ref={observerTarget} className="h-10 w-full" />
+                    )}
+                 </div>
+              </div>
            ) : (
              <div className="h-[400px] flex flex-col items-center justify-center text-center space-y-6">
                 <div className="h-24 w-24 bg-navy/5 rounded-[3rem] flex items-center justify-center text-navy/10">

@@ -1,17 +1,27 @@
 import Medicine from '../models/Medicine.js';
 
-export async function getAllMedicines(req, res) {
+export async function getAllMedicines(req, res, next) {
   try {
     const { 
-      q, category, pharmacyId, minPrice, maxPrice, 
+      q, search, category, pharmacyId, minPrice, maxPrice, 
       requiresPrescription, sort, page = 1, limit = 20 
     } = req.query;
     
-    const query = {};
-    if (q) query.$or = [
-      { name: { $regex: q, $options: 'i' } },
-      { brand: { $regex: q, $options: 'i' } }
-    ];
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 20;
+    const skip = (pageNum - 1) * limitNum;
+
+    const query = { isActive: { $ne: false } };
+    const searchTerm = q || search;
+
+    if (searchTerm) {
+      query.$or = [
+        { name: { $regex: searchTerm, $options: 'i' } },
+        { brand: { $regex: searchTerm, $options: 'i' } },
+        { therapeuticClass: { $regex: searchTerm, $options: 'i' } }
+      ];
+    }
+
     if (category) query.category = category;
     if (pharmacyId) query.pharmacyId = pharmacyId;
     if (minPrice || maxPrice) {
@@ -21,26 +31,36 @@ export async function getAllMedicines(req, res) {
     }
     if (requiresPrescription !== undefined) query.requiresPrescription = requiresPrescription === 'true';
 
-    let sortOption = 'name';
+    let sortOption = '-createdAt';
     if (sort === 'price_asc') sortOption = 'price';
     if (sort === 'price_desc') sortOption = '-price';
-    if (sort === 'popularity') sortOption = '-rating'; // Using rating as popularity proxy
+    if (sort === 'rating') sortOption = '-rating';
+    if (sort === 'newest') sortOption = '-createdAt';
 
     const [items, total] = await Promise.all([
       Medicine.find(query)
         .populate('pharmacyId', 'name address phone')
-        .skip((Number(page) - 1) * Number(limit))
-        .limit(Number(limit))
-        .sort(sortOption),
+        .sort(sortOption)
+        .skip(skip)
+        .limit(limitNum)
+        .lean(),
       Medicine.countDocuments(query)
     ]);
 
+    const pages = Math.ceil(total / limitNum);
+
     res.json({ 
+      success: true,
       items, 
-      pagination: { total, pages: Math.ceil(total / limit), currentPage: Number(page) }
+      total,
+      page: pageNum,
+      pages,
+      limit: limitNum,
+      hasNext: pageNum < pages,
+      hasPrev: pageNum > 1
     });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to synchronize medicine catalog.', error: err.message });
+    next(err);
   }
 }
 

@@ -28,17 +28,17 @@ export default function DistrictMapArchitecture() {
                 <Globe size={14} className="animate-spin-slow" /> Live Coverage
               </div>
               <h2 className="font-syne font-black text-white text-4xl md:text-6xl lg:text-8xl leading-[0.9] uppercase italic tracking-tighter drop-shadow-4xl">
-                Mapping the <br /> <span className="text-brand-teal">Region Pulse.</span>
+                Mapping Our <br /> <span className="text-brand-teal">Coverage Area.</span>
               </h2>
-              <p className="text-white/30 font-dm text-lg md:text-2xl italic font-bold max-w-xl leading-relaxed mx-auto lg:mx-0">Our delivery network synchronizes multiple hubs to ensure sub-30 minute medical delivery across Karaikal.</p>
+              <p className="text-white/30 font-dm text-lg md:text-2xl italic font-bold max-w-xl leading-relaxed mx-auto lg:mx-0">Our network connects pharmacies across the region to ensure sub-30 minute medical delivery across Karaikal.</p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-8">
                {[
-                 { label: 'Live Tracking', desc: 'Active logistics tracked via GPS.', icon: Truck },
-                 { label: 'Verified Pharmacies', icon: Store, desc: 'Licensed pharmacy centers connected to our dashboard.' },
-                 { label: 'System Integrity', icon: ShieldCheck, desc: '99.9% uptime across all district regions.' },
-                 { label: 'Hub Locations', icon: Navigation, desc: 'Optimized hub placement for fast delivery.' }
+                 { label: 'Live Tracking', desc: 'Track your medicines in real-time.', icon: Truck },
+                 { label: 'Verified Pharmacies', icon: Store, desc: 'Licensed pharmacy centers in our network.' },
+                 { label: 'Network Uptime', icon: ShieldCheck, desc: '99.9% system availability across the region.' },
+                 { label: 'Service Points', icon: Navigation, desc: 'Optimized locations for faster medical access.' }
                ].map((f, i) => (
                  <motion.div 
                    key={i} 

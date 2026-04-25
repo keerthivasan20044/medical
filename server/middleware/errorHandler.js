@@ -12,8 +12,10 @@ export function errorHandler(err, req, res, next) {
   
   // Return sanitized error to client
   const response = {
-    message: statusCode === 500 ? 'Internal server error' : (err.message || 'An error occurred'),
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    success: false,
+    error: statusCode === 500 ? 'Internal server error' : (err.message || 'An error occurred'),
+    code: err.code || 'SERVER_ERROR',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack, fields: err.errors })
   };
   
   res.status(statusCode).json(response);

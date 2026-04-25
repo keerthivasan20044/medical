@@ -56,30 +56,82 @@ export async function placeOrder(req, res) {
   res.status(201).json({ order });
 }
 
-export async function getPharmacyOrders(req, res) {
+export async function getPharmacyOrders(req, res, next) {
   try {
+    const { page = 1, limit = 20, status } = req.query;
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 20;
+    const skip = (pageNum - 1) * limitNum;
+
     const pharmacyId = req.user.pharmacyId;
     if (!pharmacyId && req.user.role !== 'admin') {
-       return res.status(403).json({ message: 'No pharmacy associated with this account' });
+       return res.status(403).json({ success: false, message: 'No pharmacy associated with this account' });
     }
+    
     const query = pharmacyId ? { pharmacyId } : {};
-    const items = await Order.find(query)
-      .populate('customerId', 'name phone')
-      .sort({ createdAt: -1 });
-    res.json({ items });
+    if (status) query.status = status;
+
+    const [items, total] = await Promise.all([
+      Order.find(query)
+        .populate('customerId', 'name phone')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNum)
+        .lean(),
+      Order.countDocuments(query)
+    ]);
+
+    const pages = Math.ceil(total / limitNum);
+
+    res.json({ 
+      success: true,
+      items,
+      total,
+      page: pageNum,
+      pages,
+      limit: limitNum,
+      hasNext: pageNum < pages,
+      hasPrev: pageNum > 1
+    });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to fetch pharmacy orders' });
+    next(err);
   }
 }
 
-export async function getMyOrders(req, res) {
+export async function getMyOrders(req, res, next) {
   try {
-    const items = await Order.find({ customerId: req.user.id })
-      .populate('pharmacyId', 'name address')
-      .sort({ createdAt: -1 });
-    res.json({ items });
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch orders' });
+    const { page = 1, limit = 10, status } = req.query;
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const query = { customerId: req.user.id };
+    if (status) query.status = status;
+
+    const [items, total] = await Promise.all([
+      Order.find(query)
+        .populate('pharmacyId', 'name address')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNum)
+        .lean(),
+      Order.countDocuments(query)
+    ]);
+
+    const pages = Math.ceil(total / limitNum);
+
+    res.json({ 
+      success: true,
+      items,
+      total,
+      page: pageNum,
+      pages,
+      limit: limitNum,
+      hasNext: pageNum < pages,
+      hasPrev: pageNum > 1
+    });
+  } catch (err) {
+    next(err);
   }
 }
 

@@ -25,10 +25,10 @@ export default function NotFound() {
             </motion.div>
             <div className="font-syne font-black text-[12rem] leading-none text-white/5 tracking-tighter absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none">404</div>
             <h1 className="font-syne font-black text-6xl md:text-8xl text-white leading-none tracking-tighter relative z-10">
-               Node Not <br />
-               <span className="text-[#028090]">Synchronized.</span>
+               Page Not <br />
+               <span className="text-[#028090]">Found.</span>
             </h1>
-            <p className="font-dm text-white/30 text-xl italic max-w-lg mx-auto pt-6 leading-relaxed">The architecture you are attempting to access appears to be offline or relocated to a different district enclave.</p>
+            <p className="font-dm text-white/30 text-xl italic max-w-lg mx-auto pt-6 leading-relaxed">The page you are looking for doesn't exist or has been moved to a different section.</p>
          </div>
 
          <div className="flex flex-col md:flex-row items-center justify-center gap-6 pt-10">
@@ -36,27 +36,27 @@ export default function NotFound() {
                to="/"
                className="h-20 px-12 bg-[#02C39A] text-[#0a1628] rounded-[2rem] font-syne font-black text-sm uppercase tracking-widest shadow-2xl shadow-[#02C39A]/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-4 group"
             >
-               <Home size={18} /> Restore Home Enclave
+               <Home size={18} /> Back to Home
             </Link>
             <button
                onClick={() => window.history.back()}
                className="h-20 px-12 bg-white/5 border border-white/10 text-white rounded-[2rem] font-syne font-black text-sm uppercase tracking-widest hover:bg-white/10 hover:border-white/20 transition-all flex items-center gap-4 group backdrop-blur-md"
             >
-               <ArrowLeft size={18} className="group-hover:-translate-x-1 transition" /> Previous Protocol
+               <ArrowLeft size={18} className="group-hover:-translate-x-1 transition" /> Go Back
             </button>
          </div>
 
          <div className="pt-20 flex items-center justify-center gap-10">
             <div className="flex flex-col items-center gap-2">
-               <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">Protocol ID</div>
-               <div className="font-syne font-black text-white/40 text-xs">/ Section_MISSING_ERR_04</div>
+               <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">Error Code</div>
+               <div className="font-syne font-black text-white/40 text-xs">404_PAGE_NOT_FOUND</div>
             </div>
             <div className="h-10 w-px bg-white/5" />
             <div className="flex flex-col items-center gap-2">
-               <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">District Pulse</div>
+               <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">System Status</div>
                <div className="flex items-center gap-2">
                   <div className="h-1.5 w-1.5 bg-[#02C39A] rounded-full animate-ping" />
-                  <div className="font-syne font-black text-white/40 text-xs tracking-widest uppercase">Live Enclave Sync</div>
+                  <div className="font-syne font-black text-white/40 text-xs tracking-widest uppercase">System Online</div>
                </div>
             </div>
          </div>

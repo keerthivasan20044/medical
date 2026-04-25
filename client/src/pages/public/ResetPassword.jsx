@@ -57,10 +57,10 @@ export default function ResetPassword() {
         <div className="flex items-center justify-between border-b border-gray-50 pb-8 md:pb-10">
            <div className="space-y-3 md:space-y-4">
               <div className="px-4 md:px-5 py-1.5 md:py-2 bg-navy rounded-xl w-fit flex items-center gap-2 md:gap-3 text-[9px] md:text-[10px] font-black text-teal-400 uppercase tracking-[0.3em] md:tracking-[0.4em] italic">
-                 <ShieldCheck size={14} className="animate-pulse" /> Final Verification
+                 <ShieldCheck size={14} className="animate-pulse" /> Update Password
               </div>
               <h1 className="font-syne font-black text-3xl md:text-5xl lg:text-6xl text-navy leading-[0.85] tracking-tighter uppercase italic">
-                 Reset <br /><span className="text-teal-500">Security Key.</span>
+                 Reset <br /><span className="text-teal-500">Password.</span>
               </h1>
            </div>
            <div className="h-12 w-12 md:h-14 md:w-14 bg-gray-50 rounded-xl md:rounded-2xl flex items-center justify-center text-navy shadow-inner">
@@ -70,7 +70,7 @@ export default function ResetPassword() {
 
         <form onSubmit={handleSubmit} className="space-y-8 md:space-y-10">
           <p className="text-gray-400 font-dm italic text-base md:text-lg opacity-60">
-            Establish a new security protocol for your identification node.
+            Create a new password for your account.
           </p>
           
           <div className="space-y-6">
@@ -133,7 +133,7 @@ export default function ResetPassword() {
               <button onClick={() => navigate('/login')} className="hover:text-teal-500 transition-colors">Back to Login</button>
               <button onClick={() => navigate('/')} className="hover:text-teal-500 transition-colors">Go Home</button>
            </div>
-           <div className="flex items-center gap-2"><Sparkles size={14} className="text-teal-500 animate-pulse"/> SECURE Section</div>
+           <div className="flex items-center gap-2"><Sparkles size={14} className="text-teal-500 animate-pulse"/> SECURE MODE</div>
         </div>
       </div>
     </div>

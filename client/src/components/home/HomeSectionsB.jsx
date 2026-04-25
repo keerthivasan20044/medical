@@ -79,12 +79,12 @@ export function FeaturedMedicines() {
            <div className="space-y-6">
               <div className="flex items-center gap-4">
                  <div className={`h-4 w-4 rounded-full shadow-[0_0_10px_rgba(2,195,154,0.5)] ${loading ? 'bg-amber-500 animate-pulse' : 'bg-brand-teal'}`} />
-                 <span className="text-[12px] font-black text-brand-teal uppercase tracking-[0.4em] italic">Open Now</span>
+                 <span className="text-[12px] font-black text-brand-teal uppercase tracking-[0.4em] italic">{t('openNow') || 'Open Now'}</span>
               </div>
               <h2 className="font-syne font-black text-[#0a1628] text-5xl md:text-7xl leading-[0.9] uppercase italic tracking-tighter">
                 {(t('popularMeds') || '').includes('.') ? t('popularMeds').split('.').slice(0, -1).join('.') : t('popularMeds')} <span className="text-brand-teal">.</span>
               </h2>
-              <p className="text-gray-400 font-dm text-xl max-w-xl italic font-bold leading-relaxed">Browse our verified pharmacy products.</p>
+              <p className="text-gray-400 font-dm text-xl max-w-xl italic font-bold leading-relaxed">{t('browseCuratedClusters') || 'Browse our verified pharmacy products.'}</p>
            </div>
            <div className="flex gap-6">
               <button 
@@ -164,11 +164,11 @@ export function KaraikalPharmacies() {
 
           <div className="flex gap-2 overflow-x-auto px-4 pb-4 hide-scrollbar justify-start md:justify-center mb-12">
              {[
-               { id: 'All', label: 'All' },
-               { id: 'Open Now', label: 'Open Now' },
-               { id: 'Free Delivery', label: 'Free Delivery' },
-               { id: 'Top Rated', label: 'Top Rated' },
-               { id: '24 Hours', label: '24 Hours' }
+                { id: 'All', label: t('all') || 'All' },
+                { id: 'Open Now', label: t('openNow') || 'Open Now' },
+                { id: 'Free Delivery', label: t('freeDel') || 'Free Delivery' },
+                { id: 'Top Rated', label: t('topRatedShop') || 'Top Rated' },
+                { id: '24 Hours', label: '24 Hours' }
              ].map(f => (
                <button 
                  key={f.id}
@@ -217,11 +217,11 @@ export function KaraikalPharmacies() {
                            <MapPin size={16} className="text-brand-teal animate-bounce" /> {p.location || 'Karaikal Center'} · <span className="text-brand-teal">{p.distance || '0.5'} KM</span>
                         </div>
                         <div className="flex flex-wrap gap-2 pt-2">
-                           {[
-                             { icon: '✓', label: 'Verified' },
-                             { icon: '🏥', label: 'Licensed' },
-                             { icon: '🕐', label: 'Open 24 Hours' }
-                           ].map(badge => (
+                            {[
+                              { icon: '✓', label: t('verified') || 'Verified' },
+                              { icon: '🏥', label: t('verifiedShop') || 'Licensed' },
+                              { icon: '🕐', label: t('openNow') || 'Open 24 Hours' }
+                            ].map(badge => (
                              <span key={badge.label} className="text-[10px] font-bold text-teal-600 bg-teal-50 px-3 py-1 rounded-full flex items-center gap-1 group-hover:bg-brand-teal group-hover:text-white transition-all">
                                 {badge.icon} {badge.label}
                              </span>
@@ -231,8 +231,8 @@ export function KaraikalPharmacies() {
 
                      <div className="pt-8 border-t-2 border-dashed border-black/[0.05] flex items-center justify-between">
                         <div className="space-y-1">
-                           <div className="text-[9px] text-gray-300 font-black uppercase tracking-widest italic leading-none">Pharmacy ID</div>
-                           <div className="text-[#0a1628] font-black font-syne text-sm uppercase italic tracking-tighter">PH-KKL-{33+i}</div>
+                           <div className="text-[9px] text-gray-300 font-black uppercase tracking-widest italic leading-none">{t('licenseNumber') || 'Pharmacy ID'}</div>
+                           <div className="text-[#0a1628] font-black font-syne text-sm uppercase italic tracking-tighter">PH-KKL-{33+idx}</div>
                         </div>
                         <Link to={`/pharmacies/${p.id}`} className="h-16 w-16 bg-[#0a1628] text-brand-teal rounded-2xl flex items-center justify-center transition-all duration-500 hover:scale-110 active:scale-95 shadow-4xl group/link">
                            <ChevronRight size={28} className="group-hover:translate-x-1 transition-transform" />
@@ -248,7 +248,7 @@ export function KaraikalPharmacies() {
                to="/pharmacies" 
                className="mx-auto bg-brand-teal text-[#0a1628] font-black py-4 px-10 rounded-full flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-brand-teal/20 uppercase tracking-widest text-sm italic"
              >
-               View All Pharmacies <ArrowRight size={20} />
+               {t('findNear') || 'View All Pharmacies'} <ArrowRight size={20} />
              </Link>
           </div>
        </div>

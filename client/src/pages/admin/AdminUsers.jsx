@@ -7,29 +7,34 @@ import toast from 'react-hot-toast';
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [search, setSearch] = useState('');
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (pageNum = 1, searchQuery = '') => {
     try {
       setLoading(true);
-      const data = await adminService.getUsers(); // I'll assume this service exists or I'll create it
+      const data = await adminService.getUsers({ page: pageNum, limit: 10, search: searchQuery });
       setUsers(data.items || []);
+      setPage(data.page || 1);
+      setTotalPages(data.pages || 1);
+      setTotalRecords(data.total || 0);
     } catch (e) {
-      // toast.error('Failed to sync user registry');
-      // Mock data for now if API fails
-      setUsers([
-        { id: '1', name: 'John Doe', email: 'john@example.com', phone: '9876543210', role: 'customer', status: 'active', createdAt: '2024-01-15' },
-        { id: '2', name: 'Dr. Smith', email: 'smith@medipharm.in', phone: '9876543211', role: 'doctor', status: 'active', createdAt: '2024-02-10' },
-        { id: '3', name: 'Apollo Pharmacy', email: 'admin@apollo.in', phone: '9876543212', role: 'pharmacist', status: 'active', createdAt: '2024-03-05' },
-        { id: '4', name: 'Rajesh Express', email: 'rajesh@delivery.in', phone: '9876543213', role: 'delivery', status: 'suspended', createdAt: '2024-03-12' },
-      ]);
+      toast.error('Failed to sync user registry');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    const timer = setTimeout(() => fetchUsers(1, search), 500);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const handlePageChange = (newPage) => {
+    fetchUsers(newPage, search);
+  };
 
   const handleExport = () => {
     toast.success('User registry exported to CSV');
@@ -53,6 +58,11 @@ export default function AdminUsers() {
       <DataTable 
         title="Global Users"
         isLoading={loading}
+        onSearch={setSearch}
+        currentPage={page}
+        totalPages={totalPages}
+        totalRecords={totalRecords}
+        onPageChange={handlePageChange}
         columns={[
           { 
             key: 'name', 

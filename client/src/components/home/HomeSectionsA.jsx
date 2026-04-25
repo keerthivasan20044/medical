@@ -6,10 +6,10 @@ import { useLanguage } from '../../context/LanguageContext';
 import { systemService } from '../../services/apiServices.js';
 
 const DEFAULT_STATS = [
-  { icon: Store, num: 8, label: 'Active Pharmacies', suffix: '', color: 'text-brand-teal' },
-  { icon: Pill, num: 5000, label: 'Verified Medicines', suffix: '+', color: 'text-blue-500' },
-  { icon: Users, num: 1200, label: 'Happy Customers', suffix: '+', color: 'text-emerald-500' },
-  { icon: Truck, num: 22, label: 'Avg Delivery', suffix: 'm', color: 'text-amber-500' }
+  { icon: Store, num: 8, label: 'statsPharmacies', suffix: '', color: 'text-brand-teal' },
+  { icon: Pill, num: 5000, label: 'statsMedicines', suffix: '+', color: 'text-blue-500' },
+  { icon: Users, num: 1200, label: 'statsCustomers', suffix: '+', color: 'text-emerald-500' },
+  { icon: Truck, num: 22, label: 'statsDelivery', suffix: 'm', color: 'text-amber-500' }
 ];
 
 const CATEGORIES = [
@@ -49,6 +49,7 @@ const Counter = ({ value, suffix = '' }) => {
 };
 
 export function StatsCounter() {
+  const { t } = useLanguage();
   return (
     <section className="bg-[#0a1628] py-10 md:py-16 relative overflow-hidden">
       <div className="absolute inset-0 bg-grid opacity-5" />
@@ -69,7 +70,7 @@ export function StatsCounter() {
                     <div className="font-syne font-black text-xl md:text-5xl text-navy italic leading-none">
                        <Counter value={s.num} suffix={s.suffix} />
                     </div>
-                    <div className="text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic leading-tight">{s.label}</div>
+                    <div className="text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic leading-tight">{t(s.label)}</div>
                  </div>
               </motion.div>
            ))}
@@ -87,10 +88,10 @@ export function Categories() {
          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-20">
             <div className="space-y-6 text-center lg:text-left">
                <div className="px-5 py-2 bg-brand-teal/10 rounded-xl w-fit flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic mx-auto lg:mx-0">
-                  <Cpu size={14} className="animate-pulse" /> Classification
+                  <Cpu size={14} className="animate-pulse" /> {t('activeStatus') || 'Status'}
                </div>
                <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-7xl leading-tight uppercase italic tracking-tighter">
-                  Shop by <span className="text-brand-teal">Category</span>
+                  {t('shopCategoryTitleMain') || 'Shop by'} <span className="text-brand-teal">{t('shopCategoryTitleSub') || 'Category'}</span>
                </h2>
             </div>
             <Link to="/medicines" className="group flex items-center justify-center gap-4 font-syne font-black text-xs uppercase italic tracking-widest text-[#0a1628] bg-gray-50 px-10 py-5 rounded-2xl hover:bg-[#0a1628] hover:text-brand-teal transition-all duration-500 shadow-soft">
@@ -123,7 +124,7 @@ export function Categories() {
                  
                  <div className="relative z-10">
                     <Link to={`/medicines?category=${c.name}`} className="h-12 md:h-14 px-6 md:px-8 bg-white rounded-xl md:rounded-2xl inline-flex items-center justify-center text-[#0a1628] font-syne font-black uppercase italic tracking-widest text-[9px] md:text-[10px] shadow-soft hover:bg-[#0a1628] hover:text-brand-teal transition-all">
-                       Shop Now
+                       {t('buyNow') || 'Shop Now'}
                     </Link>
                  </div>
               </motion.div>

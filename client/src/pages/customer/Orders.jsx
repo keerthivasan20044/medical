@@ -5,11 +5,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   AlertCircle, Package, Truck, CheckCircle, Clock, 
   ChevronRight, Download, MapPin, ShoppingBag, Search, 
-  Filter, Calendar, Activity, Info
+  Filter, Calendar, Activity, Info, Loader2
 } from 'lucide-react';
 import { fetchOrders } from '../../store/ordersSlice.js';
 import api from '../../services/api.js';
 import { SkeletonBox } from '../../components/common/Skeleton';
+import Pagination from '../../components/common/Pagination';
+import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 
 const statusMap = {
   'pending': { label: 'Placed', icon: Package, color: 'text-amber-500 bg-amber-50', step: 0 },
@@ -24,31 +26,51 @@ const TIMELINE_STEPS = ['Placed', 'Confirmed', 'Packed', 'On Way', 'Delivered'];
 
 export default function MyOrdersPage() {
   const dispatch = useDispatch();
-  const { items, status, error } = useSelector((s) => s.orders);
+  const { items, pagination, status, error } = useSelector((s) => s.orders);
   const [activeTab, setActiveTab] = useState('Active'); // Active, Past, Cancelled
   const [searchQuery, setSearchQuery] = useState('');
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const fetchOrdersAction = (pageNum = 1, append = false) => {
+    let orderStatus = '';
+    if (activeTab === 'Past') orderStatus = 'delivered';
+    if (activeTab === 'Cancelled') orderStatus = 'cancelled';
+    
+    dispatch(fetchOrders({ 
+      page: pageNum, 
+      limit: 5, 
+      status: orderStatus, 
+      search: searchQuery,
+      append 
+    }));
+  };
 
   useEffect(() => {
-    if (status === 'idle') dispatch(fetchOrders());
-  }, [status, dispatch]);
+    fetchOrdersAction(1, false);
+  }, [activeTab, searchQuery]);
+
+  const handlePageChange = (pageNum) => {
+    fetchOrdersAction(pageNum, false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLoadMore = () => {
+    if (pagination.hasNext && status !== 'loading') {
+      setLoadingMore(true);
+      fetchOrdersAction(pagination.page + 1, true);
+    }
+  };
+
+  useEffect(() => {
+    if (status === 'succeeded') setLoadingMore(false);
+  }, [status]);
+
+  const observerTarget = useInfiniteScroll(handleLoadMore, pagination.hasNext, status === 'loading' || loadingMore);
 
   const filteredItems = useMemo(() => {
-    let base = items || [];
-    if (searchQuery) {
-       base = base.filter(o => 
-         (o.orderNumber || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
-         (o.pharmacy?.name || '').toLowerCase().includes(searchQuery.toLowerCase())
-       );
-    }
-    
-    if (activeTab === 'Active') {
-       return base.filter(o => !['delivered', 'cancelled'].includes(o.status?.toLowerCase()));
-    } else if (activeTab === 'Past') {
-       return base.filter(o => o.status?.toLowerCase() === 'delivered');
-    } else {
-       return base.filter(o => o.status?.toLowerCase() === 'cancelled');
-    }
-  }, [items, activeTab, searchQuery]);
+     // Local filtering for search if needed, but we already pass it to backend
+     return items || [];
+  }, [items]);
 
   const downloadReceipt = async (id, orderNumber) => {
     try {
@@ -209,6 +231,24 @@ export default function MyOrdersPage() {
                     );
                  })}
               </AnimatePresence>
+              
+              {/* Pagination for Desktop */}
+              <div className="hidden md:block">
+                 <Pagination 
+                   page={pagination.page} 
+                   pages={pagination.pages} 
+                   onPageChange={handlePageChange} 
+                 />
+              </div>
+
+              {/* Infinite Scroll for Mobile */}
+              <div className="md:hidden py-10 flex justify-center">
+                 {loadingMore ? (
+                    <Loader2 size={24} className="animate-spin text-brand-teal" />
+                 ) : (
+                    <div ref={observerTarget} className="h-10 w-full" />
+                 )}
+              </div>
            </div>
          ) : (
            <div className="flex flex-col items-center justify-center py-32 space-y-12">

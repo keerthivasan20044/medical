@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { User, Navigation, MapPin, ShieldCheck, Camera, Save, Phone, Mail, Bike, FileText } from 'lucide-react';
+import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 
 export default function DeliveryProfile() {
+  const { user } = useSelector(state => state.auth);
   const [loading, setLoading] = useState(false);
 
   const handleSave = () => {
@@ -38,15 +40,15 @@ export default function DeliveryProfile() {
               <div className="absolute top-0 right-0 h-2 w-full bg-brand-teal" />
               <div className="relative inline-block mx-auto">
                  <div className="h-32 w-32 bg-navy rounded-[2.5rem] border-4 border-white shadow-2xl flex items-center justify-center text-white overflow-hidden">
-                    <User size={64} />
+                    {user?.avatar ? <img src={user.avatar} alt="" className="h-full w-full object-cover" /> : <User size={64} />}
                  </div>
                  <button className="absolute -bottom-2 -right-2 h-10 w-10 bg-brand-teal text-navy rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-all border-2 border-white">
                     <Camera size={18} />
                  </button>
               </div>
               <div className="mt-6">
-                 <h3 className="font-syne font-black text-xl text-navy uppercase italic">Sathish Kumar</h3>
-                 <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic">Agent ID #DP-48291</p>
+                 <h3 className="font-syne font-black text-xl text-navy uppercase italic">{user?.name || 'Agent Name'}</h3>
+                 <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic">Agent ID #{user?._id?.slice(-8).toUpperCase()}</p>
               </div>
            </div>
 
@@ -61,11 +63,11 @@ export default function DeliveryProfile() {
               <div className="space-y-6 relative z-10">
                  <div className="space-y-1">
                     <div className="text-[10px] font-black text-white/40 uppercase tracking-widest italic">Vehicle Type</div>
-                    <div className="font-dm font-bold text-white text-sm">Electric Scooter ( Ather 450X )</div>
+                    <div className="font-dm font-bold text-white text-sm">{user?.vehicleType || 'Electric Scooter ( Ather 450X )'}</div>
                  </div>
                  <div className="space-y-1">
                     <div className="text-[10px] font-black text-white/40 uppercase tracking-widest italic">Registration Number</div>
-                    <div className="font-dm font-bold text-brand-teal text-sm">PY-01-BK-4829</div>
+                    <div className="font-dm font-bold text-brand-teal text-sm">{user?.vehicleNumber || 'PY-01-BK-4829'}</div>
                  </div>
                  <div className="pt-4 border-t border-white/5 flex items-center justify-between">
                     <span className="text-[10px] font-black text-white/40 uppercase tracking-widest italic">Asset Verification</span>
@@ -85,7 +87,15 @@ export default function DeliveryProfile() {
                  <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-2">
                        <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Full Identity</label>
-                       <input type="text" defaultValue="Sathish Kumar" className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
+                       <input type="text" defaultValue={user?.name} className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Contact Sync</label>
+                       <input type="text" defaultValue={user?.phone} className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Email Registry</label>
+                       <input type="text" defaultValue={user?.email} className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
                     </div>
                     <div className="space-y-2">
                        <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Aadhar Verification</label>

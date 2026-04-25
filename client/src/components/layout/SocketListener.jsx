@@ -16,14 +16,14 @@ export default function SocketListener() {
   const user = useSelector(s => s.auth.user);
 
   useEffect(() => {
+    if (!user) return;
+
     if (!socket.connected) {
-      socket.connect();
+      socket.connect(user.id || user._id, user.role);
     }
 
     // Identify Node with Central District Command
-    if (user) {
-      socket.emit('node:register', { id: user.id || user._id, role: user.role });
-    }
+    socket.emit('node:register', { id: user.id || user._id, role: user.role });
 
     // --- CLINICAL STOCK TELEMETRY ---
     socket.on('stock:sync', (data) => {
@@ -177,18 +177,20 @@ export default function SocketListener() {
     });
 
     return () => {
-      socket.off('stock:sync');
-      socket.off('order:new');
-      socket.off('order:rx-uploaded');
-      socket.off('order:placed');
-      socket.off('order:status');
-      socket.off('order:rx-verified');
-      socket.off('order:nearby');
-      socket.off('delivery:assigned');
-      socket.off('delivery:pickup-ready');
-      socket.off('user:update');
+      if (socket && typeof socket.off === 'function') {
+        socket.off('stock:sync');
+        socket.off('order:new');
+        socket.off('order:rx-uploaded');
+        socket.off('order:placed');
+        socket.off('order:status');
+        socket.off('order:rx-verified');
+        socket.off('order:nearby');
+        socket.off('delivery:assigned');
+        socket.off('delivery:pickup-ready');
+        socket.off('user:update');
+      }
     };
-  }, [dispatch, user?.id, user?._id]);
+  }, [dispatch, user]);
 
   return null;
 }

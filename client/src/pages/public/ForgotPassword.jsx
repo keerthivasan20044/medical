@@ -45,7 +45,7 @@ export default function ForgotPassword() {
         <div className="flex items-center justify-between border-b border-gray-50 pb-8 md:pb-10">
            <div className="space-y-3 md:space-y-4">
               <div className="px-4 md:px-5 py-1.5 md:py-2 bg-navy rounded-xl w-fit flex items-center gap-2 md:gap-3 text-[9px] md:text-[10px] font-black text-teal-400 uppercase tracking-[0.3em] md:tracking-[0.4em] italic">
-                 <ShieldCheck size={14} className="animate-pulse" /> Security Access
+                 <ShieldCheck size={14} className="animate-pulse" /> Account Recovery
               </div>
               <h1 className="font-syne font-black text-3xl md:text-5xl lg:text-6xl text-navy leading-[0.85] tracking-tighter uppercase italic">
                  Forgot <br /><span className="text-teal-500">Password?</span>
@@ -59,11 +59,11 @@ export default function ForgotPassword() {
         {!sent ? (
           <form onSubmit={handleSubmit} className="space-y-10">
             <p className="text-gray-400 font-dm italic text-base md:text-lg opacity-60">
-              No problem. Enter your email or phone node and we will transmit a security reset code to your enclave.
+              No problem. Enter your email or phone number and we will send a reset code to your device.
             </p>
             
             <Input 
-              label="Contact Identification" 
+              label="Email or Phone Number" 
               icon={contact.includes('@') ? Mail : Phone} 
               placeholder="user@example.com or 94432 XXXXX" 
               value={contact}
@@ -76,7 +76,7 @@ export default function ForgotPassword() {
               className="w-full py-8 text-xl font-syne font-black uppercase tracking-[0.2em] italic shadow-4xl"
               icon={<ArrowRight size={20}/>}
             >
-              Transmit Code
+              Send Reset Code
             </Button>
           </form>
         ) : (
@@ -85,9 +85,9 @@ export default function ForgotPassword() {
                 <ShieldCheck size={64} className="animate-float-up" />
              </div>
              <div className="space-y-4">
-                <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic">Code Transmitted</h3>
+                <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic">Reset Code Sent</h3>
                 <p className="text-gray-400 font-dm italic text-lg opacity-60">
-                   Check your identification node for the security code.
+                   Check your email or phone for the reset code.
                 </p>
              </div>
              <Button 
@@ -95,7 +95,7 @@ export default function ForgotPassword() {
                className="w-full py-8 text-xl font-syne font-black uppercase tracking-[0.2em] italic shadow-4xl"
                icon={<ArrowRight size={20}/>}
              >
-                Continue to Verify
+                Continue
              </Button>
           </div>
         )}
@@ -105,7 +105,7 @@ export default function ForgotPassword() {
               <Link to="/login" className="hover:text-brand-teal transition-colors">Back to Login</Link>
               <Link to="/" className="hover:text-brand-teal transition-colors">Go Home</Link>
            </div>
-           <div className="flex items-center gap-2"><Sparkles size={14} className="text-brand-teal animate-pulse"/> SECURE Section</div>
+           <div className="flex items-center gap-2"><Sparkles size={14} className="text-brand-teal animate-pulse"/> SECURE MODE</div>
         </div>
       </div>
     </div>

@@ -5,6 +5,8 @@ import toast from 'react-hot-toast';
 
 export const useDelivery = () => {
   const [availableTasks, setAvailableTasks] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [earnings, setEarnings] = useState({ totalEarnings: 0, deliveryCount: 0, history: [] });
   const [activeTask, setActiveTask] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -16,6 +18,32 @@ export const useDelivery = () => {
       setAvailableTasks(tasks);
     } catch (err) {
       console.error('Failed to fetch available tasks:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch history
+  const fetchHistory = async () => {
+    try {
+      setLoading(true);
+      const data = await deliveryService.getHistory();
+      setHistory(data);
+    } catch (err) {
+      console.error('Failed to fetch history:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch earnings
+  const fetchEarnings = async () => {
+    try {
+      setLoading(true);
+      const data = await deliveryService.getEarnings();
+      setEarnings(data);
+    } catch (err) {
+      console.error('Failed to fetch earnings:', err);
     } finally {
       setLoading(false);
     }
@@ -78,9 +106,13 @@ export const useDelivery = () => {
 
   return {
     availableTasks,
+    history,
+    earnings,
     activeTask,
     loading,
     fetchAvailable,
+    fetchHistory,
+    fetchEarnings,
     acceptTask,
     updateStatus,
     confirmDelivery,

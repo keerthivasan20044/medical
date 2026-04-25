@@ -22,8 +22,10 @@ export function useOrderTracking(orderId) {
       dispatch(setStatusText(payload.status));
     });
     return () => {
-      socket.off('order:location-update');
-      socket.off('order:status-update');
+      if (socket && typeof socket.off === 'function') {
+        socket.off('order:location-update');
+        socket.off('order:status-update');
+      }
     };
   }, [orderId, dispatch]);
 

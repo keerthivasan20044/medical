@@ -21,9 +21,48 @@ export async function dashboardStats(req, res) {
   });
 }
 
-export async function getAllUsers(req, res) {
-  const items = await User.find().select('-passwordHash -refreshToken');
-  res.json({ items });
+export async function getAllUsers(req, res, next) {
+  try {
+    const { page = 1, limit = 20, search, role } = req.query;
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 20;
+    const skip = (pageNum - 1) * limitNum;
+
+    const query = {};
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } }
+      ];
+    }
+    if (role) query.role = role;
+
+    const [items, total] = await Promise.all([
+      User.find(query)
+        .select('-passwordHash -refreshToken')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNum)
+        .lean(),
+      User.countDocuments(query)
+    ]);
+
+    const pages = Math.ceil(total / limitNum);
+
+    res.json({
+      success: true,
+      items,
+      total,
+      page: pageNum,
+      pages,
+      limit: limitNum,
+      hasNext: pageNum < pages,
+      hasPrev: pageNum > 1
+    });
+  } catch (err) {
+    next(err);
+  }
 }
 
 export async function toggleUserStatus(req, res) {

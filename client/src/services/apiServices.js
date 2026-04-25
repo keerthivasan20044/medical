@@ -107,6 +107,11 @@ export const orderService = {
   track: async (id) => {
     const res = await api.get(`/api/orders/${id}/track`);
     return res.data;
+  },
+  
+  getAll: async (params) => {
+    const res = await api.get('/api/orders', { params });
+    return res.data;
   }
 };
 
@@ -121,8 +126,8 @@ export const adminService = {
     return res.data;
   },
   
-  getUsers: async () => {
-    const res = await api.get('/api/admin/users');
+  getUsers: async (params) => {
+    const res = await api.get('/api/admin/users', { params });
     return res.data;
   }
 };
@@ -214,9 +219,10 @@ export const systemService = {
 
 export const deliveryService = {
   getAvailableTasks: () => api.get('/api/delivery/available').then(res => res.data),
-  acceptTask: (id) => api.post(`/api/delivery/tasks/${id}/accept`).then(res => res.data),
+  acceptTask: (id) => api.post(`/api/delivery/${id}/accept`).then(res => res.data),
   getActiveTask: () => api.get('/api/delivery/active').then(res => res.data),
-  updateTaskStatus: (id, status, data) => api.patch(`/api/delivery/tasks/${id}/status`, { status, ...data }).then(res => res.data),
+  updateTaskStatus: (id, status, data) => api.patch(`/api/delivery/${id}/status`, { status, ...data }).then(res => res.data),
+  confirmDelivery: (id, otp) => api.post(`/api/delivery/${id}/confirm`, { otp }).then(res => res.data),
   getEarnings: () => api.get('/api/delivery/earnings').then(res => res.data),
   getHistory: () => api.get('/api/delivery/history').then(res => res.data),
 };

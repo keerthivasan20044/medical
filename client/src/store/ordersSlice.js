@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../services/api.js';
 
-export const fetchOrders = createAsyncThunk('orders/fetch', async (_, thunkAPI) => {
+export const fetchOrders = createAsyncThunk('orders/fetch', async (params = {}, thunkAPI) => {
   try {
-    const res = await api.get('/api/orders/my-orders');
-    return res.data.items || [];
+    const res = await api.get('/api/orders/my-orders', { params });
+    return res.data;
   } catch (e) {
     return thunkAPI.rejectWithValue(e.response?.data?.message || 'Failed to load orders');
   }
@@ -34,7 +34,13 @@ export const addIncomingOrder = (order) => (dispatch) => {
 
 const ordersSlice = createSlice({
   name: 'orders',
-  initialState: { items: [], currentItem: null, status: 'idle', error: null },
+  initialState: { 
+    items: [], 
+    currentItem: null, 
+    status: 'idle', 
+    error: null,
+    pagination: { page: 1, pages: 1, total: 0, hasNext: false }
+  },
   reducers: {
     addOrder(state, action) {
       state.items.unshift(action.payload);
@@ -46,12 +52,24 @@ const ordersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOrders.pending, (state) => {
-        state.status = 'loading';
+      .addCase(fetchOrders.pending, (state, action) => {
+        if (!action.meta.arg?.append) {
+          state.status = 'loading';
+        }
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.items = action.payload;
+        if (action.meta.arg?.append) {
+          state.items = [...state.items, ...(action.payload.items || [])];
+        } else {
+          state.items = action.payload.items || [];
+        }
+        state.pagination = {
+          page: action.payload.page,
+          pages: action.payload.pages,
+          total: action.payload.total,
+          hasNext: action.payload.hasNext
+        };
       })
       .addCase(fetchOrders.rejected, (state, action) => {
         state.status = 'failed';
