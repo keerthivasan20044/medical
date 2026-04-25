@@ -216,7 +216,7 @@ export default function MedicinesListPage() {
        <div className="space-y-6 pt-8 border-t border-black/[0.03]">
           <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Available at Pharmacies</div>
           <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
-             {pharmacyOptions.map(p => (
+             {pharmacies.slice(0, 10).map(p => (
                 <button 
                   key={p.id} 
                   onClick={() => togglePharmacy(p.id)}
