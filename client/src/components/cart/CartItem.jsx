@@ -45,7 +45,7 @@ export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
           >
             <Minus size={12} />
           </button>
-          <span className="font-syne font-black text-base md:text-2xl text-navy w-6 md:w-8 text-center italic">{item.qty}</span>
+          <span className="font-syne font-black text-base md:text-2xl text-navy w-6 md:w-8 text-center italic">{item.quantity}</span>
           <button
             type="button"
             onClick={onIncrease}
@@ -57,7 +57,7 @@ export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
 
         <div className="space-y-0.5 text-right min-w-[70px] md:min-w-[120px]">
            <div className="text-[8px] md:text-[10px] text-gray-200 font-black uppercase tracking-widest italic">{t('syncYield')}</div>
-           <div className="text-lg md:text-3xl font-syne font-black text-navy tracking-tighter italic origin-right group-hover:scale-105 transition-transform">₹{item.price * item.qty}</div>
+           <div className="text-lg md:text-3xl font-syne font-black text-navy tracking-tighter italic origin-right group-hover:scale-105 transition-transform">₹{item.price * item.quantity}</div>
         </div>
 
         <button

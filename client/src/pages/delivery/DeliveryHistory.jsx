@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import DataTable from '../../components/dashboard/DataTable';
 import { History, CheckCircle2, Clock, IndianRupee, MapPin, Store, Loader2 } from 'lucide-react';
 import { useDelivery } from '../../hooks/useDelivery';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function DeliveryHistory() {
+  const { t } = useLanguage();
   const { history, fetchHistory, loading } = useDelivery();
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 
 const TXNS = [
   { id: 1, label: 'Order #MED-0042', amount: -80, date: 'Today, 9:20 AM' },
@@ -7,6 +8,7 @@ const TXNS = [
 ];
 
 export default function Wallet() {
+  const { t } = useLanguage();
   const [balance, setBalance] = useState(480);
 
   const recharge = (amount) => setBalance((b) => b + amount);

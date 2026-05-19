@@ -1,6 +1,7 @@
 import { Phone, MapPin, Clock, Activity, AlertCircle, ShoppingCart, Zap, ShieldCheck, HeartPulse, Pill, Search, XCircle, Info, ChevronRight, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../../context/LanguageContext';
 
 const emergencyPharmacies = [
   {
@@ -40,6 +41,7 @@ const kits = [
 ];
 
 export default function EmergencyPage() {
+  const { t } = useLanguage();
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-48 font-dm">
       {/* Emergency Red Hero Terminal */}

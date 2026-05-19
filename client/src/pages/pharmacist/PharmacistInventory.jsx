@@ -3,8 +3,10 @@ import DataTable from '../../components/dashboard/DataTable';
 import { medicineService } from '../../services/apiServices';
 import { Pill, Tag, AlertTriangle, Plus, Upload, Filter, Search, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function PharmacistInventory() {
+  const { t } = useLanguage();
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);

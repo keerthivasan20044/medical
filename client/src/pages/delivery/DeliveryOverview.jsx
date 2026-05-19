@@ -6,8 +6,10 @@ import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'rec
 import { useSelector } from 'react-redux';
 import { useDelivery } from '../../hooks/useDelivery';
 import toast from 'react-hot-toast';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function DeliveryOverview() {
+  const { t } = useLanguage();
   const { user } = useSelector(state => state.auth);
   const { history, earnings, activeTask, fetchHistory, fetchEarnings, loading } = useDelivery();
   const [isOnline, setIsOnline] = useState(true);

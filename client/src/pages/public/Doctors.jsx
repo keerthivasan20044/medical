@@ -4,8 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { doctorService } from '../../services/apiServices';
 import { normalizeUrl } from '../../utils/url';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function DoctorsListPage() {
+  const { t } = useLanguage();
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');

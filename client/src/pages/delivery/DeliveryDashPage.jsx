@@ -12,6 +12,9 @@ import DeliveryActive from './DeliveryActive';
 import DeliveryHistory from './DeliveryHistory';
 import DeliveryEarnings from './DeliveryEarnings';
 import DeliveryProfile from './DeliveryProfile';
+import DeliveryTraining from './DeliveryTraining';
+import DeliveryVehicle from './DeliveryVehicle';
+import { BookOpen, Truck } from 'lucide-react';
 
 import { useDelivery } from '../../hooks/useDelivery';
 
@@ -30,6 +33,8 @@ export default function DeliveryDashPage() {
     },
     { label: 'History', path: '/delivery/history', icon: History },
     { label: 'Earnings', path: '/delivery/earnings', icon: IndianRupee },
+    { label: 'Training', path: '/delivery/training', icon: BookOpen },
+    { label: 'Vehicle', path: '/delivery/vehicle', icon: Truck },
     { label: 'Profile', path: '/delivery/profile', icon: User },
   ];
   return (
@@ -41,6 +46,8 @@ export default function DeliveryDashPage() {
         <Route path="active" element={<DeliveryActive />} />
         <Route path="history" element={<DeliveryHistory />} />
         <Route path="earnings" element={<DeliveryEarnings />} />
+        <Route path="training" element={<DeliveryTraining />} />
+        <Route path="vehicle" element={<DeliveryVehicle />} />
         <Route path="profile" element={<DeliveryProfile />} />
         <Route path="*" element={<Navigate to="/delivery/dashboard" replace />} />
       </Routes>

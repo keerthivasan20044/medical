@@ -5,8 +5,10 @@ import { getMyNotifications, markRead, markAllRead, createNotification } from '.
 const router = Router();
 
 router.get('/', verifyToken, getMyNotifications);
-router.put('/:id/read', verifyToken, markRead);
+// IMPORTANT: /read/all must come BEFORE /:id/read to avoid Express
+// treating 'read' as the :id parameter and calling markRead instead.
 router.put('/read/all', verifyToken, markAllRead);
+router.put('/:id/read', verifyToken, markRead);
 router.post('/', verifyToken, createNotification);
 
 export default router;

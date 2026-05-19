@@ -88,14 +88,14 @@ export function Categories() {
          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-20">
             <div className="space-y-6 text-center lg:text-left">
                <div className="px-5 py-2 bg-brand-teal/10 rounded-xl w-fit flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic mx-auto lg:mx-0">
-                  <Cpu size={14} className="animate-pulse" /> {t('activeStatus') || 'Status'}
+                  <Cpu size={14} className="animate-pulse" /> {t('activeStatus')}
                </div>
                <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-7xl leading-tight uppercase italic tracking-tighter">
-                  {t('shopCategoryTitleMain') || 'Shop by'} <span className="text-brand-teal">{t('shopCategoryTitleSub') || 'Category'}</span>
+                  {t('shopCategoryTitleMain')} <span className="text-brand-teal">{t('shopCategoryTitleSub')}</span>
                </h2>
             </div>
             <Link to="/medicines" className="group flex items-center justify-center gap-4 font-syne font-black text-xs uppercase italic tracking-widest text-[#0a1628] bg-gray-50 px-10 py-5 rounded-2xl hover:bg-[#0a1628] hover:text-brand-teal transition-all duration-500 shadow-soft">
-               {t('exploreCatalog') || 'Explore Catalog'} <ArrowRight className="group-hover:translate-x-3 transition-transform" />
+               {t('exploreCatalog')} <ArrowRight className="group-hover:translate-x-3 transition-transform" />
             </Link>
          </div>
 
@@ -124,7 +124,7 @@ export function Categories() {
                  
                  <div className="relative z-10">
                     <Link to={`/medicines?category=${c.name}`} className="h-12 md:h-14 px-6 md:px-8 bg-white rounded-xl md:rounded-2xl inline-flex items-center justify-center text-[#0a1628] font-syne font-black uppercase italic tracking-widest text-[9px] md:text-[10px] shadow-soft hover:bg-[#0a1628] hover:text-brand-teal transition-all">
-                       {t('buyNow') || 'Shop Now'}
+                       {t('buyNow')}
                     </Link>
                  </div>
               </motion.div>

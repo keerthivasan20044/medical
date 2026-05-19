@@ -60,10 +60,10 @@ export default function Home() {
       setTopDoctors((docsData.items || []).slice(0, 3));
 
       setStats([
-        { label: 'Total Orders', value: fetchedOrders.length.toString().padStart(2, '0'), hint: 'Sync Complete', icon: Package, color: 'text-blue-500' },
-        { label: 'Active Delivery', value: fetchedOrders.filter(o => o.status !== 'delivered').length.toString().padStart(2, '0'), hint: 'Live Tracking', icon: Truck, color: 'text-emerald-500' },
-        { label: 'Prescriptions', value: prescriptions.length.toString().padStart(2, '0'), hint: 'Clinical Vault', icon: ShieldCheck, color: 'text-brand-teal' },
-        { label: 'Appointments', value: '00', hint: 'No pending', icon: Calendar, color: 'text-amber-500' }
+        { label: t('totalOrders'), value: fetchedOrders.length.toString().padStart(2, '0'), hint: 'Sync Complete', icon: Package, color: 'text-blue-500' },
+        { label: t('activeDelivery'), value: fetchedOrders.filter(o => o.status !== 'delivered').length.toString().padStart(2, '0'), hint: 'Live Tracking', icon: Truck, color: 'text-emerald-500' },
+        { label: t('prescriptions'), value: prescriptions.length.toString().padStart(2, '0'), hint: 'Clinical Vault', icon: ShieldCheck, color: 'text-brand-teal' },
+        { label: t('appointments'), value: '00', hint: 'No pending', icon: Calendar, color: 'text-amber-500' }
       ]);
     } catch (err) {
       console.error('Dashboard sync error:', err);
@@ -73,10 +73,10 @@ export default function Home() {
   };
 
   const QUICK_ACTIONS = [
-    { label: 'Upload Prescription', to: '/prescriptions', icon: Upload, desc: 'Upload your prescription' },
-    { label: 'Book Doctor', to: '/doctors', icon: Stethoscope, desc: 'Book a doctor appointment' },
-    { label: 'Open Wallet', to: '/wallet', icon: Wallet, desc: 'View your wallet balance' },
-    { label: 'Order Again', to: '/orders', icon: RotateCcw, desc: 'Reorder previous medicines' }
+    { label: t('uploadPrescription'), to: '/prescriptions', icon: Upload, desc: t('uploadPrescriptionDesc') },
+    { label: t('bookDoctor'), to: '/doctors', icon: Stethoscope, desc: t('bookDoctorDesc') },
+    { label: t('openWallet'), to: '/wallet', icon: Wallet, desc: t('openWalletDesc') },
+    { label: t('orderAgain'), to: '/orders', icon: RotateCcw, desc: t('orderAgainDesc') }
   ];
 
   return (
@@ -85,18 +85,18 @@ export default function Home() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pt-4">
         <div className="space-y-3">
            <div className="px-4 py-1.5 bg-teal-500/10 border border-teal-500/20 rounded-xl w-fit flex items-center gap-2 text-[9px] font-black text-teal-600 uppercase tracking-widest">
-              <div className="h-1.5 w-1.5 bg-teal-500 rounded-full animate-ping" /> System Status: Online
+              <div className="h-1.5 w-1.5 bg-teal-500 rounded-full animate-ping" /> {t('systemStatus')}: {t('systemOnline')}
            </div>
            <h1 className="font-syne font-black text-4xl md:text-6xl text-navy leading-tight tracking-tighter uppercase italic">
-             Hello, <br /><span className="text-teal-600">Health Hub</span>
+             {t('hello')}, <br /><span className="text-teal-600">{t('healthHub')}</span>
            </h1>
-           <p className="text-gray-400 font-dm text-base md:text-lg italic tracking-tight">Your medical overview & quick actions.</p>
+           <p className="text-gray-400 font-dm text-base md:text-lg italic tracking-tight">{t('medicalOverview')}</p>
         </div>
         <div className="flex items-center gap-4 bg-gray-50 border border-gray-100 p-2 rounded-2xl self-start md:self-auto">
            <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-white shadow-sm flex items-center justify-center text-teal-600 shrink-0"><Bell size={20} /></div>
            <div className="pr-4 md:pr-6">
-              <div className="text-[9px] font-black uppercase text-gray-300 tracking-widest">Last Activity</div>
-              <div className="text-sm font-bold text-navy truncate">{loading ? 'Syncing...' : 'Updated Now'}</div>
+              <div className="text-[9px] font-black uppercase text-gray-300 tracking-widest">{t('lastActivity')}</div>
+              <div className="text-sm font-bold text-navy truncate">{loading ? t('syncing') : t('updatedNow')}</div>
            </div>
         </div>
       </div>
@@ -114,8 +114,8 @@ export default function Home() {
                </div>
             </div>
             <div className="text-center space-y-3">
-               <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase tracking-tighter italic">Loading Dashboard...</h3>
-               <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">Syncing Secure Clinical Data</p>
+               <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase tracking-tighter italic">{t('loadingDashboard')}</h3>
+               <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">{t('syncingSecureClinicalData')}</p>
             </div>
         </div>
       ) : (
@@ -126,22 +126,22 @@ export default function Home() {
              <div className="relative z-10 grid md:grid-cols-[1.5fr_1fr] gap-8 md:gap-12 items-center">
                 <div className="space-y-6 md:space-y-8">
                    <div className="space-y-2 md:space-y-4">
-                      <div className="text-[9px] font-black uppercase text-teal-400 tracking-widest italic">Live Fulfillment Sync</div>
-                      <h2 className="text-3xl md:text-5xl font-syne font-black leading-tight tracking-tighter uppercase">Active Orders</h2>
+                      <div className="text-[9px] font-black uppercase text-teal-400 tracking-widest italic">{t('liveFulfillmentSync')}</div>
+                      <h2 className="text-3xl md:text-5xl font-syne font-black leading-tight tracking-tighter uppercase">{t('activeOrders')}</h2>
                       <p className="text-white/40 font-dm italic text-base md:text-lg">
-                        {recentOrders[0] ? 'Your current delivery status' : 'No active orders right now'}
+                        {recentOrders[0] ? t('currentDeliveryStatus') : t('noActiveOrders')}
                       </p>
                    </div>
                    {recentOrders[0] ? (
                      <div className="flex items-center gap-6 md:gap-10">
                         <div className="space-y-1 min-w-0 flex-1">
-                           <div className="text-white/20 text-[8px] md:text-[9px] font-black uppercase tracking-widest">Order ID</div>
+                           <div className="text-white/20 text-[8px] md:text-[9px] font-black uppercase tracking-widest">{t('orderId')}</div>
                            <div className="text-lg md:text-xl font-syne font-black truncate">#{recentOrders[0].orderNumber}</div>
                         </div>
                         <div className="h-8 md:h-10 w-px bg-white/10" />
                         <div className="space-y-1">
-                           <div className="text-white/20 text-[8px] md:text-[9px] font-black uppercase tracking-widest">Status</div>
-                           <div className="text-lg md:text-xl font-syne font-black text-teal-400 tracking-widest uppercase">{recentOrders[0].status}</div>
+                           <div className="text-white/20 text-[8px] md:text-[9px] font-black uppercase tracking-widest">{t('status')}</div>
+                           <div className="text-lg md:text-xl font-syne font-black text-teal-400 tracking-widest uppercase">{t(recentOrders[0].status)}</div>
                         </div>
                      </div>
                    ) : null}
@@ -149,7 +149,7 @@ export default function Home() {
                      onClick={() => navigate('/orders')}
                      className="w-full sm:w-auto h-14 md:h-16 px-8 md:px-10 bg-white text-navy rounded-xl md:rounded-2xl font-syne font-black text-[10px] md:text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-teal-500 hover:text-white transition-all shadow-xl"
                    >
-                      View All Orders ({orders.length}) &rarr;
+                      {t('viewAllOrdersCount', { count: orders.length })} &rarr;
                    </button>
                 </div>
                 <div className="relative h-40 md:h-96 rounded-2xl md:rounded-[3rem] bg-white/5 border border-white/10 overflow-hidden hidden md:flex items-center justify-center">
@@ -167,8 +167,8 @@ export default function Home() {
           {/* Quick Actions Grid */}
           <div className="space-y-6">
              <div className="space-y-1">
-                <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase tracking-tighter italic break-words w-full max-w-full leading-tight">Quick Access</h2>
-                <p className="text-[11px] font-black text-gray-300 uppercase tracking-widest">Optimized for you</p>
+                <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase tracking-tighter italic break-words w-full max-w-full leading-tight">{t('quickAccess')}</h2>
+                <p className="text-[11px] font-black text-gray-300 uppercase tracking-widest">{t('optimizedForYou')}</p>
              </div>
              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 {QUICK_ACTIONS.map(action => (
@@ -209,8 +209,8 @@ export default function Home() {
              <div className="bg-white border border-gray-100 rounded-3xl md:rounded-[4rem] p-5 md:p-12 space-y-6 md:space-y-10 hover:shadow-xl transition-all duration-700">
                 <div className="flex items-center justify-between gap-4">
                    <div className="space-y-1">
-                      <h2 className="font-syne font-black text-2xl md:text-4xl text-navy uppercase tracking-tighter leading-tight">Available Medicines</h2>
-                      <p className="text-[10px] md:text-sm text-teal-600 font-black uppercase italic tracking-widest">In stock now</p>
+                      <h2 className="font-syne font-black text-2xl md:text-4xl text-navy uppercase tracking-tighter leading-tight">{t('availableMedicines')}</h2>
+                      <p className="text-[10px] md:text-sm text-teal-600 font-black uppercase italic tracking-widest">{t('inStockNow')}</p>
                    </div>
                    <Link to="/medicines" className="h-10 w-10 md:h-12 md:w-12 bg-gray-50 rounded-xl md:rounded-2xl flex items-center justify-center text-gray-300 hover:text-teal-600 transition shrink-0"><ArrowRight size={18}/></Link>
                 </div>
@@ -227,7 +227,7 @@ export default function Home() {
                           onClick={() => navigate(`/medicines/${m._id}`)}
                           className="h-9 md:h-12 w-full bg-navy text-white rounded-lg md:rounded-2xl font-syne font-black text-[8px] md:text-[10px] uppercase tracking-widest hover:bg-teal-500 transition duration-500 shadow-md group-hover:scale-105 active:scale-95"
                         >
-                           Add
+                           {t('add')}
                         </button>
                      </div>
                    ))}
@@ -239,8 +239,8 @@ export default function Home() {
                <div className="absolute bottom-0 left-0 h-64 w-64 bg-teal-500 opacity-[0.03] rounded-full blur-[100px]" />
                <div className="flex items-center justify-between relative z-10 gap-4">
                   <div className="space-y-1 min-w-0">
-                     <h2 className="font-syne font-black text-2xl md:text-4xl uppercase tracking-tighter italic leading-tight">Active Doctors</h2>
-                     <p className="text-[10px] font-black text-teal-400 uppercase tracking-widest italic">Available specialists</p>
+                     <h2 className="font-syne font-black text-2xl md:text-4xl uppercase tracking-tighter italic leading-tight">{t('activeDoctors')}</h2>
+                     <p className="text-[10px] font-black text-teal-400 uppercase tracking-widest italic">{t('availableSpecialists')}</p>
                   </div>
                   <Link to="/doctors" className="h-10 w-10 md:h-12 md:w-12 bg-white/5 rounded-xl md:rounded-2xl flex items-center justify-center text-white/30 hover:text-teal-400 transition shrink-0"><ArrowRight size={18}/></Link>
                </div>
@@ -254,14 +254,14 @@ export default function Home() {
                           </div>
                           <div className="space-y-0.5 min-w-0">
                              <div className="font-syne font-black text-xs md:text-base uppercase tracking-tight truncate">{d.name}</div>
-                             <div className="text-[8px] md:text-[10px] font-black text-white/30 uppercase tracking-widest italic truncate">{d.doctorProfile?.specialization || 'Clinical Specialist'}</div>
+                             <div className="text-[8px] md:text-[10px] font-black text-white/30 uppercase tracking-widest italic truncate">{d.doctorProfile?.specialization || t('clinicalSpecialist')}</div>
                           </div>
                        </div>
                        <button 
                          onClick={() => navigate(`/doctors/${d._id}`)}
                          className="h-9 px-4 md:px-6 bg-white text-navy rounded-lg md:rounded-xl font-syne font-black text-[8px] md:text-[9px] uppercase tracking-widest hover:bg-teal-500 hover:text-white transition duration-500 shadow-xl flex-shrink-0 active:scale-95"
                        >
-                          Book &rarr;
+                          {t('book')} &rarr;
                        </button>
                     </div>
                   ))}
@@ -272,8 +272,8 @@ export default function Home() {
           {/* Transactions History */}
           <div className="bg-white border border-gray-100 rounded-2xl md:rounded-[4rem] p-6 md:p-12 space-y-8 md:space-y-10">
              <div className="flex items-center justify-between gap-4">
-                <h2 className="font-syne font-black text-2xl md:text-4xl text-navy uppercase tracking-tighter leading-tight">Transactions</h2>
-                <Link to="/orders" className="text-[9px] md:text-[10px] font-black text-teal-600 uppercase tracking-widest italic flex-shrink-0 underline offset-4">History &rarr;</Link>
+                <h2 className="font-syne font-black text-2xl md:text-4xl text-navy uppercase tracking-tighter leading-tight">{t('transactions')}</h2>
+                <Link to="/orders" className="text-[9px] md:text-[10px] font-black text-teal-600 uppercase tracking-widest italic flex-shrink-0 underline offset-4">{t('history')} &rarr;</Link>
              </div>
              
              <div className="space-y-3 md:space-y-4">
@@ -296,7 +296,7 @@ export default function Home() {
                         <div className={`px-4 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest italic border ${
                           o.status === 'delivered' ? 'bg-emerald-50 text-emerald-500 border-emerald-100' : 'bg-amber-50 text-amber-500 border-amber-100'
                         }`}>
-                           {o.status}
+                           {t(o.status)}
                         </div>
                      </div>
                   </div>
@@ -309,8 +309,8 @@ export default function Home() {
                  <Plus size={40} className="rotate-45" />
                </div>
                <div className="space-y-1">
-                 <p className="text-gray-400 font-syne font-black text-lg uppercase italic tracking-tighter">No transactions yet</p>
-                 <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em]">Your payment history will appear here</p>
+                 <p className="text-gray-400 font-syne font-black text-lg uppercase italic tracking-tighter">{t('noTransactionsYet')}</p>
+                 <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em]">{t('paymentHistoryAppear')}</p>
                </div>
             </div>
           )}

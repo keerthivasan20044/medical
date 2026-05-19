@@ -3,6 +3,7 @@ import { Heart, ShoppingBag, Activity } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/cartSlice';
 import { getMedicineImage } from '../../utils/medicineImages';
+import { useLanguage } from '../../context/LanguageContext';
 
 const MedicineCard = forwardRef(({ item: medicine }, ref) => {
   const dispatch = useDispatch();
@@ -13,7 +14,7 @@ const MedicineCard = forwardRef(({ item: medicine }, ref) => {
   const dbImage = medicine.image || medicine.images?.[0]?.url;
   const imageUrl = (dbImage && !dbImage.includes(genericPillsUrl)) 
     ? dbImage 
-    : getMedicineImage(medicine.name, medicine.category);
+    : getMedicineImage(medicine);
 
   return (
     <div ref={ref} className="w-full max-w-full rounded-xl overflow-hidden border border-slate-800 bg-slate-900 flex flex-col hover:border-teal-500/50 transition-all duration-300">
@@ -23,7 +24,7 @@ const MedicineCard = forwardRef(({ item: medicine }, ref) => {
           alt={medicine.name}
           className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" 
           loading="lazy"
-          onError={e => { e.target.src = getMedicineImage('default') }}
+          onError={e => { e.target.src = getMedicineImage({ category: 'default' }) }}
         />
         {medicine.discount && (
           <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg">

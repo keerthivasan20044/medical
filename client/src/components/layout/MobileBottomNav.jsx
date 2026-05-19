@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Home, Pill, Search, Stethoscope, User, ShoppingBag } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext';
 
 const MobileBottomNav = () => {
   const location = useLocation();

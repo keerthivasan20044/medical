@@ -12,6 +12,7 @@ import api from '../../services/api.js';
 import { SkeletonBox } from '../../components/common/Skeleton';
 import Pagination from '../../components/common/Pagination';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import { useLanguage } from '../../context/LanguageContext';
 
 const statusMap = {
   'pending': { label: 'Placed', icon: Package, color: 'text-amber-500 bg-amber-50', step: 0 },
@@ -25,6 +26,7 @@ const statusMap = {
 const TIMELINE_STEPS = ['Placed', 'Confirmed', 'Packed', 'On Way', 'Delivered'];
 
 export default function MyOrdersPage() {
+  const { t } = useLanguage();
   const dispatch = useDispatch();
   const { items, pagination, status, error } = useSelector((s) => s.orders);
   const [activeTab, setActiveTab] = useState('Active'); // Active, Past, Cancelled
@@ -93,15 +95,15 @@ export default function MyOrdersPage() {
       {/* Header & Search */}
       <div className="flex flex-col gap-3">
          <div>
-            <h1 className="text-2xl md:text-4xl font-bold text-slate-900">My Orders</h1>
-            <p className="text-sm text-slate-400 mt-1">Track and manage your orders</p>
+            <h1 className="text-2xl md:text-4xl font-bold text-slate-900">{t('myOrdersTitle')}</h1>
+            <p className="text-sm text-slate-400 mt-1">{t('trackManageOrders')}</p>
          </div>
          <div className="flex gap-2">
             <div className="flex-1 h-11 bg-white border border-slate-200 rounded-xl flex items-center px-3 gap-2 focus-within:border-teal-500 transition-all">
                <Search size={16} className="text-slate-400 flex-shrink-0" />
                <input 
                   type="text" 
-                  placeholder="Search by order ID or pharmacy..." 
+                  placeholder={t('searchOrdersPlaceholder')} 
                   className="flex-1 bg-transparent text-sm font-medium outline-none text-slate-900 placeholder:text-slate-400 min-w-0"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -153,12 +155,12 @@ export default function MyOrdersPage() {
                             <div className="space-y-6 md:space-y-8 flex-1">
                                <div className="flex items-center gap-6">
                                   <div className="space-y-1">
-                                     <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Protocol ID</div>
+                                     <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{t('protocolId')}</div>
                                      <div className="font-syne font-black text-2xl md:text-3xl text-[#0a1628] italic uppercase leading-none">#{o.orderNumber || (o._id || o.id).slice(-6)}</div>
                                   </div>
                                   <div className="h-10 w-px bg-black/[0.03]" />
                                   <div className="space-y-1">
-                                     <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Sync Date</div>
+                                     <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{t('syncDate')}</div>
                                      <div className="font-dm font-black text-[#0a1628] text-sm md:text-lg italic">{new Date(o.createdAt || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
                                   </div>
                                </div>
@@ -167,15 +169,15 @@ export default function MyOrdersPage() {
                                   <div className="flex items-center gap-6">
                                      <div className="h-14 w-14 bg-gray-50 rounded-2xl flex items-center justify-center text-brand-teal shadow-inner"><MapPin size={24}/></div>
                                      <div className="space-y-0.5">
-                                        <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest italic">Source Node</div>
+                                        <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest italic">{t('sourceNode')}</div>
                                         <div className="font-syne font-black text-[#0a1628] text-lg uppercase italic">{o.pharmacy?.name || 'Karaikal Enclave'}</div>
                                      </div>
                                   </div>
                                   <div className="flex items-center gap-6">
                                      <div className="h-14 w-14 bg-gray-100 rounded-2xl flex items-center justify-center text-[#0a1628] shadow-inner"><Package size={24}/></div>
                                      <div className="space-y-0.5">
-                                        <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest italic">Payload Meta</div>
-                                        <div className="font-syne font-black text-[#0a1628] text-lg uppercase italic">{o.items?.length || 1} Categories &bull; ₹{o.totalAmount}</div>
+                                        <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest italic">{t('payloadMeta')}</div>
+                                        <div className="font-syne font-black text-[#0a1628] text-lg uppercase italic">{t('modulesCount', { count: o.items?.length || 1 })} &bull; ₹{o.totalAmount}</div>
                                      </div>
                                   </div>
                                </div>
@@ -184,7 +186,7 @@ export default function MyOrdersPage() {
                                {currentStatus.step >= 0 && (
                                  <div className="pt-8 space-y-6">
                                     <div className="flex items-center justify-between px-2">
-                                       <span className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-[0.2em]">Transmission Timeline</span>
+                                       <span className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-[0.2em]">{t('transmissionTimeline')}</span>
                                        <span className={`px-4 py-1 rounded-lg text-[9px] font-black uppercase italic tracking-widest ${currentStatus.color}`}>{currentStatus.label} Node Active</span>
                                     </div>
                                     <div className="relative h-1 bg-slate-100 rounded-full overflow-hidden">
@@ -210,7 +212,7 @@ export default function MyOrdersPage() {
                                {o.status?.toLowerCase() !== 'delivered' && o.status?.toLowerCase() !== 'cancelled' && (
                                  <Link to={`/orders/${o._id || o.id}/track`} className="flex-1">
                                     <button className="w-full h-16 md:h-20 px-8 bg-[#0a1628] text-brand-teal rounded-2xl md:rounded-[2rem] font-syne font-black text-[10px] uppercase italic tracking-widest shadow-4xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3">
-                                       <Truck size={18}/> Track Link
+                                       <Truck size={18}/> {t('trackLink')}
                                     </button>
                                  </Link>
                                )}
@@ -218,7 +220,7 @@ export default function MyOrdersPage() {
                                  onClick={() => downloadReceipt(o._id || o.id, o.orderNumber)}
                                  className="flex-1 h-16 md:h-20 px-8 bg-gray-50 border border-black/[0.02] text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl md:rounded-[2rem] hover:bg-[#0a1628] hover:text-white transition-all duration-500 flex items-center justify-center gap-3"
                                >
-                                  <Download size={18}/> Invert Invoice
+                                  <Download size={18}/> {t('invertInvoice')}
                                </button>
                                <Link to={`/orders/${o._id || o.id}`} className="flex-1">
                                   <button className="w-full h-16 md:h-16 md:w-16 bg-[#0a1628] border border-white/5 rounded-2xl flex items-center justify-center text-white hover:bg-brand-teal hover:text-[#0a1628] transition-all shadow-xl">
@@ -261,12 +263,12 @@ export default function MyOrdersPage() {
                  </div>
               </div>
               <div className="text-center space-y-4">
-                 <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic tracking-tighter">Null Enclave Detected</h3>
-                 <p className="text-gray-400 font-dm italic text-lg font-bold max-w-sm mx-auto">No {activeTab.toLowerCase()} logistics synchronizations found in the clinical registry.</p>
+                 <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic tracking-tighter">{t('nullEnclaveDetected')}</h3>
+                 <p className="text-gray-400 font-dm italic text-lg font-bold max-w-sm mx-auto">{t('noLogisticsFound', { status: activeTab.toLowerCase() })}</p>
               </div>
               <Link to="/medicines">
                  <button className="h-20 px-12 bg-brand-teal text-[#0a1628] font-syne font-black text-xs uppercase italic tracking-[0.3em] shadow-mint hover:scale-[1.05] active:scale-95 transition-all">
-                    Initialize Procurement &rarr;
+                    {t('initializeProcurement')} &rarr;
                  </button>
               </Link>
            </div>

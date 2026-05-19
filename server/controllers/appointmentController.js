@@ -14,3 +14,20 @@ export async function updateAppointment(req, res) {
   const item = await Appointment.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.json({ item });
 }
+
+export async function getAllAppointments(req, res) {
+  const { page = 1, limit = 10 } = req.query;
+  const items = await Appointment.find()
+    .populate('patient', 'name email phone')
+    .populate('doctor', 'name doctorProfile')
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * limit)
+    .limit(limit);
+  const total = await Appointment.countDocuments();
+  res.json({ 
+    items, 
+    total, 
+    page: parseInt(page), 
+    pages: Math.ceil(total / limit) 
+  });
+}

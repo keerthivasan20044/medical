@@ -72,11 +72,22 @@ export default function CheckoutPage() {
       return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError('Protocol confirmation failed.');
     }
 
-    const ok = await loadRazorpay();
-    if (!ok) return setError('Satellite payment node offline.');
-
     const intentRes = await dispatch(createPaymentIntent({ orderId, method }));
     if (intentRes.meta.requestStatus !== 'fulfilled') return setError('Payment intent failed.');
+
+    if (intentRes.payload && intentRes.payload.mock) {
+      const confirm = await dispatch(confirmPayment({
+        orderId,
+        method,
+        razorpay_payment_id: `pay_mock_${Math.random().toString(36).substring(2, 11)}`,
+        razorpay_order_id: intentRes.payload.id,
+        razorpay_signature: 'mock_signature'
+      }));
+      return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError('Mock Node synchronization failed.');
+    }
+
+    const ok = await loadRazorpay();
+    if (!ok) return setError('Satellite payment node offline.');
 
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID || '',
@@ -131,7 +142,7 @@ export default function CheckoutPage() {
                 </h1>
                 <div className="bg-teal-500/5 border border-teal-500/10 p-3 md:p-4 rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-4 text-teal-600 shrink-0">
                    <Truck size={18} className="animate-bounce-slow" />
-                   <div className="font-syne font-black text-[9px] md:text-xs uppercase italic tracking-widest leading-none">Estimated Delivery: <span className="text-navy">25–35 Mins</span></div>
+                   <div className="font-syne font-black text-[9px] md:text-xs uppercase italic tracking-widest leading-none">{t('estimatedDelivery')}: <span className="text-navy">25–35 Mins</span></div>
                 </div>
              </div>
 
@@ -141,9 +152,9 @@ export default function CheckoutPage() {
                 <div className="flex items-center justify-between border-b border-gray-50 pb-6 md:pb-8">
                    <div className="flex items-center gap-3 md:gap-4">
                       <div className="h-1 w-8 md:w-16 bg-teal-500 rounded-full" />
-                      <h3 className="font-syne font-black text-xl md:text-2xl text-navy uppercase italic">Item List</h3>
+                      <h3 className="font-syne font-black text-xl md:text-2xl text-navy uppercase italic">{t('itemList')}</h3>
                    </div>
-                   <span className="text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest">{items.length} Modules</span>
+                   <span className="text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest">{t('modulesCount', { count: items.length })}</span>
                 </div>
 
                 <div className="space-y-6 md:space-y-8 max-h-[400px] md:max-h-[500px] overflow-y-auto pr-2 no-scrollbar">
@@ -155,7 +166,7 @@ export default function CheckoutPage() {
                          <div className="flex-1 min-w-0 space-y-0.5 md:space-y-1">
                             <div className="font-syne font-black text-navy text-sm md:text-lg uppercase italic tracking-tight leading-tight truncate">{i.name}</div>
                             <div className="flex justify-between items-center text-[8px] md:text-[10px] font-black uppercase text-gray-300 tracking-widest">
-                               <span>Qty: {i.qty}</span>
+                               <span>{t('qtyCount', { qty: i.qty })}</span>
                                <span className="text-teal-600">₹{i.price * i.qty}</span>
                             </div>
                          </div>
@@ -164,23 +175,23 @@ export default function CheckoutPage() {
                 </div>                 <div className="pt-6 md:pt-10 border-t border-gray-50 space-y-4 md:space-y-6">
                    <div className="space-y-3 md:space-y-4">
                       <div className="flex justify-between text-gray-400 font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest">
-                         <span>Subtotal</span>
+                         <span>{t('subtotal')}</span>
                          <span>₹{totalAmount}</span>
                       </div>
                       <div className="flex justify-between text-gray-400 font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest">
-                         <span>Delivery Fee</span>
+                         <span>{t('deliveryFee')}</span>
                          <span className="text-emerald-500">₹{deliveryFee}</span>
                       </div>
                       {discount > 0 && (
                         <div className="flex justify-between text-teal-600 font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest">
-                           <span>Discount</span>
+                           <span>{t('discount')}</span>
                            <span>-₹{discount}</span>
                         </div>
                       )}
                    </div>
                    <div className="h-px bg-gray-50" />
                    <div className="flex justify-between items-end pt-2 md:pt-4">
-                      <div className="font-syne font-black text-lg md:text-2xl text-navy uppercase italic">Grand Total</div>
+                      <div className="font-syne font-black text-lg md:text-2xl text-navy uppercase italic">{t('grandTotal')}</div>
                       <div className="font-syne font-black text-3xl md:text-5xl text-teal-600 italic tracking-tighter">₹{finalTotal}</div>
                    </div>
                 </div>
@@ -197,7 +208,7 @@ export default function CheckoutPage() {
                    <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-4 md:gap-6">
                          <div className="h-10 w-10 md:h-14 md:w-14 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-teal-400 shrink-0"><MapPin size={20}/></div>
-                         <h2 className="font-syne font-black text-lg md:text-2xl uppercase italic tracking-tighter">Delivery Address</h2>
+                         <h2 className="font-syne font-black text-lg md:text-2xl uppercase italic tracking-tighter">{t('deliveryAddress')}</h2>
                       </div>
                       <button className="h-9 w-9 md:h-12 md:w-12 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-teal-400 hover:bg-teal-500 hover:text-navy transition-all shrink-0"><Plus size={18}/></button>
                    </div>
@@ -224,7 +235,7 @@ export default function CheckoutPage() {
                 <div className="space-y-6 md:space-y-8 relative z-10 pt-8 md:pt-10 border-t border-white/5">
                    <div className="flex items-center gap-4 md:gap-6">
                       <div className="h-10 w-10 md:h-14 md:w-14 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-teal-400 shrink-0"><CreditCard size={20}/></div>
-                      <h2 className="font-syne font-black text-lg md:text-2xl uppercase italic tracking-tighter">Payment Method</h2>
+                      <h2 className="font-syne font-black text-lg md:text-2xl uppercase italic tracking-tighter">{t('paymentMethod')}</h2>
                    </div>
 
                    <div className="grid grid-cols-3 gap-3 md:gap-4">
@@ -256,19 +267,19 @@ export default function CheckoutPage() {
                       className="w-full h-16 md:h-24 bg-teal-500 text-navy rounded-xl md:rounded-[3rem] font-syne font-black text-sm md:text-xl uppercase tracking-[0.2em] md:tracking-[0.4em] shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 md:gap-6 italic overflow-hidden relative group"
                    >
                       <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
-                      {status === 'loading' ? 'PROCESSING...' : 'PAY NOW'} 
+                      {status === 'loading' ? t('processing') : t('payNow')} 
                       <ArrowRight size={20} className="md:size-6" />
                    </button>
                    
                    <div className="flex items-center justify-center gap-4 text-[9px] font-black text-white/20 uppercase tracking-[0.4em] italic">
-                      <Lock size={12}/> Secure 256-bit AES Encryption Node
+                      <Lock size={12}/> {t('secureEncryption')}
                    </div>
                 </div>
              </div>
 
              <div className="text-center space-y-6">
                 <Link to="/cart" className="inline-flex items-center gap-3 text-gray-300 font-syne font-black text-[10px] uppercase italic tracking-[0.2em] hover:text-[#0a1628] transition-colors group">
-                   <ArrowLeft size={14} className="group-hover:-translate-x-2 transition-transform" /> Back to Cart
+                   <ArrowLeft size={14} className="group-hover:-translate-x-2 transition-transform" /> {t('backToCart')}
                 </Link>
              </div>
           </section>

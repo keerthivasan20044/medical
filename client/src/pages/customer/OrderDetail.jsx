@@ -9,8 +9,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchOrderById } from '../../store/ordersSlice.js';
 import { SkeletonBox } from '../../components/common/Skeleton';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function OrderDetail() {
+  const { t } = useLanguage();
   const { id } = useParams();
   const dispatch = useDispatch();
   const { currentItem: order, status, error } = useSelector((s) => s.orders);
@@ -97,10 +99,10 @@ export default function OrderDetail() {
                          <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center font-syne font-black text-xl text-gray-200 border border-black/[0.01] shadow-inner group-hover:bg-[#0a1628] group-hover:text-brand-teal transition-all duration-500">{(item.medicine?.name || item.name)[0]}</div>
                          <div className="space-y-1">
                             <h4 className="font-syne font-black text-[#0a1628] uppercase italic leading-none">{item.medicine?.name || item.name}</h4>
-                            <div className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">{item.qty} Items</div>
+                            <div className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">{item.quantity} Items</div>
                          </div>
                       </div>
-                      <div className="font-syne font-black text-xl text-[#0a1628]">₹{item.price * item.qty}</div>
+                      <div className="font-syne font-black text-xl text-[#0a1628]">₹{item.price * item.quantity}</div>
                    </div>
                  ))}
                  {!order?.items.length && <div className="text-center py-10 text-gray-300 font-black uppercase tracking-widest text-[10px] italic">No items found</div>}

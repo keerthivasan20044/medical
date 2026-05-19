@@ -53,6 +53,7 @@ async function seed() {
     for (const pharm of PHARMACIES) {
        const p = new Pharmacy(pharm);
        p.medicines = meds.map(m => m._id);
+       p.status = 'active'; // Ensure they are visible in public lists
        await p.save();
     }
     console.log(`Inserted ${PHARMACIES.length} Pharmacies`);

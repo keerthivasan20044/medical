@@ -68,6 +68,21 @@ export const medicineService = {
   getByCategory: async (cat) => {
     const res = await api.get(`/api/medicines/category/${cat}`);
     return res.data;
+  },
+
+  create: async (data) => {
+    const res = await api.post('/api/medicines', data);
+    return res.data;
+  },
+
+  update: async (id, data) => {
+    const res = await api.put(`/api/medicines/${id}`, data);
+    return res.data;
+  },
+
+  delete: async (id) => {
+    const res = await api.delete(`/api/medicines/${id}`);
+    return res.data;
   }
 };
 
@@ -84,6 +99,21 @@ export const pharmacyService = {
   
   getNearby: async (lat, lng) => {
     const res = await api.get('/api/pharmacies/nearby', { params: { lat, lng } });
+    return res.data;
+  },
+
+  create: async (data) => {
+    const res = await api.post('/api/pharmacies', data);
+    return res.data;
+  },
+
+  update: async (id, data) => {
+    const res = await api.put(`/api/pharmacies/${id}`, data);
+    return res.data;
+  },
+
+  delete: async (id) => {
+    const res = await api.delete(`/api/pharmacies/${id}`);
     return res.data;
   }
 };
@@ -128,6 +158,11 @@ export const adminService = {
   
   getUsers: async (params) => {
     const res = await api.get('/api/admin/users', { params });
+    return res.data;
+  },
+
+  toggleUserStatus: async (id) => {
+    const res = await api.patch(`/api/admin/users/${id}/toggle`);
     return res.data;
   }
 };
@@ -207,6 +242,11 @@ export const appointmentService = {
   updateStatus: async (id, status) => {
     const res = await api.patch(`/api/appointments/${id}/status`, { status });
     return res.data;
+  },
+
+  getAll: async (params) => {
+    const res = await api.get('/api/appointments', { params });
+    return res.data;
   }
 };
 
@@ -225,4 +265,19 @@ export const deliveryService = {
   confirmDelivery: (id, otp) => api.post(`/api/delivery/${id}/confirm`, { otp }).then(res => res.data),
   getEarnings: () => api.get('/api/delivery/earnings').then(res => res.data),
   getHistory: () => api.get('/api/delivery/history').then(res => res.data),
+};
+
+export const pharmacistService = {
+  getStats: () => api.get('/api/pharmacist/stats').then(res => res.data),
+  getInventory: () => api.get('/api/pharmacist/inventory').then(res => res.data),
+  getLowStock: (threshold = 10) => api.get('/api/pharmacist/low-stock', { params: { threshold } }).then(res => res.data),
+  getOrders: () => api.get('/api/orders/pharmacy').then(res => res.data),
+  updateOrderStatus: (id, status) => api.patch(`/api/orders/${id}/status`, { status }).then(res => res.data),
+};
+
+export const notificationService = {
+  getAll: () => api.get('/api/notifications').then(res => res.data),
+  markRead: (id) => api.put(`/api/notifications/${id}/read`).then(res => res.data),
+  markAllRead: () => api.put('/api/notifications/read/all').then(res => res.data),
+  create: (data) => api.post('/api/notifications', data).then(res => res.data),
 };

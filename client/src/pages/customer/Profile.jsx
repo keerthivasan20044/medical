@@ -6,7 +6,7 @@ import {
   Package, Pencil, Shield, Star, User, Activity, 
   ChevronRight, Heart, Zap, ShieldCheck, Globe, 
   Calendar, Clock, Wallet, Settings, RefreshCw as RefreshCwIcon,
-  PlusCircle, Trash2, ArrowRight, LayoutDashboard, Stethoscope
+  PlusCircle, Trash2, ArrowRight, LayoutDashboard, Stethoscope, Landmark
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { logoutUser } from '../../store/authSlice.js';

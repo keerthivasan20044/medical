@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
   Search, Sliders, LayoutGrid, List, ChevronRight, X, 
@@ -9,13 +10,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { pharmacies } from '../../utils/data.js';
-import { medicineService } from '../../services/apiServices';
+import { medicineService, pharmacyService } from '../../services/apiServices';
 import { addToCart } from '../../store/cartSlice.js';
 import MedicineCard from '../../components/medicine/MedicineCard';
 import Pagination from '../../components/common/Pagination';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 
 export default function MedicinesListPage() {
+  const { t } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +35,7 @@ export default function MedicinesListPage() {
   const priceRange = parseInt(searchParams.get('maxPrice')) || 10000;
   const rxFilter = searchParams.get('rx') || 'Both';
   const availability = searchParams.get('stock') || 'All';
-  const sortBy = searchParams.get('sort') || 'Most Popular';
+  const sortBy = searchParams.get('sort') || t('popularMeds');
 
   const updateFilters = (updates) => {
     const newParams = new URLSearchParams(searchParams);
@@ -55,7 +57,7 @@ export default function MedicinesListPage() {
   const setSearchQuery = (val) => updateFilters({ q: val });
   const setPriceRange = (val) => updateFilters({ maxPrice: val });
   const setRxFilter = (val) => updateFilters({ rx: val });
-  const setAvailability = (val) => updateFilters({ stock: val });
+  const setStock = (val) => updateFilters({ stock: val });
   const setSortBy = (val) => updateFilters({ sort: val });
 
   const toggleCategory = (cat) => {
@@ -105,7 +107,7 @@ export default function MedicinesListPage() {
         page: pageNum,
         limit: 12,
         q: searchQuery,
-        sort: sortBy === 'Price ↑' ? 'price_asc' : sortBy === 'Price ↓' ? 'price_desc' : sortBy === 'Rating' ? 'rating' : 'newest'
+        sort: sortBy === (t('priceLabel') + ' ↑') ? 'price_asc' : sortBy === (t('priceLabel') + ' ↓') ? 'price_desc' : sortBy === t('rating') ? 'rating' : 'newest'
       };
       
       if (selectedCategories.length > 0) params.category = selectedCategories[0];
@@ -174,12 +176,12 @@ export default function MedicinesListPage() {
       <div className={`space-y-10 ${isMobile ? 'p-8 pb-32' : ''}`}>
          <div className="space-y-2">
             <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Options</div>
-            <h3 className="font-syne font-black text-2xl md:text-3xl uppercase italic tracking-tighter text-[#0a1628]">Filters</h3>
+            <h3 className="font-syne font-black text-2xl md:text-3xl uppercase italic tracking-tighter text-[#0a1628]">{t('settingsTitle')}</h3>
          </div>
   
          {/* Categories */}
          <div className="space-y-6 pt-8 border-t border-black/[0.03]">
-            <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Category</div>
+            <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">{t('shopCategoryTitleSub')}</div>
             <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
                {categories.map(cat => (
                   <button 
@@ -202,7 +204,7 @@ export default function MedicinesListPage() {
          {/* Price Slider */}
          <div className="space-y-6 pt-8 border-t border-black/[0.03]">
             <div className="flex justify-between items-center">
-               <span className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Price Limit</span>
+               <span className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">{t('priceLabel')}</span>
                <div className="flex items-center gap-2">
                   <span className="text-[10px] font-bold text-gray-400">₹</span>
                   <input 
@@ -229,7 +231,7 @@ export default function MedicinesListPage() {
   
          {/* Pharmacy Filters */}
          <div className="space-y-6 pt-8 border-t border-black/[0.03]">
-            <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Available at Pharmacies</div>
+            <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">{t('pharmaciesNear')}</div>
             <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
                {pharmacyOptions.map(p => (
                   <button 
@@ -250,12 +252,12 @@ export default function MedicinesListPage() {
 
        {/* Stock Status */}
        <div className="space-y-4 pt-8 border-t border-black/[0.03]">
-          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">Availability</div>
+          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">{t('statusLabel')}</div>
           <button 
-             onClick={() => setAvailability(availability === 'In Stock' ? 'All' : 'In Stock')}
+             onClick={() => setStock(availability === 'In Stock' ? 'All' : 'In Stock')}
              className="w-full flex items-center justify-between group"
           >
-             <span className="font-syne font-black text-[11px] uppercase italic tracking-widest text-[#0a1628]">In Stock Only</span>
+             <span className="font-syne font-black text-[11px] uppercase italic tracking-widest text-[#0a1628]">{t('availableNow')}</span>
              <div className={`h-8 w-8 rounded-xl border-2 flex items-center justify-center transition-all ${availability === 'In Stock' ? 'bg-brand-teal border-brand-teal text-[#0a1628]' : 'border-black/[0.05] text-transparent'}`}>
                 <CheckCircle2 size={16}/>
              </div>
@@ -268,10 +270,11 @@ export default function MedicinesListPage() {
          onClick={resetFilters}
          className="w-full h-14 bg-gray-50 border border-black/[0.02] rounded-xl text-[10px] font-black text-gray-400 uppercase italic hover:bg-[#0a1628] hover:text-white transition-all shadow-inner"
        >
-          RESET FILTERS
+          {t('resetSearch').toUpperCase()}
        </button>
     </div>
   );
+  };
 
   return (
     <div className="bg-slate-50 min-h-screen pb-20 md:pb-6">
@@ -283,7 +286,7 @@ export default function MedicinesListPage() {
                   <Search size={16} className="text-teal-600" />
                   <input 
                     type="text" 
-                    placeholder="Search name or brand..." 
+                    placeholder={t('searchPlaceholder')} 
                     className="bg-transparent border-none outline-none text-sm font-semibold text-slate-900 w-full placeholder:text-slate-400"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -333,7 +336,7 @@ export default function MedicinesListPage() {
                   <div className="flex items-center gap-4 md:gap-6">
                      <div className="h-2 w-16 bg-brand-teal rounded-full animate-pulse hidden md:block" />
                       <h2 className="text-base font-bold text-slate-900 uppercase tracking-tight">
-                         {total} Medicines Found
+                         {total} {t('medicines')} {t('synced')}
                       </h2>
                   </div>
                   
@@ -359,10 +362,10 @@ export default function MedicinesListPage() {
                           onChange={(e) => setSortBy(e.target.value)}
                           className="h-16 pl-8 pr-12 bg-gray-50 border border-black/[0.02] rounded-2xl font-syne font-black text-[10px] uppercase italic tracking-widest outline-none appearance-none cursor-pointer hover:bg-white transition-all shadow-sm"
                         >
-                            <option>Most Popular</option>
-                            <option>Price ↑</option>
-                            <option>Price ↓</option>
-                            <option>Rating</option>
+                            <option>{t('popularMeds')}</option>
+                            <option>{t('priceLabel')} ↑</option>
+                            <option>{t('priceLabel')} ↓</option>
+                            <option>{t('rating')}</option>
                             <option>New arrivals</option>
                          </select>
                         <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-300 group-hover:text-[#0a1628]" />
@@ -383,7 +386,7 @@ export default function MedicinesListPage() {
                         </div>
                      </div>
                      <div className="space-y-3 text-center">
-                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase tracking-tighter italic">Loading Medicines...</h3>
+                        <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase tracking-tighter italic">{t('loadingStatus')}</h3>
                         <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">Connecting...</p>
                      </div>
                   </div>
@@ -412,7 +415,7 @@ export default function MedicinesListPage() {
                               <Pill size={56} strokeWidth={1} />
                            </div>
                            <div className="space-y-4 max-w-sm mx-auto">
-                              <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none tracking-tighter">No Medicines Found</h3>
+                              <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic leading-none tracking-tighter">No {t('medicines')} Found</h3>
                               <p className="text-gray-400 font-dm italic font-bold text-lg leading-relaxed">Try adjusting your filters or searching for something else.</p>
                            </div>
                            <button 
@@ -466,17 +469,17 @@ export default function MedicinesListPage() {
                   transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                   className="fixed inset-x-0 bottom-0 bg-white rounded-t-3xl z-[3001] shadow-2xl lg:hidden max-h-[85vh] overflow-y-auto no-scrollbar"
                >
-                  <div className="sticky top-0 bg-white p-6 border-b border-black/[0.03] flex items-center justify-between z-10">
-                     <div className="h-1.5 w-16 bg-gray-100 rounded-full mx-auto absolute top-3 left-1/2 -translate-x-1/2" />
-                     <div className="font-syne font-black text-xl uppercase italic tracking-tighter text-[#0a1628]">Sort & Filter</div>
-                     <button 
-                        onClick={() => setShowFilters(false)}
-                        className="h-10 w-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 hover:text-red-500"
-                     >
-                        <X size={20} />
-                     </button>
-                  </div>
-                  <FilterPanel isMobile />
+                   <div className="sticky top-0 bg-white p-6 border-b border-black/[0.03] flex items-center justify-between z-10">
+                      <div className="h-1.5 w-16 bg-gray-100 rounded-full mx-auto absolute top-3 left-1/2 -translate-x-1/2" />
+                      <div className="font-syne font-black text-xl uppercase italic tracking-tighter text-[#0a1628]">Sort & Filter</div>
+                      <button 
+                         onClick={() => setShowFilters(false)}
+                         className="h-10 w-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 hover:text-red-500"
+                      >
+                         <X size={20} />
+                      </button>
+                   </div>
+                   <FilterPanel isMobile />
                </motion.div>
             </>
          )}

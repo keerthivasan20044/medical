@@ -12,6 +12,7 @@ import { toast } from 'react-hot-toast';
 import { fetchOrders, updateOrderStatus, addOrder } from '../../store/ordersSlice.js';
 import PrescriptionModal from '../../components/pharmacist/PrescriptionModal';
 import { useLanguage } from '../../context/LanguageContext';
+import { pharmacistService } from '../../services/apiServices';
 
 export default function PharmacistDashboard() {
   const { t } = useLanguage();
@@ -20,17 +21,24 @@ export default function PharmacistDashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPrescription, setSelectedPrescription] = useState(null);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [lowStockItems, setLowStockItems] = useState([]);
+  const [lowStockLoading, setLowStockLoading] = useState(true);
 
   useEffect(() => {
     dispatch(fetchOrders());
+    // Fetch real low-stock data
+    pharmacistService.getLowStock(10)
+      .then(data => setLowStockItems(data.items || []))
+      .catch(() => setLowStockItems([]))
+      .finally(() => setLowStockLoading(false));
   }, [dispatch]);
 
   const stats = useMemo(() => [
     { label: "Today's Orders", value: orders.filter(o => new Date(o.createdAt).toDateString() === new Date().toDateString()).length, icon: ShoppingBag, color: 'text-amber-600 bg-amber-50' },
     { label: 'Pending Sync', value: orders.filter(o => o.status === 'placed').length, icon: Clock, color: 'text-blue-600 bg-blue-50' },
-    { label: 'Low Stock Alerts', value: 4, icon: AlertCircle, color: 'text-red-600 bg-red-50' },
+    { label: 'Low Stock Alerts', value: lowStockLoading ? '…' : lowStockItems.length, icon: AlertCircle, color: 'text-red-600 bg-red-50' },
     { label: 'District Revenue', value: `₹${orders.reduce((acc, curr) => acc + (curr.totalAmount || 0), 0)}`, icon: IndianRupee, color: 'text-brand-teal bg-brand-teal/10' }
-  ], [orders, t]);
+  ], [orders, lowStockItems, lowStockLoading, t]);
 
   const [otpValue, setOtpValue] = useState('');
   const [showOtpSync, setShowOtpSync] = useState(false);
@@ -145,7 +153,7 @@ export default function PharmacistDashboard() {
                                 {ord.items.map((item, id) => (
                                    <div key={id} className="text-xs font-dm font-black text-[#0a1628] uppercase italic tracking-widest flex items-center gap-4">
                                       <div className="h-1 w-8 bg-brand-teal rounded-full" />
-                                      <span className="opacity-50">{item.qty}x</span> {item.name || item.medicineName || t('medicineNode')}
+                                      <span className="opacity-50">{item.quantity}x</span> {item.name || item.medicineName || t('medicineNode')}
                                    </div>
                                 ))}
                              </div>
@@ -218,21 +226,28 @@ export default function PharmacistDashboard() {
               <div className="bg-white border border-black/[0.03] rounded-[4rem] p-12 space-y-8 shadow-soft">
                  <h4 className="font-syne font-black text-[#0a1628] uppercase tracking-widest text-[10px] italic border-b border-black/[0.03] pb-6">Low Stock Alarms</h4>
                  <div className="space-y-6">
-                    {[
-                       { name: 'Paracetamol 500mg', stock: '8 units' },
-                       { name: 'Cetirizine 10mg', stock: '5 units' }
-                    ].map(item => (
-                       <div key={item.name} className="flex items-center justify-between group">
-                          <div className="flex items-center gap-4">
-                             <div className="h-12 w-12 bg-red-50 text-red-500 rounded-xl flex items-center justify-center animate-pulse"><Pill size={20}/></div>
-                             <div className="space-y-0.5">
-                                <div className="font-syne font-black text-sm text-[#0a1628] italic uppercase leading-none">{item.name}</div>
-                                <div className="text-[9px] font-black text-red-400 uppercase tracking-widest">{item.stock} Left</div>
-                             </div>
-                          </div>
-                          <button className="h-10 px-4 bg-[#0a1628] text-brand-teal font-syne font-black text-[8px] uppercase italic tracking-widest rounded-xl hover:scale-105 transition-all">Reorder</button>
-                       </div>
-                    ))}
+                    {lowStockLoading ? (
+                      <div className="text-center py-4 text-gray-300 font-syne font-black text-xs uppercase italic tracking-widest animate-pulse">Syncing inventory…</div>
+                    ) : lowStockItems.length === 0 ? (
+                      <div className="text-center py-4 text-emerald-400 font-syne font-black text-xs uppercase italic tracking-widest">
+                        <CheckCircle size={24} className="mx-auto mb-2" /> All stock levels nominal
+                      </div>
+                    ) : (
+                      lowStockItems.slice(0, 5).map(item => (
+                        <div key={item._id} className="flex items-center justify-between group">
+                           <div className="flex items-center gap-4">
+                              <div className={`h-12 w-12 rounded-xl flex items-center justify-center animate-pulse ${item.stock === 0 ? 'bg-red-100 text-red-600' : 'bg-amber-50 text-amber-500'}`}><Pill size={20}/></div>
+                              <div className="space-y-0.5">
+                                 <div className="font-syne font-black text-sm text-[#0a1628] italic uppercase leading-none">{item.name}</div>
+                                 <div className={`text-[9px] font-black uppercase tracking-widest ${item.stock === 0 ? 'text-red-500' : 'text-amber-500'}`}>
+                                   {item.stock === 0 ? 'OUT OF STOCK' : `${item.stock} ${item.unit || 'units'} left`}
+                                 </div>
+                              </div>
+                           </div>
+                           <button className="h-10 px-4 bg-[#0a1628] text-brand-teal font-syne font-black text-[8px] uppercase italic tracking-widest rounded-xl hover:scale-105 transition-all">Reorder</button>
+                        </div>
+                      ))
+                    )}
                  </div>
               </div>
 

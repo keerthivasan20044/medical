@@ -1,4 +1,7 @@
+import { useLanguage } from '../../context/LanguageContext';
+
 export default function Emergency() {
+  const { t } = useLanguage();
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-red-50 to-brand-off border border-red-200 rounded-3xl p-6 shadow-soft">
@@ -45,7 +48,7 @@ export default function Emergency() {
               <div key={p.name} className="border border-brand-border rounded-xl p-3 flex items-center justify-between">
                 <div>
                   <div className="font-heading text-sm">{p.name}</div>
-                  <div className="text-xs text-brand-muted">{p.distance} · ETA {p.eta}</div>
+                  <div className="text-xs text-brand-muted">{p.distance} ï¿½ ETA {p.eta}</div>
                 </div>
                 <button className="text-xs text-brand-teal">Select</button>
               </div>

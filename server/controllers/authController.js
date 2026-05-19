@@ -103,7 +103,7 @@ export async function registerUser(req, res) {
     if (email) await sendEmail(email, 'Verify OTP', `Your OTP is ${otp}`);
     if (phone) await sendSMS(phone, `Your OTP is ${otp}`);
 
-    const payload = { id: user._id, name: user.name, email: user.email, role: user.role };
+    const payload = { id: user._id, name: user.name, email: user.email, role: user.role, pharmacyId: user.pharmacyId };
     const accessToken = signToken(payload, '7d'); // Requested 7d expiry
     const refreshToken = signToken(payload, '7d');
     user.refreshToken = refreshToken;
@@ -200,7 +200,7 @@ export async function loginUser(req, res) {
   const ok = await bcrypt.compare(password, user.password || '');
   if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
 
-  const payload = { id: user._id, name: user.name, email: user.email, role: user.role };
+  const payload = { id: user._id, name: user.name, email: user.email, role: user.role, pharmacyId: user.pharmacyId };
   const accessToken = signToken(payload, '7d');
   const refreshToken = signToken(payload, '7d');
   user.refreshToken = refreshToken;
@@ -261,7 +261,7 @@ export async function googleOAuth(req, res) {
     });
   }
 
-  const payload = { id: user._id, name: user.name, email: user.email, role: user.role };
+  const payload = { id: user._id, name: user.name, email: user.email, role: user.role, pharmacyId: user.pharmacyId };
   const accessToken = signToken(payload, '15m');
   const refreshToken = signToken(payload, '7d');
   user.refreshToken = refreshToken;
@@ -309,7 +309,7 @@ export async function verifyLoginOtp(req, res) {
   user.otpExpiry = null;
   await user.save();
 
-  const payload = { id: user._id, name: user.name, email: user.email, role: user.role };
+  const payload = { id: user._id, name: user.name, email: user.email, role: user.role, pharmacyId: user.pharmacyId };
   const accessToken = signToken(payload, '15m');
   const refreshToken = signToken(payload, '7d');
   user.refreshToken = refreshToken;

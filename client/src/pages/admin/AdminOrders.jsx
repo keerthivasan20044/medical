@@ -43,6 +43,18 @@ export default function AdminOrders() {
     fetchOrders(newPage, search, activeFilter);
   };
 
+  const handleViewOrder = (order) => {
+    const details = `
+      Order ID: ${order.orderNumber}
+      Customer: ${order.customerId?.name || 'N/A'}
+      Pharmacy: ${order.pharmacyId?.name || 'N/A'}
+      Amount: ₹${order.totalAmount}
+      Status: ${order.status.toUpperCase()}
+      Items: ${order.items?.length || 0}
+    `;
+    alert(details);
+  };
+
   return (
     <div className="space-y-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -126,6 +138,7 @@ export default function AdminOrders() {
         ]}
         data={orders}
         actions={true}
+        onView={handleViewOrder}
       />
     </div>
   );

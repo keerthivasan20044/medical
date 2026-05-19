@@ -26,7 +26,7 @@ export function FeaturedMedicines() {
       price: item.price,
       image: item.images?.[0] || item.image || '/assets/medicine_default.png',
       brand: item.brand,
-      qty: 1
+      quantity: 1
     }));
     toast.success(`${item.name} added to cart`);
   };

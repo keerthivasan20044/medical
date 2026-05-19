@@ -1,24 +1,55 @@
 import { motion } from 'framer-motion';
-import { ShoppingBag, Package, FileText, IndianRupee, Clock, Activity, Power } from 'lucide-react';
+import { ShoppingBag, Package, FileText, IndianRupee, Clock, Activity, Power, Loader2 } from 'lucide-react';
 import StatsCard from '../../components/dashboard/StatsCard';
 import DataTable from '../../components/dashboard/DataTable';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { pharmacistService } from '../../services/apiServices';
+import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function PharmacistOverview() {
+  const { t } = useLanguage();
+  const { user } = useSelector(state => state.auth);
   const [isOnline, setIsOnline] = useState(true);
+  const [stats, setStats] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const RECENT_ORDERS = [
-    { id: 'ORD-5542', customer: 'Anitha S.', total: 1240, status: 'New', date: 'Just now' },
-    { id: 'ORD-5541', customer: 'Vijay R.', total: 850, status: 'Preparing', date: '12 mins ago' },
-    { id: 'ORD-5540', customer: 'Meera K.', total: 2100, status: 'Ready', date: '45 mins ago' },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsData, ordersData] = await Promise.all([
+          pharmacistService.getStats(),
+          pharmacistService.getOrders()
+        ]);
+        setStats(statsData);
+        setOrders(ordersData.slice(0, 5));
+      } catch (err) {
+        console.error('Failed to fetch pharmacist data:', err);
+        toast.error('Failed to load dashboard data');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-[60vh] flex flex-col items-center justify-center space-y-4">
+        <Loader2 className="animate-spin text-brand-teal" size={48} />
+        <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Synchronizing Node Data...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10">
       {/* Header with Online Toggle */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em]">Node: Apollo Pharmacy #42</div>
+          <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em]">Node: {user?.name || 'Pharmacy Hub'}</div>
           <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Pharmacist Hub</h1>
         </div>
         <button 
@@ -34,37 +65,37 @@ export default function PharmacistOverview() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard label="New Requests" value="4" trend="+2 today" icon={ShoppingBag} color="bg-blue-50 text-blue-600" delay={0.1} />
-        <StatsCard label="Low Stock" value="12" trend="Action Required" icon={Package} color="bg-orange-50 text-orange-600" delay={0.2} />
-        <StatsCard label="Today's Revenue" value="₹12,450" trend="+18%" icon={IndianRupee} color="bg-emerald-50 text-emerald-600" delay={0.3} />
-        <StatsCard label="Prescriptions" value="8" trend="Pending Verification" icon={FileText} color="bg-purple-50 text-purple-600" delay={0.4} />
+        <StatsCard label="Pending Orders" value={stats?.pendingOrders || 0} trend="Live" icon={ShoppingBag} color="bg-blue-50 text-blue-600" delay={0.1} />
+        <StatsCard label="Total Orders" value={stats?.totalOrders || 0} trend="All time" icon={Package} color="bg-orange-50 text-orange-600" delay={0.2} />
+        <StatsCard label="Total Revenue" value={`₹${stats?.totalRevenue?.toLocaleString() || 0}`} trend="Delivered" icon={IndianRupee} color="bg-emerald-50 text-emerald-600" delay={0.3} />
+        <StatsCard label="Medicines" value={stats?.totalMedicines || 0} trend="Catalog" icon={FileText} color="bg-purple-50 text-purple-600" delay={0.4} />
       </div>
 
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Recent Activity */}
         <div className="lg:col-span-8">
            <DataTable 
-              title="Immediate Actions"
+              title="Recent Orders"
               columns={[
-                { key: 'id', label: 'Order ID' },
-                { key: 'customer', label: 'Client' },
-                { key: 'total', label: 'Total', render: (val) => `₹${val}` },
+                { key: '_id', label: 'Order ID', render: (val) => val.slice(-6).toUpperCase() },
+                { key: 'customerName', label: 'Client', render: (_, row) => row.userId?.name || 'Customer' },
+                { key: 'totalAmount', label: 'Total', render: (val) => `₹${val}` },
                 { 
                   key: 'status', 
                   label: 'Stage',
                   render: (val) => (
                     <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest w-fit border ${
-                      val === 'New' ? 'bg-blue-50 text-blue-600 border-blue-100 animate-pulse' : 
-                      val === 'Preparing' ? 'bg-amber-50 text-amber-600 border-amber-100' : 
+                      val === 'pending' ? 'bg-blue-50 text-blue-600 border-blue-100 animate-pulse' : 
+                      val === 'processing' ? 'bg-amber-50 text-amber-600 border-amber-100' : 
                       'bg-emerald-50 text-emerald-600 border-emerald-100'
                     }`}>
                       {val}
                     </div>
                   )
                 },
-                { key: 'date', label: 'Elapsed' }
+                { key: 'createdAt', label: 'Date', render: (val) => new Date(val).toLocaleDateString() }
               ]}
-              data={RECENT_ORDERS}
+              data={orders}
               actions={true}
            />
         </div>

@@ -20,8 +20,7 @@ export default function DoctorDashboard() {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-48 pt-24 px-6 md:px-10">
-      <div className="max-w-[1500px] mx-auto space-y-12 md:space-y-20">
+    <div className="space-y-12 md:space-y-20">
         
         {/* Header Architecture */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 pb-12 border-b border-black/[0.03]">
@@ -157,7 +156,6 @@ export default function DoctorDashboard() {
               </div>
            </div>
         </div>
-      </div>
     </div>
   );
 }

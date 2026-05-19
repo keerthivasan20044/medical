@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { MapPin, Star, Clock, Phone, Navigation, Truck, Timer, Heart, ShieldCheck, Pill, ShoppingCart, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { normalizeUrl } from '../../utils/url';
+import { useLanguage } from '../../context/LanguageContext';
 
-export default function PharmacyCard_v2({ item, layout = 'grid' }) {
+export default function PharmacyCard_v2({
+  const { t } = useLanguage(); item, layout = 'grid' }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const { 
     id, name, is24hr,

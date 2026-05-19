@@ -34,9 +34,14 @@ api.interceptors.response.use(
 
     if (status === 401) {
       localStorage.removeItem('authToken');
-      // Only redirect if we're not already on the login/register/otp pages to avoid loops
-      const publicPaths = ['/login', '/register', '/otp', '/forgot-password'];
-      if (!publicPaths.includes(window.location.pathname)) {
+      
+      // Only redirect if NOT on a public page or specifically a private page
+      const publicPaths = ['/login', '/register', '/otp', '/forgot-password', '/', '/about', '/contact', '/pharmacies', '/medicines', '/medicine'];
+      const currentPath = window.location.pathname;
+      
+      const isPublicPath = publicPaths.some(path => currentPath === path || currentPath.startsWith(path + '/'));
+      
+      if (!isPublicPath) {
         window.location.href = '/login';
       }
     } else if (import.meta.env.DEV) {

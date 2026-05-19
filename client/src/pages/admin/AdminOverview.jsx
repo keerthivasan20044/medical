@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { 
   Users, ShoppingBag, Store, IndianRupee, 
-  ArrowUpRight, Clock, Activity, MapPin 
+  ArrowUpRight, Clock, Activity, MapPin, Loader2 
 } from 'lucide-react';
 import StatsCard from '../../components/dashboard/StatsCard';
 import DataTable from '../../components/dashboard/DataTable';
@@ -9,6 +9,9 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   AreaChart, Area 
 } from 'recharts';
+import { useState, useEffect } from 'react';
+import { adminService } from '../../services/apiServices';
+import toast from 'react-hot-toast';
 
 const REVENUE_DATA = [
   { month: 'Jan', revenue: 280000 }, { month: 'Feb', revenue: 320000 },
@@ -16,13 +19,33 @@ const REVENUE_DATA = [
   { month: 'May', revenue: 520000 }, { month: 'Jun', revenue: 490000 },
 ];
 
-const RECENT_ORDERS = [
-  { id: 'ORD-1024', customer: 'Ramesh Kumar', pharmacy: 'Apollo Pharmacy', amount: 165, status: 'Out for Delivery' },
-  { id: 'ORD-1025', customer: 'Priya Raman', pharmacy: 'MedPlus', amount: 540, status: 'Processing' },
-  { id: 'ORD-1026', customer: 'Anand Kumar', pharmacy: 'Sri Murugan', amount: 320, status: 'Confirmed' },
-];
-
 export default function AdminOverview() {
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const data = await adminService.getStats();
+        setStats(data);
+      } catch (err) {
+        toast.error('Failed to load admin stats');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-[60vh] flex flex-col items-center justify-center space-y-4">
+        <Loader2 className="animate-spin text-brand-teal" size={48} />
+        <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Synchronizing Global Node Data...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-10">
       {/* Header */}
@@ -39,10 +62,10 @@ export default function AdminOverview() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard label="Total Enclaves" value="10,284" trend="+12%" icon={Users} color="bg-blue-50 text-blue-600" delay={0.1} />
-        <StatsCard label="Active Syncs" value="48,291" trend="+8%" icon={ShoppingBag} color="bg-orange-50 text-orange-600" delay={0.2} />
-        <StatsCard label="Revenue Manifest" value="₹2.8M" trend="+15%" icon={IndianRupee} color="bg-brand-teal/10 text-brand-teal" delay={0.3} />
-        <StatsCard label="Active Nodes" value="8" trend="Stable" icon={Store} color="bg-purple-50 text-purple-600" delay={0.4} />
+        <StatsCard label="Total Users" value={stats?.totalUsers || 0} trend="+12%" icon={Users} color="bg-blue-50 text-blue-600" delay={0.1} />
+        <StatsCard label="Orders Today" value={stats?.ordersToday || 0} trend="+8%" icon={ShoppingBag} color="bg-orange-50 text-orange-600" delay={0.2} />
+        <StatsCard label="Total Revenue" value={`₹${(stats?.revenue || 0).toLocaleString()}`} trend="+15%" icon={IndianRupee} color="bg-brand-teal/10 text-brand-teal" delay={0.3} />
+        <StatsCard label="Active Pharmacies" value={stats?.activePharmacies || 0} trend="Stable" icon={Store} color="bg-purple-50 text-purple-600" delay={0.4} />
       </div>
 
       {/* Charts Section */}
@@ -83,7 +106,6 @@ export default function AdminOverview() {
           </div>
           
           <div className="flex-1 flex items-center justify-center relative z-10">
-            {/* Minimalist Map visualization */}
             <div className="h-48 w-48 relative border-2 border-brand-teal/20 rounded-full flex items-center justify-center">
               <div className="h-32 w-32 border border-brand-teal/10 rounded-full animate-ping" />
               <div className="absolute top-1/4 left-1/2 h-2 w-2 bg-brand-teal rounded-full shadow-[0_0_20px_#02C39A]" />
@@ -101,30 +123,6 @@ export default function AdminOverview() {
           </div>
         </div>
       </div>
-
-      {/* Recent Orders */}
-      <DataTable 
-        title="Recent Global Orders"
-        columns={[
-          { key: 'id', label: 'Order ID' },
-          { key: 'customer', label: 'Initiator' },
-          { key: 'pharmacy', label: 'Node' },
-          { key: 'amount', label: 'Value', render: (val) => `₹${val}` },
-          { 
-            key: 'status', 
-            label: 'Status',
-            render: (val) => (
-              <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest w-fit border ${
-                val === 'Delivered' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'
-              }`}>
-                {val}
-              </div>
-            )
-          }
-        ]}
-        data={RECENT_ORDERS}
-        actions={true}
-      />
     </div>
   );
 }

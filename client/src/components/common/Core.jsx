@@ -153,8 +153,18 @@ export function OTPInput({ length = 6, onComplete }) {
 }
 
 /**
- * Multi-line entry node.
+ * Skeleton loader for structural placeholders.
  */
+export function Skeleton({ className = '', variant = 'rect' }) {
+  const base = "animate-pulse bg-navy/5";
+  const variants = {
+    rect: "rounded-xl",
+    circle: "rounded-full",
+    text: "rounded h-4 w-full"
+  };
+  return <div className={`${base} ${variants[variant]} ${className}`} />;
+}
+
 export function Textarea({ label, ...props }) {
   return (
     <div className="space-y-2 md:space-y-4 w-full">

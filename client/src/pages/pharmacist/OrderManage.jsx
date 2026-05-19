@@ -30,8 +30,8 @@ export default function OrderManage() {
                
                <div className="space-y-6">
                   {[
-                     { name: 'Dolo 650mg', qty: 2, batch: 'B2201-KKL', price: 64 },
-                     { name: 'Cetirizine 10mg', qty: 1, batch: 'C998-KKL', price: 25 }
+                     { name: 'Dolo 650mg', quantity: 2, batch: 'B2201-KKL', price: 64 },
+                     { name: 'Cetirizine 10mg', quantity: 1, batch: 'C998-KKL', price: 25 }
                   ].map(item => (
                      <div key={item.name} className="p-8 bg-white rounded-3xl border border-black/[0.01] shadow-soft flex items-center justify-between group hover:shadow-2xl hover:border-brand-teal/20 transition-all duration-700">
                         <div className="flex items-center gap-6">
@@ -42,8 +42,8 @@ export default function OrderManage() {
                            </div>
                         </div>
                         <div className="text-right space-y-1">
-                           <div className="font-syne font-black text-[#0a1628] text-xl italic mr-4">Qty: {item.qty}</div>
-                           <div className="font-syne font-black text-brand-teal text-xl italic">₹{item.price}</div>
+                           <div className="font-syne font-black text-[#0a1628] text-xl italic mr-4">Qty: {item.quantity}</div>
+                           <div className="font-syne font-black text-brand-teal text-xl italic">₹{item.price * item.quantity}</div>
                         </div>
                      </div>
                   ))}

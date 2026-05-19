@@ -79,6 +79,22 @@ export async function createPaymentIntent(req, res) {
       return res.json({ intent: rpOrder });
     }
 
+    if (process.env.NODE_ENV === 'development') {
+      const mockId = `order_mock_${crypto.randomBytes(8).toString('hex')}`;
+      order.razorpayOrderId = mockId;
+      await order.save();
+      return res.json({
+        intent: {
+          id: mockId,
+          amount,
+          currency: 'INR',
+          receipt: order.orderNumber,
+          notes: { orderId: String(order._id) },
+          mock: true
+        }
+      });
+    }
+
     res.status(500).json({ message: 'Razorpay configuration missing' });
   } catch (error) {
     res.status(500).json({ message: 'Failed to create payment' });
@@ -92,11 +108,17 @@ export async function confirmPayment(req, res) {
     if (!order) return res.status(404).json({ message: 'Order not found' });
 
     if (method !== 'cod') {
-      if (!verifySignature(razorpay_order_id, razorpay_payment_id, razorpay_signature || '')) {
-        return res.status(400).json({ message: 'Invalid payment signature' });
+      const isMock = razorpay_order_id && razorpay_order_id.startsWith('order_mock_');
+      if (isMock && process.env.NODE_ENV === 'development') {
+        order.paymentId = razorpay_payment_id || `pay_mock_${crypto.randomBytes(8).toString('hex')}`;
+        order.razorpayOrderId = razorpay_order_id;
+      } else {
+        if (!verifySignature(razorpay_order_id, razorpay_payment_id, razorpay_signature || '')) {
+          return res.status(400).json({ message: 'Invalid payment signature' });
+        }
+        order.paymentId = razorpay_payment_id;
+        order.razorpayOrderId = razorpay_order_id;
       }
-      order.paymentId = razorpay_payment_id;
-      order.razorpayOrderId = razorpay_order_id;
     }
 
     order.paymentMethod = method || order.paymentMethod;

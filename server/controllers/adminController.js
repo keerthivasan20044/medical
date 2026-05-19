@@ -4,21 +4,33 @@ import Pharmacy from '../models/Pharmacy.js';
 import Medicine from '../models/Medicine.js';
 
 export async function dashboardStats(req, res) {
-  const [totalUsers, activePharmacies, ordersToday, deliveries, revenue] = await Promise.all([
-    User.countDocuments(),
-    Pharmacy.countDocuments({ isVerified: true }),
-    Order.countDocuments({ createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) } }),
-    Order.countDocuments({ status: 'dispatched' }),
-    Order.aggregate([{ $group: { _id: null, total: { $sum: '$totalAmount' } } }])
-  ]);
+  try {
+    const [totalUsers, activePharmacies, ordersToday, deliveries, revenue] = await Promise.all([
+      User.countDocuments(),
+      Pharmacy.countDocuments({ status: 'active' }),
+      Order.countDocuments({ createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) } }),
+      Order.countDocuments({ status: 'dispatched' }),
+      Order.aggregate([{ $group: { _id: null, total: { $sum: '$totalAmount' } } }])
+    ]);
 
-  res.json({
-    totalUsers,
-    activePharmacies,
-    ordersToday,
-    deliveries,
-    revenue: revenue[0]?.total || 0
-  });
+    res.json({
+      totalUsers: totalUsers || 0,
+      activePharmacies: activePharmacies || 0,
+      ordersToday: ordersToday || 0,
+      deliveries: deliveries || 0,
+      revenue: revenue[0]?.total || 0
+    });
+  } catch (err) {
+    console.error('Dashboard stats error:', err);
+    res.status(500).json({ 
+      totalUsers: 0, 
+      activePharmacies: 0, 
+      ordersToday: 0, 
+      deliveries: 0, 
+      revenue: 0,
+      error: 'Data aggregation failure' 
+    });
+  }
 }
 
 export async function getAllUsers(req, res, next) {

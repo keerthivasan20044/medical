@@ -61,10 +61,10 @@ export function CartDrawer({ isOpen, onClose }) {
                              <div className="flex items-center justify-between">
                                 <div className="flex items-center bg-gray-50 rounded-xl px-4 py-2 gap-4 border border-gray-100">
                                    <button onClick={() => decrementQty(item._id || item.id)} className="text-gray-400 hover:text-red-500 transition"><Minus size={14}/></button>
-                                   <span className="font-syne font-black text-sm text-[#0a1628]">{item.qty}</span>
+                                   <span className="font-syne font-black text-sm text-[#0a1628]">{item.quantity}</span>
                                    <button onClick={() => incrementQty(item._id || item.id)} className="text-[#02C39A] hover:text-[#028090] transition"><Plus size={14}/></button>
                                 </div>
-                                <div className="font-syne font-black text-lg text-[#0a1628]">₹{(item.price * item.qty).toFixed(2)}</div>
+                                <div className="font-syne font-black text-lg text-[#0a1628]">₹{(item.price * item.quantity).toFixed(2)}</div>
                              </div>
                              <button onClick={() => removeFromCart(item._id || item.id)} className="text-[8px] font-black text-red-500 uppercase tracking-widest flex items-center gap-2 hover:underline"><Trash2 size={12}/> {t('removeItem') || 'Remove Item'}</button>
                           </div>

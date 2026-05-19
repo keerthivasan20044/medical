@@ -24,6 +24,11 @@ export async function getAllMedicines(req, res, next) {
 
     if (category) query.category = category;
     if (pharmacyId) query.pharmacyId = pharmacyId;
+    
+    // Auto-filter for pharmacists
+    if (req.user && req.user.role === 'pharmacist') {
+       query.pharmacyId = req.user.pharmacyId;
+    }
     if (minPrice || maxPrice) {
       query.price = {};
       if (minPrice) query.price.$gte = Number(minPrice);

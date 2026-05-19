@@ -103,7 +103,8 @@ export default function Login() {
     { id: 'customer', label: t('customer') || 'Customer', icon: User },
     { id: 'doctor', label: t('doctor') || 'Doctor', icon: Stethoscope },
     { id: 'pharmacist', label: t('pharmacist') || 'Pharmacist', icon: Store },
-    { id: 'delivery', label: t('delivery') || 'Delivery', icon: Truck }
+    { id: 'delivery', label: t('delivery') || 'Delivery', icon: Truck },
+    { id: 'admin', label: 'Admin', icon: ShieldCheck }
   ];
 
   return (
@@ -172,7 +173,7 @@ export default function Login() {
 
             <form onSubmit={method === 'email' ? handleLogin : (otpStep === 'request' ? handleRequestOtp : handleLogin)} className="space-y-10">
                {/* Role Selector */}
-               <div className="grid grid-cols-2 gap-3 md:gap-4">
+               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
                   {ROLES.map(r => (
                     <button
                       key={r.id}
@@ -197,7 +198,7 @@ export default function Login() {
                      className="space-y-6"
                    >
                        <Input 
-                         label="Email Address" 
+                         label={t('emailAddress')} 
                          icon={Mail} 
                          type="email"
                          placeholder="user@example.com" 
@@ -208,7 +209,7 @@ export default function Login() {
                        />
                        <div className="relative">
                          <Input 
-                           label="Password" 
+                           label={t('password')} 
                            icon={Lock} 
                            type={showPassword ? "text" : "password"} 
                            placeholder="••••••••" 
@@ -279,10 +280,10 @@ export default function Login() {
                          />
                          <div className={`h-2 w-2 bg-[#02C39A] rounded-full transition ${rememberMe ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`} />
                       </div>
-                      <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-[#0a1628]">Remember Me</span>
+                      <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-[#0a1628]">{t('rememberMe')}</span>
                    </label>
                   {method === 'email' && (
-                    <Link to="/forgot-password" title="Forgot Password" className="text-xs md:text-sm font-black uppercase tracking-widest text-[#028090] hover:underline decoration-2 underline-offset-4 decoration-[#02C39A] py-2">Forgot Password?</Link>
+                    <Link to="/forgot-password" title={t('forgotPassword')} className="text-xs md:text-sm font-black uppercase tracking-widest text-[#028090] hover:underline decoration-2 underline-offset-4 decoration-[#02C39A] py-2">{t('forgotPassword')}</Link>
                   )}
                </div>
 
@@ -297,7 +298,7 @@ export default function Login() {
 
             <div className="relative">
                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-50" /></div>
-               <div className="relative flex justify-center"><span className="bg-white px-8 text-[10px] font-black text-gray-200 uppercase tracking-widest">OR LOGIN WITH</span></div>
+               <div className="relative flex justify-center"><span className="bg-white px-8 text-[10px] font-black text-gray-200 uppercase tracking-widest">{t('orLoginWith')}</span></div>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
@@ -321,31 +322,32 @@ export default function Login() {
 
                <div className="text-center px-4 w-full">
                   <p className="text-[10px] font-black uppercase tracking-widest text-gray-300 flex flex-wrap items-center justify-center gap-2">
-                     <span>New here?</span>
+                     <span>{t('newHere')}</span>
                      <Link to="/register" className="text-[#028090] font-bold hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">
-                        Create Account &rarr;
+                        {t('createAccount')} &rarr;
                      </Link>
                   </p>
                   <Link to="/" className="text-[10px] font-black uppercase tracking-widest text-gray-300 hover:text-brand-teal transition-colors mt-4 block">
-                     Continue browsing without an account &rarr;
+                     {t('continueBrowsing')} &rarr;
                   </Link>
                </div>
 
             <div className="p-8 bg-gray-50/50 rounded-[2.5rem] border border-gray-100 space-y-4">
                <div className="text-[9px] text-gray-300 font-black uppercase tracking-[0.2em] flex items-center gap-4"> 
                   <div className="h-1 w-6 bg-brand-teal rounded-full" /> 
-                  Demo Accounts
+                  {t('demoAccounts')}
                </div>
                <div className="grid grid-cols-2 gap-4">
                   {[
-                    { r: 'Customer', e: 'kkl@demo.in' },
-                    { r: 'Doctor', e: 'doc@demo.in' },
-                    { r: 'Pharmacist', e: 'shop@demo.in' },
-                    { r: 'Delivery', e: 'ride@demo.in' }
+                    { r: 'Customer', e: 'customer@test.com' },
+                    { r: 'Doctor', e: 'doctor@test.com' },
+                    { r: 'Pharmacist', e: 'pharmacist@test.com' },
+                    { r: 'Delivery', e: 'delivery@test.com' },
+                    { r: 'Admin', e: 'admin@medipharm.com' }
                   ].map(d => (
                     <div key={d.r} className="p-4 bg-white rounded-2xl border border-gray-100 hover:shadow-lg transition duration-500">
                        <div className="text-[8px] font-black uppercase text-brand-teal mb-1">{d.r}</div>
-                       <div className="text-[10px] font-dm italic text-gray-400 select-all truncate">{d.e} / 123456</div>
+                       <div className="text-[10px] font-dm italic text-gray-400 select-all truncate">{d.e} / {d.r === 'Admin' ? 'admin1234' : 'test1234'}</div>
                     </div>
                   ))}
                </div>

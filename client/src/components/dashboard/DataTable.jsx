@@ -12,15 +12,18 @@ export default function DataTable({
   currentPage = 1,
   totalPages = 1,
   totalRecords = 0,
-  onPageChange
+  onPageChange,
+  onEdit,
+  onDelete,
+  onView
 }) {
   return (
     <div className="bg-white rounded-[3.5rem] border border-gray-100 shadow-sm overflow-hidden flex flex-col">
       {/* Table Header */}
       <div className="p-8 md:p-10 border-b border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h2 className="font-syne font-black text-2xl text-navy uppercase italic">{title}</h2>
-          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1">Found {totalRecords || data.length} records</p>
+          <h2 className="font-syne font-black text-2xl text-navy uppercase italic leading-none">{title}</h2>
+          <p className="text-[10px] font-dm font-bold text-navy/30 uppercase tracking-[0.2em] mt-2 italic">Refined Intelligence / {totalRecords || data.length} Units Sync'd</p>
         </div>
         
         <div className="flex items-center gap-4">
@@ -90,10 +93,38 @@ export default function DataTable({
                     </td>
                   ))}
                   {actions && (
-                    <td className="px-8 py-6 text-center">
-                      <button className="h-10 w-10 border border-gray-100 rounded-xl flex items-center justify-center text-navy/20 hover:text-navy hover:bg-white hover:shadow-lg transition-all mx-auto">
-                        <MoreVertical size={18} />
-                      </button>
+                    <td className="px-8 py-6">
+                      <div className="flex items-center justify-center gap-2">
+                        {onView && (
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); onView(row); }}
+                            className="h-9 w-9 bg-gray-50 text-navy/40 rounded-lg flex items-center justify-center hover:bg-navy hover:text-white transition-all"
+                          >
+                             <ChevronRight size={16} />
+                          </button>
+                        )}
+                        {onEdit && (
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); onEdit(row); }}
+                            className="h-9 w-9 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center hover:bg-emerald-600 hover:text-white transition-all"
+                          >
+                             <MoreVertical size={16} />
+                          </button>
+                        )}
+                        {onDelete && (
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); onDelete(row._id || row.id); }}
+                            className="h-9 w-9 bg-red-50 text-red-600 rounded-lg flex items-center justify-center hover:bg-red-600 hover:text-white transition-all"
+                          >
+                             <div className="h-4 w-4 flex items-center justify-center">×</div>
+                          </button>
+                        )}
+                        {!onEdit && !onDelete && !onView && (
+                           <button className="h-10 w-10 border border-gray-100 rounded-xl flex items-center justify-center text-navy/20 hover:text-navy hover:bg-white hover:shadow-lg transition-all mx-auto">
+                             <MoreVertical size={18} />
+                           </button>
+                        )}
+                      </div>
                     </td>
                   )}
                 </motion.tr>

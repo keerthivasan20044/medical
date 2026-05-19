@@ -39,7 +39,7 @@ export default function StatsCard({ label, value, trend, icon: Icon, color, dela
         <motion.div 
           animate={{ x: [-48, 48] }}
           transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          className={`h-full w-8 rounded-full ${color.split(' ')[0]} opacity-20`} 
+          className={`h-full w-8 rounded-full ${color?.split(' ')[0] || 'bg-gray-100'} opacity-20`} 
         />
       </div>
     </motion.div>

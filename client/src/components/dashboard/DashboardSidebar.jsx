@@ -33,28 +33,37 @@ export default function DashboardSidebar({ role, menuItems, isOpen, setIsOpen })
       {/* Nav Items */}
       <nav className="flex-1 space-y-2">
         {menuItems.map((item) => {
-          const isActive = location.pathname === item.path;
+          const isActive = location.pathname.startsWith(item.path);
           return (
             <Link
               key={item.path}
               to={item.path}
               onClick={() => setIsOpen(false)}
-              className={`flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-300 group ${
+              className={`flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-500 group relative ${
                 isActive 
-                ? 'bg-navy text-white shadow-lg shadow-navy/20' 
-                : 'text-navy/60 hover:bg-navy/5 hover:text-navy'
+                ? 'bg-[#0a1628] text-white shadow-2xl shadow-[#0a1628]/20 ring-1 ring-white/5' 
+                : 'text-navy/60 hover:bg-[#0a1628]/5 hover:text-navy'
               }`}
             >
-              <div className="flex items-center gap-3">
-                <item.icon size={20} className={isActive ? 'text-brand-teal' : 'group-hover:text-brand-teal transition-colors'} />
-                <span className="font-syne font-bold text-sm tracking-tight uppercase italic">{item.label}</span>
+              <div className="flex items-center gap-3 relative z-10">
+                <item.icon size={20} className={isActive ? 'text-brand-teal scale-110' : 'group-hover:text-brand-teal transition-all group-hover:scale-110'} />
+                <span className="font-syne font-black text-[11px] tracking-widest uppercase italic">{item.label}</span>
                 {item.badge && (
-                  <span className={`ml-2 px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest ${item.badgeColor || 'bg-gray-100 text-navy/40'}`}>
+                  <span className={`ml-2 px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest ${
+                    isActive ? 'bg-brand-teal/20 text-brand-teal' : (item.badgeColor || 'bg-gray-100 text-navy/40')
+                  }`}>
                     {item.badge}
                   </span>
                 )}
               </div>
-              {isActive && <motion.div layoutId="sidebar-active" className="h-1.5 w-1.5 rounded-full bg-brand-teal" />}
+              {isActive && (
+                <motion.div 
+                  layoutId="sidebar-active" 
+                  className="absolute left-0 w-1.5 h-6 bg-brand-teal rounded-r-full"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                />
+              )}
             </Link>
           );
         })}

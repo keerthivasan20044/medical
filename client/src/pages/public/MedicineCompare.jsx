@@ -36,12 +36,12 @@ export default function MedicineComparePage() {
   };
 
   const features = [
-    { label: 'Price', icon: Zap, val: m => `₹${m.price}` },
-    { label: 'MRP', icon: Award, val: m => `₹${m.mrp}` },
-    { label: 'Prescription', icon: FileText, val: m => m.requiresRx ? 'Required' : 'Not Req.' },
-    { label: 'Category', icon: Info, val: m => m.category },
-    { label: 'Rating', icon: Star, val: m => `${m.rating} ★` },
-    { label: 'Stock', icon: Activity, val: m => m.stockCount > 0 ? 'In Stock' : 'Out of Stock' }
+    { label: t('priceLabel'), icon: Zap, val: m => `₹${m.price}` },
+    { label: t('mrp'), icon: Award, val: m => `₹${m.mrp}` },
+    { label: t('requiresRx'), icon: FileText, val: m => m.requiresRx ? t('required') : t('notReq') },
+    { label: t('category'), icon: Info, val: m => m.category },
+    { label: t('rating'), icon: Star, val: m => `${m.rating} ★` },
+    { label: t('stockStatus'), icon: Activity, val: m => m.stockCount > 0 ? t('inStock') : t('outOfStock') }
   ];
 
   return (
@@ -130,7 +130,7 @@ export default function MedicineComparePage() {
 
                           <div className="px-8 pt-10">
                              <button className="w-full h-20 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-[0.3em] rounded-[2.5rem] shadow-4xl hover:bg-brand-teal hover:text-[#0a1628] transition-all duration-700 flex items-center justify-center gap-6 group">
-                                <ShoppingBag size={20} className="group-hover:rotate-12 transition-transform"/> Add to Cart
+                                <ShoppingBag size={20} className="group-hover:rotate-12 transition-transform"/> {t('addToCart')}
                              </button>
                           </div>
                         </>
@@ -145,7 +145,7 @@ export default function MedicineComparePage() {
                              onClick={() => setShowSearch(true)}
                              className="h-16 px-10 bg-white border border-black/[0.03] text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl hover:bg-brand-teal transition-all duration-500 shadow-4xl active:scale-95"
                            >
-                              Target Node
+                              {t('targetNode')}
                            </button>
                         </div>
                       )}
@@ -167,7 +167,7 @@ export default function MedicineComparePage() {
            >
               <div className="w-full max-w-5xl space-y-12">
                  <div className="flex justify-between items-center text-white">
-                    <h2 className="font-syne font-black text-6xl uppercase italic tracking-tighter"><span className="text-brand-teal">Target</span> Search</h2>
+                    <h2 className="font-syne font-black text-6xl uppercase italic tracking-tighter"><span className="text-brand-teal">{t('targetSearch').split(' ')[0]}</span> {t('targetSearch').split(' ')[1]}</h2>
                     <button onClick={() => setShowSearch(false)} className="h-16 w-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-white hover:text-red-500 hover:border-red-500 transition-all active:scale-95"><X size={32}/></button>
                  </div>
                  
@@ -175,7 +175,7 @@ export default function MedicineComparePage() {
                     <Search className="text-white/20 group-focus-within:text-brand-teal group-focus-within:scale-110 transition-all duration-700" size={32} />
                     <input 
                       type="text" 
-                      placeholder="Identify clinical node name..." 
+                      placeholder={t('identifyClinicalNode')}
                       className="bg-transparent flex-1 font-syne font-black text-3xl italic outline-none text-white placeholder-white/10"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}

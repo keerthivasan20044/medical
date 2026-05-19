@@ -68,7 +68,7 @@ export default function MedicineDetailPage() {
   if (loading) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] space-y-6">
       <Loader2 className="animate-spin text-brand-teal" size={48}/>
-      <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-widest">Loading Details...</p>
+      <p className="font-syne font-black text-[#0a1628] uppercase italic tracking-widest">{t('loadingDetails')}</p>
     </div>
   );
 
@@ -76,10 +76,10 @@ export default function MedicineDetailPage() {
     <div className="min-h-screen bg-[#0a1628] flex items-center justify-center p-6">
        <div className="text-center space-y-8 max-w-xl">
           <div className="h-24 w-24 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto text-brand-teal animate-pulse"><Pill size={40}/></div>
-          <h2 className="font-syne font-black text-3xl md:text-5xl text-white uppercase italic tracking-tighter">MEDICINE NOT FOUND</h2>
+          <h2 className="font-syne font-black text-3xl md:text-5xl text-white uppercase italic tracking-tighter">{t('medicineNotFound').toUpperCase()}</h2>
           <Link to="/medicines">
              <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-[10px] uppercase tracking-widest italic flex items-center gap-4 mx-auto">
-                <ChevronRight size={18} className="rotate-180"/> BACK TO SHOP
+                <ChevronRight size={18} className="rotate-180"/> {t('backToShop').toUpperCase()}
              </button>
           </Link>
        </div>
@@ -143,7 +143,7 @@ export default function MedicineDetailPage() {
                   </div>
                   {medicine.requiresRx && (
                      <div className="px-4 md:px-6 py-2 bg-purple-50 text-purple-600 text-[9px] md:text-[10px] font-black uppercase tracking-widest italic border border-purple-100 rounded-xl flex items-center gap-2">
-                        <FileText size={12}/> PRESCRIPTION REQUIRED
+                        <FileText size={12}/> {t('requiresRx').toUpperCase()}
                      </div>
                   )}
                </div>
@@ -151,14 +151,14 @@ export default function MedicineDetailPage() {
                <div className="space-y-2">
                   <div className="text-gray-400 font-dm font-bold italic text-base md:text-xl">{medicine.brand}</div>
                   <h1 className="font-syne font-black text-3xl md:text-6xl text-[#0a1628] leading-[0.9] tracking-tighter uppercase italic">{medicine.name}</h1>
-                  <div className="text-brand-teal font-dm font-black italic text-lg md:text-2xl uppercase tracking-tighter opacity-60">Active Ingredient: {medicine.generic}</div>
+                  <div className="text-brand-teal font-dm font-black italic text-lg md:text-2xl uppercase tracking-tighter opacity-60">{t('activeIngredient')}: {medicine.generic}</div>
                </div>
             </div>
 
             <div className="space-y-8 md:space-y-10 bg-white border border-black/[0.03] p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] shadow-soft">
                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                   <div className="space-y-1 md:space-y-2">
-                     <div className="text-[9px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Price</div>
+                     <div className="text-[9px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{t('priceLabel')}</div>
                      <div className="flex items-center gap-4 md:gap-6">
                         <span className="font-syne font-black text-teal-600 text-4xl md:text-6xl italic leading-none uppercase tracking-tighter select-none">₹{medicine.price}</span>
                         {medicine.mrp > medicine.price && (
@@ -171,7 +171,7 @@ export default function MedicineDetailPage() {
                   </div>
                   <div className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest italic flex items-center gap-1.5 md:gap-2 self-start md:self-auto ${medicine.stock > 0 ? 'bg-emerald-50 text-emerald-500' : 'bg-red-50 text-red-500'}`}>
                      <div className={`h-1.5 w-1.5 rounded-full animate-pulse ${medicine.stock > 0 ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                     {medicine.stock > 0 ? `${medicine.stock} IN STOCK` : 'UNAVAILABLE'}
+                     {medicine.stock > 0 ? `${medicine.stock} ${t('inStock').toUpperCase()}` : t('unavailable').toUpperCase()}
                   </div>
                </div>
 
@@ -181,7 +181,7 @@ export default function MedicineDetailPage() {
                         <Store size={20}/>
                      </div>
                      <div className="flex-1">
-                        <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest italic leading-none">Sold by</div>
+                        <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest italic leading-none">{t('soldBy')}</div>
                         <div className="font-syne font-black text-[#0a1628] text-lg uppercase italic group-hover:text-brand-teal transition-colors tracking-tighter truncate">{medicine.pharmacyName}</div>
                      </div>
                      <ChevronRight size={16} className="text-gray-200 group-hover:text-brand-teal group-hover:translate-x-2 transition-all" />
@@ -198,7 +198,7 @@ export default function MedicineDetailPage() {
                     onClick={handleAddToCart}
                     className="flex-1 h-14 md:h-20 bg-navy text-teal-400 font-syne font-black text-[9px] md:text-xs uppercase italic tracking-[0.2em] rounded-xl md:rounded-[2.2rem] shadow-xl hover:bg-teal-500 hover:text-navy transition-all flex items-center justify-center gap-3 md:gap-4"
                   >
-                     <ShoppingBag size={18} className="md:size-5"/> ADD TO CART
+                     <ShoppingBag size={18} className="md:size-5"/> {t('addToCart').toUpperCase()}
                   </button>
                </div>
             </div>
@@ -209,7 +209,7 @@ export default function MedicineDetailPage() {
                   <div className="h-12 w-12 bg-white/5 rounded-2xl flex items-center justify-center text-brand-teal">
                      <Truck size={24}/>
                   </div>
-                  <h4 className="font-syne font-black text-xl md:text-2xl uppercase italic tracking-tighter">Delivery Details</h4>
+                  <h4 className="font-syne font-black text-xl md:text-2xl uppercase italic tracking-tighter">{t('deliveryDetails')}</h4>
                </div>
                <div className="space-y-4 relative z-10">
                   <p className="text-white/60 font-dm font-bold italic text-base md:text-lg leading-relaxed">
@@ -234,7 +234,7 @@ export default function MedicineDetailPage() {
                >
                   <div className="flex items-center gap-4 md:gap-6">
                      <div className="h-10 w-10 md:h-12 md:w-12 bg-gray-50 rounded-xl flex items-center justify-center text-brand-teal group-hover:bg-[#0a1628] transition-all"><section.icon size={18}/></div>
-                     <span className="font-syne font-black text-base md:text-xl text-[#0a1628] uppercase italic tracking-tighter">{section.title}</span>
+                     <span className="font-syne font-black text-base md:text-xl text-[#0a1628] uppercase italic tracking-tighter">{t(section.title.toLowerCase()) || section.title}</span>
                   </div>
                   <ChevronRight size={20} className={`text-gray-200 transition-all transform ${openAccordions.includes(section.title) ? 'rotate-90 text-brand-teal' : ''}`} />
                </button>
@@ -257,14 +257,14 @@ export default function MedicineDetailPage() {
             className="fixed bottom-[80px] md:hidden inset-x-4 z-[100] bg-navy h-20 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between px-6 gap-6"
           >
              <div className="flex flex-col">
-                <div className="text-[8px] font-black text-white/30 uppercase italic tracking-widest">Price</div>
+                <div className="text-[8px] font-black text-white/30 uppercase italic tracking-widest">{t('priceLabel')}</div>
                 <div className="font-syne font-black text-teal-400 text-2xl italic leading-none select-none">₹{medicine.price}</div>
              </div>
              <button 
                onClick={handleAddToCart}
                className="flex-1 h-12 bg-teal-500 text-navy font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl shadow-lg active:scale-95 transition-all"
              >
-                ADD TO CART
+                {t('addToCart').toUpperCase()}
              </button>
           </motion.div>
        </AnimatePresence>

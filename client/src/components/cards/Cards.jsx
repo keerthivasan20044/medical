@@ -218,7 +218,9 @@ export function OrderCard({ order, showTrack = true }) {
           )}
        </div>
     </div>
-  
+  );
+}
+
 /**
  * Health insight article preview card.
  */

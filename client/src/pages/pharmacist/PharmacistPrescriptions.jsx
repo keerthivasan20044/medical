@@ -1,14 +1,36 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DataTable from '../../components/dashboard/DataTable';
-import { FileText, Eye, CheckCircle, XCircle, Clock, AlertCircle, Plus } from 'lucide-react';
+import { prescriptionService } from '../../services/apiServices';
+import { FileText, Eye, CheckCircle, XCircle, Clock, AlertCircle, Plus, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function PharmacistPrescriptions() {
-  const PRESCRIPTIONS = [
-    { id: 'PR-9921', customer: 'Ranjith Kumar', date: '2024-04-20 15:40', status: 'Pending', items: 0 },
-    { id: 'PR-9920', customer: 'Deepa Lakshmi', date: '2024-04-20 14:15', status: 'Processing', items: 4 },
-    { id: 'PR-9919', customer: 'Arun Mozhi', date: '2024-04-19 18:30', status: 'Verified', items: 2 },
-  ];
+  const [prescriptions, setPrescriptions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPrescriptions = async () => {
+      try {
+        const data = await prescriptionService.getPharmacyQueue();
+        setPrescriptions(data.items || []);
+      } catch (err) {
+        console.error('Failed to fetch prescriptions:', err);
+        toast.error('Failed to load prescription queue');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPrescriptions();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-[60vh] flex flex-col items-center justify-center space-y-4">
+        <Loader2 className="animate-spin text-brand-teal" size={48} />
+        <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Synchronizing Prescription Registry...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10">
@@ -23,24 +45,24 @@ export default function PharmacistPrescriptions() {
         title="Verification Backlog"
         columns={[
           { 
-            key: 'id', 
+            key: '_id', 
             label: 'Manifest ID',
             render: (val) => (
-              <span className="font-syne font-black text-xs text-brand-teal italic">{val}</span>
+              <span className="font-syne font-black text-xs text-brand-teal italic">{val.slice(-6).toUpperCase()}</span>
             )
           },
           { 
-            key: 'customer', 
+            key: 'userId', 
             label: 'Originator',
             render: (val) => (
-              <div className="font-dm font-bold text-navy text-sm italic">{val}</div>
+              <div className="font-dm font-bold text-navy text-sm italic">{val?.name || 'Customer'}</div>
             )
           },
           { 
-            key: 'date', 
+            key: 'createdAt', 
             label: 'Timestamp',
             render: (val) => (
-              <span className="text-[10px] font-bold text-navy/40 uppercase tracking-widest">{val}</span>
+              <span className="text-[10px] font-bold text-navy/40 uppercase tracking-widest">{new Date(val).toLocaleString()}</span>
             )
           },
           { 
@@ -48,13 +70,13 @@ export default function PharmacistPrescriptions() {
             label: 'Verification Phase',
             render: (val) => (
               <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest w-fit border flex items-center gap-2 ${
-                val === 'Verified' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
-                val === 'Processing' ? 'bg-blue-50 text-blue-600 border-blue-100' : 
+                val === 'verified' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
+                val === 'processing' ? 'bg-blue-50 text-blue-600 border-blue-100' : 
                 'bg-amber-50 text-amber-600 border-amber-100 animate-pulse'
               }`}>
-                {val === 'Pending' && <AlertCircle size={12} />}
-                {val === 'Processing' && <Clock size={12} />}
-                {val === 'Verified' && <CheckCircle size={12} />}
+                {val === 'pending' && <AlertCircle size={12} />}
+                {val === 'processing' && <Clock size={12} />}
+                {val === 'verified' && <CheckCircle size={12} />}
                 {val}
               </div>
             )
@@ -64,10 +86,13 @@ export default function PharmacistPrescriptions() {
             label: 'Decision Node',
             render: (_, row) => (
               <div className="flex items-center gap-2">
-                 <button className="h-9 px-4 bg-navy text-white rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all">
+                 <a 
+                   href={row.imageUrl} target="_blank" rel="noreferrer"
+                   className="h-9 px-4 bg-navy text-white rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all"
+                 >
                     <Eye size={14} /> View
-                 </button>
-                 {row.status === 'Pending' && (
+                 </a>
+                 {row.status === 'pending' && (
                     <button className="h-9 px-4 bg-brand-teal text-navy rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all">
                        <Plus size={14} /> Create Order
                     </button>
@@ -76,7 +101,7 @@ export default function PharmacistPrescriptions() {
             )
           }
         ]}
-        data={PRESCRIPTIONS}
+        data={prescriptions}
         pagination={false}
       />
       

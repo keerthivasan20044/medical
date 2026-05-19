@@ -6,6 +6,7 @@ import { pharmacyService } from '../../services/apiServices';
 import { normalizeUrl } from '../../utils/url';
 import PharmacyCard_v2 from '../../components/pharmacy/PharmacyCard_v2';
 import KaraikalMap from '../../components/pharmacy/KaraikalMap';
+import { useLanguage } from '../../context/LanguageContext';
 
 const demandData = [
   { time: '08:00', volume: 45 }, { time: '10:00', volume: 85 },
@@ -15,6 +16,7 @@ const demandData = [
 ];
 
 export default function PharmaciesListPage() {
+  const { t } = useLanguage();
   const [pharmacies, setPharmacies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid');

@@ -43,6 +43,17 @@ export default function AdminPharmacies() {
     fetchPharmacies(newPage, search, activeTab);
   };
 
+  const handleDeletePharmacy = async (id) => {
+    if (!window.confirm('Are you sure you want to decommission this pharmacy node?')) return;
+    try {
+      await pharmacyService.delete(id);
+      toast.success('Pharmacy node decommissioned');
+      fetchPharmacies(page, search, activeTab);
+    } catch (err) {
+      toast.error('Failed to decommission pharmacy');
+    }
+  };
+
   return (
     <div className="space-y-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -124,6 +135,7 @@ export default function AdminPharmacies() {
         ]}
         data={pharmacies}
         actions={true}
+        onDelete={handleDeletePharmacy}
       />
     </div>
   );

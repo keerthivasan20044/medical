@@ -76,12 +76,7 @@ const PrescriptionUploadFlow = lazy(() => import('../pages/customer/Prescription
 const PharmacistDashPage = lazy(() => import('../pages/pharmacist/PharmacistDashPage'));
 
 // DOCTOR PAGES
-const DoctorDashboard = lazy(() => import('../pages/doctor/Dashboard'));
-const DoctorAppointmentsPage = lazy(() => import('../pages/doctor/Appointments'));
-const PatientsListPage = lazy(() => import('../pages/doctor/Patients'));
-const PatientDetailPage = lazy(() => import('../pages/doctor/PatientDetail'));
-const WritePrescriptionPage = lazy(() => import('../pages/doctor/Prescriptions'));
-const SchedulePage = lazy(() => import('../pages/doctor/Schedule'));
+const DoctorDashPage = lazy(() => import('../pages/doctor/DoctorDashPage'));
 
 // DELIVERY PAGES
 const DeliveryDashPage = lazy(() => import('../pages/delivery/DeliveryDashPage'));
@@ -175,12 +170,7 @@ export default function AppRouter() {
 
             {/* DOCTOR ROUTES */}
             <Route element={<RoleRoute allow={['doctor']} />}>
-              <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-              <Route path="/doctor/appointments" element={<DoctorAppointmentsPage />} />
-              <Route path="/doctor/patients" element={<PatientsListPage />} />
-              <Route path="/doctor/patients/:id" element={<PatientDetailPage />} />
-              <Route path="/doctor/prescriptions" element={<WritePrescriptionPage />} />
-              <Route path="/doctor/schedule" element={<SchedulePage />} />
+              <Route path="/doctor/*" element={<DoctorDashPage />} />
             </Route>
 
             {/* DELIVERY ROUTES */}

@@ -6,7 +6,7 @@ export default function DashboardHeader({ role, setIsSidebarOpen }) {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <header className="h-20 bg-white border-b border-gray-100 px-4 md:px-8 flex items-center justify-between sticky top-0 z-40">
+    <header className="h-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-8 flex items-center justify-between sticky top-0 z-40 transition-all duration-500">
       {/* Left: Search & Mobile Menu */}
       <div className="flex items-center gap-4 md:gap-8 flex-1">
         <button

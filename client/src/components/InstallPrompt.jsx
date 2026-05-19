@@ -7,6 +7,9 @@ const InstallPrompt = () => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    const dismissed = localStorage.getItem('medipharm_install_dismissed');
+    if (dismissed) return;
+
     const handler = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -26,7 +29,13 @@ const InstallPrompt = () => {
     if (outcome === 'accepted') {
       setShow(false);
       setDeferredPrompt(null);
+      localStorage.setItem('medipharm_install_dismissed', 'true');
     }
+  };
+
+  const handleDismiss = () => {
+    setShow(false);
+    localStorage.setItem('medipharm_install_dismissed', 'true');
   };
 
   if (!show) return null;
@@ -50,7 +59,7 @@ const InstallPrompt = () => {
 
             <div className="flex items-center gap-3">
               <button 
-                onClick={() => setShow(false)} 
+                onClick={handleDismiss} 
                 className="h-10 w-10 flex items-center justify-center text-gray-500 hover:text-white transition-colors"
                 aria-label="Later"
               >

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Users, ShoppingBag, Store, Pill, IndianRupee, Clock, 
@@ -11,7 +11,7 @@ import {
   PieChart, Pie, Cell, LineChart, Line, AreaChart, Area 
 } from 'recharts';
 import { useSocket } from '../../context/SocketContext';
-import { adminService } from '../../services/apiServices';
+import { adminService, orderService } from '../../services/apiServices';
 
 const REVENUE_DATA = [
   { month: 'Jan', revenue: 280000 }, { month: 'Feb', revenue: 320000 },
@@ -49,18 +49,7 @@ const PHARMACY_PERFORMANCE = [
   { id: 8, name: 'Karaikal Central', orders: 48, revenue: 8800, rating: 4.7, status: 'Active' }
 ];
 
-const RECENT_ORDERS = [
-  { id: 'ORD-1024', customer: 'Ramesh Kumar', pharmacy: 'Apollo Pharmacy', amount: 165, status: 'Out for Delivery' },
-  { id: 'ORD-1025', customer: 'Priya Raman', pharmacy: 'MedPlus', amount: 540, status: 'Processing' },
-  { id: 'ORD-1026', customer: 'Anand Kumar', pharmacy: 'Sri Murugan', amount: 320, status: 'Confirmed' },
-  { id: 'ORD-1027', customer: 'Lakshmi Devi', pharmacy: 'Life Care', amount: 890, status: 'Delivered' },
-  { id: 'ORD-1028', customer: 'Suresh Prabhu', pharmacy: 'Apollo Pharmacy', amount: 210, status: 'Processing' },
-  { id: 'ORD-1029', customer: 'Kavitha S', pharmacy: 'MK Medical', amount: 1200, status: 'Delivered' },
-  { id: 'ORD-1030', customer: 'Vignesh R', pharmacy: 'Grace Pharmacy', amount: 450, status: 'Processing' },
-  { id: 'ORD-1031', customer: 'Meena K', pharmacy: 'Sri Dhanvantri', amount: 150, status: 'Confirmed' },
-  { id: 'ORD-1032', customer: 'Selvam T', pharmacy: 'Karaikal Central', amount: 980, status: 'Out for Delivery' },
-  { id: 'ORD-1033', customer: 'Deepa M', pharmacy: 'Apollo Pharmacy', amount: 670, status: 'Delivered' }
-];
+// RECENT_ORDERS is now fetched from the real API — see fetchOrders() below.
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState([
@@ -73,9 +62,22 @@ export default function AdminDashboard() {
   ]);
   const [loading, setLoading] = useState(true);
   const [telemetryNodes, setTelemetryNodes] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(true);
 
   const { socket } = useSocket();
-  const [orders, setOrders] = useState(RECENT_ORDERS);
+  const [orders, setOrders] = useState([]);
+
+  const fetchOrders = useCallback(async () => {
+    setOrdersLoading(true);
+    try {
+      const data = await orderService.getAll({ limit: 10, sort: '-createdAt' });
+      setOrders(data.items || data.orders || []);
+    } catch (e) {
+      console.warn('[AdminDashboard] Could not load orders:', e.message);
+    } finally {
+      setOrdersLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchAdminNode = async () => {
@@ -96,6 +98,7 @@ export default function AdminDashboard() {
        }
     };
     fetchAdminNode();
+    fetchOrders();
 
     // DASHBOARD UPDATES
     if (socket) {
@@ -128,7 +131,7 @@ export default function AdminDashboard() {
         socket.off('telemetry:pulse');
       }
     };
-  }, [socket]);
+  }, [socket, fetchOrders]);
 
   return (
     <div className="bg-[#f0f2f5] min-h-screen pb-20 pt-24 px-8">
@@ -147,7 +150,7 @@ export default function AdminDashboard() {
                      {loading ? 'Updating...' : 'Up to date'}
                   </div>
                </div>
-                <button className="h-12 w-12 bg-gray-50 text-[#028090] rounded-xl flex items-center justify-center hover:bg-white hover:shadow-lg transition"><RefreshCw size={18}/></button>
+                <button onClick={fetchOrders} className="h-12 w-12 bg-gray-50 text-[#028090] rounded-xl flex items-center justify-center hover:bg-white hover:shadow-lg transition"><RefreshCw size={18} className={ordersLoading ? 'animate-spin' : ''}/></button>
             </div>
          </div>
 

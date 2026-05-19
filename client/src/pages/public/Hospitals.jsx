@@ -31,11 +31,11 @@ export default function HospitalsPage() {
            
            <div className="space-y-6">
               <h1 className="font-syne font-black text-6xl lg:text-[7rem] text-white leading-[0.85] tracking-tighter uppercase italic drop-shadow-2xl">
-                 Medical <br/><span className="text-brand-teal">Centers</span>
+                 {t('medicalCenters').split(' ')[0]} <br/><span className="text-brand-teal">{t('medicalCenters').split(' ')[1]}</span>
               </h1>
               <div className="flex flex-col lg:flex-row gap-12 items-end justify-between pt-10">
                  <p className="text-white/40 font-dm text-2xl italic max-w-xl leading-relaxed">
-                    Providing quality healthcare services across the district.
+                    {t('medicalCentersDesc')}
                  </p>
                  <button className="h-20 px-12 bg-white/5 border border-white/10 text-white font-syne font-black text-[10px] uppercase italic tracking-[0.3em] rounded-2xl hover:bg-brand-teal hover:text-[#0a1628] transition-all duration-700 flex items-center gap-4 active:scale-95 shadow-4xl group">
                     <MapPin size={24} className="group-hover:translate-y-[-4px] transition-transform"/> {t('gridMap')}
@@ -79,10 +79,10 @@ export default function HospitalsPage() {
                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700" />
                      <div className="absolute top-8 left-8 flex flex-col gap-3">
                         <div className="px-5 py-2 bg-[#0a1628]/80 backdrop-blur-md rounded-xl text-[9px] font-black text-brand-teal uppercase tracking-widest italic border border-brand-teal/20 shadow-4xl">
-                           {h.type} Facility
+                           {h.type} {t('facility')}
                         </div>
                         <div className="px-5 py-2 bg-red-500 rounded-xl text-[9px] font-black text-white uppercase tracking-widest italic flex items-center gap-2 border border-red-400/30 shadow-4xl animate-pulse">
-                           <Activity size={12}/> Emergency Ready
+                           <Activity size={12}/> {t('emergencyReady')}
                         </div>
                      </div>
                      <div className="absolute bottom-6 right-8 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-700">
@@ -104,18 +104,18 @@ export default function HospitalsPage() {
                            <div className="bg-gray-50/80 border border-black/[0.01] rounded-2xl p-6 flex flex-col items-center justify-center text-center group-hover:bg-[#0a1628]/5 transition-all">
                               <Bed size={20} className="text-brand-teal mb-2" />
                               <div className="font-syne font-black text-[#0a1628] text-xl italic">{h.beds}</div>
-                              <div className="text-[8px] font-black text-gray-300 uppercase tracking-widest italic">Total Beds</div>
+                              <div className="text-[8px] font-black text-gray-300 uppercase tracking-widest italic">{t('totalBeds')}</div>
                            </div>
                            <div className="bg-gray-50/80 border border-black/[0.01] rounded-2xl p-6 flex flex-col items-center justify-center text-center group-hover:bg-[#0a1628]/5 transition-all">
                               <Award size={20} className="text-brand-teal mb-2" />
                               <div className="font-syne font-black text-[#0a1628] text-xl italic truncate max-w-full">NABH</div>
-                              <div className="text-[8px] font-black text-gray-300 uppercase tracking-widest italic">Accreditation</div>
+                              <div className="text-[8px] font-black text-gray-300 uppercase tracking-widest italic">{t('accreditation')}</div>
                            </div>
                         </div>
 
                         <div className="space-y-4 pt-4">
                            <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic flex items-center gap-4">
-                              <div className="h-px bg-black/[0.03] flex-1" /> DEPARTMENTS <div className="h-px bg-black/[0.03] flex-1" />
+                              <div className="h-px bg-black/[0.03] flex-1" /> {t('departmentsTitle')} <div className="h-px bg-black/[0.03] flex-1" />
                            </div>
                            <div className="flex flex-wrap gap-2">
                               {h.departments.slice(0, 4).map(dep => (
@@ -128,14 +128,14 @@ export default function HospitalsPage() {
 
                      <div className="pt-10 border-t border-black/[0.03] flex flex-col gap-4">
                         <div className="flex items-center justify-between text-[#0a1628]">
-                           <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">24/7 Helpline</span>
+                           <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{t('helpline')}</span>
                            <span className="font-syne font-black text-xl italic tracking-tighter flex items-center gap-4 group-hover:text-brand-teal transition-colors">
                               <Phone size={18} fill="currentColor" className="opacity-20 translate-y-1" /> {h.phone}
                            </span>
                         </div>
                         <Link to="/emergency" className="block">
                            <button className="w-full h-16 bg-gray-50 border border-black/[0.02] text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl hover:bg-[#0a1628] hover:text-white transition-all duration-700 flex items-center justify-center gap-3 active:scale-95">
-                              View Details <ChevronRight size={16}/>
+                              {t('viewDetails')} <ChevronRight size={16}/>
                            </button>
                         </Link>
                      </div>
@@ -151,7 +151,7 @@ export default function HospitalsPage() {
             <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
                <div className="space-y-6 text-center lg:text-left">
                   <div className="h-20 w-20 bg-white rounded-3xl flex items-center justify-center text-red-500 shadow-4xl animate-bounce mx-auto lg:mx-0"><Activity size={48}/></div>
-                  <h2 className="font-syne font-black text-5xl lg:text-[5.5rem] text-white tracking-tighter uppercase italic leading-none">Emergency <br/><span className="text-white/40 italic">Services</span></h2>
+                  <h2 className="font-syne font-black text-5xl lg:text-[5.5rem] text-white tracking-tighter uppercase italic leading-none">{t('emergencyServices').split(' ')[0]} <br/><span className="text-white/40 italic">{t('emergencyServices').split(' ')[1]}</span></h2>
                   <p className="text-white font-dm italic font-bold text-2xl max-w-xl">{t('districtArchitectureHeader')}</p>
                </div>
                <div className="flex flex-col items-center gap-8">
@@ -160,7 +160,7 @@ export default function HospitalsPage() {
                      <div className="font-syne font-black text-8xl lg:text-[10rem] text-white leading-none tracking-tighter italic drop-shadow-2xl">108</div>
                   </div>
                   <button className="h-24 px-16 bg-white text-red-500 font-syne font-black text-xs uppercase italic tracking-[0.3em] rounded-[2.5rem] shadow-4xl hover:scale-[1.05] active:scale-95 transition-all flex items-center gap-6 group">
-                     Call Now <ChevronRight size={24} className="group-hover:translate-x-2 transition-transform"/>
+                     {t('callNow')} <ChevronRight size={24} className="group-hover:translate-x-2 transition-transform"/>
                   </button>
                </div>
             </div>

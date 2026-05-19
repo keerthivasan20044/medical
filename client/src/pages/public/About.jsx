@@ -59,27 +59,27 @@ export default function About() {
          </div>
       </section>
 
-      {/* Clinical Infrastructure Section — NEW ADDITION */}
+      {/* Clinical Infrastructure Section */}
       <section className="max-w-7xl mx-auto px-10 py-56 space-y-40">
          <div className="grid lg:grid-cols-2 gap-24 items-center">
             <div className="space-y-12">
                <div className="px-6 py-2 bg-brand-teal/5 border border-brand-teal/10 rounded-xl inline-flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-widest italic">
-                  <Stethoscope size={16} /> Our Local Doctors
+                  <Stethoscope size={16} /> {t('ourLocalDoctors')}
                </div>
                <h2 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic tracking-tighter leading-tight">
-                  Trusted <span className="text-brand-teal">Doctors</span>, <br />Local Care.
+                  {t('trustedDoctorsLocalCare').split(',')[0]} <span className="text-brand-teal">{t('doctors')}</span>, <br />{t('trustedDoctorsLocalCare').split(',')[1]}
                </h2>
                <p className="text-gray-400 font-dm italic font-bold text-xl leading-relaxed">
-                  Our network consists of 50+ verified consultants from top institutions like JIPMER and Govt. General Hospital Karaikal. Each doctor is connected to our platform to provide real-time consultations and digital records.
+                  {t('doctorNetworkDesc')}
                </p>
                <div className="grid grid-cols-2 gap-8 pt-6">
                   <div className="space-y-2">
                      <div className="text-brand-teal font-syne font-black text-3xl italic">12+</div>
-                     <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Specialties Active</div>
+                     <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">{t('specialtiesActive')}</div>
                   </div>
                   <div className="space-y-2">
                      <div className="text-brand-teal font-syne font-black text-3xl italic">4.9/5</div>
-                     <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Quality Rating</div>
+                     <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">{t('qualityRating')}</div>
                   </div>
                </div>
             </div>
@@ -96,27 +96,27 @@ export default function About() {
             </div>
             <div className="order-1 lg:order-2 space-y-12">
                <div className="px-6 py-2 bg-[#0a1628] rounded-xl inline-flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-widest italic shadow-lg">
-                  <Store size={16} /> Pharmacy Network
+                  <Store size={16} /> {t('pharmacyNetwork')}
                </div>
                <h2 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic tracking-tighter leading-tight">
-                  Your Local <br /><span className="text-brand-teal">Pharmacy Network</span>.
+                  {t('pharmacyNetworkTitle').split(' ')[0]} {t('pharmacyNetworkTitle').split(' ')[1]} <br /><span className="text-brand-teal">{t('pharmacyNetworkTitle').split(' ').slice(2).join(' ')}</span>.
                </h2>
                <p className="text-gray-400 font-dm italic font-bold text-xl leading-relaxed">
-                  Our delivery network spans across Karaikal. From Market Road to Nagore, every pharmacy is verified, offering safe transport, real-time inventory updates, and essential services like vaccines and diabetic care.
+                  {t('pharmacyNetworkDesc')}
                </p>
                <div className="space-y-6">
                   <div className="flex items-center gap-6">
                      <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center shadow-soft text-brand-teal"><Truck size={24}/></div>
                      <div className="space-y-1">
-                        <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest">Fast Delivery</div>
-                        <p className="text-gray-300 text-sm font-bold italic">Quick delivery from your nearest local pharmacy.</p>
+                        <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest">{t('fastDelivery')}</div>
+                        <p className="text-gray-300 text-sm font-bold italic">{t('fastDeliveryDesc')}</p>
                      </div>
                   </div>
                   <div className="flex items-center gap-6">
                      <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center shadow-soft text-brand-teal"><Biohazard size={24}/></div>
                      <div className="space-y-1">
-                         <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest">Safe Medicine Transport</div>
-                         <p className="text-gray-300 text-sm font-bold italic">Special cooling for vaccines and insulin.</p>
+                         <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest">{t('safeMedicineTransport')}</div>
+                         <p className="text-gray-300 text-sm font-bold italic">{t('safeMedicineTransportDesc')}</p>
                      </div>
                   </div>
                </div>
@@ -129,23 +129,23 @@ export default function About() {
             <div className="max-w-4xl space-y-12 relative z-10">
                <div className="flex items-center gap-6">
                   <ShieldCheck size={48} className="text-brand-teal animate-pulse" />
-                  <h3 className="font-syne font-black text-4xl md:text-6xl uppercase italic tracking-tighter leading-none">Safety & Quality <br /><span className="text-brand-teal">Standards</span></h3>
+                  <h3 className="font-syne font-black text-4xl md:text-6xl uppercase italic tracking-tighter leading-none">{t('safetyQualityStandards').split('&')[0]} & {t('safetyQualityStandards').split('&')[1]} <br /><span className="text-brand-teal">{t('standards')}</span></h3>
                </div>
                <p className="text-white/40 font-dm text-2xl italic font-bold leading-relaxed">
-                  Every medicine and pharmacy on our platform goes through a strict verification process. We ensure your healthcare experience is safe, professional, and reliable.
+                  {t('safetyQualityDesc')}
                </p>
                <div className="grid md:grid-cols-3 gap-10">
                   <div className="space-y-3">
                      <div className="text-brand-teal font-syne font-black text-2xl italic">100%</div>
-                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Verified Stock</div>
+                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">{t('verifiedStock')}</div>
                   </div>
                   <div className="space-y-3">
                      <div className="text-brand-teal font-syne font-black text-2xl italic">Encrypted</div>
-                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Health Records</div>
+                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">{t('healthRecordsEncrypted')}</div>
                   </div>
                   <div className="space-y-3">
                      <div className="text-brand-teal font-syne font-black text-2xl italic">Immediate</div>
-                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Real-time Updates</div>
+                     <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">{t('realTimeUpdates')}</div>
                   </div>
                </div>
             </div>
@@ -230,7 +230,7 @@ export default function About() {
                <Users size={18} /> Our Team
             </div>
             <h2 className="font-syne font-black text-7xl lg:text-9xl text-[#0a1628] uppercase italic leading-[0.85] tracking-tighter">
-               {t('meetThe')} <br /><span className="text-brand-teal">Leadership Team</span>
+               {t('meetThe')} <br /><span className="text-brand-teal">{t('leadershipTeam')}</span>
             </h2>
             <p className="text-gray-300 font-dm text-2xl italic font-bold max-w-3xl mx-auto leading-relaxed">{t('teamSubtitle')}</p>
          </div>

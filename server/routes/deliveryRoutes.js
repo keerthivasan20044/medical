@@ -1,6 +1,7 @@
 import express from 'express';
 import { 
-  getAvailableOrders, 
+  getAvailableOrders,
+  getActiveOrder,
   acceptOrder, 
   updateDeliveryStatus, 
   confirmDelivery, 
@@ -14,6 +15,7 @@ const router = express.Router();
 router.use(verifyToken); // All delivery routes require authentication
 
 router.get('/available', getAvailableOrders);
+router.get('/active', getActiveOrder);
 router.post('/:orderId/accept', acceptOrder);
 router.patch('/:orderId/status', updateDeliveryStatus);
 router.post('/:orderId/confirm', confirmDelivery);
@@ -21,3 +23,4 @@ router.get('/history', getDeliveryHistory);
 router.get('/earnings', getDeliveryEarnings);
 
 export default router;
+

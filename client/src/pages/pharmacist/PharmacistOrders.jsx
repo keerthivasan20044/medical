@@ -3,8 +3,10 @@ import DataTable from '../../components/dashboard/DataTable';
 import { orderService } from '../../services/apiServices';
 import { ShoppingBag, Clock, CheckCircle2, XCircle, Package, Truck, AlertCircle, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function PharmacistOrders() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('New');
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);

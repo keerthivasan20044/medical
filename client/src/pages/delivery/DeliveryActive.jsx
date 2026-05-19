@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Navigation, MapPin, Phone, MessageSquare, CheckCircle2, ChevronRight, ShieldCheck, Zap, Store, Box, AlertTriangle, ShieldAlert } from 'lucide-react';
 import { useDelivery } from '../../hooks/useDelivery';
 import toast from 'react-hot-toast';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function DeliveryActive() {
+  const { t } = useLanguage();
   const { activeTask, updateStatus, confirmDelivery, loading } = useDelivery();
   const [currentStage, setCurrentStage] = useState(1); // Derived from activeTask.deliveryStatus
   const [itemsChecked, setItemsChecked] = useState({});

@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Upload, Camera, FileText, CheckCircle, 
+  Upload, Camera, FileText, CheckCircle, ShieldCheck,
   Trash2, Eye, Info, Video, X, 
   ChevronRight, ArrowLeft, Activity, Zap, 
   ClipboardList, AlertCircle, Bookmark, Plus, FileSearch
@@ -132,9 +132,9 @@ export default function PrescriptionUploadFlow() {
                        <div key={id} className="flex items-center justify-between text-xs font-dm font-black text-[#0a1628] uppercase italic tracking-widest pl-6 border-l-2 border-brand-teal/20">
                           <div className="flex items-center gap-4">
                              <ClipboardList size={14} className="text-brand-teal" />
-                             <span>{item.name} &times; {item.qty}</span>
+                             <span>{item.name} &times; {item.quantity}</span>
                           </div>
-                          <span>₹{item.price * item.qty}</span>
+                          <span>₹{item.price * item.quantity}</span>
                        </div>
                     ))}
                  </div>
@@ -335,8 +335,8 @@ export default function PrescriptionUploadFlow() {
                    <div className="space-y-4">
                       {nonRxItems.map((item, id) => (
                         <div key={id} className="flex justify-between text-[11px] font-dm font-black text-emerald-700/60 uppercase italic tracking-[0.1em] border-b border-emerald-100 pb-3 last:border-0">
-                           <span>{item.name} &times; {item.qty}</span>
-                           <span className="text-emerald-700">₹{item.price * item.qty}</span>
+                           <span>{item.name} &times; {item.quantity}</span>
+                           <span className="text-emerald-700">₹{item.price * item.quantity}</span>
                         </div>
                       ))}
                    </div>

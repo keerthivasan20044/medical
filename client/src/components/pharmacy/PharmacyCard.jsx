@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 import { Store, MapPin, Star, Clock, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function PharmacyCard({ pharmacy, idx }) {
+  const { t } = useLanguage();
   const isOpen = pharmacy.isOpen !== false;
 
   return (

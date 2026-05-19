@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 
 /**
  * Persists value to local storage architecture.
@@ -144,7 +145,6 @@ export function useSocket(token) {
   return socket;
 }
 
-import { toast } from 'react-hot-toast';
 
 /**
  * Unified toast notification bridge.

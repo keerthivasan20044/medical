@@ -36,6 +36,16 @@ export default function AdminUsers() {
     fetchUsers(newPage, search);
   };
 
+  const handleToggleStatus = async (id) => {
+    try {
+      await adminService.toggleUserStatus(id);
+      toast.success('User protocol updated');
+      fetchUsers(page, search);
+    } catch (err) {
+      toast.error('Failed to update user status');
+    }
+  };
+
   const handleExport = () => {
     toast.success('User registry exported to CSV');
   };
@@ -114,6 +124,7 @@ export default function AdminUsers() {
         ]}
         data={users}
         actions={true}
+        onEdit={(row) => handleToggleStatus(row._id || row.id)}
       />
     </div>
   );

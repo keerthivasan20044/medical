@@ -4,8 +4,10 @@ import { MapPin, Navigation, IndianRupee, Store, Clock, Zap, Map as MapIcon, Lis
 import { useDelivery } from '../../hooks/useDelivery';
 import DeliveryMap from '../../components/delivery/DeliveryMap';
 import toast from 'react-hot-toast';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function DeliveryAvailable() {
+  const { t } = useLanguage();
   const { availableTasks, fetchAvailable, acceptTask, loading } = useDelivery();
   const [viewMode, setViewMode] = useState('list');
   const [filterRadius, setFilterRadius] = useState(5); // km

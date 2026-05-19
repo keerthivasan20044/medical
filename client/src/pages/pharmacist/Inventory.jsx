@@ -37,7 +37,7 @@ export default function PharmacistInventory() {
   };
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-40 pt-32 px-12 relative overflow-hidden">
+    <div className="pb-40 relative overflow-hidden">
       {/* Background Decals */}
       <div className="absolute top-0 right-0 h-full w-1/3 bg-[#02C39A]/5 blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 h-1/2 w-1/4 bg-[#028090]/5 blur-3xl pointer-events-none" />

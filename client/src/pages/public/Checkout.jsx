@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
-import { Check, MapPin, CreditCard, ShoppingBag, ShieldCheck, Truck, ChevronRight, Plus, Phone } from 'lucide-react';
+import { Check, MapPin, CreditCard, ShoppingBag, ShieldCheck, Truck, ChevronRight, Plus, Phone, IndianRupee } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import api from '../../services/api.js';
@@ -57,6 +57,27 @@ export default function Checkout() {
 
       // 2. Synchronize Payment Intent (Razorpay)
       const { data: intentData } = await paymentService.createIntent(orderId);
+
+      if (intentData.intent && intentData.intent.mock) {
+        const confirmToast = toast.loading('Bypassing Payment (Mock Mode)...');
+        try {
+          await paymentService.confirmPayment({
+            orderId,
+            method: 'razorpay',
+            razorpay_payment_id: `pay_mock_${Math.random().toString(36).substring(2, 11)}`,
+            razorpay_order_id: intentData.intent.id,
+            razorpay_signature: 'mock_signature'
+          });
+          toast.success('Mock Payment Successful!', { id: confirmToast });
+          dispatch(clearCart());
+          navigate(`/orders/track/${orderId}`);
+        } catch (err) {
+          toast.error('Mock Payment Verification Failed.', { id: confirmToast });
+        }
+        toast.dismiss(loadingToast);
+        return;
+      }
+
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_YOUR_KEY',
         amount: intentData.intent.amount,
