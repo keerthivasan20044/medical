@@ -7,11 +7,13 @@ export const uploadPrescription = createAsyncThunk(
   async (file, thunkAPI) => {
     try {
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'medireach_prescriptions');
-      // Mocking Cloudinary/Backend upload
-      const res = await api.post('/api/prescriptions/upload', formData);
-      return res.data; // { url, publicId }
+      formData.append('image', file);
+      formData.append('notes', 'Uploaded during order checkout');
+      const res = await api.post('/api/prescriptions', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      const item = res.data.item;
+      return { url: item.imageUrl, publicId: item.publicId, id: item._id };
     } catch (e) {
       return thunkAPI.rejectWithValue(e.response?.data?.message || 'Upload failed');
     }

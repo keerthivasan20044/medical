@@ -2,7 +2,7 @@ import api from './api.js';
 
 export const paymentService = {
   createIntent: (orderId, method = 'razorpay') => 
-    api.post('/api/payments/create-intent', { orderId, method }),
+    api.post('/api/payments/intent', { orderId, method }),
   
   confirmPayment: (data) => 
     api.post('/api/payments/confirm', data),

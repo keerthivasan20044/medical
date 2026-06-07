@@ -60,43 +60,43 @@ export default function Home() {
       setTopDoctors((docsData.items || []).slice(0, 3));
 
       setStats([
-        { label: t('totalOrders'), value: fetchedOrders.length.toString().padStart(2, '0'), hint: 'Sync Complete', icon: Package, color: 'text-blue-500' },
+        { label: t('totalOrders'), value: fetchedOrders.length.toString().padStart(2, '0'), hint: 'Updated', icon: Package, color: 'text-blue-500' },
         { label: t('activeDelivery'), value: fetchedOrders.filter(o => o.status !== 'delivered').length.toString().padStart(2, '0'), hint: 'Live Tracking', icon: Truck, color: 'text-emerald-500' },
-        { label: t('prescriptions'), value: prescriptions.length.toString().padStart(2, '0'), hint: 'Clinical Vault', icon: ShieldCheck, color: 'text-brand-teal' },
+        { label: t('prescriptions'), value: prescriptions.length.toString().padStart(2, '0'), hint: 'Prescriptions', icon: ShieldCheck, color: 'text-brand-teal' },
         { label: t('appointments'), value: '00', hint: 'No pending', icon: Calendar, color: 'text-amber-500' }
       ]);
     } catch (err) {
-      console.error('Dashboard sync error:', err);
+      console.error('Dashboard update error:', err);
     } finally {
       setLoading(false);
     }
   };
 
   const QUICK_ACTIONS = [
-    { label: t('uploadPrescription'), to: '/prescriptions', icon: Upload, desc: t('uploadPrescriptionDesc') },
+    { label: t('uploadPrescription'), to: '/prescriptions/upload', icon: Upload, desc: t('uploadPrescriptionDesc') },
     { label: t('bookDoctor'), to: '/doctors', icon: Stethoscope, desc: t('bookDoctorDesc') },
     { label: t('openWallet'), to: '/wallet', icon: Wallet, desc: t('openWalletDesc') },
     { label: t('orderAgain'), to: '/orders', icon: RotateCcw, desc: t('orderAgainDesc') }
   ];
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden px-4 md:px-0 pb-32 space-y-12">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden px-4 sm:px-6 lg:px-8 pb-28 md:pb-12 space-y-8 lg:space-y-10">
       {/* Header Hub */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pt-4">
-        <div className="space-y-3">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 pt-5 lg:pt-6">
+        <div className="space-y-3 min-w-0">
            <div className="px-4 py-1.5 bg-teal-500/10 border border-teal-500/20 rounded-xl w-fit flex items-center gap-2 text-[9px] font-black text-teal-600 uppercase tracking-widest">
               <div className="h-1.5 w-1.5 bg-teal-500 rounded-full animate-ping" /> {t('systemStatus')}: {t('systemOnline')}
            </div>
-           <h1 className="font-syne font-black text-4xl md:text-6xl text-navy leading-tight tracking-tighter uppercase italic">
+           <h1 className="font-syne font-black text-4xl md:text-5xl xl:text-6xl text-navy leading-[0.95] uppercase italic break-words">
              {t('hello')}, <br /><span className="text-teal-600">{t('healthHub')}</span>
            </h1>
            <p className="text-gray-400 font-dm text-base md:text-lg italic tracking-tight">{t('medicalOverview')}</p>
         </div>
-        <div className="flex items-center gap-4 bg-gray-50 border border-gray-100 p-2 rounded-2xl self-start md:self-auto">
-           <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-white shadow-sm flex items-center justify-center text-teal-600 shrink-0"><Bell size={20} /></div>
+        <div className="flex items-center gap-3 bg-gray-50 border border-gray-100 p-2 rounded-2xl self-start md:self-auto max-w-full">
+           <div className="h-12 w-12 md:h-14 md:w-14 rounded-xl bg-white shadow-sm flex items-center justify-center text-teal-600 shrink-0"><Bell size={20} /></div>
            <div className="pr-4 md:pr-6">
               <div className="text-[9px] font-black uppercase text-gray-300 tracking-widest">{t('lastActivity')}</div>
-              <div className="text-sm font-bold text-navy truncate">{loading ? t('syncing') : t('updatedNow')}</div>
+              <div className="text-sm font-bold text-navy truncate">{loading ? t('updateing') : t('updatedNow')}</div>
            </div>
         </div>
       </div>
@@ -115,33 +115,33 @@ export default function Home() {
             </div>
             <div className="text-center space-y-3">
                <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase tracking-tighter italic">{t('loadingDashboard')}</h3>
-               <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">{t('syncingSecureClinicalData')}</p>
+               <p className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.4em] italic leading-none animate-pulse">{t('updateingSecureClinicalData')}</p>
             </div>
         </div>
       ) : (
         <>
           {/* Order Status Hero */}
-          <div className="bg-navy rounded-2xl md:rounded-[3.5rem] p-6 md:p-14 text-white relative overflow-hidden group">
-             <div className="absolute top-0 right-0 h-96 w-96 bg-teal-500 opacity-5 rounded-full blur-[100px]" />
-             <div className="relative z-10 grid md:grid-cols-[1.5fr_1fr] gap-8 md:gap-12 items-center">
-                <div className="space-y-6 md:space-y-8">
-                   <div className="space-y-2 md:space-y-4">
-                      <div className="text-[9px] font-black uppercase text-teal-400 tracking-widest italic">{t('liveFulfillmentSync')}</div>
-                      <h2 className="text-3xl md:text-5xl font-syne font-black leading-tight tracking-tighter uppercase">{t('activeOrders')}</h2>
+          <div className="bg-navy rounded-2xl lg:rounded-[2rem] p-6 md:p-8 xl:p-10 text-white relative overflow-hidden group">
+             <div className="absolute top-0 right-0 h-72 w-72 bg-teal-500 opacity-5 rounded-full blur-[90px]" />
+             <div className="relative z-10 grid lg:grid-cols-[1.25fr_0.9fr] gap-7 lg:gap-10 items-center">
+                <div className="space-y-6">
+                   <div className="space-y-2">
+                      <div className="text-[9px] font-black uppercase text-teal-400 tracking-widest italic">{t('liveFulfillmentUpdate')}</div>
+                      <h2 className="text-3xl md:text-4xl xl:text-5xl font-syne font-black leading-tight uppercase">{t('activeOrders')}</h2>
                       <p className="text-white/40 font-dm italic text-base md:text-lg">
                         {recentOrders[0] ? t('currentDeliveryStatus') : t('noActiveOrders')}
                       </p>
                    </div>
                    {recentOrders[0] ? (
-                     <div className="flex items-center gap-6 md:gap-10">
+                     <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8">
                         <div className="space-y-1 min-w-0 flex-1">
                            <div className="text-white/20 text-[8px] md:text-[9px] font-black uppercase tracking-widest">{t('orderId')}</div>
-                           <div className="text-lg md:text-xl font-syne font-black truncate">#{recentOrders[0].orderNumber}</div>
+                           <div className="text-lg md:text-xl font-syne font-black break-all">#{recentOrders[0].orderNumber}</div>
                         </div>
-                        <div className="h-8 md:h-10 w-px bg-white/10" />
+                        <div className="hidden sm:block h-10 w-px bg-white/10" />
                         <div className="space-y-1">
                            <div className="text-white/20 text-[8px] md:text-[9px] font-black uppercase tracking-widest">{t('status')}</div>
-                           <div className="text-lg md:text-xl font-syne font-black text-teal-400 tracking-widest uppercase">{t(recentOrders[0].status)}</div>
+                           <div className="text-lg md:text-xl font-syne font-black text-teal-400 tracking-widest uppercase break-words">{t(recentOrders[0].status)}</div>
                         </div>
                      </div>
                    ) : null}
@@ -152,7 +152,7 @@ export default function Home() {
                       {t('viewAllOrdersCount', { count: orders.length })} &rarr;
                    </button>
                 </div>
-                <div className="relative h-40 md:h-96 rounded-2xl md:rounded-[3rem] bg-white/5 border border-white/10 overflow-hidden hidden md:flex items-center justify-center">
+                <div className="relative h-56 xl:h-72 rounded-2xl bg-white/5 border border-white/10 overflow-hidden hidden lg:flex items-center justify-center">
                    <div className="absolute inset-0 bg-[linear-gradient(rgba(2,195,154,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(2,195,154,0.1)_1px,transparent_1px)] bg-[size:20px_20px] opacity-10" />
                    <div className="relative">
                       <div className="h-16 w-16 bg-teal-500/20 rounded-full animate-ping" />
@@ -167,12 +167,12 @@ export default function Home() {
           {/* Quick Actions Grid */}
           <div className="space-y-6">
              <div className="space-y-1">
-                <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase tracking-tighter italic break-words w-full max-w-full leading-tight">{t('quickAccess')}</h2>
+                <h2 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic break-words w-full max-w-full leading-tight">{t('quickAccess')}</h2>
                 <p className="text-[11px] font-black text-gray-300 uppercase tracking-widest">{t('optimizedForYou')}</p>
              </div>
              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 {QUICK_ACTIONS.map(action => (
-                  <Link key={action.label} to={action.to} className="group bg-white border border-gray-50 rounded-2xl md:rounded-3xl p-4 md:p-6 flex flex-col md:flex-row items-center md:items-center gap-3 md:gap-6 hover:shadow-2xl transition-all duration-500 text-center md:text-left">
+                  <Link key={action.label} to={action.to} className="group bg-white border border-gray-100 rounded-2xl p-4 md:p-5 flex flex-col md:flex-row items-center md:items-center gap-3 md:gap-5 hover:shadow-xl transition-all duration-300 text-center md:text-left min-w-0">
                      <div className="h-10 w-10 md:h-14 md:w-14 rounded-xl md:rounded-2xl bg-gray-50 text-brand-teal flex items-center justify-center group-hover:bg-[#0a1628] group-hover:text-white transition duration-500 shadow-inner flex-shrink-0"><action.icon size={20}/></div>
                      <div className="space-y-0.5 md:space-y-1 min-w-0">
                         <div className="font-syne font-black text-[10px] md:text-md text-[#0a1628] leading-none uppercase tracking-tight truncate w-full">{action.label}</div>
@@ -205,7 +205,7 @@ export default function Home() {
 
            {/* Available Medicines & Active Doctors Split */}
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-             {/* Medicines Node */}
+             {/* Medicines Item */}
              <div className="bg-white border border-gray-100 rounded-3xl md:rounded-[4rem] p-5 md:p-12 space-y-6 md:space-y-10 hover:shadow-xl transition-all duration-700">
                 <div className="flex items-center justify-between gap-4">
                    <div className="space-y-1">

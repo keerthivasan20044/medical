@@ -27,7 +27,7 @@ export default function AdminDelivery() {
       setTotalPages(data.pages || 1);
       setTotalRecords(data.total || 0);
     } catch (e) {
-      toast.error('Failed to sync delivery fleet');
+      toast.error('Could not load delivery team');
     } finally {
       setLoading(false);
     }
@@ -47,7 +47,7 @@ export default function AdminDelivery() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Delivery Fleet</h1>
-          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Managing Last-Mile Logistics Nodes</p>
+          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Managing Last-Mile Delivery Addresss</p>
         </div>
         <div className="flex items-center gap-4">
            <div className="bg-white px-6 py-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3">
@@ -93,7 +93,7 @@ export default function AdminDelivery() {
           },
           { 
             key: 'isVerified', 
-            label: 'Protocol',
+            label: 'Service',
             render: (val) => (
               <div className={`flex items-center gap-2 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest w-fit ${
                 val ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'

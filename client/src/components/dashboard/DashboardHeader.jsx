@@ -6,7 +6,7 @@ export default function DashboardHeader({ role, setIsSidebarOpen }) {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <header className="h-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-8 flex items-center justify-between sticky top-0 z-40 transition-all duration-500">
+    <header className="h-16 bg-white/90 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 flex items-center justify-between sticky top-0 z-40 transition-all duration-500">
       {/* Left: Search & Mobile Menu */}
       <div className="flex items-center gap-4 md:gap-8 flex-1">
         <button
@@ -20,7 +20,7 @@ export default function DashboardHeader({ role, setIsSidebarOpen }) {
           <Search size={18} className="text-navy/20" />
           <input 
             type="text" 
-            placeholder={`Search across ${role} modules...`}
+            placeholder={`Search ${role} pages...`}
             className="bg-transparent border-none outline-none w-full text-sm font-dm font-medium text-navy placeholder:text-navy/20"
           />
         </div>
@@ -42,10 +42,10 @@ export default function DashboardHeader({ role, setIsSidebarOpen }) {
 
         <motion.div 
           whileHover={{ scale: 1.02 }}
-          className="flex items-center gap-3 pl-3 pr-2 py-1.5 bg-navy/5 border border-navy/5 rounded-2xl cursor-pointer hover:bg-navy/10 transition-colors"
+          className="flex items-center gap-3 pl-3 pr-2 py-1.5 bg-navy/5 border border-navy/5 rounded-2xl cursor-pointer hover:bg-navy/10 transition-colors min-w-0"
         >
           <div className="text-right hidden sm:block">
-            <div className="text-xs font-syne font-black text-navy uppercase italic leading-none">{user?.name || 'Anonymous'}</div>
+            <div className="text-xs font-syne font-black text-navy uppercase leading-none max-w-36 truncate">{user?.name || 'Anonymous'}</div>
             <div className="text-[10px] font-dm font-bold text-navy/40 uppercase tracking-widest">{role}</div>
           </div>
           <div className="h-9 w-9 bg-navy text-brand-teal rounded-xl flex items-center justify-center shadow-lg shadow-navy/20 overflow-hidden border-2 border-white">

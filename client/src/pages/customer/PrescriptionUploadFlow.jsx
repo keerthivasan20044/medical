@@ -18,11 +18,13 @@ export default function PrescriptionUploadFlow() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const fileInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
   
   const { items, prescription } = useSelector(s => s.cart);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(prescription?.url || null);
+  const [previewType, setPreviewType] = useState(prescription?.type || '');
   const [activeAccordion, setActiveAccordion] = useState(null);
 
   const pharmacy = useMemo(() => pharmacies.find(p => p.id === pharmacyId) || pharmacies[0], [pharmacyId]);
@@ -47,7 +49,7 @@ export default function PrescriptionUploadFlow() {
     try {
       const formData = new FormData();
       formData.append('image', file);
-      formData.append('notes', `Order Linkage Protocol: ${pharmacyId}`);
+      formData.append('notes', `Order Linkage Service: ${pharmacyId}`);
       
       const res = await prescriptionService.upload(formData);
       
@@ -58,20 +60,22 @@ export default function PrescriptionUploadFlow() {
         url: res.item.imageUrl,
         publicId: res.item.publicId,
         id: res.item._id,
-        name: file.name
+        name: file.name,
+        type: file.type
       };
 
       setPreviewUrl(uploadData.url);
+      setPreviewType(file.type);
       dispatch(setPrescription(uploadData));
       
       setTimeout(() => {
         setIsUploading(false);
-        toast.success('Prescription Uploaded Successfully ✓');
+        toast.success('Prescription uploaded successfully');
       }, 500);
     } catch (err) {
       clearInterval(interval);
       setIsUploading(false);
-      toast.error('Upload failed — Please try again');
+      toast.error('Upload failed. Please try again');
       console.error('Upload error:', err);
     }
   };
@@ -85,13 +89,14 @@ export default function PrescriptionUploadFlow() {
 
   const handleRemove = () => {
     setPreviewUrl(null);
+    setPreviewType('');
     dispatch(setPrescription(null));
-    toast.error('Manifest Disconnected');
+    toast.error('File Disconnected');
   };
 
   const savedPrescriptions = [
-    { id: 1, doctor: 'Dr. Priya Raman', date: '15 Mar 2026', status: 'Valid ✓' },
-    { id: 2, doctor: 'Dr. Anand Kumar', date: '1 Mar 2026', status: 'Valid ✓' }
+    { id: 1, doctor: 'Dr. Priya Raman', date: '15 Mar 2026', status: 'Valid' },
+    { id: 2, doctor: 'Dr. Anand Kumar', date: '1 Mar 2026', status: 'Valid' }
   ];
 
   return (
@@ -162,13 +167,13 @@ export default function PrescriptionUploadFlow() {
                        <h3 className="font-syne font-black text-[13px] text-[#0a1628] uppercase italic tracking-widest leading-none">Files & Gallery</h3>
                        <p className="text-[9px] text-gray-300 font-bold uppercase tracking-[0.2em] italic">JPG, PNG, PDF | Max 10MB</p>
                     </div>
-                    <div className="h-12 w-fit px-8 border border-brand-teal text-brand-teal rounded-xl mx-auto flex items-center justify-center font-syne font-black text-[9px] uppercase tracking-widest group-hover/upload:bg-brand-teal group-hover/upload:text-white transition-all italic">Browse Node</div>
+                    <div className="h-12 w-fit px-8 border border-brand-teal text-brand-teal rounded-xl mx-auto flex items-center justify-center font-syne font-black text-[9px] uppercase tracking-widest group-hover/upload:bg-brand-teal group-hover/upload:text-white transition-all italic">Browse File</div>
                     <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileSelect} accept="image/*,.pdf" />
                  </button>
 
                  {/* CAMERA PROTOCOL */}
                  <button 
-                   onClick={() => toast.error('Camera Hardware Handshake Failed - Manual Upload Recommended')}
+                   onClick={() => cameraInputRef.current?.click()}
                    className="bg-white border-2 md:border-4 border-dashed border-slate-100 rounded-3xl md:rounded-[4rem] p-8 md:p-12 text-center space-y-6 md:space-y-8 group/camera hover:border-teal-500 transition-all duration-700 hover:shadow-xl relative overflow-hidden"
                  >
                     <div className="absolute top-0 right-0 h-24 w-24 bg-brand-teal/5 rounded-full blur-[40px] opacity-0 group-hover/camera:opacity-100 transition" />
@@ -177,9 +182,10 @@ export default function PrescriptionUploadFlow() {
                     </div>
                     <div className="space-y-3">
                        <h3 className="font-syne font-black text-[13px] text-[#0a1628] uppercase italic tracking-widest leading-none">Take Photo</h3>
-                       <p className="text-[9px] text-gray-300 font-bold uppercase tracking-[0.2em] italic">Instant Mobile Sync</p>
+                       <p className="text-[9px] text-gray-300 font-bold uppercase tracking-[0.2em] italic">Instant Upload</p>
                     </div>
                     <div className="h-12 w-fit px-8 border border-brand-teal/20 text-brand-teal rounded-xl mx-auto flex items-center justify-center font-syne font-black text-[9px] uppercase tracking-widest group-hover/camera:bg-[#0a1628] group-hover/camera:text-white transition-all italic">Open Camera</div>
+                    <input type="file" ref={cameraInputRef} className="hidden" onChange={handleFileSelect} accept="image/*" capture="environment" />
                  </button>
               </div>
 
@@ -195,14 +201,20 @@ export default function PrescriptionUploadFlow() {
                     {savedPrescriptions.map((p, idx) => (
                        <button 
                          key={idx} 
-                         onClick={() => { setPreviewUrl('/assets/hospital_pro.png'); dispatch(setPrescription('/assets/hospital_pro.png')); toast.success('Archived Sync Successful'); }}
+                         onClick={() => {
+                           const saved = { url: '/assets/hospital_pro.png', id: `saved-${p.id}`, name: `${p.doctor} prescription` };
+                           setPreviewUrl(saved.url);
+                           setPreviewType('image/png');
+                           dispatch(setPrescription(saved));
+                           toast.success('Saved prescription selected');
+                         }}
                          className="w-full flex items-center justify-between p-7 bg-gray-50/50 rounded-[2.5rem] border border-black/[0.02] hover:bg-white hover:shadow-4xl transition-all duration-700 group/item"
                        >
                           <div className="flex items-center gap-6">
                              <div className="h-14 w-14 bg-white rounded-2xl border border-gray-100 flex items-center justify-center text-gray-300 group-hover/item:bg-[#0a1628] group-hover/item:text-brand-teal transition-all duration-700 shadow-sm"><FileSearch size={24} /></div>
                              <div className="text-left space-y-1">
                                 <div className="font-syne font-black text-[#0a1628] uppercase italic text-lg leading-none group-hover/item:translate-x-2 transition-transform">{p.doctor}</div>
-                                <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{p.date} Architecture</div>
+                                <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{p.date} System</div>
                              </div>
                           </div>
                           <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{p.status}</span>
@@ -235,14 +247,21 @@ export default function PrescriptionUploadFlow() {
                                 />
                              </div>
                              <div className="space-y-3">
-                                <div className="font-syne font-black text-4xl text-white uppercase italic tracking-tighter">Syncing... {uploadProgress}%</div>
+                                <div className="font-syne font-black text-4xl text-white uppercase italic tracking-tighter">Saving... {uploadProgress}%</div>
                                 <div className="text-[10px] text-brand-teal font-black uppercase tracking-[0.5em] italic animate-pulse">Establishing Secure Clinical Tunnel</div>
                              </div>
                           </div>
                        ) : (
                           <div className="flex flex-col md:flex-row gap-12 items-center">
                              <div className="h-56 w-56 bg-white/5 border-4 border-white/10 rounded-[3rem] shadow-4xl shrink-0 overflow-hidden relative group/img cursor-pointer">
-                                <img src={previewUrl} className="h-full w-full object-cover transition-transform duration-[2s] group-hover/img:scale-150" alt="Prescription" />
+                                {previewType === 'application/pdf' || previewUrl?.startsWith('data:application/pdf') || previewUrl?.toLowerCase().includes('.pdf') ? (
+                                  <div className="h-full w-full flex flex-col items-center justify-center gap-3 text-white/80 bg-white/5">
+                                    <FileText size={42} className="text-brand-teal" />
+                                    <span className="text-[10px] font-black uppercase tracking-widest">PDF Uploaded</span>
+                                  </div>
+                                ) : (
+                                  <img src={previewUrl} className="h-full w-full object-cover transition-transform duration-[2s] group-hover/img:scale-150" alt="Prescription" />
+                                )}
                                 <div className="absolute inset-0 bg-[#0a1628]/40 opacity-0 group-hover/img:opacity-100 transition flex items-center justify-center backdrop-blur-sm"><Eye size={36} className="text-brand-teal" /></div>
                              </div>
                              <div className="flex-1 space-y-8 text-center md:text-left">
@@ -253,12 +272,12 @@ export default function PrescriptionUploadFlow() {
                                    </div>
                                    <div className="text-xs text-white/40 font-dm font-bold italic tracking-widest leading-relaxed">
                                       clinical_scan_609602.jpg &bull; 2.4 MB <br/> 
-                                      <span className="text-brand-teal opacity-100">Synchronized for verification by {pharmacy.name}.</span>
+                                      <span className="text-brand-teal opacity-100">Updatehronized for verification by {pharmacy.name}.</span>
                                    </div>
                                 </div>
                                 <div className="flex items-center gap-4 justify-center md:justify-start">
                                    <button onClick={handleRemove} className="h-14 px-8 bg-white/5 border border-white/10 text-red-400 rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all italic flex items-center gap-3"><Trash2 size={16}/> Disconnect</button>
-                                   <button className="h-14 px-8 bg-white/5 border border-white/10 text-brand-teal rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-brand-teal hover:text-[#0a1628] transition-all italic flex items-center gap-3"><Eye size={16}/> Preview Node</button>
+                                   <button onClick={() => window.open(previewUrl, '_blank', 'noopener,noreferrer')} className="h-14 px-8 bg-white/5 border border-white/10 text-brand-teal rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-brand-teal hover:text-[#0a1628] transition-all italic flex items-center gap-3"><Eye size={16}/> Preview</button>
                                 </div>
                              </div>
                           </div>
@@ -271,7 +290,7 @@ export default function PrescriptionUploadFlow() {
            {/* Lateral Strategy Sidebar */}
            <div className="space-y-16">
               
-              {/* Clinical Protocol Accordion */}
+              {/* Clinical Service Accordion */}
               <div className="bg-white border border-slate-100 rounded-3xl md:rounded-[5rem] p-8 md:p-16 space-y-8 md:space-y-12 shadow-sm group hover:shadow-xl transition-all duration-1000 relative overflow-hidden">
                  <div className="absolute top-0 right-0 h-40 w-40 bg-teal-500 opacity-[0.02] rounded-full blur-[60px]" />
                  <div className="space-y-3 relative z-10">
@@ -301,7 +320,7 @@ export default function PrescriptionUploadFlow() {
               {/* Authorization Alternatives */}
               <div className="space-y-10">
                  <div className="flex items-center gap-4 px-6 text-[10px] font-black uppercase text-gray-300 tracking-[0.4em] italic">
-                    <AlertCircle size={14} className="text-amber-500"/> Protocol Alternatives
+                    <AlertCircle size={14} className="text-amber-500"/> Service Alternatives
                  </div>
 
                  <div className="space-y-6">
@@ -313,13 +332,13 @@ export default function PrescriptionUploadFlow() {
                              <div className="text-[9px] text-gray-400 font-bold uppercase tracking-widest italic leading-none">Consult Dr. Priya Raman in 10m</div>
                           </div>
                        </div>
-                       <Link to="/doctors/dr-1" className="w-full h-16 bg-brand-teal/5 text-brand-teal rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-4 hover:bg-[#0a1628] hover:text-white transition-all shadow-soft italic">Initialize Consult - ₹200 <ChevronRight size={14}/></Link>
+                       <Link to="/doctors" className="w-full h-16 bg-brand-teal/5 text-brand-teal rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-4 hover:bg-[#0a1628] hover:text-white transition-all shadow-soft italic">Find Doctor Consult <ChevronRight size={14}/></Link>
                     </div>
 
-                    <button className="w-full h-16 border-2 border-red-500/10 text-red-500/40 rounded-3xl font-syne font-black text-[9px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all italic">Disconnect RX Nodes from Cart</button>
+                    <button className="w-full h-16 border-2 border-red-500/10 text-red-500/40 rounded-3xl font-syne font-black text-[9px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all italic">Disconnect RX Items from Cart</button>
                     
                     <div className="p-8 bg-gray-50 rounded-[3rem] border border-black/[0.02] text-center space-y-2">
-                       <div className="text-[9px] font-black text-gray-300 uppercase italic tracking-widest leading-none">Manual Protocol Override</div>
+                       <div className="text-[9px] font-black text-gray-300 uppercase italic tracking-widest leading-none">Manual Service Override</div>
                        <p className="text-[10px] text-gray-400 font-dm font-bold italic px-4">OTC decision remains at pharmacy discretion. Reject risk: High.</p>
                     </div>
                  </div>

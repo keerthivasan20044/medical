@@ -41,7 +41,7 @@ export default function AdminOverview() {
     return (
       <div className="h-[60vh] flex flex-col items-center justify-center space-y-4">
         <Loader2 className="animate-spin text-brand-teal" size={48} />
-        <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Synchronizing Global Node Data...</p>
+        <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Loading dashboard data...</p>
       </div>
     );
   }
@@ -51,12 +51,12 @@ export default function AdminOverview() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em]">Operational Node v2.4</div>
+          <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em]">Admin Panel v2.4</div>
           <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Overview Dashboard</h1>
         </div>
         <div className="flex items-center gap-4 bg-white px-6 py-3 rounded-2xl border border-gray-100 shadow-sm">
           <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">System Synchronized</span>
+          <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">System Updated</span>
         </div>
       </div>
 
@@ -116,10 +116,10 @@ export default function AdminOverview() {
 
           <div className="space-y-4 relative z-10 pt-8 border-t border-white/5">
              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black text-white/40 uppercase tracking-widest italic">Active Nodes</span>
+                <span className="text-[10px] font-black text-white/40 uppercase tracking-widest italic">Active Items</span>
                 <span className="font-syne font-black text-brand-teal italic">100% SECURE</span>
              </div>
-             <button className="w-full h-14 bg-white/10 hover:bg-white/20 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all">Launch Geo-Sync</button>
+             <button className="w-full h-14 bg-white/10 hover:bg-white/20 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all">Open Map</button>
           </div>
         </div>
       </div>

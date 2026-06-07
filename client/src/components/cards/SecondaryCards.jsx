@@ -9,7 +9,7 @@ import {
 import { toast } from 'react-hot-toast';
 
 /**
- * Customer review node card.
+ * Customer review item card.
  */
 export function ReviewCard({ review = {} }) {
   const rating = review.rating || 5;
@@ -61,7 +61,7 @@ export function NotificationCard({ notification = {} }) {
 }
 
 /**
- * Promotional architecture offer card.
+ * Promotional system offer card.
  */
 export function OfferCard({ offer = {}, onCopy }) {
   const { code = 'N/A', type = 'Promo', valid = 'Limited Time', title = 'District Offer', sub = 'No description' } = offer;
@@ -97,10 +97,10 @@ export function OfferCard({ offer = {}, onCopy }) {
 }
 
 /**
- * Immunization node card.
+ * Immunization item card.
  */
 export function VaccineCard({ vaccine = {}, onBook }) {
-  const { image = '/assets/medicine_default.png', name = 'Authorized Vaccine', type = 'Protocol', recommended = false, desc = 'Authorized immunization.', price = 0 } = vaccine;
+  const { image = '/assets/medicine_default.png', name = 'Authorized Vaccine', type = 'Service', recommended = false, desc = 'Authorized immunization.', price = 0 } = vaccine;
   return (
     <div className="bg-white p-5 md:p-8 rounded-3xl border border-gray-100 flex flex-col md:flex-row gap-6 md:gap-8 group hover:shadow-xl transition duration-500 overflow-hidden relative">
        <div className="h-40 w-full md:w-40 rounded-2xl overflow-hidden shrink-0 shadow-lg relative bg-gray-50">
@@ -111,15 +111,15 @@ export function VaccineCard({ vaccine = {}, onBook }) {
        <div className="flex-1 space-y-4 flex flex-col justify-center">
           <div className="space-y-1">
              <div className="flex items-center gap-3">
-                <div className="px-3 py-1 bg-gray-50 border border-gray-100 rounded-lg text-[9px] font-black text-teal-600 uppercase tracking-widest flex items-center gap-1.5 shadow-sm"><Syringe size={10}/> Protocol</div>
+                <div className="px-3 py-1 bg-gray-50 border border-gray-100 rounded-lg text-[9px] font-black text-teal-600 uppercase tracking-widest flex items-center gap-1.5 shadow-sm"><Syringe size={10}/> Service</div>
                 {recommended && <div className="text-[9px] text-emerald-500 font-dm italic font-bold">Recommended</div>}
              </div>
              <h3 className="font-syne font-black text-xl md:text-2xl text-navy group-hover:text-teal-600 transition leading-tight">{name}</h3>
              <p className="text-gray-400 font-dm italic text-xs leading-relaxed line-clamp-2">{desc}</p>
           </div>
           <div className="pt-4 border-t border-gray-50 flex items-center justify-between gap-4">
-             <div className="text-xl font-syne font-black text-navy">₹{price} <span className="text-[8px] text-gray-300 font-black uppercase tracking-widest ml-2 italic">Architecture Fee</span></div>
-             <button onClick={onBook} className="px-6 py-3 bg-navy text-white rounded-xl font-syne font-black text-[9px] uppercase tracking-widest hover:bg-teal-600 transition shadow-lg shadow-navy/10">Book Enclave &rarr;</button>
+             <div className="text-xl font-syne font-black text-navy">₹{price} <span className="text-[8px] text-gray-300 font-black uppercase tracking-widest ml-2 italic">Fee</span></div>
+             <button onClick={onBook} className="px-6 py-3 bg-navy text-white rounded-xl font-syne font-black text-[9px] uppercase tracking-widest hover:bg-teal-600 transition shadow-lg shadow-navy/10">Book Now &rarr;</button>
           </div>
        </div>
     </div>
@@ -131,9 +131,9 @@ export function VaccineCard({ vaccine = {}, onBook }) {
  * ARCHITECTURE STATUS BADGES
  */
 export function StockBadge({ qty }) {
-  const config = qty > 20 ? { label: 'In Stock Enclave', color: 'bg-emerald-50 text-emerald-600', dot: 'bg-emerald-500' } :
-                qty > 0  ? { label: 'Low Stock Protocol', color: 'bg-orange-50 text-orange-600', dot: 'bg-orange-500' } :
-                            { label: 'Out of Enclave', color: 'bg-red-50 text-red-600', dot: 'bg-red-500' };
+  const config = qty > 20 ? { label: 'In Stock', color: 'bg-emerald-50 text-emerald-600', dot: 'bg-emerald-500' } :
+                qty > 0  ? { label: 'Low Stock Service', color: 'bg-orange-50 text-orange-600', dot: 'bg-orange-500' } :
+                            { label: 'Out of Stock', color: 'bg-red-50 text-red-600', dot: 'bg-red-500' };
 
   return (
     <div className={`px-4 py-1 rounded-xl text-[8px] font-black uppercase tracking-widest flex items-center gap-3 ${config.color} shadow-sm border border-transparent hover:border-white transition`}>
@@ -144,16 +144,16 @@ export function StockBadge({ qty }) {
 
 export function OnlineStatus({ status }) {
   const configs = {
-    online: { label: '🟢 Online Enclave', color: 'text-emerald-500' },
-    busy: { label: '🟠 Busy Protocol', color: 'text-orange-500' },
-    offline: { label: '🔴 Offline Stream', color: 'text-gray-300' }
+    online: { label: '🟢 Online', color: 'text-emerald-500' },
+    busy: { label: '🟠 Busy Service', color: 'text-orange-500' },
+    offline: { label: '🔴 Offline', color: 'text-gray-300' }
   };
   const c = configs[status] || configs.offline;
   return <div className={`text-[10px] font-black uppercase tracking-[0.2em] italic ${c.color} animate-fade-in`}>{c.label}</div>;
 }
 
 export function OrderStatus({ status }) {
-  const steps = ['Protocol Pending', 'Enclave Processing', 'Node In-Transit', 'Delivered Sync'];
+  const steps = ['Service Pending', 'Processing', 'On The Way', 'Delivered'];
   const current = steps.indexOf(status) || 0;
 
   return (
@@ -173,7 +173,7 @@ export function OrderStatus({ status }) {
 export function VerifiedBadge() {
   return (
     <div className="px-6 py-2 bg-[#028090]/5 border border-[#028090]/10 rounded-2xl flex items-center gap-3 text-[#0a1628] font-syne font-black text-[10px] uppercase tracking-widest italic shadow-sm">
-       <CheckCircle size={12} className="text-[#028090] animate-bounce-slow" /> Verified Architecture
+       <CheckCircle size={12} className="text-[#028090] animate-bounce-slow" /> Verified
     </div>
   );
 }
@@ -181,7 +181,7 @@ export function VerifiedBadge() {
 export function RxBadge() {
   return (
     <div className="px-6 py-2 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center gap-3 text-indigo-700 font-syne font-black text-[10px] uppercase tracking-widest italic shadow-sm group hover:bg-indigo-700 hover:text-white transition duration-500">
-       <ShieldCheck size={12} className="group-hover:animate-float" /> Rx Protocol Authority
+       <ShieldCheck size={12} className="group-hover:animate-float" /> Rx Service Authority
     </div>
   );
 }
@@ -194,7 +194,7 @@ export function RatingStars({ rating, count }) {
              <Star key={i} size={14} className={i < Math.floor(rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-100'} />
           ))}
        </div>
-       <span className="text-[10px] font-black text-[#0a1628] uppercase tracking-tighter">{rating} <span className="text-gray-200 italic ml-2">({count} Enclave Nodes)</span></span>
+       <span className="text-[10px] font-black text-[#0a1628] uppercase tracking-tighter">{rating} <span className="text-gray-200 italic ml-2">({count} Reviews)</span></span>
     </div>
   );
 }
@@ -206,7 +206,7 @@ export function PriceBadge({ price, mrp, discount }) {
           <div className="text-3xl font-syne font-black text-[#0a1628]">₹{price}</div>
           {discount > 0 && <div className="px-3 py-1 bg-red-500 text-white rounded-lg text-[8px] font-black uppercase tracking-widest shadow-lg animate-pulse">Save {discount}%</div>}
        </div>
-       {mrp > price && <div className="text-[10px] text-gray-200 font-black line-through italic tracking-widest uppercase">MRP: ₹{mrp} Protocol</div>}
+       {mrp > price && <div className="text-[10px] text-gray-200 font-black line-through italic tracking-widest uppercase">MRP: ₹{mrp} Service</div>}
     </div>
   );
 }

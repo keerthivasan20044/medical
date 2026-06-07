@@ -26,9 +26,9 @@ export default function PharmacyDetailPage() {
     try {
       setLoading(true);
       const res = await api.get(`/api/pharmacies/${id}`);
-      setPharmacy(res.data);
+      setPharmacy(res.data.item || res.data.pharmacy || res.data);
     } catch (err) {
-      toast.error('Failed to sync node data');
+      toast.error('Could not load pharmacy data');
       navigate('/pharmacies');
     } finally {
       setLoading(false);
@@ -46,7 +46,7 @@ export default function PharmacyDetailPage() {
   );
 
   const TABS = [
-    { id: 'about', label: 'Protocol', icon: Info },
+    { id: 'about', label: 'Service', icon: Info },
     { id: 'medicines', label: 'Inventory', icon: Box },
     { id: 'reviews', label: 'Validation', icon: MessageSquare },
     { id: 'photos', label: 'Visuals', icon: Camera },
@@ -94,7 +94,7 @@ export default function PharmacyDetailPage() {
            <div className="space-y-6">
               <div className="flex items-center gap-2">
                  <div className="h-1.5 w-1.5 rounded-full bg-brand-teal animate-pulse" />
-                 <span className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic">Authorized Node</span>
+                 <span className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic">Verified Pharmacy</span>
               </div>
               <h1 className="font-syne font-black text-5xl md:text-7xl text-white italic tracking-tighter uppercase leading-none max-w-4xl">
                 {pharmacy?.name}
@@ -163,7 +163,7 @@ export default function PharmacyDetailPage() {
               className="pb-24"
             >
                {activeTab === 'about' && <PharmacyAbout pharmacy={pharmacy} />}
-               {activeTab === 'medicines' && <PharmacyMedicines pharmacyId={id} />}
+               {activeTab === 'medicines' && <PharmacyMedicines pharmacyId={pharmacy?._id || id} />}
                {activeTab === 'reviews' && <PharmacyReviews pharmacyId={id} />}
                {activeTab === 'photos' && <PharmacyPhotos pharmacy={pharmacy} />}
             </motion.div>

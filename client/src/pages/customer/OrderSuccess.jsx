@@ -26,7 +26,7 @@ export default function OrderSuccess() {
                transition={{ type: "spring", stiffness: 200, damping: 20 }}
                className="h-32 w-32 md:h-48 md:w-48 bg-brand-teal rounded-[2.5rem] md:rounded-[4rem] flex items-center justify-center text-[#0a1628] shadow-[0_30px_60px_rgba(2,195,154,0.3)] relative z-10"
             >
-               <CheckCircle size={64} md:size={100} strokeWidth={3} className="animate-pulse" />
+               <CheckCircle strokeWidth={3} className="h-16 w-16 md:h-24 md:w-24 animate-pulse" />
             </motion.div>
             <div className="absolute inset-0 bg-brand-teal/20 blur-[80px] md:blur-[100px] animate-pulse" />
          </div>

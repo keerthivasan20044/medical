@@ -15,6 +15,7 @@ import mongoose from 'mongoose';
 
 import { connectDB } from './config/db.js';
 import { initSocket } from './config/socket.js';
+import { scheduleExpiryAlertJob } from './jobs/expiryAlertJob.js';
 
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -30,6 +31,7 @@ import couponRoutes from './routes/couponRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import deliveryRoutes from './routes/deliveryRoutes.js';
 import pharmacistRoutes from './routes/pharmacistRoutes.js';
+import testRoutes from './routes/testRoutes.js';
 import { getPublicStats } from './controllers/publicController.js';
 
 import { errorHandler, notFound } from './middleware/errorHandler.js';
@@ -48,6 +50,9 @@ const ALLOWED_ORIGINS = [
   'http://127.0.0.1:5174',
   'http://127.0.0.1:5175',
   'http://127.0.0.1:4173',
+  /^http:\/\/10\.\d+\.\d+\.\d+:(5173|5174|5175|5176|4173)$/,
+  /^http:\/\/172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+:(5173|5174|5175|5176|4173)$/,
+  /^http:\/\/192\.168\.\d+\.\d+:(5173|5174|5175|5176|4173)$/,
   /\.vercel\.app$/ // Allow any Vercel deployment
 ];
 
@@ -91,6 +96,7 @@ app.use('/api/coupons', couponRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/delivery', deliveryRoutes);
 app.use('/api/pharmacist', pharmacistRoutes);
+app.use('/api/test', testRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
@@ -105,6 +111,15 @@ const PORT = process.env.PORT || 5001;
 // Only listen if not running as a Vercel function
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
   dbPromise.then(() => {
+    scheduleExpiryAlertJob();
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use. Stop the existing server or set PORT to another value.`);
+        process.exit(1);
+      }
+      console.error('Server failed to start:', err);
+      process.exit(1);
+    });
     server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   });
 }

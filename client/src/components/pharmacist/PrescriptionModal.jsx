@@ -34,7 +34,7 @@ export default function PrescriptionModal({ isOpen, onClose, prescription, order
               />
            </div>
 
-           {/* Authorization Control Node */}
+           {/* Authorization Control Item */}
            <div className="w-full lg:w-[400px] bg-white p-12 lg:p-16 flex flex-col justify-between border-l border-gray-100">
               <div className="space-y-12">
                  <div className="flex items-center justify-between">
@@ -46,7 +46,7 @@ export default function PrescriptionModal({ isOpen, onClose, prescription, order
                     <div className="px-6 py-2 bg-[#0a1628] rounded-xl w-fit flex items-center gap-3 text-[9px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">
                        <Activity size={14} className="animate-pulse" /> Clinical Verification Hub
                     </div>
-                    <h2 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic leading-none tracking-tighter">Manifest <br/>Verification</h2>
+                    <h2 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic leading-none tracking-tighter">File <br/>Verification</h2>
                     <div className="text-[10px] font-black text-gray-300 uppercase italic tracking-widest">Order ID: {orderId}</div>
                  </div>
 

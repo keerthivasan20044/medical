@@ -36,16 +36,16 @@ export const SocketProvider = ({ children }) => {
         <div className={`bg-[#0a1628] border border-brand-teal/20 text-white p-6 rounded-[2rem] shadow-4xl flex items-center gap-6 transform transition-all hover:scale-105 ${t.visible ? 'animate-enter' : 'animate-leave'}`}>
            <div className="h-12 w-12 bg-brand-teal rounded-2xl flex items-center justify-center text-white"><Package size={20} /></div>
            <div>
-              <div className="text-[10px] font-black uppercase tracking-widest text-brand-teal">District Sync Update</div>
+              <div className="text-[10px] font-black uppercase tracking-widest text-brand-teal">Order Update</div>
               <div className="text-sm font-syne font-black mt-1">Order #{data?.orderId?.slice(-6) || "N/A"} is now: {data.status}.</div>
            </div>
         </div>
       ), { duration: 4000 });
     }
 
-    function onDeliveryTelemetry(data) {
+    function onDeliveryTracking(data) {
         if (data.status === 'delivered') {
-          toast.success(`Protocol Successful: Order #${data?.orderId?.slice(-6) || "N/A"} reached destination!`, {
+          toast.success(`Service Successful: Order #${data?.orderId?.slice(-6) || "N/A"} reached destination!`, {
             icon: <ShieldCheck className="text-emerald-500" />,
             className: "rounded-3xl font-syne font-black text-sm uppercase tracking-widest"
           });
@@ -55,13 +55,13 @@ export const SocketProvider = ({ children }) => {
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('order:status-update', onOrderUpdate);
-    socket.on('order:location-update', onDeliveryTelemetry);
+    socket.on('order:location-update', onDeliveryTracking);
 
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
       socket.off('order:status-update', onOrderUpdate);
-      socket.off('order:location-update', onDeliveryTelemetry);
+      socket.off('order:location-update', onDeliveryTracking);
       // Removed socket.disconnect() to prevent re-connection loops during state changes
     };
   }, [user?.id, user?._id]);

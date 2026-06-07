@@ -117,7 +117,7 @@ export default function NotificationsPage() {
             <Bell size={14} className="animate-shake" /> Transmission Stream
           </div>
           <h1 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] uppercase italic leading-none tracking-tighter">
-            Terminal <span className="text-brand-teal">Alerts</span>
+            Page <span className="text-brand-teal">Alerts</span>
           </h1>
           {unreadCount > 0 && (
             <p className="text-sm font-dm font-bold text-gray-400 italic">
@@ -148,7 +148,7 @@ export default function NotificationsPage() {
       {loading && (
         <div className="flex items-center justify-center py-32 gap-4 text-brand-teal">
           <Loader2 size={32} className="animate-spin" />
-          <span className="font-syne font-black text-sm uppercase italic tracking-widest">Syncing Stream…</span>
+          <span className="font-syne font-black text-sm uppercase italic tracking-widest">Updateing Stream…</span>
         </div>
       )}
 
@@ -200,7 +200,7 @@ export default function NotificationsPage() {
                         <div className="flex-1 space-y-1">
                           <div className="flex items-center gap-4">
                             <span className="text-[10px] font-black uppercase tracking-widest text-[#0a1628]">
-                              {n.type || 'System'} Protocol
+                              {n.type || 'System'} Service
                             </span>
                             <span className="text-[9px] text-gray-300 font-bold uppercase tracking-widest italic">
                               {timeAgo(n.createdAt)}
@@ -265,7 +265,7 @@ export default function NotificationsPage() {
                   Null Stream Activity
                 </h3>
                 <p className="text-gray-400 font-dm italic text-lg font-bold max-w-sm mx-auto">
-                  Your clinical transmission hub is currently synchronized and silent.
+                  Your clinical transmission hub is currently updatehronized and silent.
                 </p>
               </div>
             </div>

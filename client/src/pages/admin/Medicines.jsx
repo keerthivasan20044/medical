@@ -38,9 +38,9 @@ export default function AdminMedicines() {
                </thead>
                <tbody className="divide-y divide-black/[0.01]">
                   {[
-                     { name: 'Dolo 650mg', stock: '12,400', price: '₹32.00', nodes: 8, status: 'Active' },
-                     { name: 'Azithromycin 500mg', stock: '4,500', price: '₹120.00', nodes: 6, status: 'Low Stock' },
-                     { name: 'Cetirizine 10mg', stock: '2,800', price: '₹25.00', nodes: 8, status: 'Active' }
+                     { name: 'Dolo 650mg', stock: '12,400', price: '₹32.00', items: 8, status: 'Active' },
+                     { name: 'Azithromycin 500mg', stock: '4,500', price: '₹120.00', items: 6, status: 'Low Stock' },
+                     { name: 'Cetirizine 10mg', stock: '2,800', price: '₹25.00', items: 8, status: 'Active' }
                   ].map((item, i) => (
                      <tr key={i} className="group hover:bg-gray-50/50 transition-colors">
                         <td className="p-10">
@@ -49,7 +49,7 @@ export default function AdminMedicines() {
                         </td>
                         <td className="p-10 font-syne font-black text-[#0a1628] text-xl italic">{item.stock}</td>
                         <td className="p-10 font-syne font-black text-[#0a1628] text-xl italic">{item.price}</td>
-                        <td className="p-10 font-syne font-black text-brand-teal text-xl italic">{item.nodes} Pharmacies</td>
+                        <td className="p-10 font-syne font-black text-brand-teal text-xl italic">{item.items} Pharmacies</td>
                         <td className="p-10">
                            <div className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest italic flex items-center gap-2 ${item.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-500'}`}>
                               <div className={`h-2 w-2 rounded-full ${item.status === 'Active' ? 'bg-emerald-500' : 'bg-red-500'} animate-pulse`} /> {item.status}

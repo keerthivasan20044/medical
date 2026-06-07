@@ -7,15 +7,15 @@ import {
 import { Link } from 'react-router-dom';
 
 /**
- * High-fidelity district-wide enclave map.
+ * High-fidelity district-wide area map.
  */
-// District Bounding Matrix Sync
+// District Bounding Matrix Update
 const BOUNDS = {
   lat: [10.81, 10.94], // Karaikal district N/S bounds
   lng: [79.82, 79.85]  // Karaikal district E/W bounds
 };
 
-const projectNode = (gps) => {
+const projectItem = (gps) => {
   if (!gps || !gps.lat || !gps.lng) return { top: '50%', left: '50%' };
   const top = (1 - (gps.lat - BOUNDS.lat[0]) / (BOUNDS.lat[1] - BOUNDS.lat[0])) * 100;
   const left = ((gps.lng - BOUNDS.lng[0]) / (BOUNDS.lng[1] - BOUNDS.lng[0])) * 100;
@@ -33,24 +33,24 @@ export function KaraikalMap({ pharmacies = [], showPins = true }) {
           <div className="bg-white/5 backdrop-blur-xl p-8 rounded-[3rem] border border-white/10 space-y-4 shadow-3xl">
              <div className="text-[10px] text-[#02C39A] font-black uppercase tracking-[0.4em] flex items-center gap-4 animate-pulse"><Satellite size={14} /> District Satellite Active</div>
              <div className="space-y-1">
-                <h3 className="font-syne font-black text-3xl text-white tracking-tighter">Karaikal <span className="text-white/20">Enclave</span></h3>
-                <p className="text-[10px] text-white/30 font-bold uppercase tracking-[0.2em] italic">Telemetry Version 0.2.2</p>
+                <h3 className="font-syne font-black text-3xl text-white tracking-tighter">Karaikal <span className="text-white/20">Area</span></h3>
+                <p className="text-[10px] text-white/30 font-bold uppercase tracking-[0.2em] italic">Map Version 0.2.2</p>
              </div>
              <div className="flex items-center gap-4 pt-4 border-t border-white/5">
                 <div className="flex -space-x-3">
                    {[...Array(4)].map((_, i) => <div key={i} className="h-10 w-10 bg-white/10 rounded-2xl border-2 border-[#0a1628] flex items-center justify-center text-[11px] font-black text-white/60 shadow-xl">{i+1}</div>)}
                 </div>
-                <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-none">+12 Clinical Nodes <br/>Pulse Online</div>
+                <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-none">+12 Clinical Items <br/>Pulse Online</div>
              </div>
           </div>
           <div className="flex gap-4">
-             <button title="Full Enclave" className="h-16 w-16 bg-white/5 hover:bg-white/10 text-white rounded-3xl flex items-center justify-center backdrop-blur-xl transition shadow-2xl border border-white/10"><Maximize2 size={24}/></button>
+             <button title="Full Map" className="h-16 w-16 bg-white/5 hover:bg-white/10 text-white rounded-3xl flex items-center justify-center backdrop-blur-xl transition shadow-2xl border border-white/10"><Maximize2 size={24}/></button>
              <button title="Orient GPS" className="h-16 w-16 bg-white/5 hover:bg-white/10 text-white rounded-3xl flex items-center justify-center backdrop-blur-xl transition shadow-2xl border border-white/10"><Compass size={24}/></button>
           </div>
        </div>
 
        {showPins && pharmacies.map((p, i) => {
-         const pos = projectNode(p.gps);
+         const pos = projectItem(p.gps);
          return (
            <motion.div 
              key={p.id}
@@ -70,7 +70,7 @@ export function KaraikalMap({ pharmacies = [], showPins = true }) {
                  <div className="absolute top-1/2 left-24 -translate-y-1/2 opacity-0 group-hover/pin:opacity-100 transition duration-700 pointer-events-none scale-75 group-hover/pin:scale-100 origin-left">
                     <div className="bg-[#0a1628] border border-white/10 p-8 rounded-[3.5rem] shadow-4xl text-white space-y-3 backdrop-blur-3xl min-w-[280px]">
                        <div className="flex items-center justify-between">
-                          <div className="text-[10px] text-[#02C39A] font-black uppercase tracking-widest">{p.distance || '0.2'} Enclave Dist</div>
+                          <div className="text-[10px] text-[#02C39A] font-black uppercase tracking-widest">{p.distance || '0.2'} km Away</div>
                           <ShieldCheck size={14} className="text-[#02C39A]" />
                        </div>
                        <div className="space-y-1">
@@ -92,12 +92,12 @@ export function KaraikalMap({ pharmacies = [], showPins = true }) {
           <div className="bg-white/95 backdrop-blur-md px-10 py-5 rounded-full shadow-2xl flex items-center gap-6 border border-white">
              <div className="h-3 w-3 bg-[#02C39A] rounded-full animate-pulse-ring shadow-mint" />
              <div className="space-y-1">
-                <div className="text-[8px] text-gray-400 font-bold uppercase tracking-widest leading-none">Scanning Protocol</div>
-                <div className="text-[10px] font-syne font-black text-[#0a1628] uppercase tracking-widest">Active Medical Enclave Range</div>
+                <div className="text-[8px] text-gray-400 font-bold uppercase tracking-widest leading-none">Scanning Service</div>
+                <div className="text-[10px] font-syne font-black text-[#0a1628] uppercase tracking-widest">Active Delivery Area</div>
              </div>
           </div>
           <button className="px-12 py-5 bg-[#0a1628] text-[#02C39A] rounded-full font-syne font-black text-xs uppercase tracking-widest flex items-center gap-4 hover:bg-[#02C39A] hover:text-white transition shadow-4xl">
-             Relocate Search Node <ArrowRight size={18} />
+             Change Location <ArrowRight size={18} />
           </button>
        </div>
     </div>
@@ -105,7 +105,7 @@ export function KaraikalMap({ pharmacies = [], showPins = true }) {
 }
 
 /**
- * Animated real-time navigation architecture.
+ * Animated real-time navigation system.
  */
 export function LiveTrackMap({ order, liveLocation = { lat: 0, lng: 0 } }) {
   return (
@@ -127,7 +127,7 @@ export function LiveTrackMap({ order, liveLocation = { lat: 0, lng: 0 } }) {
                 <Truck size={32} className="text-[#02C39A]" />
              </div>
              <div className="absolute -top-24 left-1/2 -translate-x-1/2 px-10 py-5 bg-white border border-gray-100 rounded-3xl shadow-4xl space-y-1 whitespace-nowrap group-hover/rider:scale-110 transition duration-500">
-                <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest text-center">Rider Enclave</div>
+                <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest text-center">Rider</div>
                 <div className="font-syne font-black text-[#0a1628] uppercase text-sm">Rajan Kumar <span className="text-[#02C39A] ml-2">12 MIN</span></div>
              </div>
           </div>
@@ -143,19 +143,19 @@ export function LiveTrackMap({ order, liveLocation = { lat: 0, lng: 0 } }) {
        <div className="absolute top-10 right-10 flex flex-col items-end gap-3 z-30">
           <div className="bg-white/90 backdrop-blur-md px-8 py-4 rounded-3xl shadow-2xl border border-white flex items-center gap-4 group cursor-pointer hover:bg-white transition duration-500">
              <div className="h-4 w-4 bg-[#028090] rounded-full flex items-center justify-center text-white"><X size={10} /></div>
-             <div className="text-[10px] font-black uppercase tracking-widest text-[#0a1628]">Order #MED-0042 Enclave</div>
+             <div className="text-[10px] font-black uppercase tracking-widest text-[#0a1628]">Order #MED-0042</div>
           </div>
        </div>
 
        <div className="absolute bottom-10 left-10 flex-col gap-2 z-30">
-          <h4 className="font-syne font-black text-white mix-blend-difference text-3xl opacity-20 uppercase selection:bg-emerald-500">Node Tracker Enclave</h4>
+          <h4 className="font-syne font-black text-white mix-blend-difference text-3xl opacity-20 uppercase selection:bg-emerald-500">Order Tracker</h4>
        </div>
     </div>
   );
 }
 
 /**
- * Single node location enclave.
+ * Single item location area.
  */
 export function PharmacyLocatorMap({ pharmacyId }) {
   return (
@@ -167,8 +167,8 @@ export function PharmacyLocatorMap({ pharmacyId }) {
              <div className="h-20 w-20 bg-[#0a1628] text-[#02C39A] rounded-[2.5rem] flex items-center justify-center shadow-4xl relative z-10 border-4 border-white"><MapPin size={32} /></div>
           </div>
           <div className="bg-white/95 backdrop-blur-md px-10 py-4 rounded-full shadow-2xl border border-gray-100 text-center space-y-1">
-             <div className="font-syne font-black text-[#0a1628] text-lg uppercase tracking-widest italic">Apollo Pharmacy Enclave</div>
-             <div className="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">10.9254° N, 79.8380° E Protocol</div>
+             <div className="font-syne font-black text-[#0a1628] text-lg uppercase tracking-widest italic">Apollo Pharmacy</div>
+             <div className="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">10.9254° N, 79.8380° E Service</div>
           </div>
        </div>
        <button className="absolute bottom-10 right-10 h-16 w-16 bg-white text-[#0a1628] rounded-2xl flex items-center justify-center shadow-4xl hover:bg-[#0a1628] hover:text-[#02C39A] transition border border-gray-100"><Navigation size={28} /></button>

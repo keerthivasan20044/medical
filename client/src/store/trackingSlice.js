@@ -12,7 +12,7 @@ export const fetchOrderTrack = createAsyncThunk('tracking/fetch', async (orderId
 
 const trackingSlice = createSlice({
   name: 'tracking',
-  initialState: { status: 'idle', error: null, location: null, eta: null, statusText: null },
+  initialState: { status: 'idle', error: null, location: null, eta: null, statusText: null, order: null },
   reducers: {
     setLocation(state, action) {
       state.location = action.payload;
@@ -31,6 +31,7 @@ const trackingSlice = createSlice({
       })
       .addCase(fetchOrderTrack.fulfilled, (state, action) => {
         state.status = 'succeeded';
+        state.order = action.payload || null;
         state.statusText = action.payload?.status || null;
         state.location = action.payload?.liveLocation || null;
         state.eta = action.payload?.estimatedDelivery || null;

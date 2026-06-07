@@ -1,0 +1,8 @@
+iconv-lite warning: javascript files use encoding different from utf-8. See https://github.com/ashtuchkin/iconv-lite/wiki/Javascript-source-file-encodings for more info.
+npm error Lifecycle script `start` failed with error:
+npm error code 4294967295
+npm error path C:\Users\ADMIN\Downloads\medireach\server
+npm error workspace medipharm-server@0.1.0
+npm error location C:\Users\ADMIN\Downloads\medireach\server
+npm error command failed
+npm error command C:\Windows\system32\cmd.exe /d /s /c node index.js

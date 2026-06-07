@@ -30,16 +30,21 @@ export const simulateDelivery = (orderId) => {
 
     const telemetry = {
       orderId,
+      lat: currentLat,
+      lng: currentLng,
       location: { lat: currentLat, lng: currentLng },
       eta: Math.max(0, 15 - Math.floor(progress / 2)),
       progress: Math.floor((progress / steps) * 100),
-      status
+      status,
+      timestamp: new Date()
     };
 
     try {
       // Synchronize specialized rooms
       io.to(`order:${orderId}`).emit('order:location-update', telemetry);
-      io.to('admin').emit('telemetry:pulse', { orderId, telemetry });
+      io.to('role:admin').emit('order:location-update', telemetry);
+      io.to('role:admin').emit('tracking:pulse', { orderId, tracking: telemetry });
+      io.to('role:admin').emit('telemetry:pulse', { orderId, telemetry });
 
       if (progress >= steps) {
         clearInterval(interval);

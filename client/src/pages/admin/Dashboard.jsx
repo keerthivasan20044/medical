@@ -61,7 +61,7 @@ export default function AdminDashboard() {
     { label: 'Pending Orders', value: '23', trend: '-5', icon: Clock, color: 'text-red-500 bg-red-50' }
   ]);
   const [loading, setLoading] = useState(true);
-  const [telemetryNodes, setTelemetryNodes] = useState([]);
+  const [trackingItems, setTrackingItems] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
 
   const { socket } = useSocket();
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
   }, []);
 
   useEffect(() => {
-    const fetchAdminNode = async () => {
+    const fetchAdminItem = async () => {
        try {
           const data = await adminService.getStats();
           setStats(prev => [
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
           setLoading(false);
        }
     };
-    fetchAdminNode();
+    fetchAdminItem();
     fetchOrders();
 
     // DASHBOARD UPDATES
@@ -113,13 +113,13 @@ export default function AdminDashboard() {
         setOrders(prev => prev.map(o => o.id === data.orderId ? { ...o, status: data.status } : o));
       });
 
-      socket.on('telemetry:pulse', (data) => {
-        setTelemetryNodes(prev => {
+      socket.on('tracking:pulse', (data) => {
+        setTrackingItems(prev => {
           const existing = prev.find(n => n.orderId === data.orderId);
           if (existing) {
-             return prev.map(n => n.orderId === data.orderId ? { ...n, ...data.telemetry } : n);
+             return prev.map(n => n.orderId === data.orderId ? { ...n, ...data.tracking } : n);
           }
-          return [ { ...data.telemetry, orderId: data.orderId }, ...prev ].slice(0, 4);
+          return [ { ...data.tracking, orderId: data.orderId }, ...prev ].slice(0, 4);
         });
       });
     }
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
       if (socket) {
         socket.off('order:new');
         socket.off('order:status-update');
-        socket.off('telemetry:pulse');
+        socket.off('tracking:pulse');
       }
     };
   }, [socket, fetchOrders]);
@@ -248,37 +248,37 @@ export default function AdminDashboard() {
                </div>
 
                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-                  {telemetryNodes.length === 0 ? (
+                  {trackingItems.length === 0 ? (
                      <div className="lg:col-span-4 p-12 text-center text-white/20 font-syne font-black uppercase tracking-widest border border-dashed border-white/10 rounded-[3rem]">
                         No active deliveries.
                      </div>
                   ) : (
-                     telemetryNodes.map((node, i) => (
+                     trackingItems.map((item, i) => (
                         <motion.div 
                          initial={{ opacity: 0, scale: 0.9 }}
                          animate={{ opacity: 1, scale: 1 }}
-                         key={node.orderId} 
+                         key={item.orderId} 
                          className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] space-y-4 hover:bg-white/[0.08] transition group"
                         >
                            <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-white/40">
-                              <span>Order #{node.orderId.slice(-4)}</span>
+                              <span>Order #{item.orderId.slice(-4)}</span>
                               <span className="text-[#02C39A] flex items-center gap-1">
                                  <Activity size={10} className="animate-pulse" /> Tracking
                               </span>
                            </div>
                            <div className="flex items-end justify-between">
-                              <div className="font-syne font-black text-4xl text-white">{node.progress}<span className="text-white/20 text-xl">%</span></div>
+                              <div className="font-syne font-black text-4xl text-white">{item.progress}<span className="text-white/20 text-xl">%</span></div>
                               <div className={`text-[10px] font-black uppercase tracking-widest border rounded-full px-3 py-1 ${
-                                 node.status === 'delivered' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20' : 'text-brand-teal border-brand-teal/20'
+                                 item.status === 'delivered' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20' : 'text-brand-teal border-brand-teal/20'
                               }`}>
-                                 {node.status}
+                                 {item.status}
                               </div>
                            </div>
                            <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                              <motion.div initial={{ width: 0 }} animate={{ width: `${node.progress}%` }} className="h-full bg-brand-teal" />
+                              <motion.div initial={{ width: 0 }} animate={{ width: `${item.progress}%` }} className="h-full bg-brand-teal" />
                            </div>
                            <div className="text-[9px] text-white/30 font-bold uppercase tracking-widest flex items-center justify-between">
-                              <div className="flex items-center gap-2 italic">ETA: {node.eta}m remaining</div>
+                              <div className="flex items-center gap-2 italic">ETA: {item.eta}m remaining</div>
                               <div className="h-2 w-2 rounded-full bg-brand-teal animate-pulse" />
                            </div>
                         </motion.div>

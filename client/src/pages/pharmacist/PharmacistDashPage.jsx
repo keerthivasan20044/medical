@@ -14,6 +14,7 @@ import PharmacistPrescriptions from './PharmacistPrescriptions';
 import PharmacistEarnings from './PharmacistEarnings';
 import PharmacistAnalytics from './PharmacistAnalytics';
 import PharmacistProfile from './PharmacistProfile';
+import AddMedicine from './AddMedicine';
 
 const PHARMACIST_MENU = [
   { label: 'Dashboard', path: '/pharmacist/dashboard', icon: LayoutDashboard },
@@ -33,6 +34,7 @@ export default function PharmacistDashPage() {
         <Route path="dashboard" element={<PharmacistOverview />} />
         <Route path="orders" element={<PharmacistOrders />} />
         <Route path="inventory" element={<PharmacistInventory />} />
+        <Route path="inventory/add" element={<AddMedicine />} />
         <Route path="prescriptions" element={<PharmacistPrescriptions />} />
         <Route path="earnings" element={<PharmacistEarnings />} />
         <Route path="analytics" element={<PharmacistAnalytics />} />

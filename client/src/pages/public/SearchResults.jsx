@@ -10,6 +10,7 @@ import {
 import { medicines, pharmacies, doctors, blogPosts } from '../../utils/data';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
+import { getMedicineImage } from '../../utils/medicineImages';
 
 const POPULAR_SEARCHES = ['Paracetamol', 'Vitamin D', 'Insulin', 'Cetirizine', 'Dolo 650'];
 
@@ -142,7 +143,12 @@ export default function SearchResults() {
                         {results.medicines.slice(0, 8).map(m => (
                            <Link to={`/medicines/${m.id}`} key={m.id} className="bg-white rounded-[2.5rem] border border-gray-100 p-6 md:p-8 space-y-6 hover:shadow-2xl transition duration-500 group">
                               <div className="h-44 bg-gray-50 rounded-3xl overflow-hidden relative">
-                                 <img src={m.image} className="h-full w-full object-cover group-hover:scale-110 transition duration-700" />
+                                 <img
+                                   src={getMedicineImage(m)}
+                                   alt={m.name}
+                                   className="h-full w-full object-cover group-hover:scale-110 transition duration-700"
+                                   onError={(event) => { event.currentTarget.src = getMedicineImage({ category: m.category || 'default' }); }}
+                                 />
                                  {m.requiresRx && <div className="absolute top-4 right-4 bg-orange-500 text-white px-4 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest shadow-lg">Rx Only</div>}
                               </div>
                               <div className="space-y-1">

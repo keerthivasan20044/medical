@@ -12,16 +12,16 @@ export const RatingModal = ({ isOpen, onClose, orderId, pharmacyName, agentName 
 
   const handleSubmit = async () => {
     if (pharmacyRating === 0 || deliveryRating === 0) {
-      return toast.error('Please provide architectural score for both nodes.');
+      return toast.error('Please add both ratings.');
     }
     
     setLoading(true);
     try {
       await api.post(`/api/orders/${orderId}/rate`, { pharmacyRating, deliveryRating, comment });
-      toast.success('Architecture Feedback Synchronized! Thank you.');
+      toast.success('Feedback submitted. Thank you.');
       onClose();
     } catch (e) {
-      toast.error('Failed to sync feedback node.');
+      toast.error('Could not send feedback.');
     } finally {
       setLoading(false);
     }
@@ -30,7 +30,7 @@ export const RatingModal = ({ isOpen, onClose, orderId, pharmacyName, agentName 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[150] flex items-center justify-center p-6">
+    <div className="fixed inset-0 z-[150] flex items-center justify-center p-3 md:p-6">
        <motion.div 
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           onClick={onClose}
@@ -40,26 +40,26 @@ export const RatingModal = ({ isOpen, onClose, orderId, pharmacyName, agentName 
        <motion.div 
           initial={{ opacity: 0, scale: 0.9, y: 50 }} 
           animate={{ opacity: 1, scale: 1, y: 0 }} 
-          className="relative z-10 w-full max-w-xl bg-white rounded-[4.5rem] p-12 shadow-4xl space-y-10"
+          className="relative z-10 w-full max-w-xl bg-white rounded-2xl md:rounded-[4.5rem] p-5 md:p-12 shadow-4xl space-y-6 md:space-y-10 max-h-[calc(100vh-1.5rem)] overflow-y-auto"
        >
           <div className="flex items-center justify-between">
              <div className="space-y-1">
-                <h2 className="font-syne font-black text-3xl text-[#0a1628]">Protocol Feedback</h2>
-                <p className="text-gray-400 font-dm text-sm italic">Synchronizing quality nodes for Karaikal enclave.</p>
+                <h2 className="font-syne font-black text-2xl md:text-3xl text-[#0a1628]">Service Feedback</h2>
+                <p className="text-gray-400 font-dm text-sm italic">Help us improve service in Karaikal.</p>
              </div>
-             <button onClick={onClose} className="h-12 w-12 rounded-full border border-gray-100 flex items-center justify-center text-gray-300 hover:text-[#0a1628] transition"><X size={24}/></button>
+             <button onClick={onClose} className="h-10 w-10 md:h-12 md:w-12 shrink-0 rounded-full border border-gray-100 flex items-center justify-center text-gray-300 hover:text-[#0a1628] transition"><X size={22}/></button>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-5 md:space-y-8">
              {/* Pharmacy Rating */}
-             <div className="space-y-4 p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100">
+             <div className="space-y-4 p-4 md:p-8 bg-gray-50 rounded-2xl md:rounded-[2.5rem] border border-gray-100">
                 <div className="flex items-center justify-between">
-                   <div className="text-[10px] font-black text-[#028090] uppercase tracking-widest">Pharmacy Node: {pharmacyName}</div>
+                   <div className="text-[10px] font-black text-[#028090] uppercase tracking-widest">Pharmacy: {pharmacyName}</div>
                    <ShieldCheck className="text-[#028090]" size={16} />
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-2 md:gap-3">
                    {[1, 2, 3, 4, 5].map(star => (
-                      <button key={star} onClick={() => setPharmacyRating(star)} className={`h-12 w-12 rounded-xl flex items-center justify-center transition ${pharmacyRating >= star ? 'bg-amber-100 text-amber-500 scale-110 shadow-lg' : 'bg-white text-gray-200'}`}>
+                      <button key={star} onClick={() => setPharmacyRating(star)} className={`h-10 w-10 md:h-12 md:w-12 rounded-xl flex items-center justify-center transition ${pharmacyRating >= star ? 'bg-amber-100 text-amber-500 scale-110 shadow-lg' : 'bg-white text-gray-200'}`}>
                          <Star size={24} fill={pharmacyRating >= star ? 'currentColor' : 'none'} />
                       </button>
                    ))}
@@ -67,14 +67,14 @@ export const RatingModal = ({ isOpen, onClose, orderId, pharmacyName, agentName 
              </div>
 
              {/* Delivery Rating */}
-             <div className="space-y-4 p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100">
+             <div className="space-y-4 p-4 md:p-8 bg-gray-50 rounded-2xl md:rounded-[2.5rem] border border-gray-100">
                 <div className="flex items-center justify-between">
                    <div className="text-[10px] font-black text-[#02C39A] uppercase tracking-widest">Delivery Agent: {agentName}</div>
                    <Heart className="text-[#02C39A]" size={16} />
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-2 md:gap-3">
                    {[1, 2, 3, 4, 5].map(star => (
-                      <button key={star} onClick={() => setDeliveryRating(star)} className={`h-12 w-12 rounded-xl flex items-center justify-center transition ${deliveryRating >= star ? 'bg-emerald-100 text-emerald-500 scale-110 shadow-lg' : 'bg-white text-gray-200'}`}>
+                      <button key={star} onClick={() => setDeliveryRating(star)} className={`h-10 w-10 md:h-12 md:w-12 rounded-xl flex items-center justify-center transition ${deliveryRating >= star ? 'bg-emerald-100 text-emerald-500 scale-110 shadow-lg' : 'bg-white text-gray-200'}`}>
                          <Star size={24} fill={deliveryRating >= star ? 'currentColor' : 'none'} />
                       </button>
                    ))}
@@ -83,7 +83,7 @@ export const RatingModal = ({ isOpen, onClose, orderId, pharmacyName, agentName 
 
              {/* Comment */}
              <div className="space-y-4">
-                <label className="text-[10px] font-black text-gray-300 uppercase tracking-widest ml-6">Additional Architecture Notes</label>
+                <label className="text-[10px] font-black text-gray-300 uppercase tracking-widest ml-6">Additional Notes</label>
                 <div className="relative">
                    <MessageSquare className="absolute left-6 top-6 text-gray-300" size={18} />
                    <textarea 
@@ -101,7 +101,7 @@ export const RatingModal = ({ isOpen, onClose, orderId, pharmacyName, agentName 
              disabled={loading}
              className="w-full py-6 bg-[#0a1628] text-white rounded-[2.2rem] font-syne font-black text-lg uppercase tracking-widest shadow-3xl hover:bg-[#028090] transition active:scale-95"
           >
-             {loading ? 'Synchronizing...' : 'Submit Architecture Feedback'}
+             {loading ? 'Submitting...' : 'Submit Feedback'}
           </button>
        </motion.div>
     </div>

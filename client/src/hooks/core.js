@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 
 /**
- * Persists value to local storage architecture.
+ * Persists value to local storage system.
  * @param {string} key 
  * @param {any} defaultValue 
  */
@@ -21,14 +21,14 @@ export function useLocalStorage(key, defaultValue) {
 }
 
 /**
- * Provides user GPS for Karaikal area detection protocol.
+ * Provides user GPS for Karaikal area detection step.
  */
 export function useGeolocation() {
   const [location, setLocation] = useState({ lat: null, lng: null, accuracy: null, error: null });
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setLocation(l => ({ ...l, error: 'Geolocation not supported by enclave' }));
+      setLocation(l => ({ ...l, error: 'Location is not supported by this browser' }));
       return;
     }
 
@@ -50,7 +50,7 @@ export function useGeolocation() {
 }
 
 /**
- * Debounce value changes to optimize architecture searches.
+ * Debounce value changes to optimize system searches.
  */
 export function useDebounce(value, delay = 300) {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -93,7 +93,7 @@ export function useCountUp(target, duration = 2000) {
 }
 
 /**
- * Media query detector for responsive architecture checks.
+ * Media query detector for responsive system checks.
  */
 export function useMediaQuery(query) {
   const [matches, setMatches] = useState(false);
@@ -111,7 +111,7 @@ export function useMediaQuery(query) {
 }
 
 /**
- * Closes dropdowns when clicking outside the enclave node.
+ * Closes dropdowns when clicking outside the area item.
  */
 export function useClickOutside(ref, callback) {
   useEffect(() => {
@@ -129,14 +129,14 @@ export function useClickOutside(ref, callback) {
 }
 
 /**
- * Connects to socket.io medical server architecture.
+ * Connects to socket.io medical server system.
  */
 export function useSocket(token) {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
     // Implementation would go here with socket.io-client
-    // console.log('Syncing with socket enclave...', token);
+    // console.log('Updateing with socket area...', token);
     return () => {
       // socket.disconnect();
     };

@@ -17,14 +17,16 @@ export default function KaraikalMap({ pharmacies }) {
   };
 
   const calculatePosition = (lat, lng) => {
-    const top = ((mapBounds.top - lat) / (mapBounds.top - mapBounds.bottom)) * 100;
-    const left = ((lng - mapBounds.left) / (mapBounds.right - mapBounds.left)) * 100;
+    const rawTop = ((mapBounds.top - lat) / (mapBounds.top - mapBounds.bottom)) * 100;
+    const rawLeft = ((lng - mapBounds.left) / (mapBounds.right - mapBounds.left)) * 100;
+    const top = Math.max(8, Math.min(92, rawTop));
+    const left = Math.max(8, Math.min(92, rawLeft));
     return { top: `${top}%`, left: `${left}%` };
   };
 
   return (
     <div className="relative w-full h-full bg-[#f0f9f8] p-10 overflow-hidden font-dm">
-      {/* Abstract Map Infrastructure Protocol */}
+      {/* Abstract Map Infrastructure Service */}
       <div className="absolute inset-0 z-0">
          {/* Coastal / Sea Visualization */}
          <div className="absolute top-0 right-0 w-1/4 h-full bg-[#02C39A]/5 blur-[80px]" />
@@ -32,14 +34,14 @@ export default function KaraikalMap({ pharmacies }) {
          {/* Grid Matrix Protcol */}
          <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(rgba(10,22,40,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(10,22,40,0.1)_1px,transparent_1px)] bg-[size:40px_40px]" />
          
-         {/* Road Node Visualization Matrix */}
+         {/* Road Item Visualization Matrix */}
          <div className="absolute top-[30%] left-0 w-full h-[6px] bg-white shadow-sm border border-black/[0.02] rotate-12" />
          <div className="absolute top-0 left-[40%] h-full w-[6px] bg-white shadow-sm border border-black/[0.02] -rotate-6" />
          <div className="absolute top-[60%] left-0 w-full h-[4px] bg-white/60 -rotate-12 border border-black/[0.01]" />
          <div className="absolute top-0 left-[60%] h-full w-[4px] bg-white/60 rotate-45 border border-black/[0.01]" />
       </div>
 
-      {/* User Location Node Hub */}
+      {/* User Location Item Hub */}
       <div 
         className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
         style={calculatePosition(10.9250, 79.8350)}
@@ -49,11 +51,11 @@ export default function KaraikalMap({ pharmacies }) {
             <div className="h-10 w-10 bg-[#0a1628] rounded-xl flex items-center justify-center text-brand-teal shadow-4xl border border-brand-teal/20">
                <MapPin size={24} />
             </div>
-            <div className="absolute top-full mt-4 bg-[#0a1628] px-4 py-2 rounded-lg text-[9px] font-black text-white uppercase italic tracking-widest shadow-lg whitespace-nowrap">Resident Node Hub</div>
+            <div className="absolute top-full mt-4 bg-[#0a1628] px-4 py-2 rounded-lg text-[9px] font-black text-white uppercase italic tracking-widest shadow-lg whitespace-nowrap">Your Location</div>
          </div>
       </div>
 
-      {/* District Boundaries / Coverage Circles Terminal */}
+      {/* District Boundaries / Coverage Circles Page */}
       <div 
         className="absolute z-0 h-[400px] w-[400px] border-4 border-dashed border-[#02C39A]/10 rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         style={calculatePosition(10.9250, 79.8350)}
@@ -63,8 +65,17 @@ export default function KaraikalMap({ pharmacies }) {
       </div>
 
       {/* Pharmacy Pins Matrix */}
+      {pharmacies.length === 0 && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center">
+          <div className="bg-white/90 backdrop-blur-xl border border-black/[0.03] rounded-3xl px-8 py-6 text-center shadow-4xl">
+            <div className="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em]">No Geo Items</div>
+            <div className="mt-2 font-syne font-black text-[#0a1628] uppercase italic">Try a wider search</div>
+          </div>
+        </div>
+      )}
+
       {pharmacies.map((p, i) => {
-      const coords = p.gps || p.coordinates || { lat: 10.9254, lng: 79.8386 };
+         const coords = p.gps || p.coordinates || { lat: 10.9254, lng: 79.8386 };
          const pos = calculatePosition(coords.lat, coords.lng);
          const isActive = activePin?.id === p.id;
 
@@ -103,8 +114,8 @@ export default function KaraikalMap({ pharmacies }) {
                         <div className="h-32 w-full relative">
                            <img src={normalizeUrl(p.images?.[0] || p.image || '/assets/pharmacy_pro.png')} alt={p.name} className="h-full w-full object-cover grayscale-[0.2]" />
                            <div className="absolute inset-x-4 bottom-4 flex justify-between items-center z-10">
-                              <div className="px-3 py-1 bg-[#0a1628]/80 backdrop-blur-md rounded-lg text-[8px] font-black text-white uppercase italic tracking-widest">{p.area} Node</div>
-                              <div className={`px-2 py-1 rounded text-[8px] font-black uppercase italic ${p.status.includes('OPEN') ? 'bg-emerald-500/80 text-white' : 'bg-red-500/80 text-white'}`}>{p.status}</div>
+                              <div className="px-3 py-1 bg-[#0a1628]/80 backdrop-blur-md rounded-lg text-[8px] font-black text-white uppercase italic tracking-widest">{p.area} Item</div>
+                              <div className={`px-2 py-1 rounded text-[8px] font-black uppercase italic ${(p.status || '').includes('OPEN') ? 'bg-emerald-500/80 text-white' : 'bg-red-500/80 text-white'}`}>{p.status || 'VERIFIED'}</div>
                            </div>
                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                         </div>
@@ -126,7 +137,7 @@ export default function KaraikalMap({ pharmacies }) {
                               </div>
                               <div className="flex items-center gap-3">
                                  <div className="h-8 w-8 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-500"><Navigation size={14}/></div>
-                                 <div className="text-[9px] font-black text-emerald-600 uppercase italic tracking-widest">{p.distance} KM</div>
+                                 <div className="text-[9px] font-black text-emerald-600 uppercase italic tracking-widest">{p.distance || '0.8'} KM</div>
                               </div>
                            </div>
 
@@ -147,7 +158,7 @@ export default function KaraikalMap({ pharmacies }) {
 
                            <Link to={`/pharmacies/${p.id}`} className="block">
                               <button className="w-full h-14 bg-[#0a1628] text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-4xl flex items-center justify-center gap-3 transition-all hover:bg-brand-teal hover:text-[#0a1628]">
-                                 <Pill size={16}/> Initialize Node Uplink
+                                 <Pill size={16}/> Initialize Item Payment
                               </button>
                            </Link>
                         </div>
@@ -159,17 +170,17 @@ export default function KaraikalMap({ pharmacies }) {
          );
       })}
 
-      {/* Map Legend Console Protocol */}
+      {/* Map Legend Console Service */}
       <div className="absolute bottom-10 right-10 bg-white/90 backdrop-blur-xl p-8 rounded-[2.5rem] border border-black/[0.03] shadow-4xl space-y-6 hidden md:block">
-         <div className="text-[9px] font-black text-gray-300 uppercase italic tracking-widest border-b border-black/[0.03] pb-3">District Node Legend</div>
+         <div className="text-[9px] font-black text-gray-300 uppercase italic tracking-widest border-b border-black/[0.03] pb-3">District Item Legend</div>
          <div className="space-y-4">
             <div className="flex items-center gap-4">
                <div className="h-6 w-6 bg-brand-teal rounded-lg border-2 border-[#0a1628]" />
-               <span className="text-[10px] font-black text-[#0a1628] uppercase italic">Standard Node</span>
+               <span className="text-[10px] font-black text-[#0a1628] uppercase italic">Standard Item</span>
             </div>
             <div className="flex items-center gap-4">
                <div className="h-6 w-6 bg-blue-500 rounded-lg border-2 border-white" />
-               <span className="text-[10px] font-black text-[#0a1628] uppercase italic">24/7 Redundant Node</span>
+               <span className="text-[10px] font-black text-[#0a1628] uppercase italic">24/7 Redundant Item</span>
             </div>
             <div className="flex items-center gap-4">
                <div className="h-6 w-6 bg-[#0a1628] rounded-full animate-ping" />
@@ -179,7 +190,7 @@ export default function KaraikalMap({ pharmacies }) {
       </div>
 
       <div className="absolute top-10 left-10 z-10">
-         <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.5em] italic">District Enclave Visualization</div>
+         <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.5em] italic">District Area Visualization</div>
          <div className="text-4xl font-syne font-black text-[#0a1628] uppercase italic tracking-tighter">Karaikal Grid</div>
       </div>
     </div>

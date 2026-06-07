@@ -42,11 +42,11 @@ export default {
         }
       },
       fontFamily: {
-        heading: ['Syne', 'ui-sans-serif', 'system-ui'],
-        body: ['DM Sans', 'ui-sans-serif', 'system-ui'],
-        syne: ['Syne', 'sans-serif'],
-        dm: ['DM Sans', 'sans-serif'],
-        ui: ['Inter', 'DM Sans', 'ui-sans-serif', 'system-ui']
+        heading: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        body: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        syne: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        dm: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        ui: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif']
       },
       boxShadow: {
         soft: '0 4px 24px rgba(2,128,144,0.12)',

@@ -1,13 +1,15 @@
 import { Outlet } from 'react-router-dom';
-import Navbar from './Navbar';
+import { useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import MobileBottomNav from './MobileBottomNav';
 
 export default function AppLayout() {
+  const { pathname } = useLocation();
+  const hasOwnDashboardShell = ['/admin', '/doctor', '/pharmacist', '/delivery'].some((path) => pathname.startsWith(path));
+
   return (
-    <div className="flex bg-brand-off min-h-screen">
-      <Sidebar />
-      <div className="flex-1">
+    <div className="flex min-h-[calc(100vh-3.5rem)] md:min-h-[calc(100vh-4rem)] bg-brand-off overflow-x-hidden">
+      {!hasOwnDashboardShell && <Sidebar />}
+      <div className="flex-1 min-w-0 w-full">
         <Outlet />
       </div>
     </div>

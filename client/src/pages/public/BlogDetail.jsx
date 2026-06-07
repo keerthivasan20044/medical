@@ -60,7 +60,7 @@ export default function BlogDetail() {
          </div>
       </section>
 
-      {/* Main Content Architecture */}
+      {/* Main Content System */}
       <section className="max-w-7xl mx-auto px-6 py-24">
          <div className="grid lg:grid-cols-[1fr_350px] gap-20 items-start">
             
@@ -72,7 +72,7 @@ export default function BlogDetail() {
                   </h3>
                   <div className="space-y-4 border-l-2 border-gray-100 pl-6">
                      <a href="#intro" className="block text-sm font-dm font-bold text-[#028090] hover:text-[#02C39A] transition">{t('overview')}</a>
-                     <a href="#medicines" className="block text-sm font-dm font-bold text-gray-400 hover:text-[#0a1628] transition">{t('primaryProtocol')}</a>
+                     <a href="#medicines" className="block text-sm font-dm font-bold text-gray-400 hover:text-[#0a1628] transition">{t('primaryService')}</a>
                      <a href="#tips" className="block text-sm font-dm font-bold text-gray-400 hover:text-[#0a1628] transition">{t('doctorAdvice')}</a>
                      <a href="#summary" className="block text-sm font-dm font-bold text-gray-400 hover:text-[#0a1628] transition">{t('conclusion')}</a>
                   </div>
@@ -96,13 +96,13 @@ export default function BlogDetail() {
                   </div>
                   
                   <div 
-                    className="prose prose-2xl prose-slate max-w-none font-dm text-[18px] text-gray-600 leading-[2] space-y-10 architecture-content"
+                    className="prose prose-2xl prose-slate max-w-none font-dm text-[18px] text-gray-600 leading-[2] space-y-10 system-content"
                     dangerouslySetInnerHTML={{ __html: post.content || `
-                      <p>Full article architecture details for "${post.title}" by ${post.author} appearing here. Healthcare professionals in the Karaikal district contribute these insights to ensure patient awareness and safety across the medical enclave.</p>
+                      <p>Full article details for "${post.title}" by ${post.author} appearing here. Healthcare professionals in the Karaikal district contribute these insights to ensure patient awareness and safety across the medical area.</p>
                        <img src="/assets/crt_scan.png" class="rounded-[4rem] shadow-2xl my-20" />
-                      <h3>Medical Enclave Overview</h3>
+                      <h3>Medical Overview</h3>
                       <p>As we expand our digital healthcare reach into the coastal areas of Tamil Nadu, the need for standardized medical education is vital. Dr. ${post.author.split(' ').pop()} notes that local trends in chronic conditions require specialized community-driven oversight.</p>
-                      <blockquote>"Patient education is the first step in preventive healthcare. By understanding these simple protocols, families in Karaikal can significantly improve their long-term health outcomes."</blockquote>
+                      <blockquote>"Patient education is the first step in preventive healthcare. By understanding these simple steps, families in Karaikal can significantly improve their long-term health outcomes."</blockquote>
                     ` }} 
                   />
                </div>
@@ -139,7 +139,7 @@ export default function BlogDetail() {
                         <p className="text-gray-500 font-dm italic text-lg leading-relaxed">{doctor.bio}</p>
                         <div className="flex flex-wrap gap-4 pt-4">
                            <Link to={`/doctors/${doctor.id}`} className="px-10 py-4 bg-[#0a1628] text-white rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-[#028090] transition shadow-xl">{t('consultArrow')}</Link>
-                           <button className="px-10 py-4 bg-white border border-gray-100 text-gray-400 rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-gray-50 transition">{t('viewFullArchitecture')}</button>
+                           <button className="px-10 py-4 bg-white border border-gray-100 text-gray-400 rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-gray-50 transition">{t('viewFullSystem')}</button>
                         </div>
                      </div>
                   </div>
@@ -174,7 +174,7 @@ export default function BlogDetail() {
                      <button className="w-full flex items-center justify-between p-6 bg-white rounded-3xl group hover:shadow-2xl transition border border-gray-50">
                         <div className="flex items-center gap-4">
                            <div className="h-10 w-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center group-hover:bg-[#02C39A] group-hover:text-white transition"><MessageCircle size={18}/></div>
-                           <span className="text-[10px] font-black uppercase tracking-widest">{t('whatsappEnclave')}</span>
+                           <span className="text-[10px] font-black uppercase tracking-widest">{t('whatsappArea')}</span>
                         </div>
                         <ArrowRight size={16} className="text-gray-300" />
                      </button>

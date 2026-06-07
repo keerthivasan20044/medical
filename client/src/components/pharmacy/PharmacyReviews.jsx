@@ -6,7 +6,7 @@ import ReviewForm from './ReviewForm';
 export default function PharmacyReviews({ pharmacyId }) {
   const [showForm, setShowForm] = useState(false);
   const [reviews, setReviews] = useState([
-    { id: 1, user: 'Rahul V.', rating: 5, date: '2 days ago', text: 'Excellent node service. Fast fulfillment and authentic medicines.', helpful: 12 },
+    { id: 1, user: 'Rahul V.', rating: 5, date: '2 days ago', text: 'Excellent pharmacy service. Fast delivery and authentic medicines.', helpful: 12 },
     { id: 2, user: 'Sonia S.', rating: 4, date: '1 week ago', text: 'Reliable stock levels. Good communication from the pharmacist.', helpful: 8 },
   ]);
 

@@ -1,13 +1,14 @@
 /**
  * MediReach Demo Seed Script
  * Run: node scripts/seed.js
- * Creates demo users for all roles with password: 123456
+ * Creates demo users for all roles with password: 123456.
  */
 
 import '../config/env.js';
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
+import Pharmacy from '../models/Pharmacy.js';
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/medireach';
 
@@ -19,7 +20,7 @@ const DEMO_USERS = [
     role: 'customer',
     isVerified: true,
     isActive: true,
-    address: { street: '42 Gandhi Nagar', city: 'Karaikal', state: 'Puducherry', pincode: '609602' }
+    address: [{ street: '42 Gandhi Nagar', city: 'Karaikal', state: 'Puducherry', pincode: '609602' }]
   },
   {
     name: 'Dr. Demo Doctor',
@@ -72,7 +73,7 @@ const DEMO_USERS = [
       rating: 4.9,
       tags: ['Heart Specialist', 'Emergency']
     },
-    address: { street: 'Church Street', city: 'Karaikal', state: 'Puducherry', pincode: '609602' }
+    address: [{ street: 'Church Street', city: 'Karaikal', state: 'Puducherry', pincode: '609602' }]
   },
   {
     name: 'Dr. Priya Mani',
@@ -91,7 +92,7 @@ const DEMO_USERS = [
       rating: 4.8,
       tags: ['Child Care', 'Vaccination']
     },
-    address: { street: 'Nagore Road', city: 'Karaikal', state: 'Puducherry', pincode: '609605' }
+    address: [{ street: 'Nagore Road', city: 'Karaikal', state: 'Puducherry', pincode: '609605' }]
   },
   {
     name: 'Admin User',
@@ -106,35 +107,47 @@ const DEMO_USERS = [
 async function seed() {
   try {
     await mongoose.connect(MONGO_URI);
-    console.log('✅ Connected to MongoDB:', MONGO_URI);
+    console.log('Connected to MongoDB:', MONGO_URI);
 
     const passwordHash = await bcrypt.hash('123456', 10);
 
     for (const userData of DEMO_USERS) {
       const existing = await User.findOne({ email: userData.email });
       if (existing) {
-        // Update password and ensure verified
-        existing.password = passwordHash;
-        existing.isVerified = true;
+        Object.assign(existing, userData, { password: passwordHash, isVerified: true, isActive: true });
         await existing.save();
-        console.log(`🔄 Updated: ${userData.email} [${userData.role}]`);
+        console.log(`Updated: ${userData.email} [${userData.role}]`);
       } else {
         await User.create({ ...userData, password: passwordHash });
-        console.log(`✨ Created: ${userData.email} [${userData.role}]`);
+        console.log(`Created: ${userData.email} [${userData.role}]`);
       }
     }
 
-    console.log('\n✅ Seed complete! Demo credentials:');
-    console.log('─────────────────────────────────────');
-    console.log('Customer  : kkl@demo.in     / 123456');
-    console.log('Doctor    : doc@demo.in     / 123456');
-    console.log('Pharmacist: shop@demo.in    / 123456');
-    console.log('Delivery  : ride@demo.in    / 123456');
-    console.log('Admin     : admin@demo.in   / 123456');
-    console.log('─────────────────────────────────────');
+    const demoPharmacist = await User.findOne({ email: 'shop@demo.in' });
+    if (demoPharmacist) {
+      const demoPharmacies = await Pharmacy.find({
+        slug: { $in: ['apollo-pharmacy', 'sri-dhanvantri-medicals'] }
+      }).sort({ name: 1 });
 
+      if (demoPharmacies.length) {
+        await Pharmacy.updateMany(
+          { _id: { $in: demoPharmacies.map((pharmacy) => pharmacy._id) } },
+          { owner: demoPharmacist._id }
+        );
+        demoPharmacist.pharmacyId = demoPharmacies[0]._id;
+        await demoPharmacist.save();
+        console.log(`Linked shop@demo.in to ${demoPharmacies.map((pharmacy) => pharmacy.name).join(', ')}`);
+      }
+    }
+
+    console.log('\nSeed complete. Demo credentials:');
+    console.log('Customer  : kkl@demo.in   / 123456');
+    console.log('Doctor    : doc@demo.in   / 123456');
+    console.log('Pharmacist: shop@demo.in  / 123456');
+    console.log('Delivery  : ride@demo.in  / 123456');
+    console.log('Admin     : admin@demo.in / 123456');
   } catch (err) {
-    console.error('❌ Seed failed:', err.message);
+    console.error('Seed failed:', err.message);
   } finally {
     await mongoose.disconnect();
     process.exit(0);

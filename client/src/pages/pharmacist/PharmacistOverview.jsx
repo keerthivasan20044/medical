@@ -24,7 +24,8 @@ export default function PharmacistOverview() {
           pharmacistService.getOrders()
         ]);
         setStats(statsData);
-        setOrders(ordersData.slice(0, 5));
+        const orderItems = Array.isArray(ordersData) ? ordersData : ordersData.items || [];
+        setOrders(orderItems.slice(0, 5));
       } catch (err) {
         console.error('Failed to fetch pharmacist data:', err);
         toast.error('Failed to load dashboard data');
@@ -39,7 +40,7 @@ export default function PharmacistOverview() {
     return (
       <div className="h-[60vh] flex flex-col items-center justify-center space-y-4">
         <Loader2 className="animate-spin text-brand-teal" size={48} />
-        <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Synchronizing Node Data...</p>
+        <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Loading data...</p>
       </div>
     );
   }
@@ -49,7 +50,7 @@ export default function PharmacistOverview() {
       {/* Header with Online Toggle */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em]">Node: {user?.name || 'Pharmacy Hub'}</div>
+          <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em]">Pharmacy: {user?.name || 'Pharmacy Hub'}</div>
           <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Pharmacist Hub</h1>
         </div>
         <button 
@@ -78,7 +79,7 @@ export default function PharmacistOverview() {
               title="Recent Orders"
               columns={[
                 { key: '_id', label: 'Order ID', render: (val) => val.slice(-6).toUpperCase() },
-                { key: 'customerName', label: 'Client', render: (_, row) => row.userId?.name || 'Customer' },
+                { key: 'customerId', label: 'Client', render: (val) => val?.name || 'Customer' },
                 { key: 'totalAmount', label: 'Total', render: (val) => `₹${val}` },
                 { 
                   key: 'status', 

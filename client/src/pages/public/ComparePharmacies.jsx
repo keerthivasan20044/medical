@@ -41,7 +41,7 @@ export default function ComparePharmaciesPage() {
 
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-48 font-dm">
-      {/* Hero Section Protocol */}
+      {/* Hero Section Service */}
       <section className="bg-[#0a1628] pt-32 pb-60 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(2,195,154,0.1),transparent_50%)]" />
         <div className="absolute top-0 right-0 h-full w-1/3 bg-brand-teal/5 blur-[120px]" />
@@ -56,7 +56,7 @@ export default function ComparePharmaciesPage() {
                  Matrix <br/><span className="text-brand-teal">Comparison Hub</span>
               </h1>
               <p className="text-white/40 font-dm text-2xl italic max-w-xl leading-relaxed mx-auto lg:mx-0">
-                 Synchronizing clinical parameters across district medical enclaves to identify the optimal delivery node.
+                 Comparing local pharmacies to find the best choice for you.
               </p>
            </div>
         </div>
@@ -65,7 +65,7 @@ export default function ComparePharmaciesPage() {
       {/* Comparison Console Interface */}
       <div className="max-w-7xl mx-auto px-10 -mt-32 relative z-20 space-y-16">
          
-         {/* Node Selector Hub */}
+         {/* Item Selector Hub */}
          <div className="bg-white border border-black/[0.03] p-12 rounded-[4.5rem] shadow-soft overflow-x-auto no-scrollbar">
             <div className="flex items-center gap-12 min-w-max">
                <div className="space-y-2 shrink-0">
@@ -146,8 +146,8 @@ export default function ComparePharmaciesPage() {
                                   <div className="space-y-3 px-6">
                                      <div className="flex justify-between text-[9px] font-black text-gray-400 uppercase italic">
                                         <span>Level</span>
-                                        <span className={p.stock[f.key] > 60 ? 'text-emerald-500' : p.stock[f.key] > 30 ? 'text-orange-500' : 'text-red-500'}>
-                                           {p.stock[f.key] > 60 ? 'High' : p.stock[f.key] > 30 ? 'Med' : 'Low'}
+                                        <span className={p.stock?.[f.key] > 60 ? 'text-emerald-500' : p.stock?.[f.key] > 30 ? 'text-orange-500' : 'text-red-500'}>
+                                           {p.stock?.[f.key] > 60 ? 'High' : p.stock?.[f.key] > 30 ? 'Med' : 'Low'}
                                         </span>
                                      </div>
                                      <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
@@ -175,7 +175,7 @@ export default function ComparePharmaciesPage() {
             </div>
          </div>
 
-         {/* Winning CTA Enclave */}
+         {/* Winning CTA Area */}
          {winner && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}

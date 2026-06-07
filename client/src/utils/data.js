@@ -73,7 +73,7 @@ export const medicines = [
     pharmacyId: 'ph-8',
     pharmacyName: 'Karaikal Central Pharmacy',
     type: 'Vial',
-    description: 'Third dose booster for COVID-19 protective protocol.',
+    description: 'Third dose booster for COVID-19 protection.',
     images: ['/assets/vaccine_pro.png']
   },
   {

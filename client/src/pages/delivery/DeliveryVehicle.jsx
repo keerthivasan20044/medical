@@ -18,11 +18,11 @@ export default function DeliveryVehicle() {
     <div className="space-y-10 pb-20">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Fleet Asset</h1>
-          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Manage Registered Vehicle Logistics</p>
+          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Vehicle</h1>
+          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Manage your registered vehicle</p>
         </div>
         <button className="h-14 px-8 bg-navy text-brand-teal rounded-[2rem] font-syne font-black text-xs uppercase tracking-widest flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-navy/20">
-           <Plus size={18} /> Update Asset
+           <Plus size={18} /> Update Vehicle
         </button>
       </div>
 
@@ -47,13 +47,13 @@ export default function DeliveryVehicle() {
                  <div className="text-xl font-syne font-black text-navy uppercase italic tracking-widest">{vehicle.number}</div>
               </div>
               <div>
-                 <div className="text-[10px] font-black text-navy/20 uppercase tracking-[0.2em] mb-2">Node Assignment</div>
+                 <div className="text-[10px] font-black text-navy/20 uppercase tracking-[0.2em] mb-2">Assigned Area</div>
                  <div className="text-xl font-syne font-black text-navy uppercase italic tracking-widest">Karaikal-B1</div>
               </div>
            </div>
 
            <div className="space-y-6">
-              <h3 className="font-syne font-black text-lg text-navy uppercase italic">Asset Documents</h3>
+              <h3 className="font-syne font-black text-lg text-navy uppercase italic">Vehicle Documents</h3>
               <div className="space-y-4">
                  {vehicle.documents.map((doc) => (
                     <div key={doc.name} className="flex items-center justify-between p-6 bg-gray-50 rounded-3xl group hover:bg-white hover:shadow-xl transition-all">
@@ -82,7 +82,7 @@ export default function DeliveryVehicle() {
            <div className="bg-navy p-10 rounded-[3.5rem] text-white space-y-8">
               <div className="space-y-2">
                  <h3 className="font-syne font-black text-xl uppercase italic">Quick Health Check</h3>
-                 <p className="text-xs text-white/40 font-dm font-bold uppercase tracking-tight italic">Scan your asset before starting mission.</p>
+                 <p className="text-xs text-white/40 font-dm font-bold uppercase tracking-tight italic">Check your vehicle before starting deliveries.</p>
               </div>
               <div className="space-y-4">
                  {[
@@ -97,14 +97,14 @@ export default function DeliveryVehicle() {
                  ))}
               </div>
               <button className="w-full h-14 bg-brand-teal text-navy rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest hover:bg-white transition-all shadow-2xl">
-                 Launch Diagnostics
+                 Start Check
               </button>
            </div>
 
            <div className="bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-sm space-y-6">
               <div className="flex items-center gap-3 text-navy">
                  <History size={20} className="text-brand-teal" />
-                 <h3 className="font-syne font-black text-lg uppercase italic tracking-tighter">Incident Logs</h3>
+                 <h3 className="font-syne font-black text-lg uppercase italic tracking-tighter">Issue History</h3>
               </div>
               <div className="flex flex-col items-center justify-center py-10 text-center space-y-4">
                  <div className="h-16 w-16 bg-gray-50 rounded-full flex items-center justify-center text-gray-200">

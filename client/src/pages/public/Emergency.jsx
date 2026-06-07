@@ -27,15 +27,15 @@ const emergencyPharmacies = [
 ];
 
 const emergencyContacts = [
-  { name: 'Ambulance Protocol', phone: '108', sub: 'Free Dispatch Node', icon: HeartPulse, color: 'text-red-500' },
+  { name: 'Ambulance Service', phone: '108', sub: 'Free Ambulance', icon: HeartPulse, color: 'text-red-500' },
   { name: 'Govt. General Hospital', phone: '04368-222288', sub: 'Karaikal Hub', icon: ShieldCheck, color: 'text-brand-teal' },
-  { name: 'JIPMER Karaikal', phone: '04368-220500', sub: 'Tertiary Care Node', icon: ShieldCheck, color: 'text-blue-500' },
+  { name: 'JIPMER Karaikal', phone: '04368-220500', sub: 'Hospital Care', icon: ShieldCheck, color: 'text-blue-500' },
   { name: 'Dr. Priya Raman', phone: '+91 94432 12345', sub: 'Emergency Consultant', icon: User, color: 'text-amber-500' }
 ];
 
 const kits = [
   { name: 'Fever Pulse Kit', meds: 'Paracetamol + ORS + Electrolytes', icon: Zap, price: 150 },
-  { name: 'Respiratory Node', meds: 'Cetirizine + Vitamin C + Cough syrup', icon: Activity, price: 280 },
+  { name: 'Cold and Cough Kit', meds: 'Cetirizine + Vitamin C + Cough syrup', icon: Activity, price: 280 },
   { name: 'Diabetes Emergency', meds: 'ORS + Glucose tablets + Dextrose', icon: HeartPulse, price: 120 },
   { name: 'Trauma First Aid', meds: 'Bandage + Antiseptic + Paracetamol', icon: ShieldCheck, price: 220 }
 ];
@@ -44,7 +44,7 @@ export default function EmergencyPage() {
   const { t } = useLanguage();
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-48 font-dm">
-      {/* Emergency Red Hero Terminal */}
+      {/* Emergency Red Hero Page */}
       <section className="bg-red-600 pt-32 pb-48 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.1),transparent_50%)]" />
         <div className="absolute top-0 right-0 h-full w-1/3 bg-white/5 blur-[120px]" />
@@ -53,7 +53,7 @@ export default function EmergencyPage() {
         <div className="max-w-7xl mx-auto px-10 relative z-10 space-y-12 text-center lg:text-left">
            <div className="flex items-center justify-center lg:justify-start gap-6">
               <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center text-red-600 shadow-4xl animate-bounce"><AlertCircle size={32}/></div>
-              <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.5em] italic">District Emergency Protocol</div>
+              <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.5em] italic">District Emergency Service</div>
            </div>
            
            <div className="space-y-6">
@@ -61,7 +61,7 @@ export default function EmergencyPage() {
                  Emergency <br/><span className="text-white/40 text-outline-red">Medicine Hub</span>
               </h1>
               <p className="text-white font-dm text-2xl italic max-w-2xl leading-relaxed mx-auto lg:mx-0">
-                 Need medication urgently? Initializing district-wide search for 24-hour surgical nodes across the Karaikal medical surgical grid.
+                 Need medication urgently? Initializing district-wide search for 24-hour surgical items across the Karaikal medical surgical grid.
               </p>
            </div>
         </div>
@@ -72,12 +72,12 @@ export default function EmergencyPage() {
          
          <div className="grid lg:grid-cols-12 gap-16">
             
-            {/* Left: 24/7 Node Registry */}
+            {/* Left: 24/7 Pharmacy Info */}
             <div className="lg:col-span-8 space-y-12">
                <div className="bg-white border border-red-100 rounded-[4.5rem] p-12 lg:p-16 shadow-soft space-y-12 relative overflow-hidden">
                   <div className="absolute top-0 right-0 h-40 w-40 bg-red-500 opacity-[0.02] rounded-full blur-[80px]" />
                   <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic leading-none flex items-center gap-6">
-                     <div className="h-2 w-16 bg-red-600 rounded-full" /> 24-Hour Active Nodes
+                     <div className="h-2 w-16 bg-red-600 rounded-full" /> 24-Hour Active Items
                   </h3>
                   
                   <div className="grid md:grid-cols-2 gap-12">
@@ -98,11 +98,11 @@ export default function EmergencyPage() {
                               </div>
                               <div className="flex items-center gap-4 py-6 border-y border-black/[0.03]">
                                  <div className="h-10 w-10 bg-white rounded-xl flex items-center justify-center text-red-600 shadow-soft animate-pulse"><Clock size={18}/></div>
-                                 <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest leading-none">ETA: {p.eta} Delivery Node</div>
+                                 <div className="text-[10px] font-black text-[#0a1628] uppercase italic tracking-widest leading-none">ETA: {p.eta} Delivery Address</div>
                               </div>
                            </div>
                            <div className="grid grid-cols-2 gap-4">
-                              <a href={`tel:${p.phone}`} className="h-16 bg-[#0a1628] text-white font-syne font-black text-[9px] uppercase italic tracking-widest rounded-2xl flex items-center justify-center gap-3 shadow-4xl hover:bg-red-600 transition-all"><Phone size={16}/> Direct Uplink</a>
+                              <a href={`tel:${p.phone}`} className="h-16 bg-[#0a1628] text-white font-syne font-black text-[9px] uppercase italic tracking-widest rounded-2xl flex items-center justify-center gap-3 shadow-4xl hover:bg-red-600 transition-all"><Phone size={16}/> Call Now</a>
                               <button className="h-16 bg-red-600 text-white font-syne font-black text-[9px] uppercase italic tracking-widest rounded-2xl shadow-4xl flex items-center justify-center shadow-red-200/50">Order Pulse</button>
                            </div>
                         </motion.div>
@@ -110,7 +110,7 @@ export default function EmergencyPage() {
                   </div>
                </div>
 
-               {/* Quick Kits Terminal */}
+               {/* Quick Kits Page */}
                <div className="bg-white border border-black/[0.03] rounded-[4.5rem] p-12 lg:p-16 shadow-soft space-y-12 relative overflow-hidden">
                   <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic leading-none flex items-center gap-6">
                      <div className="h-2 w-16 bg-amber-500 rounded-full" /> Quick Response Payloads
@@ -135,12 +135,12 @@ export default function EmergencyPage() {
             {/* Right: Emergency Contacts Matrix */}
             <div className="lg:col-span-4 space-y-10">
                <div className="bg-[#0a1628] rounded-[4.5rem] p-12 text-white space-y-10 shadow-4xl relative overflow-hidden group sticky top-32">
-                  {/* Pulse Telemetry Visualization */}
+                  {/* Pulse Tracking Visualization */}
                   <div className="absolute top-0 right-0 h-64 w-64 bg-red-600 opacity-10 rounded-full blur-[80px]" />
                   <div className="space-y-6 relative z-10">
                      <div className="h-16 w-16 bg-red-600 rounded-2xl flex items-center justify-center animate-pulse shadow-4xl"><Activity size={32}/></div>
-                     <h3 className="font-syne font-black text-4xl uppercase italic tracking-tighter leading-none text-white">Universal Uplink</h3>
-                     <p className="text-white/40 font-dm font-bold italic text-xl leading-relaxed">Direct district-wide emergency handoff terminal.</p>
+                     <h3 className="font-syne font-black text-4xl uppercase italic tracking-tighter leading-none text-white">Emergency Help</h3>
+                     <p className="text-white/40 font-dm font-bold italic text-xl leading-relaxed">Direct emergency help across the district.</p>
                   </div>
 
                   <div className="space-y-6 relative z-10 border-t border-white/5 pt-10">

@@ -9,18 +9,27 @@ export async function uploadPrescription(req, res) {
     const { doctor, doctorName, medicines, diagnosis, notes, orderId, pharmacyId } = req.body;
     
     const isObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+    const fallbackDataUrl = req.file?.buffer
+      ? `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`
+      : '';
+    const imageUrl = req.file?.path || fallbackDataUrl;
+
+    if (!imageUrl) {
+      return res.status(400).json({ message: 'Prescription file is required' });
+    }
     
     const itemData = {
       customerId: req.user.id,
-      imageUrl: req.file?.path || '',
-      publicId: req.file?.filename || '',
+      imageUrl,
+      publicId: req.file?.filename || req.file?.originalname || '',
       medicines: medicines ? (typeof medicines === 'string' ? JSON.parse(medicines) : medicines) : [],
       diagnosis,
       notes,
-      orderId,
-      pharmacyId,
       status: 'pending'
     };
+
+    if (orderId && isObjectId(orderId)) itemData.orderId = orderId;
+    if (pharmacyId && isObjectId(pharmacyId)) itemData.pharmacyId = pharmacyId;
 
     if (doctor && isObjectId(doctor)) {
       itemData.doctor = doctor;
@@ -31,7 +40,7 @@ export async function uploadPrescription(req, res) {
     const item = await Prescription.create(itemData);
 
     // Link to order if provided
-    if (orderId) {
+    if (orderId && isObjectId(orderId)) {
       await Order.findByIdAndUpdate(orderId, {
         prescriptionUrl: item.imageUrl,
         prescriptionId: item._id
@@ -92,6 +101,95 @@ export async function getPharmacyQueue(req, res) {
   }
 }
 
+export async function getAllPrescriptions(req, res) {
+  try {
+    const { page = 1, limit = 20, status, search, pharmacyId } = req.query;
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 20;
+    const skip = (pageNum - 1) * limitNum;
+
+    const query = {};
+    if (status && status !== 'all') query.status = status;
+    if (pharmacyId && mongoose.Types.ObjectId.isValid(pharmacyId)) query.pharmacyId = pharmacyId;
+
+    let customerIds = null;
+    if (search) {
+      const User = mongoose.model('User');
+      const users = await User.find({
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } },
+          { phone: { $regex: search, $options: 'i' } }
+        ]
+      }).select('_id');
+      customerIds = users.map((user) => user._id);
+      query.$or = [
+        { doctorName: { $regex: search, $options: 'i' } },
+        { notes: { $regex: search, $options: 'i' } },
+        { customerId: { $in: customerIds } }
+      ];
+    }
+
+    const [items, total] = await Promise.all([
+      Prescription.find(query)
+        .populate('customerId', 'name phone email')
+        .populate('pharmacyId', 'name city address')
+        .populate('pharmacistId', 'name')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNum)
+        .lean(),
+      Prescription.countDocuments(query)
+    ]);
+
+    const pages = Math.ceil(total / limitNum);
+    res.json({
+      success: true,
+      items,
+      total,
+      page: pageNum,
+      pages,
+      limit: limitNum,
+      hasNext: pageNum < pages,
+      hasPrev: pageNum > 1
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
+export async function updatePrescription(req, res) {
+  try {
+    const allowed = ['doctorName', 'diagnosis', 'notes', 'expiryDate', 'status', 'pharmacyId'];
+    const data = {};
+    allowed.forEach((key) => {
+      if (req.body[key] !== undefined) data[key] = req.body[key];
+    });
+
+    if (data.status === 'approved') {
+      data.approvedAt = new Date();
+      data.pharmacistId = req.user.id;
+    }
+    if (data.status === 'rejected') {
+      data.rejectedAt = new Date();
+      data.rejectedBy = req.user.id;
+      data.rejectionReason = req.body.rejectionReason || req.body.reason || 'Rejected by admin';
+    }
+
+    const item = await Prescription.findByIdAndUpdate(req.params.id, data, {
+      new: true,
+      runValidators: true
+    })
+      .populate('customerId', 'name phone email')
+      .populate('pharmacyId', 'name city address');
+
+    if (!item) return res.status(404).json({ message: 'Prescription not found' });
+    res.json({ item });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
 export async function approvePrescription(req, res) {
   try {
     const item = await Prescription.findByIdAndUpdate(
@@ -104,7 +202,7 @@ export async function approvePrescription(req, res) {
 
     const notif = await Notification.create({
       user: item.customerId._id,
-      title: '✅ Prescription Approved',
+      title: 'Prescription Approved',
       body: 'Your prescription has been approved by the pharmacist.',
       type: 'prescription',
       icon: 'shield'
@@ -146,7 +244,7 @@ export async function rejectPrescription(req, res) {
 
     const notif = await Notification.create({
       user: item.customerId._id,
-      title: '❌ Prescription Issue',
+      title: 'Prescription Issue',
       body: `Prescription rejected: ${reason}.`,
       type: 'prescription',
       icon: 'alert'

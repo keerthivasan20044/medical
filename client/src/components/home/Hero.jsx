@@ -56,7 +56,7 @@ export default function Hero() {
               <span className="text-teal-400">to MediPharm</span>
             </h1>
             <p className="text-white/40 font-dm text-base md:text-lg mt-4 italic font-bold max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Experience the future of healthcare procurement. Secure, verified, and delivered within 30 minutes to your enclave.
+              Order medicines safely and get delivery within 30 minutes.
             </p>
           </div>
 

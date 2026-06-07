@@ -3,6 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchOrderTrack, setLocation, setEta, setStatusText } from '../store/trackingSlice.js';
 import { socketService } from '../services/socket.js';
 
+function getPayloadLocation(payload) {
+  const source = payload?.location || payload?.liveLocation || payload;
+  const lat = Number(source?.lat);
+  const lng = Number(source?.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  return {
+    lat,
+    lng,
+    accuracy: payload?.accuracy ?? source?.accuracy,
+    heading: payload?.heading ?? source?.heading,
+    speed: payload?.speed ?? source?.speed,
+    timestamp: payload?.timestamp || source?.timestamp || new Date().toISOString()
+  };
+}
+
 export function useOrderTracking(orderId) {
   const dispatch  = useDispatch();
   const state     = useSelector((s) => s.tracking);
@@ -22,24 +37,29 @@ export function useOrderTracking(orderId) {
     sock.emit('order:track-subscribe', { orderId });
 
     // 4. Attach event listeners (guard against duplicate registration)
+    const handleLocationUpdate = (payload) => {
+        if (String(payload.orderId) !== String(orderId)) return;
+        const nextLocation = getPayloadLocation(payload);
+        if (nextLocation) dispatch(setLocation(nextLocation));
+        if (payload.eta) dispatch(setEta(payload.eta));
+        if (payload.status || payload.mainStatus) dispatch(setStatusText(payload.mainStatus || payload.status));
+      };
+
+    const handleStatusUpdate = (payload) => {
+        if (String(payload.orderId) !== String(orderId)) return;
+        dispatch(setStatusText(payload.status));
+      };
+
     if (!listeningRef.current) {
       listeningRef.current = true;
 
-      sock.on('order:location-update', (payload) => {
-        if (payload.orderId !== orderId) return;
-        dispatch(setLocation({ lat: payload.lat, lng: payload.lng }));
-        if (payload.eta) dispatch(setEta(payload.eta));
-      });
-
-      sock.on('order:status-update', (payload) => {
-        if (payload.orderId !== orderId) return;
-        dispatch(setStatusText(payload.status));
-      });
+      sock.on('order:location-update', handleLocationUpdate);
+      sock.on('order:status-update', handleStatusUpdate);
     }
 
     return () => {
-      sock.off('order:location-update');
-      sock.off('order:status-update');
+      sock.off('order:location-update', handleLocationUpdate);
+      sock.off('order:status-update', handleStatusUpdate);
       listeningRef.current = false;
     };
   }, [orderId, user?.id, user?.role, dispatch]);

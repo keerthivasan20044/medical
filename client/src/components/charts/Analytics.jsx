@@ -16,7 +16,7 @@ const THEME = {
 };
 
 /**
- * Monthly yield architecture bar chart.
+ * Monthly yield system bar chart.
  */
 export function RevenueBarChart({ data = [] }) {
   const { t } = useLanguage();
@@ -24,10 +24,10 @@ export function RevenueBarChart({ data = [] }) {
     <div className="h-[400px] w-full p-8 bg-white border border-gray-100 rounded-[3.5rem] shadow-soft hover:shadow-2xl transition duration-500">
        <div className="mb-10 flex items-center justify-between">
           <div className="space-y-1">
-             <h3 className="font-syne font-black text-xl text-[#0a1628] uppercase tracking-tighter">{t('financialEnclave')}</h3>
-             <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">/ {t('monthlyRevenueProtocol')}</p>
+             <h3 className="font-syne font-black text-xl text-[#0a1628] uppercase tracking-tighter">{t('financialArea')}</h3>
+             <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">/ {t('monthlyRevenueService')}</p>
           </div>
-          <div className="font-syne font-black text-emerald-500 text-sm italic">+12.4% {t('enclaveGrowth')}</div>
+          <div className="font-syne font-black text-emerald-500 text-sm italic">+12.4% {t('areaGrowth')}</div>
        </div>
        <div className="h-[280px] w-full">
           <ResponsiveContainer width="100%" height="100%" minHeight={200}>
@@ -77,7 +77,7 @@ export function RevenueBarChart({ data = [] }) {
 }
 
 /**
- * 7-day active node line architecture.
+ * 7-day active item line system.
  */
 export function OrdersLineChart({ data = [] }) {
   const { t } = useLanguage();
@@ -86,8 +86,8 @@ export function OrdersLineChart({ data = [] }) {
        <div className="absolute top-0 right-0 h-40 w-40 bg-[#028090] rounded-full blur-[80px] opacity-10" />
        <div className="mb-10 relative z-10 flex items-center justify-between">
           <div className="space-y-1">
-             <h3 className="font-syne font-black text-xl text-white uppercase tracking-tighter">{t('orderFlowArchitecture')}</h3>
-             <p className="text-[10px] text-white/20 font-bold uppercase tracking-widest italic">/ {t('realTimeStreamProtocol')}</p>
+             <h3 className="font-syne font-black text-xl text-white uppercase tracking-tighter">{t('orderFlowSystem')}</h3>
+             <p className="text-[10px] text-white/20 font-bold uppercase tracking-widest italic">/ {t('realTimeStreamService')}</p>
           </div>
        </div>
        <div className="h-[280px] w-full">
@@ -123,7 +123,7 @@ export function OrdersLineChart({ data = [] }) {
 }
 
 /**
- * Specialized category distribution pie node.
+ * Specialized category distribution pie item.
  */
 export function CategoryPieChart({ data = [] }) {
   const { t } = useLanguage();
@@ -132,8 +132,8 @@ export function CategoryPieChart({ data = [] }) {
   return (
     <div className="h-[400px] w-full p-10 bg-white border border-gray-100 rounded-[3.5rem] shadow-soft hover:shadow-2xl transition duration-500 flex flex-col items-center">
        <div className="w-full text-left mb-6 space-y-1">
-          <h3 className="font-syne font-black text-xl text-[#0a1628] uppercase tracking-tighter">{t('enclaveInventory')}</h3>
-          <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">/ {t('resourceNodeProtocol')}</p>
+          <h3 className="font-syne font-black text-xl text-[#0a1628] uppercase tracking-tighter">{t('areaInventory')}</h3>
+          <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">/ {t('resourceItemService')}</p>
        </div>
        <div className="h-[240px] w-full">
           <ResponsiveContainer width="100%" height="100%" minHeight={150}>

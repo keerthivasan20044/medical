@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 export default function SEO({ title, description, schema }) {
   useEffect(() => {
-    document.title = title ? `${title} | MediPharm Karaikal` : 'MediPharm | Karaikal\'s Premium Digital Pharmacy Enclave';
+    document.title = title ? `${title} | MediPharm Karaikal` : 'MediPharm | Karaikal\'s Premium Digital Pharmacy Area';
     
     // Manage Meta Description
     let metaDesc = document.querySelector('meta[name="description"]');
@@ -11,7 +11,7 @@ export default function SEO({ title, description, schema }) {
       metaDesc.name = 'description';
       document.head.appendChild(metaDesc);
     }
-    metaDesc.content = description || 'Access doctors, medicines, and diagnostic services across Karaikal district with rapid 15-minute clinical synchronization.';
+    metaDesc.content = description || 'Access doctors, medicines, and diagnostic services across Karaikal district with rapid 15-minute service updates.';
 
     // Managed JSON-LD Schema
     if (schema) {

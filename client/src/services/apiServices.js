@@ -1,34 +1,43 @@
 import api from './api';
 
+function persistAuthToken(data) {
+  if (data?.token) {
+    localStorage.setItem('authToken', data.token);
+  }
+  return data;
+}
+
 export const authService = {
   login: async (credentials) => {
     const res = await api.post('/api/auth/login', credentials);
-    return res.data;
+    return persistAuthToken(res.data);
   },
   
   register: async (data) => {
-    const res = await api.post('/api/auth/register', data);
-    return res.data;
+    const { photo, otp, ...payload } = data;
+    const res = await api.post('/api/auth/register', payload);
+    return persistAuthToken(res.data);
   },
   
   verifyOTP: async (data) => {
     const res = await api.post('/api/auth/verify-otp', data);
-    return res.data;
+    return persistAuthToken(res.data);
   },
   
   logout: async () => {
     const res = await api.post('/api/auth/logout');
+    localStorage.removeItem('authToken');
     return res.data;
   },
   
   refresh: async () => {
     const res = await api.post('/api/auth/refresh');
-    return res.data;
+    return persistAuthToken(res.data);
   },
   
-  googleLogin: async (token) => {
-    const res = await api.post('/api/auth/google', { token });
-    return res.data;
+  googleLogin: async (payload) => {
+    const res = await api.post('/api/auth/google', payload);
+    return persistAuthToken(res.data);
   },
 
   requestLoginOtp: async (data) => {
@@ -38,7 +47,7 @@ export const authService = {
 
   verifyLoginOtp: async (data) => {
     const res = await api.post('/api/auth/login-otp/verify', data);
-    return res.data;
+    return persistAuthToken(res.data);
   },
   
   uploadAvatar: async (formData) => {
@@ -89,6 +98,11 @@ export const medicineService = {
 export const pharmacyService = {
   getAll: async (params) => {
     const res = await api.get('/api/pharmacies', { params });
+    return res.data;
+  },
+
+  getAdminAll: async (params) => {
+    const res = await api.get('/api/pharmacies/admin/list', { params });
     return res.data;
   },
   
@@ -142,6 +156,11 @@ export const orderService = {
   getAll: async (params) => {
     const res = await api.get('/api/orders', { params });
     return res.data;
+  },
+
+  updateStatus: async (id, status) => {
+    const res = await api.patch(`/api/orders/${id}/status`, { status });
+    return res.data;
   }
 };
 
@@ -155,14 +174,39 @@ export const adminService = {
     const res = await api.get('/api/admin/analytics');
     return res.data;
   },
+
+  sendTestEmail: async (to) => {
+    const res = await api.post('/api/admin/email/test', { to });
+    return res.data;
+  },
   
   getUsers: async (params) => {
     const res = await api.get('/api/admin/users', { params });
     return res.data;
   },
 
+  createUser: async (data) => {
+    const res = await api.post('/api/admin/users', data);
+    return res.data;
+  },
+
+  updateUser: async (id, data) => {
+    const res = await api.put(`/api/admin/users/${id}`, data);
+    return res.data;
+  },
+
+  deleteUser: async (id) => {
+    const res = await api.delete(`/api/admin/users/${id}`);
+    return res.data;
+  },
+
   toggleUserStatus: async (id) => {
     const res = await api.patch(`/api/admin/users/${id}/toggle`);
+    return res.data;
+  },
+
+  toggleUserVerification: async (id) => {
+    const res = await api.patch(`/api/admin/users/${id}/verify`);
     return res.data;
   }
 };
@@ -185,6 +229,16 @@ export const prescriptionService = {
     return res.data;
   },
 
+  getAll: async (params) => {
+    const res = await api.get('/api/prescriptions/admin', { params });
+    return res.data;
+  },
+
+  update: async (id, data) => {
+    const res = await api.put(`/api/prescriptions/${id}`, data);
+    return res.data;
+  },
+
   delete: async (id) => {
     const res = await api.delete(`/api/prescriptions/${id}`);
     return res.data;
@@ -196,7 +250,7 @@ export const prescriptionService = {
   },
 
   verify: async (id) => {
-    const res = await api.put(`/api/prescriptions/${id}/verify`);
+    const res = await api.put(`/api/prescriptions/${id}/approve`);
     return res.data;
   },
 
@@ -262,17 +316,28 @@ export const deliveryService = {
   acceptTask: (id) => api.post(`/api/delivery/${id}/accept`).then(res => res.data),
   getActiveTask: () => api.get('/api/delivery/active').then(res => res.data),
   updateTaskStatus: (id, status, data) => api.patch(`/api/delivery/${id}/status`, { status, ...data }).then(res => res.data),
+  updateLocation: (id, location) => api.patch(`/api/delivery/${id}/location`, location).then(res => res.data),
   confirmDelivery: (id, otp) => api.post(`/api/delivery/${id}/confirm`, { otp }).then(res => res.data),
+  resendDeliveryOtp: (id) => api.post(`/api/delivery/${id}/resend-otp`).then(res => res.data),
+  reportDisruption: (id, data) => api.post(`/api/delivery/${id}/report-disruption`, data).then(res => res.data),
   getEarnings: () => api.get('/api/delivery/earnings').then(res => res.data),
   getHistory: () => api.get('/api/delivery/history').then(res => res.data),
 };
 
 export const pharmacistService = {
   getStats: () => api.get('/api/pharmacist/stats').then(res => res.data),
-  getInventory: () => api.get('/api/pharmacist/inventory').then(res => res.data),
+  getProfile: () => api.get('/api/pharmacist/profile').then(res => res.data),
+  updateProfile: (data) => api.put('/api/pharmacist/profile', data).then(res => res.data),
+  getInventory: (params) => api.get('/api/pharmacist/inventory', { params }).then(res => res.data),
   getLowStock: (threshold = 10) => api.get('/api/pharmacist/low-stock', { params: { threshold } }).then(res => res.data),
+  getEarnings: () => api.get('/api/pharmacist/earnings').then(res => res.data),
+  getAnalytics: () => api.get('/api/pharmacist/analytics').then(res => res.data),
   getOrders: () => api.get('/api/orders/pharmacy').then(res => res.data),
+  getOrdersPage: (params) => api.get('/api/orders/pharmacy', { params }).then(res => res.data),
   updateOrderStatus: (id, status) => api.patch(`/api/orders/${id}/status`, { status }).then(res => res.data),
+  createMedicine: (data) => api.post('/api/medicines', data).then(res => res.data),
+  updateMedicine: (id, data) => api.put(`/api/medicines/${id}`, data).then(res => res.data),
+  deleteMedicine: (id) => api.delete(`/api/medicines/${id}`).then(res => res.data),
 };
 
 export const notificationService = {

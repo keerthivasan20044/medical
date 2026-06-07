@@ -50,9 +50,9 @@ export default function PharmacySettings() {
                   <div className="flex justify-center"><ShieldCheck size={64} className="text-gray-200 group-hover:text-brand-teal group-hover:scale-110 transition duration-700" /></div>
                   <div className="space-y-2">
                      <h4 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic tracking-tighter leading-none">Secure Encryption Active</h4>
-                     <p className="text-gray-400 font-dm italic font-bold">Your pharmacy data is encrypted and protected with end-to-end security protocols.</p>
+                     <p className="text-gray-400 font-dm italic font-bold">Your pharmacy data is encrypted and protected with end-to-end security steps.</p>
                   </div>
-                  <button className="h-20 w-full bg-[#0a1628] text-brand-teal font-syne font-black text-sm uppercase italic tracking-widest rounded-2xl shadow-4xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4"><RefreshCw size={24}/> Refresh Security Sync</button>
+                  <button className="h-20 w-full bg-[#0a1628] text-brand-teal font-syne font-black text-sm uppercase italic tracking-widest rounded-2xl shadow-4xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4"><RefreshCw size={24}/> Refresh Security</button>
                </div>
 
                <div className="bg-brand-teal/5 border-2 border-dashed border-brand-teal/20 p-12 rounded-[4rem] space-y-6">

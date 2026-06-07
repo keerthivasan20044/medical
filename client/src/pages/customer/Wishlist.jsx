@@ -5,7 +5,7 @@ export default function Wishlist() {
   return (
     <PageShell 
       title="Medical Watchlist" 
-      subtitle="Critical survival clusters and SKU inventory synchronized for future procurement."
+      subtitle="Critical survival clusters and SKU inventory updatehronized for future procurement."
       icon={Heart}
     >
       <div className="p-20 grid md:grid-cols-2 lg:grid-cols-3 gap-12">
@@ -22,7 +22,7 @@ export default function Wishlist() {
                         <h3 className="font-syne font-black text-[#0a1628] text-2xl uppercase italic tracking-tighter leading-tight group-hover:text-brand-teal transition-colors">Dolo 650mg</h3>
                         <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-400 rounded-xl text-[#0a1628] font-black text-xs shadow-xl rotate-3"><Star size={14} fill="currentColor" /> 4.8</div>
                      </div>
-                     <p className="text-gray-400 font-dm italic font-bold">Relieves fever and body pain. Crucial for district family health enclaves.</p>
+                     <p className="text-gray-400 font-dm italic font-bold">Relieves fever and body pain. Crucial for district family health areas.</p>
                   </div>
 
                   <div className="flex items-center justify-between pt-8 border-t border-black/[0.05]">

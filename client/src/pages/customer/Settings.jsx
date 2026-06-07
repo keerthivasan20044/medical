@@ -23,10 +23,10 @@ export default function Settings() {
   });
 
   const TABS = [
-    { id: 'account', label: t('accountProtocol'), icon: User },
+    { id: 'account', label: t('accountService'), icon: User },
     { id: 'notifications', label: t('alertStreams'), icon: Bell },
-    { id: 'privacy', label: t('enclavePrivacy'), icon: Shield },
-    { id: 'region', label: t('regionSync'), icon: Globe }
+    { id: 'privacy', label: t('areaPrivacy'), icon: Shield },
+    { id: 'region', label: t('regionUpdate'), icon: Globe }
   ];
 
   return (
@@ -38,7 +38,7 @@ export default function Settings() {
              <aside className="md:w-80 space-y-12">
                 <div className="space-y-4">
                    <h1 className="font-syne font-black text-5xl text-[#0a1628]">{t('settingsTitle')}</h1>
-                   <p className="text-gray-300 font-dm italic text-lg uppercase tracking-widest">{t('commandProtocolEnclave')}</p>
+                   <p className="text-gray-300 font-dm italic text-lg uppercase tracking-widest">{t('commandServiceArea')}</p>
                 </div>
 
                 <nav className="space-y-4">
@@ -59,7 +59,7 @@ export default function Settings() {
                    <div className="flex items-center gap-6">
                       <div className="h-12 w-12 bg-gray-50 rounded-2xl flex items-center justify-center text-[#028090] shadow-sm"><HelpCircle size={20}/></div>
                       <div className="space-y-1">
-                         <div className="font-syne font-black text-xs text-[#0a1628] uppercase tracking-tighter">{t('architectureHelp')}</div>
+                         <div className="font-syne font-black text-xs text-[#0a1628] uppercase tracking-tighter">{t('systemHelp')}</div>
                          <p className="text-[8px] text-gray-300 font-bold uppercase tracking-widest">{t('districtSupportDesc')}</p>
                       </div>
                    </div>
@@ -77,10 +77,10 @@ export default function Settings() {
                               <h2 className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter">{t('identityCredentials')}</h2>
                            </div>
                            <div className="grid md:grid-cols-2 gap-8">
-                              <Input label={t('currentProtocolPass')} type="password" placeholder="••••••••" />
-                              <Input label={t('newNodeSecret')} type="password" placeholder="••••••••" />
+                              <Input label={t('currentServicePass')} type="password" placeholder="••••••••" />
+                              <Input label={t('newItemSecret')} type="password" placeholder="••••••••" />
                               <div className="md:col-span-2">
-                                 <Button className="w-full md:w-auto">{t('updateAccessProtocol')}</Button>
+                                 <Button className="w-full md:w-auto">{t('updateAccessService')}</Button>
                               </div>
                            </div>
                         </section>
@@ -95,27 +95,27 @@ export default function Settings() {
                                  <div className="flex items-center gap-6">
                                     <div className="h-12 w-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#028090]"><Smartphone size={20}/></div>
                                     <div className="space-y-1">
-                                       <div className="text-[8px] text-gray-300 font-black uppercase tracking-widest">{t('mobileEnclave')}</div>
+                                       <div className="text-[8px] text-gray-300 font-black uppercase tracking-widest">{t('mobileArea')}</div>
                                        <div className="font-syne font-black text-sm text-[#0a1628]">+91 94432 11111</div>
                                     </div>
                                  </div>
-                                 <button className="text-[10px] font-black text-[#028090] uppercase tracking-widest hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">{t('reVerifyNode')}</button>
+                                 <button className="text-[10px] font-black text-[#028090] uppercase tracking-widest hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">{t('reVerifyItem')}</button>
                               </div>
                               <div className="flex items-center justify-between p-8 bg-gray-50 rounded-3xl group hover:bg-white border border-transparent hover:border-gray-100 transition duration-500">
                                  <div className="flex items-center gap-6">
                                     <div className="h-12 w-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#028090]"><Mail size={20}/></div>
                                     <div className="space-y-1">
                                        <div className="text-[8px] text-gray-300 font-black uppercase tracking-widest">{t('emailStream')}</div>
-                                       <div className="font-syne font-black text-sm text-[#0a1628]">priya.raman@enclave.in</div>
+                                       <div className="font-syne font-black text-sm text-[#0a1628]">priya.raman@mail.com</div>
                                     </div>
                                  </div>
-                                 <button className="text-[10px] font-black text-[#028090] uppercase tracking-widest hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">{t('syncProtocol')}</button>
+                                 <button className="text-[10px] font-black text-[#028090] uppercase tracking-widest hover:underline decoration-2 underline-offset-4 decoration-[#02C39A]">{t('updateService')}</button>
                               </div>
                            </div>
                         </section>
 
                         <section className="pt-10 border-t border-red-50 space-y-6">
-                           <h2 className="font-syne font-black text-xl text-red-600 uppercase tracking-tighter flex items-center gap-4"><Trash2 size={24}/> {t('purgeEnclaveNode')}</h2>
+                           <h2 className="font-syne font-black text-xl text-red-600 uppercase tracking-tighter flex items-center gap-4"><Trash2 size={24}/> {t('purgeAreaItem')}</h2>
                            <p className="text-gray-400 font-dm text-sm italic italic leading-relaxed">{t('purgeDesc')}</p>
                            <Button variant="danger" className="w-full md:w-auto">{t('initiatePurge')}</Button>
                         </section>
@@ -127,16 +127,16 @@ export default function Settings() {
                         <section className="space-y-10">
                            <div className="flex items-center gap-6 border-b border-gray-50 pb-8">
                               <div className="h-10 w-1 bg-[#028090] rounded-full" />
-                              <h2 className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter">{t('alertSyncProtocol')}</h2>
+                              <h2 className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter">{t('alertUpdateService')}</h2>
                            </div>
                            <div className="space-y-4">
                               {[
-                                { id: 'orders', label: t('orderUpdateStreams'), sub: t('pushSmsEnclave') },
-                                { id: 'tracking', label: t('deliveryTrackingNode'), sub: t('liveGpsProtocol') },
-                                { id: 'prescription', label: t('verificationAlerts'), sub: t('criticalPharmaSync') },
-                                { id: 'reminders', label: t('healthSynchronizers'), sub: t('medicineIntakePings') },
-                                { id: 'offers', label: t('promoEnclaveNodes'), sub: t('karaikalDistrictDeals') },
-                                { id: 'newsletter', label: t('architectureDigest'), sub: t('weeklyHealthcareStream') }
+                                { id: 'orders', label: t('orderUpdateStreams'), sub: t('pushSmsArea') },
+                                { id: 'tracking', label: t('deliveryTrackingItem'), sub: t('liveGpsService') },
+                                { id: 'prescription', label: t('verificationAlerts'), sub: t('criticalPharmaUpdate') },
+                                { id: 'reminders', label: t('healthUpdatehronizers'), sub: t('medicineIntakePings') },
+                                { id: 'offers', label: t('promoAreaItems'), sub: t('karaikalDistrictDeals') },
+                                { id: 'newsletter', label: t('systemDigest'), sub: t('weeklyHealthcareStream') }
                               ].map(item => (
                                 <div key={item.id} className="p-8 bg-gray-50 rounded-[2.5rem] border border-transparent hover:border-gray-100 hover:bg-white transition duration-500 flex items-center justify-between group">
                                    <div className="space-y-1">
@@ -164,13 +164,13 @@ export default function Settings() {
                         <section className="space-y-10">
                            <div className="flex items-center gap-6 border-b border-gray-50 pb-8">
                               <div className="h-10 w-1 bg-[#028090] rounded-full" />
-                              <h2 className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter">{t('enclaveVisibility')}</h2>
+                              <h2 className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter">{t('areaVisibility')}</h2>
                            </div>
                            <div className="space-y-6">
                               {[
-                                { l: t('profileNodeVisibility'), s: t('publicMedicalAuth') },
-                                { l: t('dataSharingProtocol'), s: t('syncMedicalHistoryDoc') },
-                                { l: t('gpsTrackingStream'), s: t('continuousLocationSync') }
+                                { l: t('profileItemVisibility'), s: t('publicMedicalAuth') },
+                                { l: t('dataSharingService'), s: t('updateMedicalHistoryDoc') },
+                                { l: t('gpsTrackingStream'), s: t('continuousLocationUpdate') }
                               ].map(item => (
                                 <div key={item.l} className="flex items-center justify-between p-8 bg-gray-50 rounded-3xl">
                                    <div className="space-y-1">
@@ -190,17 +190,17 @@ export default function Settings() {
                         <section className="space-y-10">
                            <div className="flex items-center gap-6 border-b border-gray-50 pb-8">
                               <div className="h-10 w-1 bg-[#028090] rounded-full" />
-                              <h2 className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter">{t('localizedArchitecture')}</h2>
+                              <h2 className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter">{t('localizedSystem')}</h2>
                            </div>
                            <div className="grid md:grid-cols-2 gap-8">
                               <div className="p-8 bg-gray-50 rounded-3xl space-y-4">
-                                 <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest">{t('languageEnclave')}</div>
+                                 <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest">{t('languageArea')}</div>
                                  <div className="flex gap-4">
                                     <button 
                                       onClick={() => setLang('en')}
                                       className={`flex-1 py-4 rounded-2xl font-syne font-black text-[10px] uppercase tracking-widest transition-all duration-300 ${lang === 'en' ? 'bg-[#0a1628] text-white shadow-lg' : 'bg-white border border-gray-100 text-gray-400 hover:bg-gray-50'}`}
                                     >
-                                      {t('englishProtocol')}
+                                      {t('englishService')}
                                     </button>
                                     <button 
                                       onClick={() => setLang('ta')}
@@ -212,12 +212,12 @@ export default function Settings() {
                               </div>
                               <div className="p-8 bg-gray-50 rounded-3xl space-y-4">
                                  <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest">{t('timezoneAuth')}</div>
-                                 <div className="font-syne font-black text-sm text-[#0a1628] flex items-center gap-3"><Clock size={16}/> IST (UTC+5:30) Protocol</div>
+                                 <div className="font-syne font-black text-sm text-[#0a1628] flex items-center gap-3"><Clock size={16}/> IST (UTC+5:30) Service</div>
                               </div>
                               <div className="p-8 bg-gray-50 rounded-3xl space-y-4 md:col-span-2">
-                                 <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest">{t('geographicalNode')}</div>
+                                 <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest">{t('geographicalItem')}</div>
                                  <div className="flex items-center justify-between">
-                                    <div className="font-syne font-black text-lg text-[#0a1628] flex items-center gap-4"><MapPin size={20}/> Karaikal, Tamil Nadu Enclave</div>
+                                    <div className="font-syne font-black text-lg text-[#0a1628] flex items-center gap-4"><MapPin size={20}/> Karaikal, Tamil Nadu</div>
                                     <div className="h-12 w-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#02C39A] animate-pulse-ring"><Shield size={18}/></div>
                                  </div>
                               </div>

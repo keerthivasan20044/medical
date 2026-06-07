@@ -9,7 +9,7 @@ export default function AdminLogs() {
     { id: '2', event: 'Global Stock Update', user: 'System Task', timestamp: '2024-05-11 10:30:00', severity: 'Info', module: 'Inventory' },
     { id: '3', event: 'Failed Login Attempt', user: 'Unknown IP: 192.168.1.1', timestamp: '2024-05-11 09:12:45', severity: 'Warning', module: 'Security' },
     { id: '4', event: 'Medicine Record Deleted', user: 'Admin User', timestamp: '2024-05-11 08:45:10', severity: 'Critical', module: 'Catalog' },
-    { id: '5', event: 'Payment Node Sync', user: 'System Task', timestamp: '2024-05-11 08:00:00', severity: 'Info', module: 'Payments' },
+    { id: '5', event: 'Payment Update', user: 'System Task', timestamp: '2024-05-11 08:00:00', severity: 'Info', module: 'Payments' },
   ]);
 
   return (
@@ -57,7 +57,7 @@ export default function AdminLogs() {
           },
           { 
             key: 'module', 
-            label: 'System Node',
+            label: 'System',
             render: (val) => (
                <div className="px-3 py-1 bg-gray-50 rounded-lg text-[9px] font-black text-navy/40 uppercase tracking-[0.2em] w-fit">
                   {val}
@@ -66,7 +66,7 @@ export default function AdminLogs() {
           },
           { 
             key: 'timestamp', 
-            label: 'Temporal Sync',
+            label: 'Time',
             render: (val) => (
               <div className="flex items-center gap-2 text-navy/30">
                 <Clock size={12} />

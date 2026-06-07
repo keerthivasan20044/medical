@@ -5,7 +5,7 @@ export default function AppointmentDetail() {
   return (
     <PageShell 
       title="Session Meta" 
-      subtitle="Full synchronization logs for clinical session ID: APT-5521-KKL."
+      subtitle="Full session details for clinical appointment ID: APT-5521-KKL."
       icon={Calendar}
       actions={
         <div className="flex gap-4">
@@ -24,8 +24,8 @@ export default function AppointmentDetail() {
                <div className="flex items-center gap-6">
                   <div className="h-20 w-20 bg-[#0a1628] rounded-[2rem] flex items-center justify-center text-brand-teal shadow-2xl animate-spin-slow"><Clock size={32}/></div>
                   <div className="space-y-1">
-                     <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">Sync Lockdown</div>
-                     <div className="font-syne font-black text-[#0a1628] text-xl uppercase italic flex items-center gap-3">CONFIRMED_Section <CheckCircle size={18} className="text-brand-teal"/></div>
+                     <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">Secure</div>
+                     <div className="font-syne font-black text-[#0a1628] text-xl uppercase italic flex items-center gap-3">Confirmed Session <CheckCircle size={18} className="text-brand-teal"/></div>
                   </div>
                </div>
                
@@ -63,7 +63,7 @@ export default function AppointmentDetail() {
                <div className="p-8 bg-white/5 border border-white/5 rounded-3xl group hover:bg-white/10 transition-all cursor-pointer flex items-center justify-between">
                   <div className="flex items-center gap-6">
                      <Download className="text-brand-teal" size={24} />
-                     <div className="font-syne font-black text-white text-lg uppercase italic tracking-tighter shrink-0">PRESCRIPTION_HANDSHAKE_P01</div>
+                     <div className="font-syne font-black text-white text-lg uppercase italic tracking-tighter shrink-0">Prescription PDF</div>
                   </div>
                   <ChevronRight size={20} className="text-white/20 group-hover:text-white transition-opacity" />
                </div>

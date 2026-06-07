@@ -26,19 +26,19 @@ const MobileBottomNav = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 h-14 md:hidden bg-slate-900 border-t border-white/10 pb-[env(safe-area-inset-bottom)]">
-      <div className="grid grid-cols-5 h-full max-w-full overflow-hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 h-[calc(3.75rem+env(safe-area-inset-bottom))] md:hidden bg-slate-900 border-t border-white/10 pb-[env(safe-area-inset-bottom)]">
+      <div className="grid grid-cols-5 h-[3.75rem] max-w-full overflow-hidden">
         {tabs.map(tab => {
           const active = isActive(tab.path);
           return (
             <Link 
               key={tab.path} 
               to={tab.path}
-              className="flex flex-col items-center justify-center gap-0.5 min-h-14 transition-all"
+              className="flex min-w-0 flex-col items-center justify-center gap-0.5 min-h-[3.75rem] transition-all"
             >
               <div className="relative flex items-center justify-center">
                  <tab.icon
-                   size={20}
+                   size={19}
                    className={`transition-colors duration-300 ${active ? 'text-teal-400' : 'text-slate-400'}`}
                  />
                  {tab.count > 0 && (
@@ -47,7 +47,7 @@ const MobileBottomNav = () => {
                     </span>
                  )}
               </div>
-              <span className={`text-[10px] md:text-xs font-medium transition-colors duration-300 ${
+              <span className={`max-w-full truncate px-1 text-[9px] font-medium transition-colors duration-300 ${
                 active ? 'text-teal-400' : 'text-slate-400'
               }`}>
                 {tab.label}

@@ -10,7 +10,7 @@ const AddressCard = ({ address, onEdit, onDelete }) => {
             <MapPin size={18} />
           </div>
           <div className="min-w-0">
-            <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Logistics Node</div>
+            <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Delivery Address</div>
             <h3 className="text-sm font-semibold text-white flex items-center gap-2 truncate">
               {address.label || 'Home'} {address.isDefault && <CheckCircle size={12} className="text-teal-500" />}
             </h3>

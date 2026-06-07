@@ -16,7 +16,7 @@ export default function Chat() {
                   <div className="absolute -bottom-1 -right-1 h-6 w-6 bg-brand-teal rounded-full border-4 border-white animate-pulse" />
                </div>
                <div className="space-y-1">
-                  <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic leading-none">Terminal Sync Active</div>
+                  <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic leading-none">Chat Active</div>
                   <div className="font-syne font-black text-[#0a1628] text-2xl uppercase italic tracking-tighter">Apollo Pharmacy Support</div>
                </div>
             </div>
@@ -30,16 +30,16 @@ export default function Chat() {
             {/* Mock Chat History */}
             <div className="flex flex-col items-start gap-4 max-w-xl">
                <div className="py-6 px-10 bg-[#0a1628] rounded-[2.5rem] rounded-bl-none text-white font-dm italic font-bold text-xl shadow-4xl border-l-[12px] border-brand-teal">
-                  Hello Commander. How can we synchronize your medical procurement today?
+                  Hello Commander. How can we updatehronize your medical procurement today?
                </div>
-               <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic px-4">Pharmacist Node · 10:42 AM</div>
+               <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic px-4">Pharmacist · 10:42 AM</div>
             </div>
 
             <div className="flex flex-col items-end gap-4 max-w-xl ml-auto">
                <div className="py-6 px-10 bg-brand-teal rounded-[2.5rem] rounded-br-none text-[#0a1628] font-dm italic font-bold text-xl shadow-4xl border-r-[12px] border-[#0a1628]">
-                  Checking inventory for Dolo 650mg at Central Enclave.
+                  Checking inventory for Dolo 650mg at Central Pharmacy.
                </div>
-               <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic px-4">Terminal Alpha · 10:44 AM</div>
+               <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic px-4">You · 10:44 AM</div>
             </div>
          </div>
 

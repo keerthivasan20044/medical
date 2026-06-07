@@ -11,6 +11,7 @@ import AdminOverview from './AdminOverview';
 import AdminUsers from './AdminUsers';
 import AdminPharmacies from './AdminPharmacies';
 import AdminMedicines from './AdminMedicines';
+import AdminPrescriptions from './AdminPrescriptions';
 import AdminOrders from './AdminOrders';
 import AdminAnalytics from './AdminAnalytics';
 import AdminPromotions from './AdminPromotions';
@@ -31,6 +32,7 @@ const ADMIN_MENU = [
   { label: 'Delivery', path: '/admin/delivery', icon: ShoppingBag },
   { label: 'Appointments', path: '/admin/appointments', icon: Calendar },
   { label: 'Compliance', path: '/admin/compliance', icon: ShieldCheck },
+  { label: 'Prescriptions', path: '/admin/prescriptions', icon: FileText },
   { label: 'Inventory', path: '/admin/inventory', icon: Package },
   { label: 'Medicines', path: '/admin/medicines', icon: Pill },
   { label: 'Orders', path: '/admin/orders', icon: ShoppingBag },
@@ -53,6 +55,7 @@ export default function AdminDashPage() {
         <Route path="delivery" element={<AdminDelivery />} />
         <Route path="appointments" element={<AdminAppointments />} />
         <Route path="compliance" element={<AdminCompliance />} />
+        <Route path="prescriptions" element={<AdminPrescriptions />} />
         <Route path="inventory" element={<AdminInventory />} />
         <Route path="medicines" element={<AdminMedicines />} />
         <Route path="orders" element={<AdminOrders />} />

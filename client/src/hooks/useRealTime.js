@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
 export const useSocket = (userId) => {
   const [socket, setSocket] = useState(null);
@@ -16,13 +16,13 @@ export const useSocket = (userId) => {
     });
 
     newSocket.on('connect', () => {
-      if (import.meta.env.DEV) { console.log('[Socket] Connected to Master Node Architecture'); }
+      if (import.meta.env.DEV) { console.log('[Socket] Connected'); }
       setIsConnected(true);
       newSocket.emit('join:user', userId);
     });
 
     newSocket.on('disconnect', () => {
-      if (import.meta.env.DEV) { console.log('[Socket] Disconnected from Architecture'); }
+      if (import.meta.env.DEV) { console.log('[Socket] Disconnected'); }
       setIsConnected(false);
     });
 
@@ -48,7 +48,7 @@ export const useOrderLiveTracking = (orderId, userId) => {
     socket.on('order:status', (data) => {
       if (data.orderId === orderId) {
         setStatus(data.status);
-        if (import.meta.env.DEV) { console.log(`[Order] Status Synchronized: ${data.status}`); }
+        if (import.meta.env.DEV) { console.log(`[Order] Status Updated: ${data.status}`); }
       }
     });
 

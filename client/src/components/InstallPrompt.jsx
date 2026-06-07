@@ -43,33 +43,31 @@ const InstallPrompt = () => {
   return (
     <AnimatePresence>
       {show && (
-        <motion.div 
-          initial={{ y: -50, opacity: 0 }}
+        <motion.div
+          initial={{ y: -24, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -50, opacity: 0 }}
-          className="fixed top-20 left-4 right-4 z-[5000] md:left-auto md:right-8 md:w-96"
+          exit={{ y: -24, opacity: 0 }}
+          className="fixed top-[4.25rem] left-3 right-3 z-[5000] md:top-20 md:left-auto md:right-8 md:w-96"
         >
-          <div className="bg-[#0a1628] border border-brand-teal/30 rounded-3xl p-6 flex items-center justify-between shadow-[0_32px_64px_rgba(0,0,0,0.4)] backdrop-blur-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 h-32 w-32 bg-brand-teal opacity-5 rounded-full blur-[40px] pointer-events-none" />
-            
-            <div className="flex-1 space-y-1">
-              <p className="font-syne font-black text-white text-base uppercase italic tracking-tighter">Install MediPharm</p>
-              <p className="text-[10px] font-dm font-bold text-gray-400 uppercase tracking-widest italic leading-relaxed">Add to home screen for instant medicine access.</p>
+          <div className="bg-[#0a1628] border border-brand-teal/30 rounded-2xl p-3 pl-4 flex items-center gap-2 shadow-[0_18px_40px_rgba(0,0,0,0.32)] backdrop-blur-xl">
+            <div className="min-w-0 flex-1">
+              <p className="font-syne font-black text-white text-sm uppercase leading-tight">Install MediPharm</p>
+              <p className="hidden sm:block text-[10px] font-dm font-bold text-gray-400 uppercase leading-relaxed">Fast access from your home screen</p>
             </div>
 
-            <div className="flex items-center gap-3">
-              <button 
-                onClick={handleDismiss} 
-                className="h-10 w-10 flex items-center justify-center text-gray-500 hover:text-white transition-colors"
-                aria-label="Later"
-              >
-                <X size={18} />
-              </button>
-              <button 
-                onClick={handleInstall} 
-                className="bg-brand-teal text-[#0a1628] font-syne font-black text-[9px] px-6 h-10 rounded-xl flex items-center gap-2 uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg"
+            <div className="flex shrink-0 items-center gap-1">
+              <button
+                onClick={handleInstall}
+                className="bg-brand-teal text-[#0a1628] font-dm font-bold text-xs px-3 h-10 rounded-xl flex items-center gap-1.5 uppercase hover:bg-teal-300 transition-colors shadow-lg"
               >
                 <Download size={14} /> Install
+              </button>
+              <button
+                onClick={handleDismiss}
+                className="h-10 w-10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                aria-label="Dismiss install prompt"
+              >
+                <X size={18} />
               </button>
             </div>
           </div>

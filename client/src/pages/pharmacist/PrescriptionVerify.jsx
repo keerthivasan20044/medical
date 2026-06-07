@@ -132,7 +132,7 @@ function AuditModal({ rx, onClose, onApprove, onReject }) {
         {/* Header */}
         <div className="bg-[#0a1628] p-10 flex items-center justify-between rounded-t-[3rem]">
           <div className="space-y-2">
-            <div className="text-[9px] font-black text-brand-teal uppercase tracking-[0.4em] italic">Deep_Audit_Protocol</div>
+            <div className="text-[9px] font-black text-brand-teal uppercase tracking-[0.4em] italic">Deep_Audit_Service</div>
             <h2 className="font-syne font-black text-4xl text-white uppercase italic tracking-tighter leading-none">
               Rx #{rx.orderNumber?.slice(-6) || rx._id?.slice(-6)}
             </h2>
@@ -174,7 +174,7 @@ function AuditModal({ rx, onClose, onApprove, onReject }) {
           <div className="space-y-8">
             {/* Patient */}
             <div className="space-y-3">
-              <div className="text-[9px] font-black text-gray-300 uppercase tracking-[0.4em] italic">Patient_Node</div>
+              <div className="text-[9px] font-black text-gray-300 uppercase tracking-[0.4em] italic">Patient</div>
               <div className="flex items-center gap-6 p-6 bg-gray-50 rounded-[2rem] border border-gray-100">
                 <div className="h-14 w-14 bg-[#0a1628] rounded-2xl flex items-center justify-center text-brand-teal shadow-xl">
                   <User size={22} />
@@ -280,7 +280,7 @@ function AuditModal({ rx, onClose, onApprove, onReject }) {
                   className="flex-1 h-16 bg-[#0a1628] text-brand-teal font-syne font-black text-sm uppercase italic tracking-widest rounded-2xl shadow-4xl hover:bg-brand-teal hover:text-[#0a1628] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                 >
                   {loading === 'approve' ? <Loader2 size={18} className="animate-spin" /> : <CheckCircle size={18} />}
-                  Authorize Sync
+                  Approve
                 </button>
               )}
             </div>
@@ -358,15 +358,15 @@ export default function PrescriptionVerify() {
 
   return (
     <PageShell
-      title="Vault Audit"
-      subtitle="Manual verification and clinical synchronization of district-uploaded medical prescriptions."
+      title="Prescription Review"
+      subtitle="Manual verification of district-uploaded medical prescriptions."
       icon={ShieldCheck}
       actions={
         <button
           onClick={() => setRefreshKey(k => k + 1)}
           className="h-16 px-8 bg-brand-teal text-[#0a1628] font-syne font-black text-xs uppercase italic tracking-widest rounded-[2rem] shadow-4xl flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
         >
-          <RefreshCw size={18} /> Sync Queue
+          <RefreshCw size={18} /> Refresh List
         </button>
       }
     >
@@ -427,12 +427,12 @@ export default function PrescriptionVerify() {
               <div className="absolute inset-0 border-4 border-brand-teal/20 border-t-brand-teal rounded-full animate-spin" />
               <Activity size={32} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-brand-teal animate-pulse" />
             </div>
-            <span className="font-syne font-black text-[#0a1628] uppercase italic tracking-widest">Syncing Vault...</span>
+            <span className="font-syne font-black text-[#0a1628] uppercase italic tracking-widest">Loading prescriptions...</span>
           </div>
         ) : filtered.length === 0 ? (
           <EmptyState
             title="No Prescriptions Found"
-            desc="No clinical manifests match the active filter protocol."
+            desc="No prescriptions match this filter."
             icon={FileText}
           />
         ) : (
@@ -469,7 +469,7 @@ export default function PrescriptionVerify() {
                 <div className="p-10 space-y-8 relative z-10">
                   <div className="flex items-start justify-between gap-4">
                     <div className="space-y-1">
-                      <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest italic">Rx Node</div>
+                      <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest italic">Prescription</div>
                       <div className="font-syne font-black text-2xl text-[#0a1628] uppercase italic tracking-tighter">
                         {rx.orderNumber?.slice(-8) || rx._id?.slice(-8)}
                       </div>

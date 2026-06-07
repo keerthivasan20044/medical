@@ -57,13 +57,13 @@ export default function MedicineComparePage() {
                <ChevronRight size={14} className="opacity-40" />
                <Link to="/medicines" className="hover:text-brand-teal transition-all">Medicines</Link>
                <ChevronRight size={14} className="opacity-40" />
-               <span className="text-brand-teal">{t('compareProtocols')}</span>
+               <span className="text-brand-teal">{t('compareServices')}</span>
             </div>
             
             <div className="flex flex-col lg:flex-row justify-between items-end gap-12">
                <div className="space-y-6">
                   <h1 className="font-syne font-black text-6xl lg:text-9xl text-white leading-[0.85] tracking-tighter uppercase italic drop-shadow-2xl">
-                     {t('protocolUplink').split(' ')[0]} <br/><span className="text-brand-teal">{t('protocolUplink').split(' ')[1]}</span>
+                     {t('stepPayment').split(' ')[0]} <br/><span className="text-brand-teal">{t('stepPayment').split(' ')[1]}</span>
                   </h1>
                   <p className="text-white/40 font-dm text-2xl italic leading-relaxed max-w-xl">{t('clinicalTrajectories')}</p>
                </div>
@@ -80,12 +80,12 @@ export default function MedicineComparePage() {
         </div>
       </section>
 
-      {/* Comparison Matrix Table Terminal */}
+      {/* Comparison Matrix Table Page */}
       <div className="max-w-[1400px] mx-auto px-10 -mt-20 relative z-20">
          <div className="bg-white border border-black/[0.03] rounded-[5rem] shadow-4xl overflow-hidden p-10 lg:p-20">
             <div className="grid grid-cols-[250px_1fr_1fr_1fr] gap-4">
                
-               {/* Label Column Node */}
+               {/* Label Column Item */}
                <div className="space-y-12 pt-[450px]">
                   {features.map(f => (
                     <div key={f.label} className="h-24 flex items-center gap-4 border-b border-black/[0.02] last:border-0 group select-none">
@@ -139,13 +139,13 @@ export default function MedicineComparePage() {
                            <div className="h-32 w-32 bg-white rounded-[3.5rem] flex items-center justify-center text-gray-200 border border-black/[0.03] shadow-soft group-hover:scale-110 transition-transform"><Plus size={48} className="animate-pulse"/></div>
                            <div className="space-y-4">
                               <h4 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic tracking-tighter">{t('addMedicine')}</h4>
-                              <p className="text-gray-300 font-dm italic font-bold">{t('initializeDescription') || 'Initialize a new medical node for comparison.'}</p>
+                              <p className="text-gray-300 font-dm italic font-bold">{t('initializeDescription') || 'Add a medicine to compare.'}</p>
                            </div>
                            <button 
                              onClick={() => setShowSearch(true)}
                              className="h-16 px-10 bg-white border border-black/[0.03] text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl hover:bg-brand-teal transition-all duration-500 shadow-4xl active:scale-95"
                            >
-                              {t('targetNode')}
+                              {t('targetItem')}
                            </button>
                         </div>
                       )}
@@ -156,7 +156,7 @@ export default function MedicineComparePage() {
          </div>
       </div>
 
-      {/* Comparison Target Search Overlay Terminal */}
+      {/* Comparison Target Search Overlay Page */}
       <AnimatePresence>
          {showSearch && (
            <motion.div 
@@ -175,7 +175,7 @@ export default function MedicineComparePage() {
                     <Search className="text-white/20 group-focus-within:text-brand-teal group-focus-within:scale-110 transition-all duration-700" size={32} />
                     <input 
                       type="text" 
-                      placeholder={t('identifyClinicalNode')}
+                      placeholder={t('identifyClinicalItem')}
                       className="bg-transparent flex-1 font-syne font-black text-3xl italic outline-none text-white placeholder-white/10"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}

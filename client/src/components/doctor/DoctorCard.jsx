@@ -13,7 +13,7 @@ export default function DoctorCard({ item }) {
     <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
-      className="bg-white border border-black/[0.03] rounded-[3rem] p-8 shadow-soft hover:shadow-4xl transition-all duration-700 group relative overflow-hidden h-full flex flex-col"
+      className="bg-white border border-black/[0.03] rounded-2xl md:rounded-[3rem] p-5 md:p-8 shadow-soft hover:shadow-4xl transition-all duration-700 group relative overflow-hidden h-full flex flex-col"
     >
       <div className="absolute top-0 right-0 h-32 w-32 bg-brand-teal opacity-[0.02] rounded-full blur-[60px]" />
       
@@ -21,7 +21,7 @@ export default function DoctorCard({ item }) {
       <div className="flex items-start justify-between mb-8">
         <div className="relative">
            <div className="h-20 w-20 rounded-[2.2rem] bg-gray-50 flex items-center justify-center font-syne font-black text-2xl text-brand-teal border border-black/[0.01] group-hover:bg-[#0a1628] group-hover:text-white transition-all duration-700 shadow-inner">
-             {item.name[4]}
+             {item.name?.[0] || 'D'}
            </div>
            <div className={`absolute -bottom-1 -right-1 h-6 w-6 rounded-lg border-[3px] border-white flex items-center justify-center ${statusColors[item.status || 'online']}`}>
               <Activity size={10} className="animate-pulse" />
@@ -38,7 +38,7 @@ export default function DoctorCard({ item }) {
 
       <div className="space-y-4 mb-10 flex-1">
         <div>
-           <h3 className="font-syne font-black text-xl text-[#0a1628] uppercase italic tracking-tighter group-hover:text-brand-teal transition-colors">{item.name}</h3>
+           <h3 className="font-syne font-black text-lg md:text-xl text-[#0a1628] uppercase italic tracking-normal md:tracking-tighter group-hover:text-brand-teal transition-colors break-words">{item.name}</h3>
            <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.2em] italic mt-1 flex items-center gap-2">
               <ShieldCheck size={12} className="text-brand-teal" /> {item.spec || item.specialization || 'General Physician'}
            </p>
@@ -50,7 +50,7 @@ export default function DoctorCard({ item }) {
               <span className="text-lg font-syne text-brand-teal tracking-tighter">₹{item.fee || 200}</span>
            </div>
            <div className="flex items-center gap-2 text-[9px] font-bold text-emerald-500 uppercase tracking-widest italic bg-emerald-50/50 w-fit px-3 py-1.5 rounded-lg border border-emerald-100">
-              <Video size={10} /> Live Virtual Node Available
+              <Video size={10} /> Video Call Available
            </div>
         </div>
       </div>
@@ -59,8 +59,8 @@ export default function DoctorCard({ item }) {
          <Link to={`/doctors/${item.id || item._id}`} className="h-14 w-14 bg-gray-50 text-gray-400 border border-black/[0.03] rounded-2xl flex items-center justify-center hover:bg-[#0a1628] hover:text-brand-teal transition shadow-inner">
             <Activity size={20} />
          </Link>
-         <button className="flex-1 h-14 bg-[#0a1628] text-brand-teal rounded-2xl font-syne font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-brand-teal hover:text-[#0a1628] transition-all shadow-4xl group/btn italic">
-            Procure Session <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+         <button className="flex-1 h-14 bg-[#0a1628] text-brand-teal rounded-2xl font-syne font-black text-[10px] uppercase tracking-[0.14em] md:tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-brand-teal hover:text-[#0a1628] transition-all shadow-4xl group/btn italic">
+            Book Session <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
          </button>
       </div>
     </motion.div>

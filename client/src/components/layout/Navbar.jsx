@@ -102,7 +102,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isCheckoutPage = location.pathname === '/checkout' || location.pathname.startsWith('/orders/track');
+  const isCheckoutPage = location.pathname === '/checkout' || /^\/orders\/[^/]+\/track/.test(location.pathname);
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
   // Scroll detection
@@ -151,7 +151,7 @@ export default function Navbar() {
       <nav className={`
         hidden md:flex
         fixed top-0 left-0 right-0 z-50 h-16
-        items-center justify-between px-6 lg:px-8
+        items-center justify-between px-5 lg:px-7
         transition-all duration-300
         ${scrolled
           ? 'bg-slate-900/95 backdrop-blur-md shadow-lg border-b border-white/10'
@@ -169,10 +169,10 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav Links */}
-        <div className="flex items-center gap-6">
+        <div className="hidden lg:flex items-center gap-5">
           {navLinks.map(link => (
             <Link key={link.path} to={link.path}>
-              <button className={`px-2 py-2 rounded-xl font-bold text-sm transition-all ${
+              <button className={`px-3 py-2 rounded-xl font-bold text-sm transition-all ${
                 isActive(link.path)
                   ? 'bg-teal-500/20 text-teal-400'
                   : 'text-gray-400 hover:text-white hover:bg-white/10'
@@ -184,14 +184,16 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Right Actions */}
-        <div className="flex items-center gap-2">
-          {/* Live indicator */}
-          <div className="hidden lg:flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full mr-1">
-            <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-teal-400 animate-pulse' : 'bg-red-500'}`} />
-            <span className={`text-xs font-bold ${isConnected ? 'text-teal-400' : 'text-red-400'}`}>
-              {isConnected ? 'LIVE' : 'OFFLINE'}
-            </span>
-          </div>
+        <div className="flex items-center gap-1.5">
+          {/* Live indicator — only shown to authenticated users */}
+          {isAuthenticated && (
+            <div className="hidden lg:flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full mr-1">
+              <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-teal-400 animate-pulse' : 'bg-red-500'}`} />
+              <span className={`text-xs font-bold ${isConnected ? 'text-teal-400' : 'text-red-400'}`}>
+                {isConnected ? 'LIVE' : 'OFFLINE'}
+              </span>
+            </div>
+          )}
 
           {/* Search */}
           <button
@@ -268,22 +270,22 @@ export default function Navbar() {
       <nav className={`
         flex md:hidden
         fixed top-0 left-0 right-0 z-50 h-14
-        items-center justify-between px-4
+        items-center justify-between px-3
         transition-all duration-300
         bg-slate-900 border-b border-white/10
       `}>
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 whitespace-nowrap">
+        <Link to="/" className="flex min-w-0 items-center gap-2 whitespace-nowrap">
           <div className="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center">
             <Pill size={16} className="text-teal-400" />
           </div>
-          <span className="font-black text-lg text-white whitespace-nowrap">
+          <span className="font-black text-base text-white whitespace-nowrap">
             Medi<span className="text-teal-400">Pharm</span>
           </span>
         </Link>
 
         {/* Mobile Right — minimal */}
-        <div className="flex items-center gap-1">
+        <div className="flex shrink-0 items-center gap-1">
           {/* Search */}
           <button
             onClick={() => setSearchOpen(true)}
@@ -308,13 +310,6 @@ export default function Navbar() {
               )}
             </button>
           )}
-
-          {/* Profile */}
-          <Link to={isAuthenticated ? '/profile' : '/login'}>
-            <button className="w-11 h-11 bg-white/10 rounded-xl flex items-center justify-center min-h-11 min-w-11" aria-label="Profile">
-              <User size={20} className="text-white" />
-            </button>
-          </Link>
 
           {/* Menu */}
           <button

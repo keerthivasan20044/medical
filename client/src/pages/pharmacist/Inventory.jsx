@@ -2,26 +2,48 @@ import { useState, useMemo, useEffect } from 'react';
 import { 
   Search, Filter, Plus, RotateCw, ArrowUpDown, 
   Trash2, Edit2, AlertCircle, Package, Zap, 
-  Activity, IndianRupee, X, CheckCircle, ArrowRight 
+  Activity, IndianRupee, X, CheckCircle, ArrowRight, TrendingUp
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { useLanguage } from '../../context/LanguageContext';
-
-const MOCK_MEDICINES = [
-  { id: 1, name: 'Paracetamol 500mg', category: 'tablets', stock: 85, price: 45, mrp: 60, expiry: 'Mar 2027', batch: 'B25001', status: 'normal', demand: 'high' },
-  { id: 2, name: 'Amoxicillin Syrup', category: 'syrups', stock: 5, price: 68, mrp: 85, expiry: 'Nov 2026', batch: 'B24892', status: 'low', demand: 'medium' },
-  { id: 3, name: 'Metformin 500mg', category: 'tablets', stock: 120, price: 38, mrp: 50, expiry: 'Jun 2027', batch: 'B25002', status: 'normal', demand: 'low' },
-  { id: 4, name: 'Flu Vaccine', category: 'vaccines', stock: 0, price: 450, mrp: 500, expiry: '—', batch: '—', status: 'out', demand: 'critical' },
-  { id: 5, name: 'Insulin Glargine', category: 'injections', stock: 12, price: 850, mrp: 950, expiry: 'Aug 2026', batch: 'B24001', status: 'expiring', demand: 'high' }
-];
+import { pharmacistService } from '../../services/apiServices';
 
 export default function PharmacistInventory() {
   const { t } = useLanguage();
-  const [medicines, setMedicines] = useState(MOCK_MEDICINES);
+  const [medicines, setMedicines] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
   const [showAddModal, setShowAddModal] = useState(false);
+
+  useEffect(() => {
+    const fetchMedicines = async () => {
+      try {
+        setLoading(true);
+        const data = await pharmacistService.getInventory({ limit: 50 });
+        if (data?.items?.length > 0) {
+          setMedicines(data.items.map(m => ({
+            id: m._id,
+            name: m.name,
+            category: m.category,
+            stock: m.stock || 0,
+            price: m.price,
+            mrp: m.mrp || m.price,
+            expiry: m.expiryDate ? new Date(m.expiryDate).toLocaleDateString() : '—',
+            batch: m.batchNumber || 'N/A',
+            status: m.stock === 0 ? 'out' : m.stock < 10 ? 'low' : m.stock > 50 ? 'normal' : 'medium',
+            demand: m.demand || 'medium'
+          })));
+        }
+      } catch (err) {
+        toast.error('Failed to load inventory');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMedicines();
+  }, []);
 
   const filteredMeds = useMemo(() => {
     return medicines.filter(m => {
@@ -31,9 +53,15 @@ export default function PharmacistInventory() {
     });
   }, [search, category, medicines]);
 
-  const handleDelete = (id) => {
-    setMedicines(medicines.filter(m => m.id !== id));
-    toast.success(t('medicineRemovedInventory'));
+  const handleDelete = async (id) => {
+    if (!window.confirm('Remove this medicine?')) return;
+    try {
+      await pharmacistService.deleteMedicine(id);
+      setMedicines(medicines.filter(m => m.id !== id));
+      toast.success(t('medicineRemovedInventory'));
+    } catch (err) {
+      toast.error('Failed to remove medicine');
+    }
   };
 
   return (
@@ -44,13 +72,13 @@ export default function PharmacistInventory() {
 
       <div className="max-w-[1500px] mx-auto space-y-16 relative z-10">
          
-         {/* Telemetry Pulse Header */}
+         {/* Tracking Pulse Header */}
          <div className="grid lg:grid-cols-[1fr_500px] gap-12 items-end">
             <div className="space-y-4">
                <div className="flex items-center gap-4 text-[10px] font-black text-[#02C39A] uppercase tracking-[0.4em] mb-4">
-                  <Activity size={14} className="animate-pulse" /> {t('liveEnclaveInventorySync')}
+                  <Activity size={14} className="animate-pulse" /> {t('liveAreaInventoryUpdate')}
                </div>
-               <h1 className="font-syne font-black text-7xl text-[#0a1628] leading-none tracking-tighter">{t('inventoryArchitecture').split(' ')[0]} <br /><span className="text-[#028090]">{t('inventoryArchitecture').split(' ')[1]}.</span></h1>
+               <h1 className="font-syne font-black text-7xl text-[#0a1628] leading-none tracking-tighter">{t('inventorySystem').split(' ')[0]} <br /><span className="text-[#028090]">{t('inventorySystem').split(' ')[1]}.</span></h1>
                <p className="text-gray-400 font-dm italic text-lg opacity-60">Managing 5,240 SKU units across Apollo Pharmacy, New Colony.</p>
             </div>
             
@@ -62,9 +90,9 @@ export default function PharmacistInventory() {
                   <div className="text-[10px] text-white/20 font-bold uppercase tracking-widest leading-none">{t('replenishmentEfficiency')}</div>
                </div>
                <div className="space-y-2 flex-1 relative z-10">
-                  <div className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">{t('enclaveRisk')}</div>
+                  <div className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">{t('areaRisk')}</div>
                   <div className="font-syne font-black text-4xl text-orange-400">03</div>
-                  <div className="text-[10px] text-white/20 font-bold uppercase tracking-widest leading-none">{t('criticalLowNodesDistrict')}</div>
+                  <div className="text-[10px] text-white/20 font-bold uppercase tracking-widest leading-none">{t('criticalLowItemsDistrict')}</div>
                </div>
                <div className="h-20 w-20 bg-white/5 rounded-3xl flex items-center justify-center text-[#02C39A] backdrop-blur-xl border border-white/5 shadow-inner">
                   <Zap size={32} />
@@ -72,7 +100,7 @@ export default function PharmacistInventory() {
             </div>
          </div>
 
-         {/* Protocol Controls */}
+         {/* Service Controls */}
          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pt-10 border-t border-gray-100">
             <div className="flex-1 flex flex-col md:flex-row gap-6">
                <div className="flex-1 flex items-center bg-white rounded-[2.5rem] px-10 py-5 border border-gray-100 shadow-sm focus-within:border-[#028090]/30 transition-all duration-500 group">
@@ -107,28 +135,32 @@ export default function PharmacistInventory() {
                  onClick={() => setShowAddModal(true)}
                  className="px-12 py-5 bg-gradient-to-r from-[#02C39A] to-[#028090] text-white font-syne font-black text-xs uppercase tracking-widest rounded-full shadow-4xl shadow-[#02C39A]/40 hover:scale-105 active:scale-95 transition-all flex items-center gap-4"
               >
-                 <Plus size={22} /> {t('addNewMedicineNode')}
+                 <Plus size={22} /> {t('addNewMedicineItem')}
               </button>
             </div>
          </div>
 
-         {/* Medicine Table Architecture */}
+         {/* Medicine Table System */}
          <div className="bg-white rounded-[5rem] border border-gray-100 shadow-3xl overflow-hidden">
             <div className="overflow-x-auto no-scrollbar">
                <table className="w-full text-left">
                   <thead className="bg-[#0a1628] text-white">
                      <tr>
-                        <th className="px-16 py-10 text-[10px] font-black uppercase tracking-[0.3em]">{t('medicineNode')}</th>
-                        <th className="px-8 py-10 text-[10px] font-black uppercase tracking-[0.3em]">{t('categoryArchitecture')}</th>
+                        <th className="px-16 py-10 text-[10px] font-black uppercase tracking-[0.3em]">{t('medicineItem')}</th>
+                        <th className="px-8 py-10 text-[10px] font-black uppercase tracking-[0.3em]">{t('categorySystem')}</th>
                         <th className="px-8 py-10 text-[10px] font-black uppercase tracking-[0.3em]"><div className="flex items-center gap-3">{t('available')} <ArrowUpDown size={14} className="text-[#02C39A]" /></div></th>
                         <th className="px-8 py-10 text-[10px] font-black uppercase tracking-[0.3em]">{t('pulseDemand')}</th>
                         <th className="px-8 py-10 text-[10px] font-black uppercase tracking-[0.3em]">{t('registryMetrics')}</th>
-                        <th className="px-16 py-10 text-[10px] font-black uppercase tracking-[0.3em] text-center">{t('protocolSync')}</th>
+                        <th className="px-16 py-10 text-[10px] font-black uppercase tracking-[0.3em] text-center">{t('stepUpdate')}</th>
                      </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
                      <AnimatePresence mode="popLayout">
-                        {filteredMeds.map((m, idx) => (
+                        {loading ? (
+                          <tr><td colSpan="6" className="p-12 text-center"><div className="inline-block animate-spin">⏳ Loading...</div></td></tr>
+                        ) : filteredMeds.length === 0 ? (
+                          <tr><td colSpan="6" className="p-12 text-center text-gray-400">No medicines found</td></tr>
+                        ) : filteredMeds.map((m, idx) => (
                            <motion.tr 
                               layoutId={m.id}
                               key={m.id}
@@ -148,7 +180,7 @@ export default function PharmacistInventory() {
                                     }`}>{m.name[0]}</div>
                                     <div className="space-y-1">
                                        <div className="font-syne font-black text-2xl text-[#0a1628] uppercase tracking-tighter leading-none">{m.name}</div>
-                                       <div className="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">{m.batch} {t('batchArchitectureNode')}</div>
+                                       <div className="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">{m.batch} {t('batchSystemItem')}</div>
                                     </div>
                                  </div>
                               </td>
@@ -182,7 +214,7 @@ export default function PharmacistInventory() {
                               </td>
                               <td className="px-16 py-12">
                                  <div className="flex items-center justify-center gap-4">
-                                    <button className="h-14 px-8 bg-[#0a1628] text-white font-syne font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-[#028090] transition-all shadow-xl flex items-center justify-center gap-4">{t('editNode')} <Edit2 size={14}/></button>
+                                    <button className="h-14 px-8 bg-[#0a1628] text-white font-syne font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-[#028090] transition-all shadow-xl flex items-center justify-center gap-4">{t('editItem')} <Edit2 size={14}/></button>
                                     <button 
                                        onClick={() => handleDelete(m.id)}
                                        className="h-14 w-14 bg-white border-2 border-gray-50 text-gray-300 rounded-2xl flex items-center justify-center hover:bg-red-500 hover:text-white hover:border-red-500 transition-all shadow-lg active:scale-90"
@@ -201,17 +233,17 @@ export default function PharmacistInventory() {
             <div className="p-16 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-8">
                <div className="flex items-center gap-6">
                   <div className="h-12 w-12 bg-[#0a1628] text-[#02C39A] rounded-2xl flex items-center justify-center shadow-lg"><Info size={20}/></div>
-                  <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-relaxed max-w-xs">District medical protocol requires <br/>exact SKU counts for all Schedule H drugs.</div>
+                  <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-relaxed max-w-xs">District rules require <br/>exact SKU counts for all Schedule H drugs.</div>
                </div>
                <div className="flex items-center gap-3">
-                  <button className="h-14 px-10 border-2 border-gray-100 rounded-2xl text-[10px] font-black uppercase text-gray-300 hover:bg-white transition-all cursor-pointer">Back Architecture</button>
-                  <button className="h-14 px-10 bg-[#0a1628] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-2xl hover:bg-[#028090] transition-all">Next Enclave Buffer &rarr;</button>
+                  <button className="h-14 px-10 border-2 border-gray-100 rounded-2xl text-[10px] font-black uppercase text-gray-300 hover:bg-white transition-all cursor-pointer">Back</button>
+                  <button className="h-14 px-10 bg-[#0a1628] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-2xl hover:bg-[#028090] transition-all">Next &rarr;</button>
                </div>
             </div>
          </div>
       </div>
 
-      {/* Add Medicine Modal Architecture */}
+      {/* Add Medicine Modal System */}
       <AnimatePresence>
          {showAddModal && (
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-8">
@@ -231,7 +263,7 @@ export default function PharmacistInventory() {
                   <div className="h-40 bg-[#0a1628] flex items-center justify-between px-20 relative overflow-hidden">
                      <div className="absolute inset-0 bg-grid opacity-10" />
                      <div className="relative z-10 space-y-1">
-                        <h2 className="font-syne font-black text-4xl text-white tracking-tighter">Add New <span className="text-[#02C39A]">{t('medicineNode')}</span></h2>
+                        <h2 className="font-syne font-black text-4xl text-white tracking-tighter">Add New <span className="text-[#02C39A]">{t('medicineItem')}</span></h2>
                         <p className="text-white/30 font-dm italic text-sm">Registering new therapeutic assets for the Karaikal district.</p>
                      </div>
                      <button onClick={() => setShowAddModal(false)} className="h-16 w-16 text-white/40 hover:text-white transition group border-2 border-white/10 rounded-[2rem] flex items-center justify-center hover:bg-white/5 active:scale-95"><X size={32}/></button>
@@ -258,7 +290,7 @@ export default function PharmacistInventory() {
                      <div className="space-y-10">
                         <div className="grid grid-cols-2 gap-6">
                            <div className="space-y-4">
-                              <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-4 ml-2"><IndianRupee size={14}/> {t('nodeValuation')}</label>
+                              <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-4 ml-2"><IndianRupee size={14}/> {t('itemValuation')}</label>
                               <div className="relative">
                                  <IndianRupee size={20} className="absolute left-7 top-7 text-gray-200" />
                                  <input type="number" placeholder="0.00" className="w-full p-7 pl-16 bg-gray-50 border-2 border-gray-100 rounded-[2.5rem] outline-none font-syne font-black text-2xl" />
@@ -288,10 +320,10 @@ export default function PharmacistInventory() {
                               <div className="absolute inset-0 bg-gray-100 border-2 border-gray-200 rounded-2xl transition-all peer-checked:bg-[#02C39A] peer-checked:border-[#02C39A]" />
                               <CheckCircle className="absolute inset-0 m-auto text-white opacity-0 transition-opacity peer-checked:opacity-100" size={24} />
                            </div>
-                           <label htmlFor="rx" className="text-xl font-syne font-black text-[#0a1628] group-hover:text-[#028090] transition cursor-pointer">{t('rxProtocol')} <span className="text-[#02C39A] ml-2">(Schedule H)</span></label>
+                           <label htmlFor="rx" className="text-xl font-syne font-black text-[#0a1628] group-hover:text-[#028090] transition cursor-pointer">{t('rxService')} <span className="text-[#02C39A] ml-2">(Schedule H)</span></label>
                         </div>
                         <button 
-                           onClick={() => { setShowAddModal(false); toast.success(t('newMedicineSyncSuccess')); }}
+                           onClick={() => { setShowAddModal(false); toast.success(t('newMedicineUpdateSuccess')); }}
                            className="px-20 py-8 bg-[#0a1628] text-[#02C39A] rounded-[3rem] font-syne font-black text-lg uppercase tracking-[0.3em] shadow-4xl hover:bg-[#02C39A] hover:text-white transition-all active:scale-95 flex items-center gap-6"
                         >
                            {t('authorizeRegistry')} <ArrowRight size={24} />

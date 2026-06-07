@@ -11,11 +11,11 @@ export default function HelpCenter() {
       <div className="p-20 grid lg:grid-cols-2 gap-24">
          <div className="space-y-12">
             <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic tracking-tighter leading-none flex items-center gap-6">
-               <div className="h-2 w-16 bg-brand-teal rounded-full" /> Common Enclave Queries
+               <div className="h-2 w-16 bg-brand-teal rounded-full" /> Common Questions
             </h3>
             
             <div className="space-y-4">
-               {['How to synchronize my prescription?', 'What is the Avg Logistics Sync?', 'Emergency Protocol: Govt Hospital contact', 'How to authorize a new pharmacy node?'].map(q => (
+               {['How do I upload my prescription?', 'What is the average delivery time?', 'Emergency Service: Govt Hospital contact', 'How do I add a new pharmacy?'].map(q => (
                   <div key={q} className="p-10 bg-gray-50/50 rounded-[2.5rem] border border-black/[0.03] group hover:bg-[#0a1628] hover:text-white transition-all duration-700 cursor-pointer flex items-center justify-between">
                      <span className="font-dm text-2xl italic font-bold text-[#0a1628] group-hover:text-white transition-colors">{q}</span>
                      <ChevronRight className="text-brand-teal transform group-hover:translate-x-2 transition-transform" size={24} />
@@ -26,13 +26,13 @@ export default function HelpCenter() {
 
          <div className="space-y-12">
             <h3 className="font-syne font-black text-4xl text-[#0a1628] uppercase italic tracking-tighter leading-none flex items-center gap-6">
-               <div className="h-2 w-16 bg-brand-teal rounded-full" /> Direct Command Node
+               <div className="h-2 w-16 bg-brand-teal rounded-full" /> Contact Support
             </h3>
             
             <div className="grid grid-cols-1 gap-6">
                {[
                   { label: 'Voice Handshake', val: '+91 94432 XXXXX', icon: Phone },
-                  { label: 'Uplink Support', val: 'support@medipharm.com', icon: Mail },
+                  { label: 'Email Support', val: 'support@medipharm.com', icon: Mail },
                   { label: 'Live Tele-Support', val: '10 AM - 8 PM', icon: MessageSquare }
                ].map(item => (
                   <div key={item.label} className="bg-white p-12 rounded-[3.5rem] border border-black/[0.01] shadow-soft hover:shadow-4xl transition-all duration-700 flex items-center gap-10 group cursor-pointer relative overflow-hidden">
@@ -52,7 +52,7 @@ export default function HelpCenter() {
                <div className="flex items-center gap-4 text-brand-teal font-syne font-black text-sm uppercase italic">
                   <ShieldCheck size={24} /> MISSION_SECURITY_PROTOCOL
                </div>
-               <p className="text-[#0a1628]/60 font-dm italic font-bold">MediPharm Command Center operates 24/7 for emergency logistics and district synchronization.</p>
+               <p className="text-[#0a1628]/60 font-dm italic font-bold">MediPharm support operates 24/7 for emergency logistics and district service updates.</p>
             </div>
          </div>
       </div>

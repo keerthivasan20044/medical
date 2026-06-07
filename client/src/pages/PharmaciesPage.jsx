@@ -48,7 +48,7 @@ export default function PharmaciesPage() {
       setPage(data.page || 1);
       setTotal(data.total || 0);
     } catch (err) {
-      toast.error('Failed to load nodes');
+      toast.error('Failed to load items');
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -84,8 +84,8 @@ export default function PharmaciesPage() {
                     <span className="h-2 w-2 rounded-full bg-brand-teal animate-pulse" />
                     <span className="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em]">Network Active</span>
                  </div>
-                 <h1 className="font-syne font-black text-5xl text-navy italic tracking-tighter uppercase leading-none">Pharmacy Nodes</h1>
-                 <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest italic">Discover verified medical fulfillment nodes in your sector</p>
+                 <h1 className="font-syne font-black text-5xl text-navy italic tracking-tighter uppercase leading-none">Pharmacy Items</h1>
+                 <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest italic">Find verified pharmacies near you</p>
               </div>
               
               <div className="flex items-center gap-4">
@@ -103,7 +103,7 @@ export default function PharmaciesPage() {
                  </div>
                  <input 
                    type="text" 
-                   placeholder="Search node name, city, or specialty..." 
+                   placeholder="Search name, city, or service..." 
                    value={search}
                    onChange={(e) => setSearch(e.target.value)}
                    className="w-full h-16 bg-gray-50 border border-gray-100 rounded-[2rem] pl-16 pr-8 font-dm font-bold text-navy outline-none focus:bg-white focus:border-brand-teal focus:ring-8 focus:ring-brand-teal/5 transition-all shadow-sm"
@@ -163,7 +163,7 @@ export default function PharmaciesPage() {
                            onClick={() => setFilters({ rating: 0, service: '', sort: 'rating' })}
                            className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em] italic flex items-center gap-2 hover:underline ml-auto"
                          >
-                            <X size={14} /> Reset Protocol
+                            <X size={14} /> Reset Service
                          </button>
                       </div>
                    </div>
@@ -213,7 +213,7 @@ export default function PharmaciesPage() {
                 </div>
                 <div>
                    <h2 className="font-syne font-black text-3xl text-navy uppercase italic">Zero Intercept</h2>
-                   <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest italic mt-2">No nodes found matching your current coordinates and filters.</p>
+                   <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest italic mt-2">No items found matching your current coordinates and filters.</p>
                 </div>
              </div>
            )

@@ -14,7 +14,7 @@ export default function Teleconsult() {
 
   return (
     <div className="space-y-10 pb-20">
-      {/* Top Protocol Header */}
+      {/* Top Service Header */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -25,13 +25,13 @@ export default function Teleconsult() {
           <div className="space-y-8">
              <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/5 border border-white/10 rounded-full backdrop-blur-md">
                 <div className="h-2 w-2 bg-[#02C39A] rounded-full animate-ping" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-white/60 font-syne">Active Health Enclave Synchronized</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-white/60 font-syne">Online Doctors Available</span>
              </div>
              <h1 className="font-syne font-black text-5xl md:text-7xl leading-[1.1]">
                 Instant <br />
                 <span className="text-[#02C39A]">Video Consult.</span>
              </h1>
-             <p className="text-white/40 font-dm text-lg max-w-md italic">Connect with verified Karaikal doctors in under 2 minutes. Secure, encrypted, and real-time medical architecture.</p>
+             <p className="text-white/40 font-dm text-lg max-w-md italic">Connect with verified Karaikal doctors in under 2 minutes. Secure online doctor support.</p>
              <div className="flex flex-wrap gap-4 pt-4">
                 <Button className="py-6 px-10 text-lg shadow-2xl shadow-[#02C39A]/20" icon={<Zap size={18}/>}>Initiate Instant Consult</Button>
                 <div className="flex items-center gap-6 px-8 py-2 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md">
@@ -55,8 +55,8 @@ export default function Teleconsult() {
                    <div className="flex items-center gap-4">
                       <div className="h-12 w-12 bg-[#02C39A] rounded-2xl flex items-center justify-center text-[#0a1628] shadow-lg shadow-[#02C39A]/20"><Video size={20}/></div>
                       <div>
-                         <div className="text-xs font-dm font-black uppercase text-white tracking-widest leading-none">Incoming Protocol...</div>
-                         <div className="text-[10px] text-white/40 font-bold uppercase tracking-tighter mt-1">Satellite Link Synchronized</div>
+                         <div className="text-xs font-dm font-black uppercase text-white tracking-widest leading-none">Incoming Service...</div>
+                         <div className="text-[10px] text-white/40 font-bold uppercase tracking-tighter mt-1">Satellite Link Updatehronized</div>
                       </div>
                    </div>
                    <div className="flex items-center gap-2">
@@ -69,15 +69,15 @@ export default function Teleconsult() {
         </div>
       </motion.div>
 
-      {/* Main Grid Architecture */}
+      {/* Main Grid System */}
       <div className="grid lg:grid-cols-12 gap-10">
         
-        {/* Available Nodes (Doctors) */}
+        {/* Available Items (Doctors) */}
         <div className="lg:col-span-8 space-y-8">
           <div className="flex items-end justify-between px-4">
              <div className="space-y-1">
-                <h3 className="font-syne font-black text-[#0a1628] text-2xl">Verified Medical Nodes</h3>
-                <p className="text-gray-400 font-dm text-sm italic">Local specialists across the district enclave.</p>
+                <h3 className="font-syne font-black text-[#0a1628] text-2xl">Verified Medical Items</h3>
+                <p className="text-gray-400 font-dm text-sm italic">Local specialists across the district.</p>
              </div>
              <button className="text-[10px] font-black text-[#028090] uppercase tracking-widest hover:underline underline-offset-4 decoration-2">See Global Directory &rarr;</button>
           </div>
@@ -97,7 +97,7 @@ export default function Teleconsult() {
                    </div>
                    <div className="space-y-1 flex-1">
                       <div className="flex items-center justify-between">
-                         <div className="text-[9px] font-black text-[#028090] uppercase tracking-widest">Available Protocols</div>
+                         <div className="text-[9px] font-black text-[#028090] uppercase tracking-widest">Available Services</div>
                          <div className="flex items-center gap-1 text-amber-500 text-[10px] font-bold">
                             <Star size={10} fill="currentColor" /> {d.rating}
                          </div>
@@ -113,7 +113,7 @@ export default function Teleconsult() {
                       <div className="text-lg font-syne font-black text-[#0a1628]">₹{d.fee}</div>
                    </div>
                    <button className="h-14 px-8 bg-gray-50 border border-transparent hover:border-[#02C39A]/20 hover:bg-white text-[#0a1628] font-syne font-bold text-xs rounded-2xl transition-all flex items-center gap-3 active:scale-95 group/btn shadow-sm">
-                      Select Protocol <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition" />
+                      Select Service <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition" />
                    </button>
                 </div>
                 
@@ -124,12 +124,12 @@ export default function Teleconsult() {
           </div>
         </div>
 
-        {/* Secondary Enclave Sidebar */}
+        {/* Secondary Area Sidebar */}
         <div className="lg:col-span-4 space-y-10">
-          {/* Upcoming Appointment Protocol */}
+          {/* Upcoming Appointment Service */}
           <div className="bg-white border border-gray-100 rounded-[3rem] p-10 space-y-8 shadow-sm">
              <div className="flex items-center justify-between">
-                <h3 className="font-syne font-black text-[#0a1628] text-xl">Node Queue</h3>
+                <h3 className="font-syne font-black text-[#0a1628] text-xl">Waiting List</h3>
                 <Clock className="text-[#028090]" size={18} />
              </div>
              <div className="p-6 bg-gray-50 rounded-[2.5rem] border border-gray-100 relative group hover:bg-white hover:border-[#02C39A]/20 transition-all duration-500 shadow-inner hover:shadow-xl">
@@ -143,16 +143,16 @@ export default function Teleconsult() {
                    </div>
                 </div>
                 <button className="w-full py-4 bg-[#0a1628] text-[#02C39A] rounded-2xl font-syne font-bold text-xs shadow-xl shadow-[#0a1628]/20 active:scale-95 transition flex items-center justify-center gap-3">
-                   <Video size={14} /> Synchronize Node Call
+                   <Video size={14} /> Start Video Call
                 </button>
              </div>
              
              <div className="pt-6 border-t border-gray-50 space-y-4">
-                <h4 className="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em]">Protocol Highlights</h4>
+                <h4 className="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em]">Service Highlights</h4>
                 {[
                    { icon: ShieldCheck, label: 'Encrypted Stream' },
-                   { icon: FileText, label: 'Instant Rx Node' },
-                   { icon: Activity, label: 'Vitals Sync Ready' }
+                   { icon: FileText, label: 'Instant Prescription' },
+                   { icon: Activity, label: 'Vitals Ready' }
                 ].map((h, i) => (
                    <div key={i} className="flex items-center gap-4 text-xs font-dm font-bold text-gray-500">
                       <div className="h-8 w-8 bg-gray-50 rounded-xl flex items-center justify-center text-[#028090] shadow-sm"><h.icon size={14}/></div>
@@ -162,12 +162,12 @@ export default function Teleconsult() {
              </div>
           </div>
           
-          {/* Support Node */}
+          {/* Support Item */}
           <div className="bg-[#028090] rounded-[3rem] p-10 text-white space-y-6 relative overflow-hidden group shadow-3xl">
              <div className="absolute top-0 right-0 h-32 w-32 bg-[#02C39A] rounded-full blur-[80px] opacity-20" />
              <div className="h-12 w-12 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-md mb-6"><MessageSquare size={20}/></div>
-             <h3 className="font-syne font-black text-2xl leading-tight">Need Medical <br /> Telemetry Guidance?</h3>
-             <p className="text-white/40 font-dm text-sm leading-relaxed">Our district support AI is available 24/7 for health enclave navigation.</p>
+             <h3 className="font-syne font-black text-2xl leading-tight">Need Medical <br /> Help?</h3>
+             <p className="text-white/40 font-dm text-sm leading-relaxed">Our district support AI is available 24/7 for health support.</p>
              <button className="w-full py-5 bg-white text-[#028090] rounded-2xl font-syne font-black text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-black/20">Init Agent Chat</button>
           </div>
         </div>

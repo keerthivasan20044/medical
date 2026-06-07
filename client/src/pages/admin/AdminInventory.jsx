@@ -23,7 +23,7 @@ export default function AdminInventory() {
         <div className="flex items-center gap-3">
            <div className="bg-white px-6 py-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3">
               <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">4 Critical Stock Nodes</span>
+              <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">4 Low Stock Items</span>
            </div>
         </div>
       </div>
@@ -53,7 +53,7 @@ export default function AdminInventory() {
         columns={[
           { 
             key: 'name', 
-            label: 'Medicine Node',
+            label: 'Medicine',
             render: (val) => (
               <div className="font-dm font-black text-navy text-sm italic">{val}</div>
             )

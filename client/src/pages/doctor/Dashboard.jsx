@@ -12,7 +12,7 @@ const KPIS = [
   { label: "Today's Consultations", value: '12', icon: Video, color: 'text-brand-teal bg-brand-teal/10' },
   { label: 'Verified Patients', value: '482', icon: Users, color: 'text-emerald-600 bg-emerald-50' },
   { label: 'Professional Rating', value: '4.9', icon: Star, color: 'text-amber-500 bg-amber-50' },
-  { label: 'Rx Nodes Issued', value: '23', icon: FileText, color: 'text-indigo-600 bg-indigo-50' }
+  { label: 'Prescriptions Issued', value: '23', icon: FileText, color: 'text-indigo-600 bg-indigo-50' }
 ];
 
 export default function DoctorDashboard() {
@@ -22,7 +22,7 @@ export default function DoctorDashboard() {
   return (
     <div className="space-y-12 md:space-y-20">
         
-        {/* Header Architecture */}
+        {/* Header System */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 pb-12 border-b border-black/[0.03]">
            <div className="space-y-6">
               <div className="flex items-center gap-4">
@@ -35,7 +35,7 @@ export default function DoctorDashboard() {
                     </h1>
                     <div className="flex flex-wrap items-center gap-4 text-[10px] font-black uppercase tracking-widest text-gray-400 italic">
                        <span className="flex items-center gap-2 text-brand-teal"><ShieldCheck size={14} /> MBDS, MD Psychiatry</span>
-                       <span className="flex items-center gap-2"><Clock size={14} /> Active Node: Today 4PM - 9PM</span>
+                       <span className="flex items-center gap-2"><Clock size={14} /> Available: Today 4PM - 9PM</span>
                     </div>
                  </div>
               </div>
@@ -49,13 +49,13 @@ export default function DoctorDashboard() {
                  </div>
               </div>
               <div className="flex items-center gap-3">
-                 <Link to="/profile">
+                 <Link to="/doctor/profile">
                     <button className="h-12 w-12 bg-gray-50 border border-black/[0.03] text-gray-400 rounded-xl flex items-center justify-center hover:bg-[#0a1628] hover:text-brand-teal transition shadow-inner" title="Profile Settings">
                        <Settings size={18} />
                     </button>
                  </Link>
                  <button className="h-12 px-8 bg-[#0a1628] text-brand-teal rounded-xl font-syne font-black text-[10px] uppercase tracking-widest flex items-center gap-3 hover:bg-brand-teal hover:text-[#0a1628] transition-all shadow-4xl italic">
-                    <PlusCircle size={14} /> Create Rx Node
+                    <PlusCircle size={14} /> Create Prescription
                  </button>
               </div>
            </div>
@@ -87,13 +87,13 @@ export default function DoctorDashboard() {
            <div className="space-y-10">
               <h2 className="font-syne font-black text-2xl md:text-3xl text-[#0a1628] flex items-center gap-6 uppercase italic tracking-tighter">
                  <div className="h-2 w-16 bg-brand-teal rounded-full" /> 
-                 Consultation Architecture <span className="text-gray-100 italic">/</span> <span className="text-[14px] font-dm text-gray-300 font-black uppercase tracking-widest italic">Live Schedule</span>
+                 Appointments <span className="text-gray-100 italic">/</span> <span className="text-[14px] font-dm text-gray-300 font-black uppercase tracking-widest italic">Live Schedule</span>
               </h2>
               <div className="grid gap-6">
                  {[
                     { time: '09:00 AM', patient: 'Keerthivasan R.', type: 'Video Consult', status: 'Confirmed', alert: true },
-                    { time: '10:30 AM', patient: 'Priya M.', type: 'In-Clinic Sync', status: 'Checked-in', alert: false },
-                    { time: '11:15 AM', patient: 'Arjun S.', type: 'Emergency Node', status: 'Priority', alert: true }
+                    { time: '10:30 AM', patient: 'Priya M.', type: 'In-Clinic Visit', status: 'Checked-in', alert: false },
+                    { time: '11:15 AM', patient: 'Arjun S.', type: 'Emergency', status: 'Priority', alert: true }
                  ].map((t) => (
                     <div key={t.time} className="bg-white border border-black/[0.03] rounded-[3.5rem] md:rounded-[4.5rem] p-10 flex flex-col md:flex-row md:items-center justify-between gap-10 hover:shadow-4xl hover:border-brand-teal/20 transition group relative overflow-hidden">
                        {t.alert && (
@@ -121,20 +121,20 @@ export default function DoctorDashboard() {
               </div>
            </div>
 
-           {/* Quick Actions & Enclave Controls */}
+           {/* Quick Actions & Area Controls */}
            <div className="space-y-10">
               <div className="bg-[#0a1628] p-12 rounded-[4.5rem] text-white shadow-3xl relative overflow-hidden group border-t-[12px] border-brand-teal">
                  <div className="absolute top-0 right-0 h-48 w-48 bg-brand-teal rounded-full blur-[100px] opacity-[0.15]" />
                  <h2 className="font-syne font-black text-2xl mb-10 flex items-center justify-between relative z-10 uppercase italic tracking-tighter">
-                    Quick Architecture <PlusCircle size={22} className="text-brand-teal" />
+                    Quick Actions <PlusCircle size={22} className="text-brand-teal" />
                  </h2>
                  <div className="space-y-4 relative z-10">
                      {[
-                        { label: 'Issue Digital Rx Node', icon: FileText, color: 'hover:bg-brand-teal', to: '/doctor/prescriptions' },
-                        { label: 'Manage Node Identity', icon: User, color: 'hover:bg-brand-teal', to: '/profile' },
-                        { label: 'Sync Lab Handover', icon: Activity, color: 'hover:bg-emerald-600', to: '/doctor/dashboard' },
+                        { label: 'Issue Digital Prescription', icon: FileText, color: 'hover:bg-brand-teal', to: '/doctor/prescriptions' },
+                        { label: 'Manage Profile', icon: User, color: 'hover:bg-brand-teal', to: '/doctor/profile' },
+                        { label: 'Lab Reports', icon: Activity, color: 'hover:bg-emerald-600', to: '/doctor/dashboard' },
                         { label: 'Review Patient History', icon: Users, color: 'hover:bg-indigo-600', to: '/doctor/patients' },
-                        { label: 'Architecture Settings', icon: ShieldCheck, color: 'hover:bg-gray-700', to: '/settings' }
+                        { label: 'Settings', icon: ShieldCheck, color: 'hover:bg-gray-700', to: '/doctor/profile' }
                      ].map(link => (
                         <button 
                           key={link.label}

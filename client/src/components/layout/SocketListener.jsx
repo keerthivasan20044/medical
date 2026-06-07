@@ -22,7 +22,7 @@ export default function SocketListener() {
       socket.connect(user.id || user._id, user.role);
     }
 
-    // Identify Node with Central District Command
+    // Identify Item with Central District Command
     socket.emit('node:register', { id: user.id || user._id, role: user.role });
 
     // --- CLINICAL STOCK TELEMETRY ---
@@ -44,7 +44,7 @@ export default function SocketListener() {
       if (user?.role === 'pharmacist' || user?.role === 'admin') {
          dispatch(newOrderReceived(order));
          dispatch(addOrder(order));
-         dispatch(addNotification({ id: Date.now(), title: t('newProtocolManifest'), message: t('incomingOrderMsg', { id: order.id || order._id }), type: 'order' }));
+         dispatch(addNotification({ id: Date.now(), title: t('newServiceManifest'), message: t('incomingOrderMsg', { id: order.id || order._id }), type: 'order' }));
          toast(t('newOrderManifest'), {
             icon: <Bell className="text-brand-teal animate-bounce" size={16}/>,
             style: { border: '1px solid #02C39A', background: '#0a1628', color: '#02C39A' }
@@ -99,10 +99,10 @@ export default function SocketListener() {
                msg = t('orderCancelledBy', { reason: data.reason || t('outOfStock') });
                icon = <XCircle className="text-red-500" />;
                break;
-            default: msg = t('statusSyncUpdate', { status: data.status });
+            default: msg = t('statusUpdateUpdate', { status: data.status });
          }
 
-         dispatch(addNotification({ id: Date.now(), title: t('protocolUpdate'), message: msg, type: 'status' }));
+         dispatch(addNotification({ id: Date.now(), title: t('stepUpdate'), message: msg, type: 'status' }));
          toast(msg, { icon, style: { border: '1px solid #02C39A', background: '#0a1628', color: '#02C39A' }, duration: 6000 });
       }
     });
@@ -170,7 +170,7 @@ export default function SocketListener() {
              // For verification success or role updates
              dispatch({ type: 'auth/me/fulfilled', payload: { ...user, ...data } });
              if (data.verified) {
-                toast.success(t('identitySynced'));
+                toast.success(t('identityUpdateed'));
              }
           }
        }

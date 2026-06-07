@@ -140,7 +140,7 @@ export default function Appointments() {
           {loading ? (
             <div className="flex flex-col items-center justify-center py-32 gap-4 text-brand-teal">
               <Loader2 size={40} className="animate-spin" />
-              <span className="font-syne font-black text-sm uppercase italic tracking-widest">Syncing appointments…</span>
+              <span className="font-syne font-black text-sm uppercase italic tracking-widest">Updateing appointments…</span>
             </div>
           ) : visibleList.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-24 space-y-8">

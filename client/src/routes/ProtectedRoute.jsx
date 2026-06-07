@@ -10,7 +10,7 @@ export default function ProtectedRoute() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-white">
         <Loader2 className="animate-spin text-brand-teal" size={48} />
-        <p className="mt-4 font-syne font-black text-[#0a1628] uppercase tracking-widest text-xs">Authenticating Enclave...</p>
+        <p className="mt-4 font-syne font-black text-[#0a1628] uppercase tracking-widest text-xs">Checking login...</p>
       </div>
     );
   }

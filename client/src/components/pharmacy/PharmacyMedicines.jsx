@@ -30,13 +30,14 @@ export default function PharmacyMedicines({ pharmacyId }) {
   };
 
   useEffect(() => {
+    if (!pharmacyId) return;
     fetchMedicines();
-  }, [search, category]);
+  }, [pharmacyId, search, category]);
 
   const handleAddToCart = (med) => {
     // Check if cart has items from another pharmacy
     if (cartItems.length > 0 && cartItems[0].pharmacyId !== pharmacyId) {
-      toast.error('Cannot mix items from different nodes. Clear cart first.', {
+      toast.error('Cannot mix items from different items. Clear cart first.', {
         icon: '⚠️',
         duration: 4000
       });

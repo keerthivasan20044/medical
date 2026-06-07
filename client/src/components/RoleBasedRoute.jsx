@@ -9,7 +9,7 @@ export default function RoleBasedRoute({ children, allowedRoles }) {
 
   useEffect(() => {
     if (!loading && isAuthenticated && user && !allowedRoles.includes(user.role)) {
-      toast.error('You are not authorized to access this enclave.');
+      toast.error('You cannot open this page.');
     }
   }, [isAuthenticated, user, allowedRoles, loading]);
 

@@ -35,30 +35,30 @@ export default function PharmacistDashboard() {
 
   const stats = useMemo(() => [
     { label: "Today's Orders", value: orders.filter(o => new Date(o.createdAt).toDateString() === new Date().toDateString()).length, icon: ShoppingBag, color: 'text-amber-600 bg-amber-50' },
-    { label: 'Pending Sync', value: orders.filter(o => o.status === 'placed').length, icon: Clock, color: 'text-blue-600 bg-blue-50' },
+    { label: 'Pending', value: orders.filter(o => o.status === 'placed').length, icon: Clock, color: 'text-blue-600 bg-blue-50' },
     { label: 'Low Stock Alerts', value: lowStockLoading ? '…' : lowStockItems.length, icon: AlertCircle, color: 'text-red-600 bg-red-50' },
     { label: 'District Revenue', value: `₹${orders.reduce((acc, curr) => acc + (curr.totalAmount || 0), 0)}`, icon: IndianRupee, color: 'text-brand-teal bg-brand-teal/10' }
   ], [orders, lowStockItems, lowStockLoading, t]);
 
   const [otpValue, setOtpValue] = useState('');
-  const [showOtpSync, setShowOtpSync] = useState(false);
+  const [showOtpUpdate, setShowOtpUpdate] = useState(false);
 
   const confirmDeliveryOtp = () => {
      if(otpValue.length === 4) {
         toast.success("Logistics Handshake Verified");
-        setShowOtpSync(false);
+        setShowOtpUpdate(false);
         setOtpValue('');
      } else {
-        toast.error("Invalid Protocol Key");
+        toast.error("Invalid Service Key");
      }
   };
 
   const handleAction = async (id, newStatus) => {
     const res = await dispatch(updateOrderStatus({ id, status: newStatus }));
     if (res.meta.requestStatus === 'fulfilled') {
-      toast.success(`${t('nodeSynchronized')}: Order ${t(newStatus)}`);
+      toast.success(`${t('itemUpdatehronized')}: Order ${t(newStatus)}`);
     } else {
-      toast.error(t('protocolSyncFailed'));
+      toast.error(t('stepUpdateFailed'));
     }
   };
 
@@ -120,7 +120,7 @@ export default function PharmacistDashboard() {
                     {orders.length === 0 ? (
                        <div className="bg-white border border-dashed border-gray-100 rounded-[4rem] p-24 text-center space-y-8 opacity-40">
                           <Activity size={64} className="mx-auto text-gray-300 animate-pulse" />
-                          <div className="font-syne font-black text-2xl uppercase italic tracking-widest text-gray-300">{t('terminalIdle')}</div>
+                          <div className="font-syne font-black text-2xl uppercase italic tracking-widest text-gray-300">{t('pageIdle')}</div>
                        </div>
                     ) : orders.map((ord, idx) => (
                        <motion.div 
@@ -132,7 +132,7 @@ export default function PharmacistDashboard() {
                           className={`bg-white border p-4 md:p-8 rounded-xl flex flex-col gap-4 shadow-sm hover:shadow-md transition-all relative overflow-hidden ${ord.status === 'placed' ? 'border-teal-500/30 border-l-4 border-l-teal-500' : 'border-slate-200'}`}
                        >
                           {ord.status === 'placed' && (
-                             <div className="absolute top-0 right-0 py-2 px-8 bg-brand-teal text-[#0a1628] font-syne font-black text-[9px] uppercase italic tracking-[0.4em] rounded-bl-[2rem] shadow-mint animate-pulse z-10">{t('uplinked')}</div>
+                             <div className="absolute top-0 right-0 py-2 px-8 bg-brand-teal text-[#0a1628] font-syne font-black text-[9px] uppercase italic tracking-[0.4em] rounded-bl-[2rem] shadow-mint animate-pulse z-10">{t('paymented')}</div>
                           )}
                           
                           <div className="flex items-center gap-8 lg:w-1/3">
@@ -142,8 +142,8 @@ export default function PharmacistDashboard() {
                              </div>
                              <div className="space-y-1">
                                 <div className="text-[10px] font-black text-gray-300 uppercase italic tracking-widest">{t('payloadId')} {(ord.id || ord._id).slice(-6)}</div>
-                                <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic leading-none tracking-tighter">{ord.customerName || t('anonymousNode')}</h3>
-                                <div className="flex items-center gap-3 text-xs font-dm font-bold text-gray-400 italic"><MapPin size={14} className="text-brand-teal" /> {ord.deliveryAddress || t('karaikalEnclave')}</div>
+                                <h3 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic leading-none tracking-tighter">{ord.customerName || t('anonymousItem')}</h3>
+                                <div className="flex items-center gap-3 text-xs font-dm font-bold text-gray-400 italic"><MapPin size={14} className="text-brand-teal" /> {ord.deliveryAddress || t('karaikalArea')}</div>
                              </div>
                           </div>
 
@@ -153,7 +153,7 @@ export default function PharmacistDashboard() {
                                 {ord.items.map((item, id) => (
                                    <div key={id} className="text-xs font-dm font-black text-[#0a1628] uppercase italic tracking-widest flex items-center gap-4">
                                       <div className="h-1 w-8 bg-brand-teal rounded-full" />
-                                      <span className="opacity-50">{item.quantity}x</span> {item.name || item.medicineName || t('medicineNode')}
+                                      <span className="opacity-50">{item.quantity}x</span> {item.name || item.medicineName || t('medicineItem')}
                                    </div>
                                 ))}
                              </div>
@@ -178,11 +178,11 @@ export default function PharmacistDashboard() {
                                       onClick={() => handleAction(ord._id || ord.id, 'confirmed')}
                                       className="w-full h-20 bg-[#0a1628] text-brand-teal rounded-[2rem] font-syne font-black text-xs uppercase tracking-widest flex items-center justify-center gap-6 hover:bg-brand-teal hover:text-white transition-all shadow-4xl italic group"
                                    >
-                                      {t('acceptNode')} <CheckCircle size={20} className="group-hover:rotate-12 transition-transform" />
+                                      {t('acceptItem')} <CheckCircle size={20} className="group-hover:rotate-12 transition-transform" />
                                    </button>
                                    <div className="grid grid-cols-2 gap-4">
-                                      <button onClick={() => handleAction(ord._id || ord.id, 'cancelled')} className="h-14 bg-gray-50 text-gray-300 rounded-2xl font-syne font-black text-[9px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-soft italic">{t('rejectSync')}</button>
-                                      <button className="h-14 bg-gray-50 text-gray-300 rounded-2xl font-syne font-black text-[9px] uppercase tracking-widest hover:bg-[#0a1628] hover:text-white transition-all shadow-soft italic">{t('logNode')}</button>
+                                      <button onClick={() => handleAction(ord._id || ord.id, 'cancelled')} className="h-14 bg-gray-50 text-gray-300 rounded-2xl font-syne font-black text-[9px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-soft italic">{t('rejectUpdate')}</button>
+                                      <button className="h-14 bg-gray-50 text-gray-300 rounded-2xl font-syne font-black text-[9px] uppercase tracking-widest hover:bg-[#0a1628] hover:text-white transition-all shadow-soft italic">{t('logItem')}</button>
                                    </div>
                                 </>
                              ) : ord.status === 'confirmed' ? (
@@ -217,7 +217,7 @@ export default function PharmacistDashboard() {
                  <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-5 rounded-full blur-[80px]" />
                  <div className="h-24 w-24 bg-white/5 border border-white/10 rounded-[2.5rem] flex items-center justify-center mx-auto text-brand-teal shadow-3xl animate-bounce-slow"><Lock size={48}/></div>
                  <div className="space-y-4">
-                    <h3 className="font-syne font-black text-3xl uppercase italic tracking-tighter leading-none tracking-tight">{t('terminalLock')}</h3>
+                    <h3 className="font-syne font-black text-3xl uppercase italic tracking-tighter leading-none tracking-tight">{t('pageLock')}</h3>
                     <p className="text-white/40 font-dm text-lg italic leading-relaxed">{t('emergencySecureMode')}</p>
                  </div>
                  <button className="w-full h-20 bg-white/10 border border-white/20 rounded-[2.5rem] font-syne font-black text-xs uppercase tracking-[0.4em] italic hover:bg-white hover:text-[#0a1628] transition-all duration-700">{t('enterEnigma')}</button>
@@ -227,7 +227,7 @@ export default function PharmacistDashboard() {
                  <h4 className="font-syne font-black text-[#0a1628] uppercase tracking-widest text-[10px] italic border-b border-black/[0.03] pb-6">Low Stock Alarms</h4>
                  <div className="space-y-6">
                     {lowStockLoading ? (
-                      <div className="text-center py-4 text-gray-300 font-syne font-black text-xs uppercase italic tracking-widest animate-pulse">Syncing inventory…</div>
+                      <div className="text-center py-4 text-gray-300 font-syne font-black text-xs uppercase italic tracking-widest animate-pulse">Updateing inventory…</div>
                     ) : lowStockItems.length === 0 ? (
                       <div className="text-center py-4 text-emerald-400 font-syne font-black text-xs uppercase italic tracking-widest">
                         <CheckCircle size={24} className="mx-auto mb-2" /> All stock levels nominal

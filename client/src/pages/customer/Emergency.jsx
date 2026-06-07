@@ -48,7 +48,7 @@ export default function Emergency() {
               <div key={p.name} className="border border-brand-border rounded-xl p-3 flex items-center justify-between">
                 <div>
                   <div className="font-heading text-sm">{p.name}</div>
-                  <div className="text-xs text-brand-muted">{p.distance} � ETA {p.eta}</div>
+                  <div className="text-xs text-brand-muted">{p.distance} - ETA {p.eta}</div>
                 </div>
                 <button className="text-xs text-brand-teal">Select</button>
               </div>

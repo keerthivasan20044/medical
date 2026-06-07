@@ -9,10 +9,10 @@ export default function PharmacyAbout({ pharmacy }) {
       <div className="lg:col-span-7 space-y-12">
         <section className="space-y-6">
            <h3 className="font-syne font-black text-2xl text-navy uppercase italic flex items-center gap-3">
-              <Info size={24} className="text-brand-teal" /> Node Description
+              <Info size={24} className="text-brand-teal" /> Description
            </h3>
            <p className="text-sm font-dm font-bold text-navy/60 italic leading-relaxed">
-             {pharmacy.description || `${pharmacy.name} is a premier medical node providing verified healthcare fulfillment and priority pharmaceutical distribution in the ${pharmacy.city} region. Engineered for maximum integrity and rapid local synchronization.`}
+             {pharmacy.description || `${pharmacy.name} is a verified pharmacy providing trusted medicines and fast delivery in the ${pharmacy.city} region. Built for safe and fast local service.`}
            </p>
         </section>
 
@@ -40,7 +40,7 @@ export default function PharmacyAbout({ pharmacy }) {
               <div className="h-40 w-full md:w-48 bg-white/5 rounded-3xl overflow-hidden relative">
                  {/* Map Placeholder */}
                  <div className="absolute inset-0 flex items-center justify-center text-[10px] font-black uppercase tracking-widest opacity-20">
-                    Map Sync Pending
+                    Map Not Ready
                  </div>
               </div>
               <div className="flex-1 space-y-4">
@@ -67,7 +67,7 @@ export default function PharmacyAbout({ pharmacy }) {
       <div className="lg:col-span-5 space-y-8">
         <div className="bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-sm space-y-8">
            <h3 className="font-syne font-black text-xl text-navy uppercase italic flex items-center gap-3">
-              <Clock size={24} className="text-brand-teal" /> Sync Windows
+              <Clock size={24} className="text-brand-teal" /> Open Hours
            </h3>
            <div className="space-y-4">
               {DAYS.map(day => {
@@ -85,7 +85,7 @@ export default function PharmacyAbout({ pharmacy }) {
         </div>
 
         <div className="bg-gray-50 p-10 rounded-[3.5rem] border border-gray-100 space-y-8">
-           <h3 className="font-syne font-black text-xl text-navy uppercase italic">Node Registry</h3>
+           <h3 className="font-syne font-black text-xl text-navy uppercase italic">Pharmacy Info</h3>
            <div className="space-y-6">
               <div className="flex items-center gap-4">
                  <div className="h-10 w-10 bg-white rounded-xl flex items-center justify-center text-navy/20">

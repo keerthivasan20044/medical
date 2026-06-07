@@ -10,17 +10,17 @@ export default function EmergencyFAB() {
   const scrollDirection = useScrollDirection();
 
   const ACTIONS = [
-    { label: t('call108Emergency'), icon: Phone, color: 'bg-red-500', sub: t('instantAmbulanceSync'), tel: '108' },
+    { label: t('call108Emergency'), icon: Phone, color: 'bg-red-500', sub: t('instantAmbulanceUpdate'), tel: '108' },
     { label: t('bloodRequest'), icon: Heart, color: 'bg-rose-600', sub: t('districtBloodHub'), tel: '102' },
     { label: t('oxygenPulse'), icon: Zap, color: 'bg-blue-600', sub: t('liveSupplyLink'), tel: '104' },
-    { label: t('sosSupport'), icon: MessageCircle, color: 'bg-brand-teal', sub: t('whatsappEnclave'), tel: '+9100000000' }
+    { label: t('sosSupport'), icon: MessageCircle, color: 'bg-brand-teal', sub: t('whatsappArea'), tel: '+9100000000' }
   ];
 
   return (
     <motion.div
       initial={{ x: 100, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-[99] flex flex-col items-end gap-3"
+      className="fixed bottom-[calc(7rem+env(safe-area-inset-bottom))] right-3 md:bottom-5 md:right-5 z-[45] flex flex-col items-end gap-3"
     >
       <AnimatePresence>
         {isOpen && (
@@ -28,12 +28,12 @@ export default function EmergencyFAB() {
             initial={{ opacity: 0, scale: 0.8, x: 20, y: 20 }}
             animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, x: 20, y: 20 }}
-            className="absolute bottom-20 md:bottom-24 right-0 w-[calc(100vw-2rem)] md:w-80 bg-[#0a1628] rounded-[2.5rem] md:rounded-[3.5rem] border-4 border-white shadow-[0_80px_160px_rgba(255,0,0,0.2)] overflow-hidden"
+            className="absolute bottom-16 md:bottom-24 right-0 w-[calc(100vw-1.5rem)] md:w-80 bg-[#0a1628] rounded-[2rem] md:rounded-[3.5rem] border-4 border-white shadow-[0_80px_160px_rgba(255,0,0,0.2)] overflow-hidden"
           >
             <div className="p-6 md:p-8 bg-red-600 text-white flex items-center justify-between">
                <div className="space-y-1">
                   <h3 className="font-syne font-black text-lg md:text-xl uppercase italic tracking-tighter">{t('emergencyHub')}</h3>
-                  <div className="text-[9px] md:text-[10px] font-black uppercase tracking-widest opacity-60">{t('priorityProtocolActive')}</div>
+                  <div className="text-[9px] md:text-[10px] font-black uppercase tracking-widest opacity-60">{t('priorityServiceActive')}</div>
                </div>
                <AlertTriangle className="animate-pulse" size={24} />
             </div>
@@ -71,15 +71,15 @@ export default function EmergencyFAB() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className={`h-12 w-12 md:h-16 md:w-16 lg:hover:w-auto lg:hover:px-8 rounded-full shadow-4xl flex items-center justify-center gap-4 z-[100] border-2 transition-all duration-500 relative overflow-hidden group ${isOpen ? 'bg-white border-red-500 text-red-500' : 'bg-red-600 border-red-500/20 text-white'}`}
+        className={`h-10 w-10 md:h-12 md:w-12 lg:hover:w-auto lg:hover:px-5 rounded-full shadow-4xl flex items-center justify-center gap-3 z-[46] border-2 transition-all duration-500 relative overflow-hidden group ${isOpen ? 'bg-white border-red-500 text-red-500' : 'bg-red-600 border-red-500/20 text-white'}`}
       >
         <div className="absolute inset-0 bg-white/10 animate-pulse pointer-events-none" />
         {isOpen ? (
           <X size={20} />
         ) : (
           <>
-            <Phone size={18} className="relative z-10 animate-shake flex-shrink-0" />
-            <span className="hidden lg:group-hover:block font-syne font-black text-[10px] uppercase tracking-[0.2em] italic whitespace-nowrap">{t('emergency')}</span>
+            <Phone size={16} className="relative z-10 animate-shake flex-shrink-0" />
+            <span className="hidden lg:group-hover:block font-syne font-black text-[10px] uppercase tracking-[0.14em] whitespace-nowrap">{t('emergency')}</span>
           </>
         )}
       </motion.button>

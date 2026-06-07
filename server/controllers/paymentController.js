@@ -3,7 +3,7 @@ import Order from '../models/Order.js';
 import Notification from '../models/Notification.js';
 import User from '../models/User.js';
 import { getIO } from '../config/socket.js';
-import { sendEmail, sendSMS } from '../utils/notify.js';
+import { sendEmail, sendSMS, sendWhatsApp } from '../utils/notify.js';
 import PDFDocument from 'pdfkit';
 import Razorpay from 'razorpay';
 
@@ -11,14 +11,28 @@ function getRazorpayClient() {
   const key_id = process.env.RAZORPAY_KEY_ID;
   const key_secret = process.env.RAZORPAY_KEY_SECRET;
   if (!key_id || !key_secret) return null;
+  
+  // Auto-detect environment placeholders and return null to trigger mock development mode
+  if (
+    key_id.includes('your_') || 
+    key_id.includes('change-me') || 
+    key_secret.includes('your_') || 
+    key_secret.includes('change-me')
+  ) {
+    return null;
+  }
+  
   return new Razorpay({ key_id, key_secret });
 }
 
 function verifySignature(orderId, paymentId, signature) {
   const secret = process.env.RAZORPAY_KEY_SECRET || '';
+  if (!orderId || !paymentId || !signature || !secret) return false;
   const body = `${orderId}|${paymentId}`;
   const expected = crypto.createHmac('sha256', secret).update(body).digest('hex');
-  return expected === signature;
+  const expectedBuffer = Buffer.from(expected);
+  const signatureBuffer = Buffer.from(signature);
+  return expectedBuffer.length === signatureBuffer.length && crypto.timingSafeEqual(expectedBuffer, signatureBuffer);
 }
 
 function verifyWebhookSignature(rawBody, signature) {
@@ -58,28 +72,40 @@ function buildReceiptBuffer(order) {
   });
 }
 
+function canAccessOrder(req, order) {
+  return req.user?.role === 'admin' || String(order.customerId) === String(req.user?.id);
+}
+
 export async function createPaymentIntent(req, res) {
   try {
     const { orderId } = req.body;
     const order = await Order.findById(orderId);
     if (!order) return res.status(404).json({ message: 'Order not found' });
+    if (!canAccessOrder(req, order)) return res.status(403).json({ message: 'Not allowed to access this order' });
 
     const amount = Math.round(Number(order.totalAmount || 0) * 100);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({ message: 'Order amount must be greater than zero' });
+    }
     const client = getRazorpayClient();
     
     if (client) {
-      const rpOrder = await client.orders.create({
-        amount,
-        currency: 'INR',
-        receipt: order.orderNumber,
-        notes: { orderId: String(order._id) }
-      });
-      order.razorpayOrderId = rpOrder.id;
-      await order.save();
-      return res.json({ intent: rpOrder });
+      try {
+        const rpOrder = await client.orders.create({
+          amount,
+          currency: 'INR',
+          receipt: order.orderNumber,
+          notes: { orderId: String(order._id) }
+        });
+        order.razorpayOrderId = rpOrder.id;
+        await order.save();
+        return res.json({ intent: { ...rpOrder, key: process.env.RAZORPAY_KEY_ID } });
+      } catch (rpError) {
+        console.warn('Razorpay creation failed. Falling back to mock if allowed.', rpError.message);
+      }
     }
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV !== 'production') {
       const mockId = `order_mock_${crypto.randomBytes(8).toString('hex')}`;
       order.razorpayOrderId = mockId;
       await order.save();
@@ -95,7 +121,7 @@ export async function createPaymentIntent(req, res) {
       });
     }
 
-    res.status(500).json({ message: 'Razorpay configuration missing' });
+    res.status(500).json({ message: 'Razorpay configuration missing or invalid in production' });
   } catch (error) {
     res.status(500).json({ message: 'Failed to create payment' });
   }
@@ -106,10 +132,15 @@ export async function confirmPayment(req, res) {
     const { orderId, method, razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
     const order = await Order.findById(orderId).populate('items.medicine');
     if (!order) return res.status(404).json({ message: 'Order not found' });
+    if (!canAccessOrder(req, order)) return res.status(403).json({ message: 'Not allowed to access this order' });
+    if (order.paymentStatus === 'paid') return res.json({ order });
 
     if (method !== 'cod') {
       const isMock = razorpay_order_id && razorpay_order_id.startsWith('order_mock_');
-      if (isMock && process.env.NODE_ENV === 'development') {
+      if (!razorpay_order_id || String(order.razorpayOrderId) !== String(razorpay_order_id)) {
+        return res.status(400).json({ message: 'Payment order mismatch' });
+      }
+      if (isMock && process.env.NODE_ENV !== 'production') {
         order.paymentId = razorpay_payment_id || `pay_mock_${crypto.randomBytes(8).toString('hex')}`;
         order.razorpayOrderId = razorpay_order_id;
       } else {
@@ -147,7 +178,11 @@ export async function confirmPayment(req, res) {
         receipt ? [{ filename: `receipt-${order.orderNumber}.pdf`, content: receipt }] : undefined
       );
     }
-    if (user?.phone) await sendSMS(user.phone, `Payment ${order.paymentStatus} for ${order.orderNumber}`);
+    if (user?.phone) {
+      const message = `Payment ${order.paymentStatus} for ${order.orderNumber}. Download your receipt from MediReach orders.`;
+      await sendSMS(user.phone, message);
+      await sendWhatsApp(user.phone, message);
+    }
 
     res.json({ order });
   } catch (error) {
@@ -159,6 +194,7 @@ export async function getReceipt(req, res) {
   try {
     const order = await Order.findById(req.params.id).populate('items.medicine');
     if (!order) return res.status(404).json({ message: 'Order not found' });
+    if (!canAccessOrder(req, order)) return res.status(403).json({ message: 'Not allowed to access this receipt' });
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=receipt-${order.orderNumber}.pdf`);
@@ -208,6 +244,7 @@ export async function logPaymentRetry(req, res) {
     const { orderId, reason } = req.body;
     const order = await Order.findById(orderId);
     if (!order) return res.status(404).json({ message: 'Order not found' });
+    if (!canAccessOrder(req, order)) return res.status(403).json({ message: 'Not allowed to access this order' });
     
     // Using a simpler logging for now
     console.log(`[Payment Retry] Order: ${order.orderNumber}, Reason: ${reason}`);
@@ -265,7 +302,11 @@ export async function razorpayWebhook(req, res) {
             [{ filename: `receipt-${order.orderNumber}.pdf`, content: receipt }]
           );
         }
-        if (user?.phone) await sendSMS(user.phone, `Payment captured for ${order.orderNumber}`);
+        if (user?.phone) {
+          const message = `Payment captured for ${order.orderNumber}. Your MediReach receipt is ready.`;
+          await sendSMS(user.phone, message);
+          await sendWhatsApp(user.phone, message);
+        }
       }
     }
 

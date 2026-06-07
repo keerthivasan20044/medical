@@ -98,7 +98,7 @@ export default function Search() {
       </div>
       <div className="mt-8 space-y-8 flex-1 overflow-auto no-scrollbar">
         <div className="space-y-4">
-          <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Category Enclave</div>
+          <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Category</div>
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button

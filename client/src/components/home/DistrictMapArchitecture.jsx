@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { MapPin, Store, Truck, Activity, ShieldCheck, Zap, Globe, Navigation } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
-export default function DistrictMapArchitecture() {
+export default function DistrictMapSystem() {
   const { t } = useLanguage();
 
   const LOCATIONS = [
@@ -90,11 +90,11 @@ export default function DistrictMapArchitecture() {
                   <motion.div
                     key={n.id}
                     style={{ left: n.x, top: n.y }}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group/node"
+                    className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group/item"
                   >
-                    <div className={`h-6 w-6 rounded-full border-4 border-white shadow-4xl transition-all duration-500 relative flex items-center justify-center ${n.status === 'online' ? 'bg-brand-teal' : 'bg-red-500'} group-hover/node:scale-150`}>
+                    <div className={`h-6 w-6 rounded-full border-4 border-white shadow-4xl transition-all duration-500 relative flex items-center justify-center ${n.status === 'online' ? 'bg-brand-teal' : 'bg-red-500'} group-hover/item:scale-150`}>
                        <div className="absolute inset-0 bg-inherit rounded-full animate-ping opacity-40" />
-                       <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 whitespace-nowrap bg-[#0a1628] text-white text-[9px] font-black px-4 py-2 rounded-xl opacity-0 group-hover/node:opacity-100 transition-opacity uppercase tracking-widest italic border border-white/10 shadow-2xl z-30">
+                       <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 whitespace-nowrap bg-[#0a1628] text-white text-[9px] font-black px-4 py-2 rounded-xl opacity-0 group-hover/item:opacity-100 transition-opacity uppercase tracking-widest italic border border-white/10 shadow-2xl z-30">
                           {n.name} <span className="text-brand-teal ml-2">✓ Active</span>
                        </div>
                     </div>
@@ -117,7 +117,7 @@ export default function DistrictMapArchitecture() {
                  <div className="absolute top-4 right-4 md:top-10 md:right-10 bg-[#0a1628]/80 backdrop-blur-2xl p-4 md:p-6 rounded-[2rem] md:rounded-[2.5rem] border border-white/10 space-y-4 shadow-4xl group-hover:scale-105 transition duration-700 max-w-[180px] md:max-w-none">
                     <div className="flex items-center gap-3 md:gap-4">
                        <div className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]" />
-                       <span className="text-[8px] md:text-[10px] font-black text-white/40 uppercase tracking-widest italic leading-none">Live Sync</span>
+                       <span className="text-[8px] md:text-[10px] font-black text-white/40 uppercase tracking-widest italic leading-none">Live Updates</span>
                     </div>
                     <div className="h-px bg-white/5" />
                     <div className="space-y-2">
@@ -139,7 +139,7 @@ export default function DistrictMapArchitecture() {
                       <div className="h-2 w-2 rounded-full bg-brand-teal" /> Active Hubs
                    </div>
                    <div className="flex items-center gap-2 text-[10px] font-black text-white/20 uppercase tracking-[0.2em] italic">
-                      <div className="h-2 w-2 rounded-full bg-red-500" /> Maintenance Sync
+                      <div className="h-2 w-2 rounded-full bg-red-500" /> Under Maintenance
                    </div>
                 </div>
                 <div className="text-[10px] font-black text-white opacity-20 uppercase tracking-[0.4em] italic leading-none">

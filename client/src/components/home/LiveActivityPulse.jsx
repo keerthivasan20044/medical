@@ -42,7 +42,7 @@ export default function LiveActivityPulse() {
     <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-y border-white/10 relative z-10">
       <div className="flex items-center gap-3">
         <span className="w-2 h-2 bg-teal-400 rounded-full animate-pulse" />
-        <span className="text-teal-400 text-xs font-bold tracking-widest uppercase italic">{t('liveSync') || 'Live Updates'}</span>
+        <span className="text-teal-400 text-xs font-bold tracking-widest uppercase italic">{t('liveUpdate') || 'Live Updates'}</span>
       </div>
       <div className="flex-1 px-6 overflow-hidden">
         <AnimatePresence mode="popLayout">

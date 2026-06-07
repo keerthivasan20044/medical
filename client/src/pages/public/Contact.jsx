@@ -44,7 +44,7 @@ export default function Contact() {
          <div className="max-w-7xl mx-auto px-6 md:px-10 space-y-8 md:space-y-12 relative z-10">
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="space-y-6 md:space-y-10 group">
                <div className="px-5 md:px-8 py-2 md:py-3 bg-teal-400/10 border border-teal-400/20 rounded-xl md:rounded-[2rem] inline-flex items-center gap-3 md:gap-4 text-[9px] md:text-[11px] font-black text-teal-400 uppercase tracking-[0.3em] md:tracking-[0.4em] italic backdrop-blur-3xl group-hover:scale-105 transition-transform duration-700">
-                  <Activity size={16} md:size={18} className="animate-pulse" /> Talk to Us
+                  <Activity className="h-4 w-4 md:h-[18px] md:w-[18px] animate-pulse" /> Talk to Us
                </div>
                <h1 className="font-syne font-black text-5xl md:text-8xl lg:text-[11rem] text-white tracking-[-0.05em] leading-[0.85] uppercase italic drop-shadow-2xl">
                   {t('contact')} <br /><span className="text-teal-400 drop-shadow-[0_0_80px_rgba(45,212,191,0.3)]">Team</span>
@@ -54,11 +54,11 @@ export default function Contact() {
          </div>
       </section>
 
-      {/* Contact Grid Architecture */}
+      {/* Contact Grid System */}
       <div className="max-w-7xl mx-auto px-6 md:px-10 -mt-20 md:-mt-40 relative z-20">
          <div className="grid lg:grid-cols-[1.3fr_1fr] gap-10 md:gap-20 items-start">
             
-            {/* Contact Form Terminal */}
+            {/* Contact Form Page */}
             <div className="bg-white rounded-3xl md:rounded-[5rem] p-8 md:p-16 lg:p-32 shadow-2xl border border-gray-100 group transition-all duration-1000 relative overflow-hidden">
                <div className="absolute top-0 right-0 h-64 w-64 bg-teal-400 opacity-[0.02] rounded-full blur-[100px]" />
                <div className="space-y-10 md:space-y-16 relative z-10">
@@ -93,7 +93,7 @@ export default function Contact() {
                                  type="button" 
                                  className="w-full h-20 md:h-28 bg-teal-400 text-navy rounded-2xl md:rounded-[3rem] font-syne font-black text-xl md:text-2xl uppercase tracking-[0.2em] md:tracking-[0.3em] flex items-center justify-center gap-4 md:gap-6 transition shadow-xl italic shadow-teal-400/20"
                               >
-                                 <CheckCircle size={24} md:size={32} /> Message Sent &rarr;
+                                 <CheckCircle className="h-6 w-6 md:h-8 md:w-8" /> Message Sent &rarr;
                               </motion.button>
                            ) : (
                               <motion.button 
@@ -103,12 +103,12 @@ export default function Contact() {
                                  type="submit" 
                                  className="w-full h-20 md:h-28 bg-navy text-white rounded-2xl md:rounded-[3rem] font-syne font-black text-xl md:text-2xl uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-teal-400 transition-all shadow-xl flex items-center justify-center gap-4 md:gap-6 hover:scale-[1.02] active:scale-95 duration-700 italic group/tx"
                               >
-                                 Send Message <Send size={24} md:size={32} className="group-hover/tx:translate-x-6 group-hover/tx:-translate-y-4 transition-transform duration-700" />
+                                 Send Message <Send className="h-6 w-6 md:h-8 md:w-8 group-hover/tx:translate-x-6 group-hover/tx:-translate-y-4 transition-transform duration-700" />
                               </motion.button>
                            )}
                         </AnimatePresence>
                         <div className="flex items-center justify-center gap-3 md:gap-4 mt-6 md:mt-10">
-                           <Activity size={14} md:size={16} className="text-teal-400 animate-pulse" />
+                           <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-teal-400 animate-pulse" />
                            <p className="text-[9px] md:text-[10px] text-gray-200 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-center italic">Response time: ~2.4 Hours</p>
                         </div>
                      </div>
@@ -124,33 +124,33 @@ export default function Contact() {
                   <div className="space-y-4 md:space-y-6 relative z-10">
                      <div className="flex items-center gap-4 md:gap-6">
                         <div className="h-1.5 md:h-2 w-8 md:w-12 bg-red-500 rounded-full" />
-                        <span className="text-[10px] md:text-[11px] font-black text-red-500 uppercase tracking-[0.3em] md:tracking-[0.4em] italic">{t('priorityNode')}</span>
+                        <span className="text-[10px] md:text-[11px] font-black text-red-500 uppercase tracking-[0.3em] md:tracking-[0.4em] italic">{t('priorityItem')}</span>
                      </div>
                      <h3 className="font-syne font-black text-3xl md:text-5xl flex items-center gap-4 md:gap-8 uppercase italic leading-none tracking-tighter">
-                        <LifeBuoy className="text-red-500 animate-spin-slow" size={32} md:size={48} /> Emergency
+                        <LifeBuoy className="h-8 w-8 md:h-12 md:w-12 text-red-500 animate-spin-slow" /> Emergency
                      </h3>
                      <p className="text-white/40 font-dm text-base md:text-lg italic font-bold leading-relaxed">{t('criticalSupportDesc')}</p>
                   </div>
                   <div className="space-y-6 md:space-y-8 relative z-10">
-                     {EMERGENCY_CONTACTS.map((node, idx) => (
+                     {EMERGENCY_CONTACTS.map((item, idx) => (
                         <motion.div 
-                           key={node.label}
+                           key={item.label}
                            initial={{ opacity: 0, x: 20 }}
                            whileInView={{ opacity: 1, x: 0 }}
                            transition={{ delay: idx * 0.1 }}
-                           className="p-6 md:p-10 bg-white/5 border border-white/5 rounded-2xl md:rounded-[2.5rem] flex items-center justify-between hover:bg-white/10 transition-all duration-700 group/node shadow-xl backdrop-blur-3xl"
+                           className="p-6 md:p-10 bg-white/5 border border-white/5 rounded-2xl md:rounded-[2.5rem] flex items-center justify-between hover:bg-white/10 transition-all duration-700 group/item shadow-xl backdrop-blur-3xl"
                         >
                            <div className="space-y-1 md:space-y-2">
-                              <div className="text-[9px] md:text-[10px] text-white/20 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] italic">{node.label}</div>
-                              <div className={`text-2xl md:text-3xl font-syne font-black ${node.color} italic`}>{node.val}</div>
+                              <div className="text-[9px] md:text-[10px] text-white/20 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] italic">{item.label}</div>
+                              <div className={`text-2xl md:text-3xl font-syne font-black ${item.color} italic`}>{item.val}</div>
                            </div>
-                           <button className="h-12 w-12 md:h-16 md:w-16 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-white/40 group-hover/node:bg-white group-hover/node:text-navy transition-all duration-500 shadow-xl"><Phone size={20} md:size={24}/></button>
+                           <button className="h-12 w-12 md:h-16 md:w-16 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-white/40 group-hover/item:bg-white group-hover/item:text-navy transition-all duration-500 shadow-xl"><Phone className="h-5 w-5 md:h-6 md:w-6"/></button>
                         </motion.div>
                      ))}
                   </div>
                </div>
 
-               {/* Direct Info Terminals */}
+               {/* Direct Info Pages */}
                <div className="grid grid-cols-1 gap-6 md:gap-8">
                   {CONTACT_INFO.map((info, idx) => (
                      <motion.div 
@@ -161,7 +161,7 @@ export default function Contact() {
                         className="p-8 md:p-12 bg-white border border-gray-100 rounded-3xl md:rounded-[4rem] flex items-start gap-6 md:gap-10 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-700 group relative overflow-hidden"
                      >
                         <div className="absolute top-0 right-0 h-40 w-40 bg-teal-400 opacity-0 group-hover:opacity-5 rounded-full blur-[60px] transition-opacity duration-1000" />
-                        <div className="h-12 w-12 md:h-16 md:w-16 bg-gray-50 border border-gray-50 rounded-xl md:rounded-[1.5rem] flex items-center justify-center text-navy group-hover:bg-navy group-hover:text-teal-400 transition-all duration-500 shadow-inner group-hover:rotate-12 shrink-0"><info.icon size={24} md:size={28}/></div>
+                        <div className="h-12 w-12 md:h-16 md:w-16 bg-gray-50 border border-gray-50 rounded-xl md:rounded-[1.5rem] flex items-center justify-center text-navy group-hover:bg-navy group-hover:text-teal-400 transition-all duration-500 shadow-inner group-hover:rotate-12 shrink-0"><info.icon className="h-6 w-6 md:h-7 md:w-7"/></div>
                         <div className="space-y-2 md:space-y-3">
                            <div className="text-[9px] md:text-[10px] text-gray-200 font-black uppercase tracking-[0.3em] md:tracking-[0.4em] italic leading-none">{info.label}</div>
                            <div className="text-lg md:text-xl font-syne font-black text-navy uppercase tracking-tighter italic leading-[1.1]">{info.val}</div>
@@ -174,12 +174,12 @@ export default function Contact() {
          </div>
       </div>
 
-      {/* Cartographic Enclave Mapping */}
+      {/* Cartographic Area Mapping */}
       <section className="max-w-7xl mx-auto px-6 md:px-10 py-24 md:py-56">
          <div className="space-y-16 md:space-y-24">
             <div className="text-center space-y-6 md:space-y-8 group">
                <div className="px-6 md:px-8 py-2 md:py-3 bg-teal-400/10 border border-teal-400/20 rounded-xl md:rounded-[2rem] inline-flex items-center gap-3 md:gap-4 text-[9px] md:text-[11px] font-black text-teal-400 uppercase tracking-[0.3em] md:tracking-[0.4em] italic backdrop-blur-3xl group-hover:scale-105 transition-transform duration-700">
-                  <Globe size={16} md:size={18} className="animate-spin-slow" /> Find Us
+                  <Globe className="h-4 w-4 md:h-[18px] md:w-[18px] animate-spin-slow" /> Find Us
                </div>
                <h2 className="font-syne font-black text-4xl md:text-7xl text-navy text-center uppercase italic leading-none tracking-tighter">
                   Our <span className="text-teal-400">Location</span>
@@ -193,24 +193,24 @@ export default function Contact() {
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6 md:gap-10 scale-75 md:scale-100">
                   <div className="relative">
                      <div className="absolute -inset-24 bg-teal-400 rounded-full blur-[100px] opacity-20 animate-pulse" />
-                     <div className="h-20 w-20 md:h-24 md:w-24 bg-navy text-teal-400 rounded-full flex items-center justify-center border-8 border-white shadow-xl relative z-10"><MapPin size={36} md:size={48} /></div>
+                     <div className="h-20 w-20 md:h-24 md:w-24 bg-navy text-teal-400 rounded-full flex items-center justify-center border-8 border-white shadow-xl relative z-10"><MapPin className="h-9 w-9 md:h-12 md:w-12" /></div>
                   </div>
                   <div className="bg-white/90 backdrop-blur-3xl px-10 md:px-16 py-6 md:py-10 rounded-2xl md:rounded-[3rem] shadow-xl border-2 md:border-4 border-white space-y-2 text-center">
                      <div className="font-syne font-black text-xl md:text-3xl text-navy italic uppercase tracking-tighter">Market Road, Karaikal</div>
                      <div className="text-[9px] md:text-[11px] text-gray-200 font-black uppercase tracking-[0.3em] md:tracking-[0.4em] italic flex items-center justify-center gap-2 md:gap-3">
-                        <Activity size={10} md:size={12} className="text-teal-400" /> 10.9254° N, 79.8380° E
+                        <Activity className="h-2.5 w-2.5 md:h-3 md:w-3 text-teal-400" /> 10.9254° N, 79.8380° E
                      </div>
                   </div>
                </div>
                
                <button className="absolute bottom-8 md:bottom-16 right-8 md:right-16 h-16 md:h-24 px-8 md:px-16 bg-navy text-white rounded-xl md:rounded-[2.5rem] font-syne font-black text-xs md:text-sm uppercase tracking-[0.3em] md:tracking-[0.4em] hover:bg-teal-400 transition-all duration-500 shadow-xl flex items-center gap-4 md:gap-6 italic border-2 md:border-4 border-white/5">
-                  Open Maps <ArrowRight size={20} md:size={24} />
+                  Open Maps <ArrowRight className="h-5 w-5 md:h-6 md:w-6" />
                </button>
             </div>
          </div>
       </section>
 
-      {/* Support FAQ Protocol */}
+      {/* Support FAQ Service */}
       <section className="bg-white py-24 md:py-56 border-y border-gray-100 relative overflow-hidden">
          <div className="absolute top-0 right-0 h-[800px] w-[800px] bg-teal-400 opacity-[0.02] rounded-full blur-[150px] translate-x-1/2 -translate-y-1/2" />
          <div className="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-[1fr_1.2fr] gap-16 md:gap-40 items-center relative z-10">
@@ -226,7 +226,7 @@ export default function Contact() {
                   <p className="text-lg md:text-2xl font-dm text-gray-300 italic font-bold leading-relaxed border-l-4 md:border-l-[12px] border-gray-100 pl-6 md:pl-12 py-2 md:py-4">{t('accessImmediateInsights')}</p>
                </div>
                <button className="h-20 md:h-24 px-12 md:px-20 bg-navy text-white rounded-2xl md:rounded-[3rem] font-syne font-black text-xs md:text-sm uppercase tracking-[0.3em] md:tracking-[0.4em] hover:bg-teal-400 transition-all duration-500 shadow-xl italic group/faq">
-                  {t('viewFullFaq')} <ArrowRight size={20} md:size={24} className="inline ml-4 md:ml-6 group-hover/faq:translate-x-4 transition-transform" />
+                  {t('viewFullFaq')} <ArrowRight className="inline h-5 w-5 md:h-6 md:w-6 ml-4 md:ml-6 group-hover/faq:translate-x-4 transition-transform" />
                </button>
             </div>
             
@@ -243,7 +243,7 @@ export default function Contact() {
                      transition={{ delay: i * 0.1 }}
                      className="bg-gray-50 p-8 md:p-12 rounded-3xl md:rounded-[4rem] border border-gray-100 shadow-sm flex items-start gap-6 md:gap-12 group hover:bg-white hover:shadow-xl transition-all duration-700 md:hover:-translate-x-4 border-r-4 md:border-r-[20px] border-transparent hover:border-teal-400"
                   >
-                     <div className="h-12 w-12 md:h-16 md:w-16 bg-white border border-gray-100 rounded-xl md:rounded-2xl flex items-center justify-center text-teal-400 shrink-0 shadow-inner group-hover:rotate-12 group-hover:bg-navy transition-all duration-500"><Info size={24} md:size={28}/></div>
+                     <div className="h-12 w-12 md:h-16 md:w-16 bg-white border border-gray-100 rounded-xl md:rounded-2xl flex items-center justify-center text-teal-400 shrink-0 shadow-inner group-hover:rotate-12 group-hover:bg-navy transition-all duration-500"><Info className="h-6 w-6 md:h-7 md:w-7"/></div>
                      <div className="space-y-2 md:space-y-4">
                         <h4 className="font-syne font-black text-lg md:text-2xl text-navy uppercase italic tracking-tighter leading-snug">{faq.q}</h4>
                         <p className="text-gray-400 font-dm italic text-base md:text-lg font-bold leading-relaxed">{faq.a}</p>

@@ -16,7 +16,7 @@ import {
   DistrictBackdrop
 } from '../../components/home/HomeSectionsC';
 import LiveActivityPulse from '../../components/home/LiveActivityPulse';
-import DistrictMapArchitecture from '../../components/home/DistrictMapArchitecture';
+import DistrictMapSystem from '../../components/home/DistrictMapArchitecture';
 import PrescriptionScannerPreview from '../../components/home/PrescriptionScannerPreview';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import useScrollAnimation from '../../hooks/useScrollAnimation.js';
@@ -70,7 +70,7 @@ export default function Landing() {
       <FeaturedMedicines />
       <KaraikalPharmacies />
       <GPSTracking />
-      <DistrictMapArchitecture />
+      <DistrictMapSystem />
       <PrescriptionScannerPreview />
       <PrescriptionUpload />
       <DoctorsConsultation />
@@ -82,12 +82,12 @@ export default function Landing() {
       <LogoStrip />
  
        {/* Ticker - fixed just above bottom nav */}
-      <div className="fixed bottom-16 left-0 right-0 z-30 bg-[#080c18] border-t border-teal-900/40 py-1.5 px-4 flex md:hidden items-center gap-3">
+      <div className="fixed bottom-[calc(3.75rem+env(safe-area-inset-bottom))] left-0 right-0 z-30 bg-[#080c18] border-t border-teal-900/40 py-1 px-3 flex md:hidden items-center gap-3">
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <span className="w-1.5 h-1.5 bg-teal-400 rounded-full animate-pulse" />
           <span className="text-teal-400 text-[10px] font-black tracking-wider">LIVE</span>
         </div>
-        <div className="overflow-x-auto flex gap-5 no-scrollbar">
+        <div className="min-w-0 overflow-x-auto flex gap-4 no-scrollbar pr-2">
           <span className="text-gray-400 text-[10px] whitespace-nowrap">{t('platformStatus') || 'Platform Status'}</span>
           <span className="text-gray-500 text-[10px]">•</span>
           <span className="text-gray-400 text-[10px] whitespace-nowrap">{t('deliveryLabel') || 'Delivery'} {t('activeStatus') || 'Active'}</span>

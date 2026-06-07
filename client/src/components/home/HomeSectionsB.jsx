@@ -35,9 +35,16 @@ export function FeaturedMedicines() {
     const fetchMeds = async () => {
       try {
         const data = await medicineService.getAll({ limit: 12 });
-        setItems(data?.items?.length > 0 ? data.items : mockMedicines);
+        if (data?.items?.length > 0) {
+          setItems(data.items);
+        } else {
+          // Show empty state instead of mock data
+          setItems([]);
+        }
       } catch (err) {
-        setItems(mockMedicines);
+        console.error('Failed to fetch medicines:', err);
+        // Show empty state instead of mock data
+        setItems([]);
       } finally {
         setLoading(false);
       }
@@ -70,36 +77,47 @@ export function FeaturedMedicines() {
   const totalPages = Math.ceil(items.length / perPage);
   const currentItems = items.slice(currentPage * perPage, (currentPage + 1) * perPage);
 
+  // Show error state if no medicines available
+  if (!loading && items.length === 0) {
+    return (
+      <section className="py-10 md:py-16 bg-[#f8fafc] overflow-hidden md:min-h-[400px] flex flex-col justify-center relative">
+        <div className="max-w-7xl mx-auto px-4 md:px-10 relative z-10 w-full text-center">
+          <p className="text-gray-400 font-dm text-lg">No featured medicines available at the moment</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className="py-8 md:py-16 bg-[#f8fafc] overflow-hidden min-h-[800px] flex flex-col justify-center relative">
+    <section className="py-10 md:py-16 bg-[#f8fafc] overflow-hidden md:min-h-[800px] flex flex-col justify-center relative">
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#0a1628 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
       
-      <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10 w-full">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-20 border-l-8 border-brand-teal pl-10">
-           <div className="space-y-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-10 relative z-10 w-full">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-7 md:gap-10 mb-10 md:mb-20 border-l-4 md:border-l-8 border-brand-teal pl-5 md:pl-10 overflow-hidden">
+           <div className="space-y-5 md:space-y-6 min-w-0">
               <div className="flex items-center gap-4">
                  <div className={`h-4 w-4 rounded-full shadow-[0_0_10px_rgba(2,195,154,0.5)] ${loading ? 'bg-amber-500 animate-pulse' : 'bg-brand-teal'}`} />
-                 <span className="text-[12px] font-black text-brand-teal uppercase tracking-[0.4em] italic">{t('openNow') || 'Open Now'}</span>
+                 <span className="text-[10px] md:text-[12px] font-black text-brand-teal uppercase tracking-[0.24em] md:tracking-[0.4em] italic">{t('openNow') || 'Open Now'}</span>
               </div>
-              <h2 className="font-syne font-black text-[#0a1628] text-5xl md:text-7xl leading-[0.9] uppercase italic tracking-tighter">
+              <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-7xl leading-[0.95] md:leading-[0.9] uppercase italic tracking-normal md:tracking-tighter break-words max-w-full">
                 {(t('popularMeds') || '').includes('.') ? t('popularMeds').split('.').slice(0, -1).join('.') : t('popularMeds')} <span className="text-brand-teal">.</span>
               </h2>
-              <p className="text-gray-400 font-dm text-xl max-w-xl italic font-bold leading-relaxed">{t('browseCuratedClusters') || 'Browse our verified pharmacy products.'}</p>
+              <p className="text-gray-400 font-dm text-base md:text-xl max-w-xl italic font-bold leading-relaxed">{t('browseCuratedClusters') || 'Browse our verified pharmacy products.'}</p>
            </div>
-           <div className="flex gap-6">
+           <div className="flex gap-4 md:gap-6 justify-center md:justify-start">
               <button 
                 onClick={() => setCurrentPage(p => Math.max(0, p - 1))} 
                 disabled={currentPage === 0}
-                className="h-20 w-20 rounded-[2rem] bg-white border-2 border-black/[0.03] flex items-center justify-center text-[#0a1628] hover:bg-brand-teal hover:text-[#0a1628] hover:border-brand-teal transition-all duration-500 shadow-2xl disabled:opacity-20 disabled:cursor-not-allowed group/btn"
+                className="h-14 w-14 md:h-20 md:w-20 rounded-2xl md:rounded-[2rem] bg-white border-2 border-black/[0.03] flex items-center justify-center text-[#0a1628] hover:bg-brand-teal hover:text-[#0a1628] hover:border-brand-teal transition-all duration-500 shadow-2xl disabled:opacity-20 disabled:cursor-not-allowed group/btn"
               >
-                <ChevronLeft size={32} className="group-hover:-translate-x-1 transition-transform" />
+                <ChevronLeft size={24} className="md:size-8 group-hover:-translate-x-1 transition-transform" />
               </button>
               <button 
                 onClick={() => setCurrentPage(p => Math.min(totalPages - 1, p + 1))} 
                 disabled={currentPage === totalPages - 1}
-                className="h-20 w-20 rounded-[2rem] bg-white border-2 border-black/[0.03] flex items-center justify-center text-[#0a1628] hover:bg-brand-teal hover:text-[#0a1628] hover:border-brand-teal transition-all duration-500 shadow-2xl disabled:opacity-20 disabled:cursor-not-allowed group/btn"
+                className="h-14 w-14 md:h-20 md:w-20 rounded-2xl md:rounded-[2rem] bg-white border-2 border-black/[0.03] flex items-center justify-center text-[#0a1628] hover:bg-brand-teal hover:text-[#0a1628] hover:border-brand-teal transition-all duration-500 shadow-2xl disabled:opacity-20 disabled:cursor-not-allowed group/btn"
               >
-                <ChevronRight size={32} className="group-hover:translate-x-1 transition-transform" />
+                <ChevronRight size={24} className="md:size-8 group-hover:translate-x-1 transition-transform" />
               </button>
            </div>
         </div>
@@ -114,7 +132,7 @@ export function FeaturedMedicines() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-8 px-4 md:px-0">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-8 px-0 md:px-0">
               {items.slice(0, 8).map((med, idx) => (
                  <MedicineCard 
                    key={med.id || med._id} 
@@ -151,18 +169,18 @@ export function KaraikalPharmacies() {
        {/* Background Noise & HUD */}
        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(10,22,40,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(10,22,40,0.1) 1px, transparent 1px)', backgroundSize: '100px 100px' }} />
 
-       <div className="max-w-7xl mx-auto px-10 relative z-10 w-full">
-          <div className="text-center space-y-8 mb-24 max-w-4xl mx-auto">
-             <div className="inline-flex items-center gap-3 px-6 py-2 bg-[#0a1628] text-brand-teal rounded-full font-syne font-black text-[10px] uppercase tracking-[0.4em] italic shadow-2xl">
+       <div className="max-w-7xl mx-auto px-4 md:px-10 relative z-10 w-full">
+          <div className="text-center space-y-6 md:space-y-8 mb-12 md:mb-24 max-w-4xl mx-auto overflow-hidden">
+             <div className="inline-flex max-w-full items-center gap-3 px-5 md:px-6 py-2 bg-[#0a1628] text-brand-teal rounded-full font-syne font-black text-[9px] md:text-[10px] uppercase tracking-[0.16em] md:tracking-[0.4em] italic shadow-2xl">
                 <Globe size={14} className="animate-spin-slow" /> {t('districtNetwork')}
              </div>
-             <h2 className="font-syne font-black text-[#0a1628] text-5xl md:text-8xl leading-none uppercase italic tracking-tighter">
+             <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-8xl leading-tight md:leading-none uppercase italic tracking-normal md:tracking-tighter break-words max-w-full">
                 {t('pharmaciesNear')}
              </h2>
-             <p className="text-gray-400 font-dm text-2xl italic font-bold">{t('verifiedLicensedPharmacies')}</p>
+             <p className="text-gray-400 font-dm text-lg md:text-2xl italic font-bold leading-relaxed">{t('verifiedLicensedPharmacies')}</p>
           </div>
 
-          <div className="flex gap-2 overflow-x-auto px-4 pb-4 hide-scrollbar justify-start md:justify-center mb-12">
+          <div className="flex gap-2 overflow-x-auto px-0 md:px-4 pb-4 hide-scrollbar justify-start md:justify-center mb-8 md:mb-12">
              {[
                 { id: 'All', label: t('all') || 'All' },
                 { id: 'Open Now', label: t('openNow') || 'Open Now' },

@@ -65,7 +65,7 @@ export default function VaccinesPage() {
 
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-48 font-dm overflow-x-hidden">
-      {/* Hero Section Protocol */}
+      {/* Hero Section Service */}
       <section className="bg-[#0a1628] pt-32 pb-48 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(2,195,154,0.1),transparent_50%)]" />
         <div className="absolute -bottom-32 -right-32 h-96 w-96 bg-brand-teal/5 rounded-full blur-[120px]" />
@@ -101,7 +101,7 @@ export default function VaccinesPage() {
                </div>
                <div className="bg-emerald-50 text-emerald-500 px-6 py-2 rounded-xl text-[10px] font-black uppercase italic tracking-[0.2em] flex items-center gap-4 border border-emerald-100 self-start">
                   <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Live Inventory Sync
+                  Live Inventory
                </div>
             </div>
 
@@ -149,7 +149,7 @@ export default function VaccinesPage() {
                </table>
             </div>
 
-            {/* Protocol Legend */}
+            {/* Service Legend */}
             <div className="flex flex-wrap gap-8 md:gap-12 mt-12 pt-12 border-t border-black/[0.03] justify-center lg:justify-start">
                <div className="flex items-center gap-4">
                   <div className="text-emerald-500"><CheckCircle2 size={16}/></div>
@@ -171,7 +171,7 @@ export default function VaccinesPage() {
             <div className="space-y-12">
                <div className="space-y-4">
                   <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Clinical Information</div>
-                  <h3 className="font-syne font-black text-4xl md:text-5xl text-[#0a1628] uppercase italic tracking-tighter">Vaccine Protocols</h3>
+                  <h3 className="font-syne font-black text-4xl md:text-5xl text-[#0a1628] uppercase italic tracking-tighter">Vaccine Services</h3>
                   <p className="text-gray-400 font-dm font-bold italic text-lg md:text-xl max-w-xl leading-relaxed">Integrated tracking for immunization schedules and district medical appointments.</p>
                </div>
                

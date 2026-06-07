@@ -5,9 +5,12 @@ import { motion } from 'framer-motion';
 import { normalizeUrl } from '../../utils/url';
 import { useLanguage } from '../../context/LanguageContext';
 
-export default function PharmacyCard_v2({
-  const { t } = useLanguage(); item, layout = 'grid' }) {
+export default function PharmacyCard_v2({ item, layout = 'grid' }) {
+  const { t } = useLanguage();
   const [isFavorite, setIsFavorite] = useState(false);
+
+  if (!item) return null;
+
   const { 
     id, name, is24hr,
     status = 'OPEN NOW', distance = 1.2, eta = '12 MINS',
@@ -18,11 +21,11 @@ export default function PharmacyCard_v2({
   } = item;
 
   // Safe field access with fallbacks
-  const location = item.location || item.address || 'Karaikal';
+  const location = typeof item.location === 'string' ? item.location : item.address || item.city || 'Karaikal';
   const phone = item.phone || '04368-222288';
   const rating = item.rating || 4.2;
   const reviewsCount = item.reviewsCount || item.totalReviews || 120;
-  const images = item.images || (item.image ? [item.image] : ['/assets/pharmacy_pro.png']);
+  const images = (Array.isArray(item.images) && item.images.length > 0) ? item.images : (item.image ? [item.image] : ['/assets/pharmacy_pro.png']);
   const alerts = item.alerts || [];
 
   // Safe stock with guaranteed defaults
@@ -105,7 +108,7 @@ export default function PharmacyCard_v2({
            </div>
 
            <div className="flex flex-col gap-3 justify-center">
-              <Link to={`/pharmacies/${id}`} className="block">
+                 <Link to={`/pharmacies/${id || item._id}`} className="block">
                 <button className="h-14 px-8 bg-white border border-brand-teal text-brand-teal font-syne font-black text-[10px] uppercase italic tracking-widest rounded-xl hover:bg-brand-teal hover:text-white transition-all flex items-center justify-center gap-3">
                    <Pill size={16}/> View Pharmacy
                 </button>
@@ -127,7 +130,7 @@ export default function PharmacyCard_v2({
       viewport={{ once: true }}
       className="bg-white rounded-[3rem] overflow-hidden shadow-soft hover:shadow-4xl transition-all duration-700 border border-black/[0.03] group flex flex-col h-full relative"
     >
-      {/* Top Image Section Protocol */}
+      {/* Top Image Section Service */}
       <div className="h-56 relative overflow-hidden shrink-0">
          <img src={normalizeUrl(images?.[0] || '/assets/pharmacy_pro.png')} alt={name} className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
          
@@ -245,7 +248,7 @@ export default function PharmacyCard_v2({
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-               <Link to={`/pharmacies/${id}`} className="block">
+               <Link to={`/pharmacies/${id || item._id}`} className="block">
                  <button className="w-full h-14 bg-white border border-brand-teal text-brand-teal font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl hover:bg-brand-teal hover:text-white transition-all flex items-center justify-center gap-3">
                     <Pill size={16}/> Details
                  </button>

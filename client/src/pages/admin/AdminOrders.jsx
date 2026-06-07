@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import DataTable from '../../components/dashboard/DataTable';
+import OrderManagementModal from '../../components/dashboard/OrderManagementModal';
 import { orderService } from '../../services/apiServices';
-import { ShoppingBag, Clock, CheckCircle2, XCircle, Package, Truck, AlertCircle, Search } from 'lucide-react';
+import { Clock, CheckCircle2, XCircle, Truck } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function AdminOrders() {
@@ -12,6 +13,7 @@ export default function AdminOrders() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
   const [search, setSearch] = useState('');
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const fetchOrders = async (pageNum = 1, searchQuery = '', filter = 'All') => {
     try {
@@ -43,16 +45,8 @@ export default function AdminOrders() {
     fetchOrders(newPage, search, activeFilter);
   };
 
-  const handleViewOrder = (order) => {
-    const details = `
-      Order ID: ${order.orderNumber}
-      Customer: ${order.customerId?.name || 'N/A'}
-      Pharmacy: ${order.pharmacyId?.name || 'N/A'}
-      Amount: ₹${order.totalAmount}
-      Status: ${order.status.toUpperCase()}
-      Items: ${order.items?.length || 0}
-    `;
-    alert(details);
+  const handleOrderUpdated = () => {
+    fetchOrders(page, search, activeFilter);
   };
 
   return (
@@ -60,7 +54,7 @@ export default function AdminOrders() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Order Management</h1>
-          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">View and Manage All Orders</p>
+          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">View, track, and manage all orders</p>
         </div>
         <div className="flex bg-white p-1.5 rounded-[2rem] border border-gray-100 shadow-sm overflow-x-auto no-scrollbar">
           {['All', 'Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map(filter => (
@@ -77,7 +71,7 @@ export default function AdminOrders() {
         </div>
       </div>
 
-      <DataTable 
+      <DataTable
         title="All Orders"
         isLoading={loading}
         onSearch={setSearch}
@@ -86,48 +80,48 @@ export default function AdminOrders() {
         totalRecords={totalRecords}
         onPageChange={handlePageChange}
         columns={[
-          { 
-            key: 'orderNumber', 
+          {
+            key: 'orderNumber',
             label: 'Order ID',
             render: (val) => (
               <span className="font-syne font-black text-xs text-brand-teal italic">{val}</span>
             )
           },
-          { 
-            key: 'customerId', 
+          {
+            key: 'customerId',
             label: 'Customer',
             render: (val, row) => (
               <div className="font-dm font-bold text-navy text-sm italic">{row.customerId?.name || 'Unknown'}</div>
             )
           },
-          { 
-            key: 'pharmacyId', 
+          {
+            key: 'pharmacyId',
             label: 'Pharmacy',
             render: (val, row) => (
               <div className="font-dm font-bold text-navy text-sm italic">{row.pharmacyId?.name || 'Unknown'}</div>
             )
           },
-          { key: 'totalAmount', label: 'Price', render: (val) => `₹${val}` },
-          { 
-            key: 'status', 
+          { key: 'totalAmount', label: 'Price', render: (val) => `Rs.${val}` },
+          {
+            key: 'status',
             label: 'Status',
             render: (val) => (
               <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest w-fit border flex items-center gap-2 ${
-                val === 'delivered' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
-                val === 'cancelled' ? 'bg-red-50 text-red-600 border-red-100' : 
+                val === 'delivered' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                val === 'cancelled' ? 'bg-red-50 text-red-600 border-red-100' :
                 val === 'pending' ? 'bg-amber-50 text-amber-600 border-amber-100' :
                 'bg-blue-50 text-blue-600 border-blue-100'
               }`}>
-                {val === 'delivered' ? <CheckCircle2 size={12} /> : 
-                 val === 'cancelled' ? <XCircle size={12} /> : 
+                {val === 'delivered' ? <CheckCircle2 size={12} /> :
+                 val === 'cancelled' ? <XCircle size={12} /> :
                  val === 'pending' ? <Clock size={12} className="animate-spin-slow" /> :
                  <Truck size={12} />}
                 {val}
               </div>
             )
           },
-          { 
-            key: 'createdAt', 
+          {
+            key: 'createdAt',
             label: 'Date',
             render: (val) => (
               <span className="text-[10px] font-bold text-navy/40 uppercase tracking-widest">
@@ -137,9 +131,18 @@ export default function AdminOrders() {
           }
         ]}
         data={orders}
-        actions={true}
-        onView={handleViewOrder}
+        actions
+        onView={(order) => setSelectedOrder(order)}
       />
+
+      {selectedOrder && (
+        <OrderManagementModal
+          order={selectedOrder}
+          title="Admin Order Control"
+          onClose={() => setSelectedOrder(null)}
+          onUpdated={handleOrderUpdated}
+        />
+      )}
     </div>
   );
 }

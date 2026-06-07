@@ -4,7 +4,7 @@ import PageShell from '../../components/layout/PageShell';
 export default function Schedule() {
   return (
     <PageShell 
-      title="Architecture Sync" 
+      title="Schedule" 
       subtitle="Define your clinical availability and district consultation timeframes."
       icon={Calendar}
       actions={
@@ -43,10 +43,10 @@ export default function Schedule() {
             <div className="bg-[#0a1628] p-12 rounded-[4.5rem] text-white space-y-12 shadow-4xl relative overflow-hidden group">
                <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-0 group-hover:opacity-10 rounded-full blur-[80px] transition-opacity" />
                <h4 className="font-syne font-black text-2xl uppercase italic tracking-tighter text-brand-teal flex items-center gap-4">
-                  <Clock size={24}/> Real-time Sync
+                  <Clock size={24}/> Live Updates
                </h4>
                <div className="space-y-6 relative z-10">
-                  <p className="text-white/40 font-dm italic font-bold">Your schedule is currently synchronized with the public district enclave. Patients can book till 26 April 2026.</p>
+                  <p className="text-white/40 font-dm italic font-bold">Your schedule is visible to patients. Patients can book till 26 April 2026.</p>
                   <div className="p-8 bg-white/5 border border-white/5 rounded-3xl flex items-center justify-between group hover:bg-white/10 transition cursor-pointer">
                      <div className="font-syne font-black text-white text-lg uppercase italic tracking-tighter">Emergency Buffer: ON</div>
                      <div className="h-6 w-12 bg-brand-teal rounded-full flex items-center px-1"><div className="h-4 w-4 bg-[#0a1628] rounded-full ml-auto" /></div>
@@ -58,7 +58,7 @@ export default function Schedule() {
                <div className="flex items-center gap-4 text-brand-teal font-syne font-black text-sm uppercase italic">
                   <ShieldCheck size={24} className="group-hover:animate-shake" /> SYNC_ADHERENCE_PROTO
                </div>
-               <p className="text-[#0a1628]/60 font-dm italic font-bold">Modifying availability window requires 12H system stabilization before updating public district nodes.</p>
+               <p className="text-[#0a1628]/60 font-dm italic font-bold">Modifying availability window requires 12H system stabilization before updating public district items.</p>
             </div>
          </div>
       </div>

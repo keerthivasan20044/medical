@@ -24,7 +24,16 @@ export const updateOrderStatus = createAsyncThunk('orders/updateStatus', async (
     const res = await api.patch(`/api/orders/${id}/status`, { status, riderId, otp });
     return res.data.item || res.data.order;
   } catch (e) {
-    return thunkAPI.rejectWithValue(e.response?.data?.message || 'Protocol update failed');
+    return thunkAPI.rejectWithValue(e.response?.data?.message || 'Service update failed');
+  }
+});
+
+export const cancelOrder = createAsyncThunk('orders/cancel', async (id, thunkAPI) => {
+  try {
+    const res = await api.patch(`/api/orders/${id}/cancel`);
+    return res.data.item;
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e.response?.data?.message || 'Failed to cancel order');
   }
 });
 
@@ -87,6 +96,13 @@ const ordersSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        const idx = state.items.findIndex(i => (i.id === action.payload.id || i._id === action.payload._id));
+        if (idx !== -1) state.items[idx] = action.payload;
+        if (state.currentItem && (state.currentItem.id === action.payload.id || state.currentItem._id === action.payload._id)) {
+          state.currentItem = action.payload;
+        }
+      })
+      .addCase(cancelOrder.fulfilled, (state, action) => {
         const idx = state.items.findIndex(i => (i.id === action.payload.id || i._id === action.payload._id));
         if (idx !== -1) state.items[idx] = action.payload;
         if (state.currentItem && (state.currentItem.id === action.payload.id || state.currentItem._id === action.payload._id)) {

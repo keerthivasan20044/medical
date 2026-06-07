@@ -8,7 +8,7 @@ export default function DashboardLayout({ children, role, menuItems }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#f0f2f5] flex">
+    <div className="min-h-screen bg-[#f0f2f5] flex overflow-x-hidden">
       {/* Sidebar */}
       <DashboardSidebar 
         role={role} 
@@ -23,12 +23,12 @@ export default function DashboardLayout({ children, role, menuItems }) {
           role={role} 
           setIsSidebarOpen={setIsSidebarOpen} 
         />
-        <main className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto scroll-smooth">
+        <main className="flex-1 p-4 md:p-6 xl:p-8 overflow-y-auto overflow-x-hidden scroll-smooth">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="max-w-[1600px] mx-auto"
+            className="w-full max-w-[1440px] mx-auto"
           >
             <Breadcrumbs />
             {children}

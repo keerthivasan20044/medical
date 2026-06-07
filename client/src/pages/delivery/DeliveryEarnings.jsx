@@ -29,7 +29,7 @@ export default function DeliveryEarnings() {
     return (
       <div className="h-screen flex flex-col items-center justify-center space-y-4 pb-48">
         <Loader2 className="animate-spin text-brand-teal" size={48} />
-        <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Retrieving Yield Matrix...</p>
+        <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Loading earnings...</p>
       </div>
     );
   }
@@ -38,8 +38,8 @@ export default function DeliveryEarnings() {
     <div className="space-y-10 pb-20">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Yield Registry</h1>
-          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Agent Financial Performance Manifest</p>
+          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Earnings</h1>
+          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Your delivery payments and recent payouts</p>
         </div>
         <button 
           className="h-14 px-8 bg-navy text-brand-teal rounded-[2rem] font-syne font-black text-xs uppercase tracking-widest flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-navy/20"
@@ -52,7 +52,7 @@ export default function DeliveryEarnings() {
         <div className="bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-sm relative overflow-hidden group">
            <div className="absolute top-0 right-0 h-24 w-24 bg-emerald-50 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform" />
            <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic mb-2 relative z-10">Wallet Balance</p>
-           <h4 className="text-4xl font-syne font-black italic tracking-tighter text-navy relative z-10">₹{earnings.totalEarnings?.toFixed(2)}</h4>
+           <h4 className="text-4xl font-syne font-black italic tracking-tighter text-navy relative z-10">INR {earnings.totalEarnings?.toFixed(2) || '0.00'}</h4>
            <div className="mt-6 flex items-center gap-2 text-emerald-600 font-dm font-bold text-xs relative z-10">
               <ArrowUpRight size={14} /> Available for Withdrawal
            </div>
@@ -63,14 +63,14 @@ export default function DeliveryEarnings() {
            <p className="text-[10px] font-black text-brand-teal uppercase tracking-widest italic mb-2 relative z-10">Total Deliveries</p>
            <h4 className="text-4xl font-syne font-black italic tracking-tighter text-white relative z-10">{earnings.deliveryCount}</h4>
            <div className="mt-6 flex items-center gap-2 text-brand-teal font-dm font-bold text-xs relative z-10">
-              <TrendingUp size={14} /> Completed Missions
+              <TrendingUp size={14} /> Completed Deliveries
            </div>
         </div>
 
         <div className="bg-brand-teal p-10 rounded-[3.5rem] text-navy relative overflow-hidden group">
            <div className="absolute top-0 right-0 h-24 w-24 bg-navy/5 rounded-full -mr-12 -mt-12" />
            <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic mb-2 relative z-10">Estimated Bonus</p>
-           <h4 className="text-4xl font-syne font-black italic tracking-tighter text-navy relative z-10">₹{(earnings.totalEarnings * 0.1).toFixed(2)}</h4>
+           <h4 className="text-4xl font-syne font-black italic tracking-tighter text-navy relative z-10">INR {((earnings.totalEarnings || 0) * 0.1).toFixed(2)}</h4>
            <div className="mt-6 flex items-center gap-2 text-navy/40 font-dm font-bold text-xs relative z-10">
               <Navigation size={14} /> Efficiency Incentive
            </div>
@@ -79,9 +79,9 @@ export default function DeliveryEarnings() {
 
       <div className="bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-sm">
         <div className="flex items-center justify-between mb-10">
-          <h3 className="font-syne font-black text-xl text-navy uppercase italic">Yield Projection</h3>
+          <h3 className="font-syne font-black text-xl text-navy uppercase italic">Earnings Chart</h3>
           <div className="flex items-center gap-2 text-[10px] font-black text-navy/40 uppercase tracking-widest italic">
-             <Calendar size={14} /> Recent Missions
+             <Calendar size={14} /> Recent Deliveries
           </div>
         </div>
         <div className="h-[300px]">
@@ -104,13 +104,13 @@ export default function DeliveryEarnings() {
       </div>
 
       <DataTable 
-        title="Payout Matrix"
+        title="Payout History"
         columns={[
           { key: 'id', label: 'Payout ID' },
-          { key: 'task', label: 'Mission ID' },
+          { key: 'task', label: 'Order ID' },
           { 
             key: 'type', 
-            label: 'Protocol',
+            label: 'Type',
             render: (val) => (
               <span className={`text-[10px] font-black uppercase tracking-widest italic ${
                 val === 'Fare' ? 'text-emerald-500' : 'text-blue-500'
@@ -122,14 +122,14 @@ export default function DeliveryEarnings() {
             label: 'Impact', 
             render: (val) => (
               <span className={`font-syne font-black text-sm italic ${val > 0 ? 'text-navy' : 'text-red-500'}`}>
-                {val > 0 ? `+₹${val}` : `-₹${Math.abs(val)}`}
+                {val > 0 ? `+INR ${val}` : `-INR ${Math.abs(val)}`}
               </span>
             )
           },
-          { key: 'date', label: 'Sync Time' },
+          { key: 'date', label: 'Date' },
           { 
             key: 'status', 
-            label: 'Finality',
+            label: 'Status',
             render: (val) => (
               <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest w-fit border ${
                 val === 'Credited' || val === 'Transferred' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'

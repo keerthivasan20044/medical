@@ -1,20 +1,30 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSelector, useDispatch } from 'react-redux';
-import { 
-  Search, Sliders, LayoutGrid, List, ChevronRight, X, 
-  Pill, Loader2, ArrowUpDown, ChevronDown, CheckCircle2, 
-  Store, ShoppingBag, FileText, AlertCircle, Info, Database
+import {
+  Search, Sliders, LayoutGrid, List, X,
+  Pill, Loader2, ChevronDown, CheckCircle2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { pharmacies } from '../../utils/data.js';
 import { medicineService, pharmacyService } from '../../services/apiServices';
 import { addToCart } from '../../store/cartSlice.js';
 import MedicineCard from '../../components/medicine/MedicineCard';
 import Pagination from '../../components/common/Pagination';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import { getMedicineImage } from '../../utils/medicineImages';
+
+function uniqueMedicines(items) {
+  const ids = new Set();
+  return items.filter((item) => {
+    const id = item?._id || item?.id;
+    if (!id) return true;
+    if (ids.has(id)) return false;
+    ids.add(id);
+    return true;
+  });
+}
 
 export default function MedicinesListPage() {
   const { t } = useLanguage();
@@ -27,15 +37,20 @@ export default function MedicinesListPage() {
   const [total, setTotal] = useState(0);
   const [viewMode, setViewMode] = useState('grid');
   const [showFilters, setShowFilters] = useState(false);
+  const [pharmacyOptions, setPharmacyOptions] = useState([]);
+  const searchParamString = searchParams.toString();
+  const latestQueryRef = useRef(searchParamString);
+  const appendInFlightRef = useRef(false);
+  latestQueryRef.current = searchParamString;
 
-  // Sync state with URL params
+  // Update state with URL params
   const searchQuery = searchParams.get('q') || '';
-  const selectedCategories = useMemo(() => searchParams.getAll('category'), [searchParams]);
-  const selectedPharmacies = useMemo(() => searchParams.getAll('pharmacy'), [searchParams]);
+  const selectedCategories = useMemo(() => searchParams.getAll('category'), [searchParamString]);
+  const selectedPharmacies = useMemo(() => searchParams.getAll('pharmacy'), [searchParamString]);
   const priceRange = parseInt(searchParams.get('maxPrice')) || 10000;
   const rxFilter = searchParams.get('rx') || 'Both';
   const availability = searchParams.get('stock') || 'All';
-  const sortBy = searchParams.get('sort') || t('popularMeds');
+  const sortBy = searchParams.get('sort') || 'newest';
 
   const updateFilters = (updates) => {
     const newParams = new URLSearchParams(searchParams);
@@ -82,12 +97,16 @@ export default function MedicinesListPage() {
   const dispatch = useDispatch();
 
   const handleAddToCart = (item) => {
+    const pharmacyId = item.pharmacyId?._id || item.pharmacyId || item.pharmacy?._id || item.pharmacy;
     dispatch(addToCart({
       id: item._id || item.id,
       name: item.name,
       price: item.price,
-      image: item.images?.[0]?.url || item.image || '/assets/medicine_default.png',
+      image: getMedicineImage(item),
       brand: item.brand,
+      category: item.category,
+      requiresRx: item.requiresPrescription || item.requiresRx,
+      pharmacyId,
       quantity: 1
     }));
     toast.success(`${item.name} added to cart`);
@@ -96,31 +115,60 @@ export default function MedicinesListPage() {
   useEffect(() => {
     const currentPage = parseInt(searchParams.get('page')) || 1;
     fetchMedicines(currentPage, false);
-  }, [searchQuery, selectedCategories, selectedPharmacies, priceRange, rxFilter, availability, sortBy, searchParams]);
+  }, [searchParamString]);
+
+  useEffect(() => {
+    let active = true;
+
+    const fetchPharmacies = async () => {
+      try {
+        const data = await pharmacyService.getAll();
+        if (active) setPharmacyOptions(data.items || data || []);
+      } catch (err) {
+        if (active) setPharmacyOptions([]);
+      }
+    };
+
+    fetchPharmacies();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const fetchMedicines = async (pageNum, append = false) => {
+    const requestQuery = searchParamString;
+
+    if (append && appendInFlightRef.current) return;
+
     try {
-      if (append) setLoadingMore(true);
+      if (append) {
+        appendInFlightRef.current = true;
+        setLoadingMore(true);
+      }
       else setLoading(true);
 
       const params = {
         page: pageNum,
         limit: 12,
         q: searchQuery,
-        sort: sortBy === (t('priceLabel') + ' ↑') ? 'price_asc' : sortBy === (t('priceLabel') + ' ↓') ? 'price_desc' : sortBy === t('rating') ? 'rating' : 'newest'
+        sort: sortBy === `${t('priceLabel')} ↑` ? 'price_asc' : sortBy === `${t('priceLabel')} ↓` ? 'price_desc' : sortBy === t('rating') ? 'rating' : 'newest'
       };
       
-      if (selectedCategories.length > 0) params.category = selectedCategories[0];
-      if (selectedPharmacies.length > 0) params.pharmacyId = selectedPharmacies[0];
+      params.sort = sortBy;
+      if (selectedCategories.length > 0) params.category = selectedCategories.join(',');
+      if (selectedPharmacies.length > 0) params.pharmacyId = selectedPharmacies.join(',');
       if (priceRange < 10000) params.maxPrice = priceRange;
       if (rxFilter !== 'Both') params.requiresPrescription = rxFilter === 'Yes';
+      if (availability === 'In Stock') params.stock = availability;
       
       const data = await medicineService.getAll(params);
+      if (requestQuery !== latestQueryRef.current) return;
+      const nextItems = uniqueMedicines(data.items || []);
       
       if (append) {
-        setMedicines(prev => [...prev, ...(data.items || [])]);
+        setMedicines(prev => uniqueMedicines([...prev, ...nextItems]));
       } else {
-        setMedicines(data.items || []);
+        setMedicines(nextItems);
       }
       
       setPages(data.pages || 1);
@@ -130,8 +178,11 @@ export default function MedicinesListPage() {
       console.error('Failed to load medicines:', err);
       toast.error('Failed to load medicines. Please try again.');
     } finally {
-      setLoading(false);
-      setLoadingMore(false);
+      if (append) appendInFlightRef.current = false;
+      if (requestQuery === latestQueryRef.current) {
+        setLoading(false);
+        setLoadingMore(false);
+      }
     }
   };
 
@@ -152,66 +203,74 @@ export default function MedicinesListPage() {
 
   // Mock categories from items for now, ideally backend provides this
   const categories = useMemo(() => {
-    const defaultCats = ['Tablets', 'Capsules', 'Syrups', 'Injections', 'Creams', 'Vitamins'];
-    return defaultCats.map(cat => ({ name: cat, count: 'Live' }));
-  }, []);
+    const fallbackCats = [
+      'Fever & Pain',
+      'Antibiotics',
+      'Allergy',
+      'Digestive Care',
+      'Cough & Cold',
+      'Heart',
+      'Diabetes',
+      'Respiratory',
+      'Wellness',
+      'Nutrition',
+      'Skin Care',
+      'Eye Care',
+      'Ear Care',
+      'First Aid',
+      'Devices',
+      'Baby Care',
+      'Women Care',
+      'Hygiene',
+      'Ayurvedic'
+    ];
+    const merged = [...new Set([...fallbackCats, ...medicines.map((item) => item.category).filter(Boolean)])];
+    return merged.map((cat) => ({
+      name: cat
+    }));
+  }, [medicines]);
 
 
   const FilterPanel = ({ isMobile = false }) => {
-    const [pharmacyOptions, setPharmacyOptions] = useState([]);
-
-    useEffect(() => {
-      const fetchPharmacies = async () => {
-        try {
-          const data = await pharmacyService.getAll();
-          setPharmacyOptions(data.items || data || []);
-        } catch (err) {
-          setPharmacyOptions([]);
-        }
-      };
-      fetchPharmacies();
-    }, []);
-
     return (
-      <div className={`space-y-10 ${isMobile ? 'p-8 pb-32' : ''}`}>
+      <div className={`space-y-6 ${isMobile ? 'p-6 pb-28' : ''}`}>
          <div className="space-y-2">
-            <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">Options</div>
-            <h3 className="font-syne font-black text-2xl md:text-3xl uppercase italic tracking-tighter text-[#0a1628]">{t('settingsTitle')}</h3>
+            <div className="text-[10px] font-black text-brand-teal uppercase tracking-[0.16em] leading-none">Filters</div>
+            <h3 className="font-syne font-black text-xl uppercase tracking-tight text-[#0a1628]">Find Medicines</h3>
          </div>
   
          {/* Categories */}
-         <div className="space-y-6 pt-8 border-t border-black/[0.03]">
-            <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">{t('shopCategoryTitleSub')}</div>
-            <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
+         <div className="space-y-4 pt-6 border-t border-black/[0.03]">
+            <div className="text-[9px] font-black uppercase text-gray-400 tracking-widest">Category</div>
+            <div className="space-y-2 max-h-48 overflow-y-auto pr-2 no-scrollbar">
                {categories.map(cat => (
                   <button 
                     key={cat.name} 
                     onClick={() => toggleCategory(cat.name)}
-                    className="w-full flex items-center justify-between group cursor-pointer"
+                    className="w-full flex items-center gap-3 group cursor-pointer text-left"
                   >
-                     <div className="flex items-center gap-4">
+                     <div className="flex items-center gap-3 min-w-0">
                         <div className={`h-5 w-5 rounded-lg border-2 transition-all flex items-center justify-center ${selectedCategories.includes(cat.name) ? 'bg-brand-teal border-brand-teal text-[#0a1628]' : 'bg-white border-black/[0.1] text-transparent'}`}>
                            <CheckCircle2 size={10}/>
                         </div>
-                        <span className={`font-syne font-black text-[11px] uppercase italic tracking-widest transition-colors ${selectedCategories.includes(cat.name) ? 'text-brand-teal' : 'text-gray-400 group-hover:text-[#0a1628]'}`}>{cat.name}</span>
+                        <span className={`font-syne font-black text-[11px] uppercase transition-colors leading-snug tracking-normal ${selectedCategories.includes(cat.name) ? 'text-brand-teal' : 'text-gray-500 group-hover:text-[#0a1628]'}`}>{cat.name}</span>
                      </div>
-                     <span className="text-[9px] font-black text-gray-200 font-syne">{cat.count}</span>
                   </button>
                ))}
             </div>
          </div>
   
          {/* Price Slider */}
-         <div className="space-y-6 pt-8 border-t border-black/[0.03]">
+         <div className="space-y-4 pt-6 border-t border-black/[0.03]">
             <div className="flex justify-between items-center">
-               <span className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">{t('priceLabel')}</span>
+               <span className="text-[9px] font-black uppercase text-gray-400 tracking-widest">{t('priceLabel')}</span>
                <div className="flex items-center gap-2">
                   <span className="text-[10px] font-bold text-gray-400">₹</span>
                   <input 
                     type="number"
                     value={priceRange}
                     onChange={(e) => setPriceRange(Math.min(2500, Math.max(0, parseInt(e.target.value) || 0)))}
-                    className="w-16 bg-gray-50 border-none text-brand-teal font-syne font-black italic text-sm outline-none p-0 focus:ring-0"
+                    className="w-16 bg-gray-50 border-none text-brand-teal font-syne font-black text-sm outline-none p-0 focus:ring-0"
                   />
                </div>
             </div>
@@ -222,7 +281,7 @@ export default function MedicinesListPage() {
                 value={priceRange}
                 onChange={(e) => setPriceRange(parseInt(e.target.value))}
               />
-              <div className="flex justify-between text-[10px] font-black text-gray-300 uppercase italic">
+              <div className="flex justify-between text-[10px] font-black text-gray-400 uppercase">
                  <span>₹0</span>
                  <span>₹2500</span>
               </div>
@@ -230,20 +289,20 @@ export default function MedicinesListPage() {
          </div>
   
          {/* Pharmacy Filters */}
-         <div className="space-y-6 pt-8 border-t border-black/[0.03]">
-            <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">{t('pharmaciesNear')}</div>
-            <div className="space-y-3 max-h-56 overflow-y-auto pr-4 no-scrollbar">
+         <div className="space-y-4 pt-6 border-t border-black/[0.03]">
+            <div className="text-[9px] font-black uppercase text-gray-400 tracking-widest">Pharmacy</div>
+            <div className="space-y-2 max-h-48 overflow-y-auto pr-2 no-scrollbar">
                {pharmacyOptions.map(p => (
                   <button 
                     key={p.id || p._id} 
                     onClick={() => togglePharmacy(p.id || p._id)}
-                    className="w-full flex items-center justify-between group cursor-pointer"
+                    className="w-full flex items-center gap-3 group cursor-pointer text-left"
                   >
-                     <div className="flex items-center gap-4">
+                     <div className="flex items-center gap-3 min-w-0">
                         <div className={`h-5 w-5 rounded-lg border-2 transition-all flex items-center justify-center ${selectedPharmacies.includes(p.id || p._id) ? 'bg-[#0a1628] border-[#0a1628] text-brand-teal' : 'bg-white border-black/[0.1] text-transparent'}`}>
                            <CheckCircle2 size={10}/>
                         </div>
-                        <span className={`font-syne font-black text-[11px] uppercase italic tracking-widest transition-colors ${selectedPharmacies.includes(p.id || p._id) ? 'text-[#0a1628]' : 'text-gray-400 group-hover:text-[#0a1628]'}`}>{p.name}</span>
+                        <span className={`font-syne font-black text-[11px] uppercase transition-colors leading-snug tracking-normal ${selectedPharmacies.includes(p.id || p._id) ? 'text-[#0a1628]' : 'text-gray-500 group-hover:text-[#0a1628]'}`}>{p.name}</span>
                      </div>
                   </button>
                ))}
@@ -251,13 +310,13 @@ export default function MedicinesListPage() {
          </div>
 
        {/* Stock Status */}
-       <div className="space-y-4 pt-8 border-t border-black/[0.03]">
-          <div className="text-[9px] font-black uppercase text-gray-300 italic tracking-widest">{t('statusLabel')}</div>
+       <div className="space-y-4 pt-6 border-t border-black/[0.03]">
+          <div className="text-[9px] font-black uppercase text-gray-400 tracking-widest">{t('statusLabel')}</div>
           <button 
              onClick={() => setStock(availability === 'In Stock' ? 'All' : 'In Stock')}
              className="w-full flex items-center justify-between group"
           >
-             <span className="font-syne font-black text-[11px] uppercase italic tracking-widest text-[#0a1628]">{t('availableNow')}</span>
+             <span className="font-syne font-black text-[11px] uppercase tracking-widest text-[#0a1628]">{t('availableNow')}</span>
              <div className={`h-8 w-8 rounded-xl border-2 flex items-center justify-center transition-all ${availability === 'In Stock' ? 'bg-brand-teal border-brand-teal text-[#0a1628]' : 'border-black/[0.05] text-transparent'}`}>
                 <CheckCircle2 size={16}/>
              </div>
@@ -268,7 +327,7 @@ export default function MedicinesListPage() {
 
        <button 
          onClick={resetFilters}
-         className="w-full h-14 bg-gray-50 border border-black/[0.02] rounded-xl text-[10px] font-black text-gray-400 uppercase italic hover:bg-[#0a1628] hover:text-white transition-all shadow-inner"
+         className="w-full h-12 bg-gray-50 border border-black/[0.04] rounded-xl text-[10px] font-black text-gray-500 uppercase hover:bg-[#0a1628] hover:text-white transition-all shadow-inner"
        >
           {t('resetSearch').toUpperCase()}
        </button>
@@ -277,12 +336,12 @@ export default function MedicinesListPage() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-20 md:pb-6">
+    <div className="bg-slate-50 min-h-screen pb-24 md:pb-8">
       {/* Search & Categories Bar */}
-      <div className="sticky top-14 md:top-16 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm py-2 px-3 md:px-10">
-         <div className="max-w-7xl mx-auto flex flex-col gap-2">
+      <div className="relative z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 py-3 md:z-20 md:px-6 lg:px-8">
+         <div className="max-w-[1440px] mx-auto flex flex-col gap-3">
             <div className="flex items-center gap-2">
-               <div className="flex-1 flex items-center bg-slate-100 rounded-xl px-3 py-2.5 gap-2 border border-slate-200">
+               <div className="flex-1 flex items-center bg-slate-100 rounded-2xl px-4 h-12 gap-2 border border-slate-200 min-w-0">
                   <Search size={16} className="text-teal-600" />
                   <input 
                     type="text" 
@@ -294,7 +353,8 @@ export default function MedicinesListPage() {
                </div>
                <button 
                  onClick={() => setShowFilters(true)}
-                 className="h-10 w-10 bg-slate-900 text-teal-400 rounded-xl flex items-center justify-center shadow-md active:scale-95"
+                 className="h-12 w-12 bg-slate-900 text-teal-400 rounded-2xl flex items-center justify-center shadow-md active:scale-95 shrink-0"
+                 aria-label="Open filters"
                >
                  <Sliders size={18} />
                </button>
@@ -305,14 +365,13 @@ export default function MedicinesListPage() {
                  <button 
                    key={cat.name} 
                    onClick={() => toggleCategory(cat.name)}
-                   className={`h-8 px-4 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all flex items-center gap-2 shrink-0 border ${
+                   className={`h-9 px-4 rounded-full font-bold text-[10px] uppercase tracking-[0.08em] transition-all flex items-center gap-2 shrink-0 border ${
                      selectedCategories.includes(cat.name) 
                        ? 'bg-slate-900 text-teal-400 border-slate-900 shadow-sm' 
                        : 'bg-white text-slate-400 border-slate-200'
                    }`}
                  >
                    <span className="whitespace-nowrap">{cat.name}</span>
-                   <span className="opacity-40 text-[8px]">{cat.count}</span>
                  </button>
                ))}
             </div>
@@ -320,28 +379,33 @@ export default function MedicinesListPage() {
       </div>
 
       {/* Medicines List Section */}
-      <div className="max-w-7xl mx-auto px-3 md:px-10 py-6 md:py-12 relative z-20">
-         <div className="flex flex-col lg:flex-row gap-12 md:gap-16">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 pt-7 pb-5 md:pt-8 md:pb-7 relative z-20">
+         <div className="grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)] gap-5 xl:gap-7">
             
             {/* Desktop Sidebar */}
-            <aside className="hidden lg:block w-72 shrink-0">
-               <div className="sticky top-10 bg-white rounded-[3rem] p-10 text-[#0a1628] shadow-soft border border-black/[0.02]">
+            <aside className="hidden lg:block min-w-0">
+               <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto bg-white rounded-2xl p-5 text-[#0a1628] shadow-sm border border-slate-100 no-scrollbar">
                   <FilterPanel />
                </div>
             </aside>
  
             {/* Medicines Grid */}
-            <div className="flex-1 space-y-12 md:space-y-16">
-               <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 bg-white border border-black/[0.03] rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-10 shadow-soft transition-all duration-700">
-                  <div className="flex items-center gap-4 md:gap-6">
-                     <div className="h-2 w-16 bg-brand-teal rounded-full animate-pulse hidden md:block" />
-                      <h2 className="text-base font-bold text-slate-900 uppercase tracking-tight">
-                         {total} {t('medicines')} {t('synced')}
-                      </h2>
+            <div className="flex-1 min-w-0 space-y-6 md:space-y-8">
+               <div className="flex items-center justify-between gap-3 bg-white border border-slate-100 rounded-2xl px-4 py-4 md:px-6 md:py-5 shadow-sm transition-all duration-300">
+                  <div className="flex items-center gap-3 md:gap-4 min-w-0">
+                     <div className="h-2 w-12 bg-brand-teal rounded-full animate-pulse hidden md:block shrink-0" />
+                     <div className="min-w-0">
+                        <h2 className="text-sm leading-snug md:text-xl font-black text-slate-900 uppercase">
+                           {total} medicines<span className="hidden sm:inline"> available</span>
+                        </h2>
+                        <p className="mt-0.5 text-[10px] font-bold text-slate-400 uppercase tracking-[0.12em] hidden sm:block">
+                           Updated from active pharmacy stock
+                        </p>
+                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-6 self-end md:self-auto">
-                     <div className="flex bg-gray-50 p-1.5 rounded-2xl border border-black/[0.01]">
+                  <div className="flex items-center gap-3 shrink-0">
+                     <div className="flex bg-slate-50 p-1 rounded-2xl border border-slate-100">
                         {[
                            { id: 'grid', icon: LayoutGrid },
                            { id: 'list', icon: List }
@@ -349,7 +413,8 @@ export default function MedicinesListPage() {
                            <button
                              key={mode.id}
                              onClick={() => setViewMode(mode.id)}
-                             className={`h-11 w-11 rounded-xl flex items-center justify-center transition-all duration-700 active:scale-95 ${viewMode === mode.id ? 'bg-[#0a1628] text-brand-teal shadow-2xl' : 'text-gray-300 hover:text-[#0a1628]'}`}
+                             className={`h-10 w-10 md:h-11 md:w-11 rounded-xl flex items-center justify-center transition-all duration-300 active:scale-95 ${viewMode === mode.id ? 'bg-[#0a1628] text-brand-teal shadow-lg' : 'text-slate-300 hover:text-[#0a1628]'}`}
+                             aria-label={`Switch to ${mode.id} view`}
                            >
                               <mode.icon size={19}/>
                            </button>
@@ -360,13 +425,12 @@ export default function MedicinesListPage() {
                         <select 
                           value={sortBy}
                           onChange={(e) => setSortBy(e.target.value)}
-                          className="h-16 pl-8 pr-12 bg-gray-50 border border-black/[0.02] rounded-2xl font-syne font-black text-[10px] uppercase italic tracking-widest outline-none appearance-none cursor-pointer hover:bg-white transition-all shadow-sm"
+                          className="h-12 w-56 pl-4 pr-10 bg-slate-50 border border-slate-100 rounded-2xl font-syne font-black text-[10px] uppercase tracking-[0.12em] outline-none appearance-none cursor-pointer hover:bg-white transition-all shadow-sm"
                         >
-                            <option>{t('popularMeds')}</option>
-                            <option>{t('priceLabel')} ↑</option>
-                            <option>{t('priceLabel')} ↓</option>
-                            <option>{t('rating')}</option>
-                            <option>New arrivals</option>
+                            <option value="newest">{t('popularMeds')}</option>
+                            <option value="price_asc">{t('priceLabel')} Low to High</option>
+                            <option value="price_desc">{t('priceLabel')} High to Low</option>
+                            <option value="rating">{t('rating')}</option>
                          </select>
                         <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-300 group-hover:text-[#0a1628]" />
                      </div>
@@ -394,7 +458,7 @@ export default function MedicinesListPage() {
                   <div className="space-y-8">
                     <motion.div 
                       layout
-                      className={`grid gap-3 md:gap-8 px-3 md:px-0 ${viewMode === 'grid' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5' : 'grid-cols-1'}`}
+                      className={`grid gap-4 md:gap-5 ${viewMode === 'grid' ? 'grid-cols-2 sm:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'}`}
                     >
                      <AnimatePresence mode="popLayout">
                        {medicines.map((m, idx) => (

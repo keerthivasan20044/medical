@@ -11,9 +11,9 @@ export default function DeliveryProfile() {
     toast.promise(
       new Promise(resolve => setTimeout(resolve, 1000)),
       {
-        loading: 'Updating Agent registry...',
-        success: 'Profile Synchronized!',
-        error: 'Update Failed.',
+        loading: 'Saving profile...',
+        success: 'Profile saved!',
+        error: 'Save failed.',
       }
     );
   };
@@ -22,14 +22,14 @@ export default function DeliveryProfile() {
     <div className="space-y-10 pb-20">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Agent Identity</h1>
-          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Authorized Delivery Partner Profile</p>
+          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">My Profile</h1>
+          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Delivery partner details</p>
         </div>
         <button 
           onClick={handleSave}
           className="h-14 px-8 bg-navy text-brand-teal rounded-[2rem] font-syne font-black text-xs uppercase tracking-widest flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-navy/20"
         >
-          <Save size={18} /> Sync Registry
+          <Save size={18} /> Save
         </button>
       </div>
 
@@ -48,7 +48,7 @@ export default function DeliveryProfile() {
               </div>
               <div className="mt-6">
                  <h3 className="font-syne font-black text-xl text-navy uppercase italic">{user?.name || 'Agent Name'}</h3>
-                 <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic">Agent ID #{user?._id?.slice(-8).toUpperCase()}</p>
+                 <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic">Partner ID #{user?._id?.slice(-8).toUpperCase()}</p>
               </div>
            </div>
 
@@ -58,7 +58,7 @@ export default function DeliveryProfile() {
                  <div className="h-12 w-12 bg-white/10 rounded-2xl flex items-center justify-center text-brand-teal">
                     <Bike size={24} />
                  </div>
-                 <h4 className="font-syne font-black text-lg uppercase italic">Transit Asset</h4>
+                 <h4 className="font-syne font-black text-lg uppercase italic">Vehicle Details</h4>
               </div>
               <div className="space-y-6 relative z-10">
                  <div className="space-y-1">
@@ -70,7 +70,7 @@ export default function DeliveryProfile() {
                     <div className="font-dm font-bold text-brand-teal text-sm">{user?.vehicleNumber || 'PY-01-BK-4829'}</div>
                  </div>
                  <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                    <span className="text-[10px] font-black text-white/40 uppercase tracking-widest italic">Asset Verification</span>
+                    <span className="text-[10px] font-black text-white/40 uppercase tracking-widest italic">Vehicle Check</span>
                     <span className="px-3 py-1 bg-brand-teal/20 text-brand-teal rounded-full text-[9px] font-black uppercase italic">Verified</span>
                  </div>
               </div>
@@ -82,23 +82,23 @@ export default function DeliveryProfile() {
            <div className="space-y-12">
               <div className="space-y-8">
                  <h3 className="font-syne font-black text-xl text-navy uppercase italic flex items-center gap-3">
-                    <ShieldCheck size={24} className="text-brand-teal" /> Personal Protocol
+                    <ShieldCheck size={24} className="text-brand-teal" /> Personal Details
                  </h3>
                  <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Full Identity</label>
+                       <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Full Name</label>
                        <input type="text" defaultValue={user?.name} className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Contact Sync</label>
+                       <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Phone Number</label>
                        <input type="text" defaultValue={user?.phone} className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Email Registry</label>
+                       <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Email</label>
                        <input type="text" defaultValue={user?.email} className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Aadhar Verification</label>
+                       <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Aadhaar</label>
                        <input type="text" defaultValue="•••• •••• 4291" disabled className="w-full h-14 bg-gray-200 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy/40 outline-none cursor-not-allowed" />
                     </div>
                  </div>
@@ -106,21 +106,21 @@ export default function DeliveryProfile() {
 
               <div className="space-y-8">
                  <h3 className="font-syne font-black text-xl text-navy uppercase italic flex items-center gap-3">
-                    <FileText size={24} className="text-brand-teal" /> Legal Registry
+                    <FileText size={24} className="text-brand-teal" /> Documents
                  </h3>
                  <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-4">
                        <div className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Driving License</div>
                        <div className="h-32 bg-gray-50 border border-gray-100 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 transition-all border-dashed border-2">
                           <FileText size={24} className="text-navy/20 mb-2" />
-                          <span className="text-[10px] font-black text-navy/40 uppercase tracking-widest">Update License Scan</span>
+                          <span className="text-[10px] font-black text-navy/40 uppercase tracking-widest">Update License</span>
                        </div>
                     </div>
                     <div className="space-y-4">
                        <div className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Vehicle Insurance</div>
                        <div className="h-32 bg-gray-50 border border-gray-100 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 transition-all border-dashed border-2">
                           <ShieldCheck size={24} className="text-navy/20 mb-2" />
-                          <span className="text-[10px] font-black text-navy/40 uppercase tracking-widest">Update Policy Scan</span>
+                          <span className="text-[10px] font-black text-navy/40 uppercase tracking-widest">Update Insurance</span>
                        </div>
                     </div>
                  </div>
@@ -128,10 +128,10 @@ export default function DeliveryProfile() {
 
               <div className="space-y-8">
                  <h3 className="font-syne font-black text-xl text-navy uppercase italic flex items-center gap-3">
-                    <MapPin size={24} className="text-brand-teal" /> Operational Radius
+                    <MapPin size={24} className="text-brand-teal" /> Work Area
                  </h3>
                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Preferred Sector</label>
+                    <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Preferred Area</label>
                     <select className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all appearance-none cursor-pointer">
                        <option>Karaikal Central</option>
                        <option>Nagore Region</option>

@@ -10,6 +10,17 @@ export const useDelivery = () => {
   const [activeTask, setActiveTask] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const fetchActive = async () => {
+    try {
+      const data = await deliveryService.getActiveTask();
+      setActiveTask(data.order || null);
+      return data.order || null;
+    } catch (err) {
+      console.error('Failed to fetch active task:', err);
+      return null;
+    }
+  };
+
   // Fetch available tasks
   const fetchAvailable = async () => {
     try {
@@ -55,7 +66,7 @@ export const useDelivery = () => {
       const res = await deliveryService.acceptTask(id);
       setActiveTask(res.order);
       setAvailableTasks(prev => prev.filter(t => t._id !== id));
-      toast.success('Task Accepted! Heading to node...');
+      toast.success('Task accepted. Heading to address...');
       return res.order;
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to accept task');
@@ -79,8 +90,10 @@ export const useDelivery = () => {
   const confirmDelivery = async (id, otp) => {
     try {
       const res = await deliveryService.confirmDelivery(id, otp);
-      setActiveTask(null);
-      toast.success('Mission Accomplished! Earnings synchronized.');
+      setActiveTask(res.order);
+      toast.success('Delivery confirmed.');
+      // Clear task after a brief delay to allow UI to update
+      setTimeout(() => setActiveTask(null), 2000);
       return res.order;
     } catch (err) {
       toast.error(err.response?.data?.message || 'Invalid Verification Code');
@@ -88,19 +101,39 @@ export const useDelivery = () => {
     }
   };
 
+  const resendDeliveryOtp = async (id) => {
+    try {
+      setLoading(true);
+      const res = await deliveryService.resendDeliveryOtp(id);
+      toast.success(res.message || 'OTP sent to customer');
+      return res;
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Could not send OTP');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Socket setup
   useEffect(() => {
-    socketService.on('new_delivery_available', (task) => {
+    fetchActive();
+
+    const handleNewTaskAvailable = (task) => {
       setAvailableTasks(prev => [task, ...prev]);
       toast('New task available in your sector!', { icon: '📦' });
-    });
+    };
 
-    socketService.on('delivery_assigned', (taskId) => {
+    const handleDeliveryAssigned = (taskId) => {
       setAvailableTasks(prev => prev.filter(t => t._id !== taskId));
-    });
+    };
+
+    socketService.on('new_delivery_available', handleNewTaskAvailable);
+    socketService.on('delivery_assigned', handleDeliveryAssigned);
 
     return () => {
-      // Cleanup listeners if needed
+      socketService.off('new_delivery_available', handleNewTaskAvailable);
+      socketService.off('delivery_assigned', handleDeliveryAssigned);
     };
   }, []);
 
@@ -113,9 +146,11 @@ export const useDelivery = () => {
     fetchAvailable,
     fetchHistory,
     fetchEarnings,
+    fetchActive,
     acceptTask,
     updateStatus,
     confirmDelivery,
+    resendDeliveryOtp,
     setAvailableTasks
   };
 };

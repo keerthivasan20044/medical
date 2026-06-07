@@ -16,9 +16,9 @@ const ScrollToTopButton = () => {
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: isVisible ? 1 : 0, opacity: isVisible ? 1 : 0 }}
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      className="fixed bottom-40 right-4 md:bottom-20 md:right-6 z-[99] h-12 w-12 bg-[#0a1628] text-teal-400 rounded-full flex items-center justify-center shadow-4xl border border-white/10 hover:bg-teal-400 hover:text-[#0a1628] transition-all group"
+      className="fixed bottom-[calc(10rem+env(safe-area-inset-bottom))] right-3 md:bottom-20 md:right-6 z-[45] h-10 w-10 md:h-12 md:w-12 bg-[#0a1628] text-teal-400 rounded-full flex items-center justify-center shadow-4xl border border-white/10 hover:bg-teal-400 hover:text-[#0a1628] transition-all group"
     >
-      <ChevronUp size={24} />
+      <ChevronUp size={20} />
     </motion.button>
   );
 };

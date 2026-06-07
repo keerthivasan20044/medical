@@ -2,7 +2,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import User from '../models/User.js';
-import { sendEmail, sendSMS } from '../utils/notify.js';
+import { sendEmail, sendSMS, sendWhatsApp } from '../utils/notify.js';
+import { notifyOTPGenerated } from '../services/notificationService.js';
 import { getIO } from '../config/socket.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -15,10 +16,14 @@ function signToken(payload, expiresIn) {
 }
 
 function cookieOptions() {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const clientUrl = process.env.CLIENT_URL || '';
+  const isCrossSite = isProduction && clientUrl && !clientUrl.includes('localhost') && !clientUrl.includes('127.0.0.1');
+
   return {
     httpOnly: true,
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    sameSite: isCrossSite ? 'none' : 'lax',
+    secure: isProduction,
     path: '/'
   };
 }
@@ -34,6 +39,13 @@ function toSafeUser(user) {
     address: user.address,
     isVerified: user.isVerified,
     isActive: user.isActive
+  };
+}
+
+function authResponse(user, accessToken) {
+  return {
+    user: toSafeUser(user),
+    token: accessToken
   };
 }
 
@@ -62,7 +74,9 @@ export async function registerUser(req, res) {
 
     if (user) {
       if (user.isVerified) {
-        return res.status(409).json({ error: 'Email already exists' });
+        return res.status(409).json({
+          error: 'Account already exists. Please login or use forgot password.'
+        });
       }
       // Re-send OTP for unverified user
       user.otp = otp;
@@ -100,17 +114,21 @@ export async function registerUser(req, res) {
       });
     }
 
-    if (email) await sendEmail(email, 'Verify OTP', `Your OTP is ${otp}`);
-    if (phone) await sendSMS(phone, `Your OTP is ${otp}`);
-
-    const payload = { id: user._id, name: user.name, email: user.email, role: user.role, pharmacyId: user.pharmacyId };
-    const accessToken = signToken(payload, '7d'); // Requested 7d expiry
-    const refreshToken = signToken(payload, '7d');
-    user.refreshToken = refreshToken;
-    await user.save();
-
-    res.cookie('accessToken', accessToken, cookieOptions());
-    res.cookie('refreshToken', refreshToken, cookieOptions());
+    if (email) {
+      const emailBody = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px;">
+          <h2>✅ Welcome to MediReach</h2>
+          <p>Your verification OTP is:</p>
+          <h1 style="color: #4CAF50; font-size: 36px; letter-spacing: 5px;">${otp}</h1>
+          <p>This OTP is valid for 10 minutes.</p>
+          <p>Never share this OTP with anyone. MediReach staff will never ask for your OTP.</p>
+        </div>
+      `;
+      await sendEmail(email, '✅ MediReach Verification OTP', emailBody);
+    }
+    if (phone) {
+      await notifyOTPGenerated(phone, otp, 'registration');
+    }
 
     try {
       getIO().emit('activity:new', {
@@ -121,7 +139,7 @@ export async function registerUser(req, res) {
       });
     } catch (e) {}
 
-    res.json({ user: toSafeUser(user) });
+    res.json({ ok: true, pendingVerification: true, user: toSafeUser(user) });
   } catch (error) {
     console.error('Register error:', error);
     res.status(500).json({ message: 'Registration failed' });
@@ -144,13 +162,20 @@ export async function verifyOTP(req, res) {
     user.otp = null;
     user.otpExpiry = null;
     user.isActive = true; // Ensure active on verification
+    const payload = { id: user._id, name: user.name, email: user.email, role: user.role, pharmacyId: user.pharmacyId };
+    const accessToken = signToken(payload, '7d');
+    const refreshToken = signToken(payload, '7d');
+    user.refreshToken = refreshToken;
     await user.save();
+
+    res.cookie('accessToken', accessToken, cookieOptions());
+    res.cookie('refreshToken', refreshToken, cookieOptions());
 
     try {
       getIO().emit('user:update', { id: user._id, verified: true, isActive: true });
     } catch (e) {}
 
-    res.json({ ok: true, user: toSafeUser(user) });
+    res.json(authResponse(user, accessToken));
   } catch (error) {
     console.error('Verify OTP error:', error);
     res.status(500).json({ error: 'Verification failed' });
@@ -173,8 +198,11 @@ export async function resendOTP(req, res) {
     user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
     await user.save();
 
-    if (user.email) await sendEmail(user.email, 'Verify OTP', `Your OTP is ${otpCode}`);
-    if (user.phone) await sendSMS(user.phone, `Your OTP is ${otpCode}`);
+    if (user.email) await sendEmail(user.email, 'Verify OTP', `Your OTP is ${otp}`);
+    if (user.phone) {
+      await sendSMS(user.phone, `Your OTP is ${otp}`);
+      await sendWhatsApp(user.phone, `Your MediReach verification OTP is ${otp}.`);
+    }
 
     res.json({ ok: true });
   } catch (error) {
@@ -197,7 +225,8 @@ export async function loginUser(req, res) {
   if (!user) return res.status(401).json({ error: 'Invalid credentials' });
   if (role && user.role !== role) return res.status(403).json({ error: 'Role mismatch' });
 
-  const ok = await bcrypt.compare(password, user.password || '');
+  const storedPassword = user.password || user.passwordHash || '';
+  const ok = await bcrypt.compare(password, storedPassword);
   if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
 
   const payload = { id: user._id, name: user.name, email: user.email, role: user.role, pharmacyId: user.pharmacyId };
@@ -218,12 +247,18 @@ export async function loginUser(req, res) {
     });
   } catch (e) {}
 
-  res.json({ user: toSafeUser(user) });
+  res.json(authResponse(user, accessToken));
 }
 
 export async function logoutUser(req, res) {
-  if (req.user?.id) {
-    await User.findByIdAndUpdate(req.user.id, { refreshToken: null });
+  try {
+    if (req.user?.id) {
+      await User.findByIdAndUpdate(req.user.id, { refreshToken: null });
+    } else if (req.cookies?.refreshToken) {
+      await User.findOneAndUpdate({ refreshToken: req.cookies.refreshToken }, { refreshToken: null });
+    }
+  } catch (error) {
+    console.error('Logout token cleanup failed:', error);
   }
   res.clearCookie('accessToken', cookieOptions());
   res.clearCookie('refreshToken', cookieOptions());
@@ -237,9 +272,9 @@ export async function refreshAccessToken(req, res) {
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await User.findById(decoded.id);
     if (!user || user.refreshToken !== token) return res.status(401).json({ message: 'Invalid refresh token' });
-    const accessToken = signToken({ id: user._id, name: user.name, email: user.email, role: user.role }, '15m');
+    const accessToken = signToken({ id: user._id, name: user.name, email: user.email, role: user.role, pharmacyId: user.pharmacyId }, '7d');
     res.cookie('accessToken', accessToken, cookieOptions());
-    res.json({ ok: true });
+    res.json({ ok: true, token: accessToken, user: toSafeUser(user) });
   } catch (e) {
     return res.status(401).json({ message: 'Invalid refresh token' });
   }
@@ -257,19 +292,20 @@ export async function googleOAuth(req, res) {
       name: name || email.split('@')[0],
       email,
       role: role || 'customer',
+      password: crypto.randomBytes(32).toString('hex'),
       isVerified: true
     });
   }
 
   const payload = { id: user._id, name: user.name, email: user.email, role: user.role, pharmacyId: user.pharmacyId };
-  const accessToken = signToken(payload, '15m');
+  const accessToken = signToken(payload, '7d');
   const refreshToken = signToken(payload, '7d');
   user.refreshToken = refreshToken;
   await user.save();
 
   res.cookie('accessToken', accessToken, cookieOptions());
   res.cookie('refreshToken', refreshToken, cookieOptions());
-  res.json({ user: toSafeUser(user) });
+  res.json(authResponse(user, accessToken));
 }
 
 export async function requestLoginOtp(req, res) {
@@ -287,8 +323,21 @@ export async function requestLoginOtp(req, res) {
   user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
   await user.save();
 
-  if (email) await sendEmail(email, 'Login OTP', `Your OTP is ${otp}`);
-  if (phone) await sendSMS(phone, `Your OTP is ${otp}`);
+  if (email) {
+    const emailBody = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px;">
+        <h2>🔐 MediReach Login OTP</h2>
+        <p>Your login OTP is:</p>
+        <h1 style="color: #2196F3; font-size: 36px; letter-spacing: 5px;">${otp}</h1>
+        <p>This OTP is valid for 10 minutes.</p>
+        <p>Never share this OTP with anyone.</p>
+      </div>
+    `;
+    await sendEmail(email, '🔐 MediReach Login OTP', emailBody);
+  }
+  if (phone) {
+    await notifyOTPGenerated(phone, otp, 'login');
+  }
 
   res.json({ ok: true });
 }
@@ -310,14 +359,14 @@ export async function verifyLoginOtp(req, res) {
   await user.save();
 
   const payload = { id: user._id, name: user.name, email: user.email, role: user.role, pharmacyId: user.pharmacyId };
-  const accessToken = signToken(payload, '15m');
+  const accessToken = signToken(payload, '7d');
   const refreshToken = signToken(payload, '7d');
   user.refreshToken = refreshToken;
   await user.save();
 
   res.cookie('accessToken', accessToken, cookieOptions());
   res.cookie('refreshToken', refreshToken, cookieOptions());
-  res.json({ user: toSafeUser(user) });
+  res.json(authResponse(user, accessToken));
 }
 
 export async function requestPasswordReset(req, res) {
@@ -329,14 +378,19 @@ export async function requestPasswordReset(req, res) {
   const user = queryArr.length > 0 ? await User.findOne({ $or: queryArr }) : null;
   if (!user) return res.status(404).json({ message: 'User not found' });
 
-  const resetToken = crypto.randomBytes(16).toString('hex');
+  const resetToken = process.env.NODE_ENV === 'development'
+    ? '123456'
+    : String(Math.floor(100000 + Math.random() * 900000));
   user.resetToken = resetToken;
   user.resetTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
   await user.save();
 
   const message = `Your password reset code is ${resetToken}. It expires in 15 minutes.`;
   if (user.email) await sendEmail(user.email, 'Reset your MediReach password', message);
-  if (user.phone) await sendSMS(user.phone, message);
+  if (user.phone) {
+    await sendSMS(user.phone, message);
+    await sendWhatsApp(user.phone, message);
+  }
 
   res.json({ ok: true });
 }
@@ -375,8 +429,10 @@ export async function uploadAvatar(req, res) {
     const user = queryArr.length > 0 ? await User.findOne({ $or: queryArr }) : null;
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    // Support both Cloudinary (path/filename) and memory storage (buffer only)
-    const avatarUrl = req.file.path || null;
+    const avatarDataUrl = req.file.buffer
+      ? `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`
+      : null;
+    const avatarUrl = req.file.path || avatarDataUrl;
     const avatarPublicId = req.file.filename || req.file.originalname || null;
 
     user.avatar = {

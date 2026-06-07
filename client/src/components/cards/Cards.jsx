@@ -7,12 +7,14 @@ import {
   Tag, Activity, TrendingUp, BookOpen, AlertCircle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getMedicineImage } from '../../utils/medicineImages';
 
 /**
  * Standard pharmaceutical unit card.
  */
 export function MedicineCard({ medicine, pharmacyId }) {
   const { id, name, brand, generic, category, price, mrp, discount, image, requiresRx } = medicine;
+  const resolvedImage = getMedicineImage(medicine);
   return (
     <motion.div 
       initial={{ opacity: 0, y: 10 }}
@@ -22,11 +24,11 @@ export function MedicineCard({ medicine, pharmacyId }) {
     >
        <div className="aspect-square w-full overflow-hidden bg-gray-50 relative">
           <img 
-            src={image} 
+            src={resolvedImage} 
             alt={name} 
-            className="w-full h-full object-contain p-4 group-hover:scale-110 transition duration-500" 
+            className="w-full h-full object-cover group-hover:scale-110 transition duration-500" 
             loading="lazy"
-            onError={(e) => { e.target.src = '/assets/medicine_default.png'; }}
+            onError={(e) => { e.currentTarget.src = getMedicineImage({ category }); }}
           />
           <div className="absolute top-2 left-2 flex flex-col gap-1">
              {discount > 0 && (
@@ -70,7 +72,7 @@ export function MedicineCard({ medicine, pharmacyId }) {
 }
 
 /**
- * Licensed pharmacy node card.
+ * Licensed pharmacy item card.
  */
 export function PharmacyCard({ pharmacy, showDistance = true }) {
   return (
@@ -167,7 +169,7 @@ export function DoctorCard({ doctor, onBook }) {
 }
 
 /**
- * Order architecture tracker card.
+ * Order system tracker card.
  */
 export function OrderCard({ order, showTrack = true }) {
   const statusColors = {

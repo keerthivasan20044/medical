@@ -4,7 +4,7 @@ import PageShell from '../../components/layout/PageShell';
 export default function AddMoney() {
   return (
     <PageShell 
-      title="Credit Uplink" 
+      title="Add Money" 
       subtitle="Initialize a financial handshake to replenish your district medical credits."
       icon={Wallet}
     >
@@ -19,7 +19,7 @@ export default function AddMoney() {
             </div>
 
             <div className="space-y-10">
-               <label className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic leading-none">Select Uplink Protocol</label>
+               <label className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic leading-none">Select Payment Service</label>
                <div className="grid grid-cols-3 gap-6">
                   {['₹500', '₹1,000', '₹2,500', '₹5,000', '₹10k', 'Custom'].map(amt => (
                      <button key={amt} className="h-20 bg-gray-50/50 border border-black/[0.03] rounded-3xl font-syne font-black text-xl italic hover:bg-white hover:shadow-4xl transition-all duration-700 active:scale-95 group">
@@ -36,7 +36,7 @@ export default function AddMoney() {
                   <div className="h-16 w-16 bg-[#0a1628] rounded-2xl flex items-center justify-center text-brand-teal shadow-2xl group-hover:scale-110 transition-transform"><CreditCard size={28}/></div>
                   <div className="space-y-1">
                      <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">Authorization Handshake</div>
-                     <div className="font-syne font-black text-[#0a1628] text-xl uppercase italic">Secure Razorpay Sync</div>
+                     <div className="font-syne font-black text-[#0a1628] text-xl uppercase italic">Secure Razorpay Payment</div>
                   </div>
                </div>
                
@@ -44,19 +44,19 @@ export default function AddMoney() {
                   <div className="p-8 bg-gray-50 rounded-3xl border border-black/[0.02] flex items-center justify-between group hover:border-brand-teal transition-colors cursor-pointer">
                      <div className="flex items-center gap-6">
                         <input type="radio" name="pay" className="h-6 w-6 text-brand-teal" defaultChecked />
-                        <span className="font-dm text-xl italic font-bold text-[#0a1628]">Unified Payments Sync (UPI)</span>
+                        <span className="font-dm text-xl italic font-bold text-[#0a1628]">UPI Payment</span>
                      </div>
                   </div>
                   <div className="p-8 bg-gray-50 rounded-3xl border border-black/[0.02] flex items-center justify-between group hover:border-brand-teal transition-colors cursor-pointer">
                      <div className="flex items-center gap-6">
                         <input type="radio" name="pay" className="h-6 w-6 text-brand-teal" />
-                        <span className="font-dm text-xl italic font-bold text-[#0a1628]">Credit Node Synchronization</span>
+                        <span className="font-dm text-xl italic font-bold text-[#0a1628]">Card Payment</span>
                      </div>
                   </div>
                </div>
 
                <button className="w-full h-24 bg-[#0a1628] text-brand-teal font-syne font-black text-xl italic uppercase tracking-widest rounded-[2rem] shadow-4xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-6">
-                  <ShieldCheck size={32} /> Initiate Sync handshale
+                  <ShieldCheck size={32} /> Pay Now
                </button>
             </div>
          </div>

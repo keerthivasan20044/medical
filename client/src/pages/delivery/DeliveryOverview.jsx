@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useDelivery } from '../../hooks/useDelivery';
 import toast from 'react-hot-toast';
 import { useLanguage } from '../../context/LanguageContext';
+import { Link } from 'react-router-dom';
 
 export default function DeliveryOverview() {
   const { t } = useLanguage();
@@ -38,7 +39,7 @@ export default function DeliveryOverview() {
 
   const recentLogs = history?.slice(0, 3).map(order => ({
     id: order.orderNumber || order._id?.slice(-6).toUpperCase(),
-    pharmacy: order.pharmacyId?.name || 'Pharmacy Node',
+    pharmacy: order.pharmacyId?.name || 'Pharmacy',
     date: new Date(order.deliveredAt).toLocaleString('en-IN', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' }),
     earnings: order.deliveryFare || 45
   })) || [];
@@ -47,7 +48,7 @@ export default function DeliveryOverview() {
     return (
       <div className="h-screen flex flex-col items-center justify-center space-y-4 pb-48">
         <Loader2 className="animate-spin text-brand-teal" size={48} />
-        <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Synchronizing Node Data...</p>
+        <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Loading delivery data...</p>
       </div>
     );
   }
@@ -73,8 +74,8 @@ export default function DeliveryOverview() {
 
         <div className="flex items-center gap-6">
            <div className="text-right">
-              <div className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic leading-none">Total Yield</div>
-              <div className="text-3xl font-syne font-black text-navy italic tracking-tighter">₹{earnings.totalEarnings?.toFixed(2)}</div>
+              <div className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic leading-none">Total Earnings</div>
+              <div className="text-3xl font-syne font-black text-navy italic tracking-tighter">INR {earnings.totalEarnings?.toFixed(2) || '0.00'}</div>
            </div>
            <div className="h-10 w-[1px] bg-gray-100" />
            <button 
@@ -92,7 +93,7 @@ export default function DeliveryOverview() {
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <StatsCard label="Completed" value={earnings.deliveryCount} trend="+3" icon={CheckCircle2} color="bg-blue-50 text-blue-600" />
-        <StatsCard label="Yield" value={`₹${earnings.totalEarnings?.toFixed(0)}`} trend="+12%" icon={IndianRupee} color="bg-emerald-50 text-emerald-600" />
+        <StatsCard label="Earnings" value={`INR ${earnings.totalEarnings?.toFixed(0) || 0}`} trend="+12%" icon={IndianRupee} color="bg-emerald-50 text-emerald-600" />
         <StatsCard label="Rating" value="4.9" trend="Top 5%" icon={Star} color="bg-amber-50 text-amber-600" />
         <StatsCard label="Efficiency" value="98%" trend="Stable" icon={TrendingUp} color="bg-purple-50 text-purple-600" />
       </div>
@@ -109,16 +110,16 @@ export default function DeliveryOverview() {
               <div className="space-y-2">
                  <div className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-brand-teal animate-pulse" />
-                    <span className="text-[10px] font-black text-brand-teal uppercase tracking-widest italic">Mission in Progress</span>
+                    <span className="text-[10px] font-black text-brand-teal uppercase tracking-widest italic">Delivery in Progress</span>
                  </div>
                  <h2 className="text-2xl font-syne font-black uppercase italic">{activeTask.deliveryStatus?.replace('_', ' ')}</h2>
                  <p className="text-sm font-dm font-bold text-white/40 italic mt-1 leading-relaxed max-w-md">
                    {activeTask.pharmacyId?.name} &rarr; {activeTask.deliveryAddress}
                  </p>
               </div>
-              <button className="h-14 px-8 bg-brand-teal text-navy rounded-2xl font-syne font-black text-xs uppercase tracking-widest hover:scale-105 transition-all flex items-center gap-2">
-                 Resume Mission <ChevronRight size={18} />
-              </button>
+              <Link to="/delivery/active" className="h-14 px-8 bg-brand-teal text-navy rounded-2xl font-syne font-black text-xs uppercase tracking-widest hover:scale-105 transition-all flex items-center gap-2">
+                 Continue Delivery <ChevronRight size={18} />
+              </Link>
            </div>
         </motion.div>
       ) : (
@@ -147,7 +148,7 @@ export default function DeliveryOverview() {
                       </div>
                    </div>
                    <div className="text-right">
-                      <div className="text-lg font-syne font-black text-navy italic">+₹{delivery.earnings}</div>
+                      <div className="text-lg font-syne font-black text-navy italic">+INR {delivery.earnings}</div>
                       <div className="text-[9px] font-black text-emerald-500 uppercase tracking-widest italic leading-none">Settled</div>
                    </div>
                 </div>
@@ -175,7 +176,7 @@ export default function DeliveryOverview() {
            </div>
            <div className="mt-6 p-6 bg-navy rounded-[2.5rem] text-white flex items-center justify-between">
               <div>
-                 <div className="text-[10px] font-black text-brand-teal uppercase tracking-widest italic mb-1">Node Status</div>
+                 <div className="text-[10px] font-black text-brand-teal uppercase tracking-widest italic mb-1">Work Status</div>
                  <div className="font-syne font-black text-2xl italic tracking-tighter uppercase">{isOnline ? 'Active' : 'Standby'}</div>
               </div>
               <TrendingUp size={32} className="text-brand-teal/40" />

@@ -15,6 +15,17 @@ const STEPS = [
   { id: 4, name: 'PAYMENT', icon: CreditCard },
 ];
 
+function loadRazorpay() {
+  return new Promise((resolve) => {
+    if (window.Razorpay) return resolve(true);
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
 export default function Checkout() {
   const [activeStep, setActiveStep] = useState(2); // Start at Address
   const { items, subtotal, totalQuantity } = useSelector(s => s.cart);
@@ -25,7 +36,7 @@ export default function Checkout() {
   const delivery = subtotal > 500 ? 0 : 40;
   const total = subtotal + delivery;
 
-  const [paymentMethod, setPaymentMethod] = useState('razorpay');
+  const [paymentMethod, setPaymentMethod] = useState('upi');
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handlePlaceOrder = async () => {
@@ -35,14 +46,10 @@ export default function Checkout() {
     const loadingToast = toast.loading('Connecting to secure payment...');
     
     try {
-      // 1. Create Initial Order Architecture
+      // 1. Create Initial Order System
       const { data } = await api.post('/api/orders', {
         items: items.map(i => ({ medicine: i.id, quantity: i.quantity, price: i.price })),
-        deliveryAddress: { 
-           address: "Door No. 42, Poompuhar Street", 
-           city: "Karaikal", 
-           zip: "609602" 
-        },
+        deliveryAddress: "Door No. 42, Poompuhar Street, Karaikal, 609602",
         paymentMethod
       });
 
@@ -51,11 +58,11 @@ export default function Checkout() {
       if (paymentMethod === 'cod') {
         toast.success('Order Placed!', { id: loadingToast });
         dispatch(clearCart());
-        navigate(`/orders/track/${orderId}`);
+        navigate(`/orders/${orderId}/track`);
         return;
       }
 
-      // 2. Synchronize Payment Intent (Razorpay)
+      // 2. Create payment intent (Razorpay)
       const { data: intentData } = await paymentService.createIntent(orderId);
 
       if (intentData.intent && intentData.intent.mock) {
@@ -70,7 +77,7 @@ export default function Checkout() {
           });
           toast.success('Mock Payment Successful!', { id: confirmToast });
           dispatch(clearCart());
-          navigate(`/orders/track/${orderId}`);
+          navigate(`/orders/${orderId}/track`);
         } catch (err) {
           toast.error('Mock Payment Verification Failed.', { id: confirmToast });
         }
@@ -78,8 +85,14 @@ export default function Checkout() {
         return;
       }
 
+      const ready = await loadRazorpay();
+      if (!ready) {
+        toast.error('Payment gateway could not be loaded. Please try again.', { id: loadingToast });
+        return;
+      }
+
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_YOUR_KEY',
+        key: intentData.intent.key || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_YOUR_KEY',
         amount: intentData.intent.amount,
         currency: 'INR',
         name: 'MediReach Pharmacy',
@@ -98,7 +111,7 @@ export default function Checkout() {
             });
             toast.success('Payment Successful!', { id: confirmToast });
             dispatch(clearCart());
-            navigate(`/orders/track/${orderId}`);
+            navigate(`/orders/${orderId}/track`);
           } catch (err) {
             toast.error('Payment Verification Hub Failed.', { id: confirmToast });
           }
@@ -143,7 +156,7 @@ export default function Checkout() {
       <div className="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-8">
          <div className="grid lg:grid-cols-[1fr_420px] gap-12 items-start">
             
-            {/* Left Column: Step-by-Step Architecture */}
+            {/* Left Column: Step-by-Step System */}
             <div className="space-y-6">
                {STEPS.map((step) => {
                  const isCompleted = step.id < activeStep;
@@ -158,12 +171,12 @@ export default function Checkout() {
                                 {isCompleted ? <Check size={20} /> : <step.icon size={20} />}
                              </div>
                              <div>
-                                <h3 className={`font-syne font-black text-sm uppercase tracking-widest ${isActive ? 'text-[#0a1628]' : 'text-gray-400'}`}>{step.name}</h3>
+                                <h3 className={`font-syne font-extrabold text-sm uppercase tracking-widest ${isActive ? 'text-[#0a1628]' : 'text-gray-400'}`}>{step.name}</h3>
                                 {isCompleted && <p className="text-[10px] text-emerald-500 font-bold uppercase tracking-widest mt-1">Step Completed</p>}
                              </div>
                           </div>
                           {!isActive && step.id < activeStep && (
-                            <button onClick={() => setActiveStep(step.id)} className="px-4 py-2 border border-gray-100 hover:border-brand-teal text-brand-teal rounded-xl text-[10px] font-black uppercase tracking-widest transition">Change</button>
+                            <button onClick={() => setActiveStep(step.id)} className="px-4 py-2 border border-gray-100 hover:border-brand-teal text-brand-teal rounded-xl text-[10px] font-extrabold uppercase tracking-widest transition">Change</button>
                           )}
                        </div>
 
@@ -181,16 +194,16 @@ export default function Checkout() {
                                     <div className="grid md:grid-cols-2 gap-6">
                                        <div className="p-6 border-2 border-brand-teal bg-brand-teal/[0.02] rounded-3xl space-y-4 relative overflow-hidden group">
                                           <div className="absolute top-0 right-0 h-12 w-12 bg-brand-teal text-white flex items-center justify-center rounded-bl-3xl"><Check size={20}/></div>
-                                          <div className="font-syne font-black text-[#0a1628] uppercase tracking-wider">Home Address</div>
+                                          <div className="font-syne font-extrabold text-[#0a1628] uppercase tracking-wider">Home Address</div>
                                           <p className="text-sm text-gray-400 font-dm leading-relaxed">Door No. 42, Poompuhar Street, <br /> Karaikal - 609602, TN</p>
                                           <div className="flex items-center gap-3 text-xs font-dm font-bold text-[#0a1628]">
                                              <Phone size={14} /> +91 98*** **321
                                           </div>
-                                          <button onClick={() => setActiveStep(3)} className="w-full h-12 bg-[#0a1628] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-brand-teal transition">DELIVER TO THIS ADDRESS</button>
+                                          <button onClick={() => setActiveStep(3)} className="w-full h-12 bg-[#0a1628] text-white rounded-2xl font-extrabold text-[10px] uppercase tracking-widest hover:bg-brand-teal transition">DELIVER TO THIS ADDRESS</button>
                                        </div>
                                        <button className="p-6 border-2 border-dashed border-gray-100 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-brand-teal hover:bg-gray-50 transition group">
                                           <div className="h-12 w-12 rounded-full border border-gray-100 flex items-center justify-center text-gray-300 group-hover:bg-brand-teal group-hover:text-white transition-all"><Plus size={24}/></div>
-                                          <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest group-hover:text-brand-teal">Add New Address</span>
+                                          <span className="text-[10px] font-extrabold text-gray-300 uppercase tracking-widest group-hover:text-brand-teal">Add New Address</span>
                                        </button>
                                     </div>
                                  </div>
@@ -204,13 +217,13 @@ export default function Checkout() {
                                             <img src={item.image} className="max-h-full max-w-full mix-blend-multiply" alt="Medicine" />
                                          </div>
                                          <div className="flex-1">
-                                            <div className="font-syne font-black text-[#0a1628]">{item.name}</div>
+                                            <div className="font-syne font-extrabold text-[#0a1628]">{item.name}</div>
                                             <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Quantity: {item.quantity}</div>
-                                            <div className="font-syne font-black text-brand-teal mt-2 text-lg">₹{(item.price * item.quantity).toLocaleString()}</div>
+                                            <div className="font-syne font-extrabold text-brand-teal mt-2 text-lg">₹{(item.price * item.quantity).toLocaleString()}</div>
                                          </div>
                                       </div>
                                     ))}
-                                    <button onClick={() => setActiveStep(4)} className="w-full h-16 bg-[#0a1628] text-white rounded-[1.5rem] font-syne font-black text-sm uppercase tracking-[0.2em] shadow-xl hover:bg-brand-teal transition active:scale-95">CONFIRM ORDER &rarr;</button>
+                                    <button onClick={() => setActiveStep(4)} className="w-full h-16 bg-[#0a1628] text-white rounded-[1.5rem] font-syne font-extrabold text-sm uppercase tracking-[0.2em] shadow-xl hover:bg-brand-teal transition active:scale-95">CONFIRM ORDER &rarr;</button>
                                  </div>
                                )}
 
@@ -219,20 +232,20 @@ export default function Checkout() {
                                      <div className="grid gap-6">
                                         {/* Razorpay Option */}
                                         <div 
-                                          onClick={() => setPaymentMethod('razorpay')}
-                                          className={`p-8 bg-white rounded-3xl border-2 transition flex items-center justify-between group cursor-pointer ${paymentMethod === 'razorpay' ? 'border-brand-teal bg-brand-teal/[0.02]' : 'border-gray-100'}`}
+                                          onClick={() => setPaymentMethod('upi')}
+                                          className={`p-8 bg-white rounded-3xl border-2 transition flex items-center justify-between group cursor-pointer ${paymentMethod === 'upi' ? 'border-brand-teal bg-brand-teal/[0.02]' : 'border-gray-100'}`}
                                         >
                                            <div className="flex items-center gap-6">
                                               <div className="h-10 w-16 bg-white border border-gray-100 rounded-xl flex items-center justify-center shadow-sm">
                                                  <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" className="h-4" alt="Razorpay" />
                                               </div>
                                               <div>
-                                                 <div className="font-syne font-black text-[#0a1628] text-xs uppercase tracking-widest">RAZORPAY</div>
+                                                 <div className="font-syne font-extrabold text-[#0a1628] text-xs uppercase tracking-widest">RAZORPAY</div>
                                                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">UPI, Card, Net Banking</p>
                                               </div>
                                            </div>
-                                           <div className={`h-6 w-6 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'razorpay' ? 'border-brand-teal' : 'border-gray-200'}`}>
-                                              {paymentMethod === 'razorpay' && <div className="h-3 w-3 bg-brand-teal rounded-full" />}
+                                           <div className={`h-6 w-6 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'upi' ? 'border-brand-teal' : 'border-gray-200'}`}>
+                                              {paymentMethod === 'upi' && <div className="h-3 w-3 bg-brand-teal rounded-full" />}
                                            </div>
                                         </div>
 
@@ -246,7 +259,7 @@ export default function Checkout() {
                                                  <IndianRupee size={20} className="text-emerald-500" />
                                               </div>
                                               <div>
-                                                 <div className="font-syne font-black text-[#0a1628] text-xs uppercase tracking-widest">CASH ON DELIVERY</div>
+                                                 <div className="font-syne font-extrabold text-[#0a1628] text-xs uppercase tracking-widest">CASH ON DELIVERY</div>
                                                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Pay at Delivery</p>
                                               </div>
                                            </div>
@@ -259,7 +272,7 @@ export default function Checkout() {
                                      <button 
                                         onClick={handlePlaceOrder} 
                                         disabled={isProcessing}
-                                        className="w-full h-18 bg-[#0a1628] text-white rounded-[2rem] font-syne font-black text-sm uppercase tracking-[0.2em] shadow-4xl hover:bg-brand-teal hover:scale-[1.02] active:scale-[0.98] transition disabled:opacity-50"
+                                        className="w-full h-16 bg-[#0a1628] text-white rounded-[2rem] font-syne font-extrabold text-sm uppercase tracking-[0.2em] shadow-4xl hover:bg-brand-teal hover:scale-[1.02] active:scale-[0.98] transition disabled:opacity-50"
                                      >
                                         {isProcessing ? 'PROCESSING...' : `PAY NOW: ₹${total.toLocaleString()}`}
                                      </button>
@@ -273,19 +286,19 @@ export default function Checkout() {
                })}
             </div>
 
-            {/* Right Column: Dynamic Price Terminal */}
+            {/* Right Column: Dynamic Price Page */}
             <div className="lg:sticky lg:top-36 space-y-8">
                <div className="bg-[#0a1628] rounded-[3.5rem] p-10 text-white relative overflow-hidden shadow-4xl group">
                   <div className="absolute top-0 right-0 h-40 w-40 bg-brand-teal opacity-10 rounded-full blur-[80px]" />
                   <div className="space-y-8 relative z-10">
-                     <h2 className="font-syne font-black text-2xl uppercase tracking-tighter">Order Summary</h2>
+                     <h2 className="font-syne font-extrabold text-2xl uppercase tracking-tighter">Order Summary</h2>
                      
                      <div className="space-y-4">
-                        <div className="flex justify-between text-white/40 text-[10px] font-black uppercase tracking-widest">
+                        <div className="flex justify-between text-white/40 text-[10px] font-extrabold uppercase tracking-widest">
                            <span>Subtotal ({totalQuantity} Items)</span>
                            <span className="text-white">₹{subtotal.toLocaleString()}</span>
                         </div>
-                        <div className="flex justify-between text-white/40 text-[10px] font-black uppercase tracking-widest">
+                        <div className="flex justify-between text-white/40 text-[10px] font-extrabold uppercase tracking-widest">
                            <span>Delivery</span>
                            <span className={delivery === 0 ? 'text-emerald-400' : 'text-white'}>
                               {delivery === 0 ? 'FREE' : `₹${delivery}`}
@@ -293,13 +306,13 @@ export default function Checkout() {
                         </div>
                         <div className="h-px w-full bg-white/5" />
                         <div className="flex justify-between items-center pt-2">
-                           <span className="font-syne font-black text-lg">TOTAL</span>
-                           <span className="font-syne font-black text-4xl text-brand-teal">₹{total.toLocaleString()}</span>
+                           <span className="font-syne font-extrabold text-lg">TOTAL</span>
+                           <span className="font-syne font-extrabold text-4xl text-brand-teal">₹{total.toLocaleString()}</span>
                         </div>
                      </div>
 
                      <div className="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-2">
-                        <div className="text-[9px] font-black text-emerald-400 uppercase tracking-[0.3em] flex items-center gap-2">
+                        <div className="text-[9px] font-extrabold text-emerald-400 uppercase tracking-[0.3em] flex items-center gap-2">
                            <div className="h-1.5 w-1.5 bg-emerald-400 rounded-full animate-ping" /> Order Status
                         </div>
                         <p className="text-[10px] text-white/40 leading-relaxed italic">"Verified medicines will be procured directly from licensed local pharmacies."</p>
@@ -307,15 +320,15 @@ export default function Checkout() {
                   </div>
                </div>
 
-               {/* Trust Badges Enclave */}
+               {/* Trust Badges Area */}
                <div className="grid grid-cols-2 gap-4">
                   <div className="p-6 bg-white rounded-3xl border border-gray-100 flex flex-col items-center text-center gap-3">
                      <Truck className="text-brand-teal" size={24} />
-                     <div className="text-[8px] font-black text-gray-400 uppercase tracking-widest leading-none">Verified <br /> Delivery</div>
+                     <div className="text-[8px] font-extrabold text-gray-400 uppercase tracking-widest leading-none">Verified <br /> Delivery</div>
                   </div>
                   <div className="p-6 bg-white rounded-3xl border border-gray-100 flex flex-col items-center text-center gap-3">
                      <ShieldCheck className="text-emerald-500" size={24} />
-                     <div className="text-[8px] font-black text-gray-400 uppercase tracking-widest leading-none">Security <br /> SECURE PAYMENT</div>
+                     <div className="text-[8px] font-extrabold text-gray-400 uppercase tracking-widest leading-none">Security <br /> SECURE PAYMENT</div>
                   </div>
                </div>
             </div>

@@ -1,4 +1,4 @@
-import { Sparkles, Tag, ShieldCheck, Zap, Activity, Info, CreditCard } from 'lucide-react';
+import { Tag, Zap, Activity, CreditCard, ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -20,7 +20,8 @@ export default function CartSummary({
   onClearCoupon,
   onTipChange,
   onCheckout,
-  isCheckoutDisabled
+  isCheckoutDisabled,
+  showCheckout = true
 }) {
   const { t } = useLanguage();
   const [code, setCode] = useState(coupon?.code || '');
@@ -30,7 +31,7 @@ export default function CartSummary({
   }, [coupon]);
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl md:rounded-[4rem] p-6 md:p-12 shadow-xl sticky top-32 overflow-hidden group">
+    <div className="bg-white border border-gray-100 rounded-2xl md:rounded-[4rem] p-5 md:p-12 shadow-xl lg:sticky lg:top-32 overflow-hidden group">
       <div className="absolute top-0 right-0 h-48 w-48 bg-teal-500 opacity-[0.02] rounded-full blur-[100px]" />
       
       <div className="flex items-center gap-4 md:gap-6 relative z-10 border-b border-gray-50 pb-6 md:pb-10 mb-6 md:mb-10">
@@ -43,19 +44,19 @@ export default function CartSummary({
 
       <div className="space-y-6 relative z-10">
          <div className="flex items-center justify-between group/row">
-          <span className="text-[10px] md:text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-navy transition-colors">{t('subtotalNode')}</span>
+          <span className="text-[10px] md:text-[11px] font-black text-slate-500 uppercase tracking-widest group-hover/row:text-navy transition-colors">{t('subtotalItem')}</span>
           <span className="font-syne font-black text-lg md:text-2xl text-navy italic">₹{subtotal}</span>
         </div>
         <div className="flex items-center justify-between group/row">
-          <span className="text-[10px] md:text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-navy transition-colors">{t('deliveryProtocolFee')}</span>
+          <span className="text-[10px] md:text-[11px] font-black text-slate-500 uppercase tracking-widest group-hover/row:text-navy transition-colors">{t('deliveryServiceFee')}</span>
           <span className="font-syne font-black text-lg md:text-2xl text-navy italic">₹{deliveryFee}</span>
         </div>
         <div className="flex items-center justify-between group/row">
-          <span className="text-[10px] md:text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-navy transition-colors">{t('packagingSync')}</span>
+          <span className="text-[10px] md:text-[11px] font-black text-slate-500 uppercase tracking-widest group-hover/row:text-navy transition-colors">{t('packagingUpdate')}</span>
           <span className="font-syne font-black text-lg md:text-2xl text-navy italic">₹{packagingFee}</span>
         </div>
         <div className="flex items-center justify-between group/row border-b border-gray-50 pb-4 md:pb-6 mb-4 md:mb-6">
-          <span className="text-[10px] md:text-[11px] font-black text-gray-300 uppercase tracking-widest italic group-hover/row:text-navy transition-colors">{t('taxesProtocol')}</span>
+          <span className="text-[10px] md:text-[11px] font-black text-slate-500 uppercase tracking-widest group-hover/row:text-navy transition-colors">{t('taxesService')}</span>
           <span className="font-syne font-black text-lg md:text-2xl text-navy italic">₹{tax}</span>
         </div>
         
@@ -81,17 +82,17 @@ export default function CartSummary({
                exit={{ opacity: 0, height: 0 }}
                className="flex items-center justify-between text-brand-teal p-4 rounded-2xl bg-brand-teal/5 border border-brand-teal/10"
             >
-              <span className="text-[11px] font-black uppercase tracking-widest italic">{t('deliveryNodeTip')}</span>
+              <span className="text-[11px] font-black uppercase tracking-widest italic">{t('deliveryItemTip')}</span>
               <span className="font-syne font-black text-2xl italic">₹{tip}</span>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      <div className="mt-8 md:mt-12 p-6 md:p-10 bg-navy rounded-2xl md:rounded-[3.5rem] text-white flex items-center justify-between shadow-xl border-t-4 md:border-t-[8px] border-teal-500 relative overflow-hidden group/total">
+      <div className="mt-6 md:mt-12 p-5 md:p-10 bg-navy rounded-2xl md:rounded-[3.5rem] text-white flex items-center justify-between shadow-xl border-t-4 md:border-t-[8px] border-teal-500 relative overflow-hidden group/total">
         <div className="absolute top-0 right-0 h-40 w-40 bg-teal-500 opacity-5 rounded-full blur-[60px]" />
         <div className="relative z-10 space-y-1 md:space-y-2">
-           <div className="text-[8px] md:text-[10px] text-white/30 font-black uppercase tracking-widest italic">{t('totalSyncAmount')}</div>
+           <div className="text-[8px] md:text-[10px] text-white/30 font-black uppercase tracking-widest italic">{t('totalUpdateAmount')}</div>
            <div className="text-3xl md:text-5xl font-syne font-black text-white tracking-tighter italic origin-left group-hover/total:scale-110 transition-transform duration-700">₹{totalAmount}</div>
         </div>
         <div className="h-12 w-12 md:h-20 md:w-20 bg-white/5 border border-white/10 rounded-xl md:rounded-3xl flex items-center justify-center text-teal-400 shadow-2xl transition-all duration-700 group-hover/total:rotate-12 group-hover/total:bg-white group-hover/total:text-navy"><Zap size={24} /></div>
@@ -126,7 +127,7 @@ export default function CartSummary({
               className="h-10 md:h-14 px-4 md:px-8 rounded-lg md:rounded-2xl bg-teal-500 text-white font-syne font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all italic shrink-0"
               disabled={couponStatus === 'loading'}
             >
-              {couponStatus === 'loading' ? t('syncing') : t('authorize')}
+              {couponStatus === 'loading' ? t('updateing') : t('authorize')}
             </button>
           )}
         </div>
@@ -138,11 +139,11 @@ export default function CartSummary({
         </AnimatePresence>
       </div>
 
-      {/* Tip Synchronizer */}
-      <div className="mt-12 space-y-4 border-t border-gray-100 pt-12">
+      {/* Tip Updatehronizer */}
+      <div className="mt-8 md:mt-12 space-y-4 border-t border-gray-100 pt-8 md:pt-12">
         <div className="flex items-center gap-4 px-4">
            <div className="h-1.5 w-6 bg-amber-500 rounded-full" />
-           <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">{t('logisticsTipSync')}</div>
+           <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">{t('logisticsTipUpdate')}</div>
         </div>
         <div className="grid grid-cols-4 gap-4">
           {TIP_PRESETS.map((amount) => (
@@ -154,21 +155,23 @@ export default function CartSummary({
                 tip === amount ? 'border-brand-teal bg-[#0a1628] text-brand-teal shadow-4xl' : 'border-gray-50 text-gray-200 hover:border-brand-teal hover:text-brand-teal'
               }`}
             >
-              {amount === 0 ? t('noSyncTip') : `₹${amount}`}
+              {amount === 0 ? t('noUpdateTip') : `₹${amount}`}
             </button>
           ))}
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={onCheckout}
-        className="mt-10 md:mt-16 w-full h-16 md:h-24 bg-teal-500 text-white rounded-xl md:rounded-[2.5rem] font-syne font-black text-sm md:text-xl uppercase tracking-[0.2em] md:tracking-[0.3em] shadow-xl hover:bg-navy hover:scale-105 active:scale-95 transition-all duration-500 flex items-center justify-center gap-4 md:gap-6 italic group/checkout"
-        disabled={isCheckoutDisabled}
-      >
-        <CreditCard size={20} className="md:size-7" /> {t('initializeCheckout')}
-        <div className="h-10 w-10 md:h-12 md:w-12 bg-white/20 rounded-lg md:rounded-xl flex items-center justify-center group-hover/checkout:bg-teal-500 group-hover/checkout:text-white transition-all"><ArrowRight size={18} className="md:size-6" /></div>
-      </button>
+      {showCheckout && (
+        <button
+          type="button"
+          onClick={onCheckout}
+          className="mt-10 md:mt-16 w-full h-16 md:h-24 bg-teal-500 text-white rounded-xl md:rounded-[2.5rem] font-syne font-black text-sm md:text-xl uppercase tracking-[0.2em] md:tracking-[0.3em] shadow-xl hover:bg-navy hover:scale-105 active:scale-95 transition-all duration-500 flex items-center justify-center gap-4 md:gap-6 italic group/checkout"
+          disabled={isCheckoutDisabled}
+        >
+          <CreditCard size={20} className="md:size-7" /> {t('initializeCheckout')}
+          <div className="h-10 w-10 md:h-12 md:w-12 bg-white/20 rounded-lg md:rounded-xl flex items-center justify-center group-hover/checkout:bg-teal-500 group-hover/checkout:text-white transition-all"><ArrowRight size={18} className="md:size-6" /></div>
+        </button>
+      )}
     </div>
   );
 }

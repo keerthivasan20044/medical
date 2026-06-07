@@ -1,15 +1,22 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ShieldCheck, ArrowRight, CreditCard, Smartphone, 
-  Truck, CheckCircle, MapPin, Package, Lock, 
-  ChevronRight, ArrowLeft, Info, AlertCircle, Activity, Zap, Globe, Plus, ShoppingBag
+import {
+  AlertCircle,
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle,
+  CreditCard,
+  Lock,
+  MapPin,
+  Package,
+  ShoppingBag,
+  Smartphone,
+  Truck
 } from 'lucide-react';
-import { createOrder, confirmPayment, createPaymentIntent } from '../../store/paymentsSlice.js';
-import { Button, Input } from '../../components/common/Core';
+import { createOrder, confirmPayment, createPaymentIntent, logPaymentRetry } from '../../store/paymentsSlice.js';
 import { useLanguage } from '../../context/LanguageContext';
+import { getMedicineImage } from '../../utils/medicineImages';
 
 function loadRazorpay() {
   return new Promise((resolve) => {
@@ -27,6 +34,16 @@ const SAVED_ADDRESSES = [
   { id: 2, label: 'Work', address: 'District Hospital Compx, Nagore Rd', city: 'Karaikal', zip: '609602', default: false }
 ];
 
+const PAYMENT_METHODS = [
+  { id: 'upi', icon: Smartphone, label: 'UPI' },
+  { id: 'card', icon: CreditCard, label: 'Card' },
+  { id: 'cod', icon: Truck, label: 'COD' }
+];
+
+function getItemImage(item) {
+  return getMedicineImage(item);
+}
+
 export default function CheckoutPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,9 +55,10 @@ export default function CheckoutPage() {
   const [error, setError] = useState('');
   const [selectedAddress, setSelectedAddress] = useState(SAVED_ADDRESSES[0].id);
 
-  const deliveryFee = 35;
+  const deliveryFee = totalAmount >= 500 || totalAmount === 0 ? 0 : 35;
   const discount = totalAmount > 1000 ? 100 : 0;
-  const finalTotal = totalAmount + deliveryFee - discount;
+  const finalTotal = Math.max(0, totalAmount + deliveryFee - discount);
+  const selectedAddressData = SAVED_ADDRESSES.find((a) => a.id === selectedAddress);
 
   useEffect(() => {
     if (items.length === 0) navigate('/cart');
@@ -48,20 +66,20 @@ export default function CheckoutPage() {
   }, [items, navigate]);
 
   const payload = useMemo(() => ({
-    pharmacyId: items[0]?.pharmacyId || 'ph-1', // Derive from first item or default
+    pharmacyId: items[0]?.pharmacyId || 'ph-1',
     items: items.map((i) => ({ medicine: i.id || i._id, quantity: i.quantity, price: i.price })),
     totalAmount: finalTotal,
-    deliveryAddress: SAVED_ADDRESSES.find(a => a.id === selectedAddress)?.address || '',
+    deliveryAddress: selectedAddressData?.address || '',
     paymentMethod: method,
     note,
     prescriptionUrl: prescription?.url || ''
-  }), [items, finalTotal, method, note, prescription, selectedAddress]);
+  }), [items, finalTotal, method, note, prescription, selectedAddressData]);
 
   const handlePay = async () => {
     setError('');
     const orderRes = await dispatch(createOrder(payload));
     if (orderRes.meta.requestStatus !== 'fulfilled') {
-      setError('Enclave synchronization failed.');
+      setError(orderRes.payload || 'Order could not be created.');
       return;
     }
 
@@ -69,13 +87,18 @@ export default function CheckoutPage() {
 
     if (method === 'cod') {
       const confirm = await dispatch(confirmPayment({ orderId, method }));
-      return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError('Protocol confirmation failed.');
+      return confirm.meta.requestStatus === 'fulfilled'
+        ? navigate('/checkout/success')
+        : setError(confirm.payload || 'Payment confirmation failed.');
     }
 
     const intentRes = await dispatch(createPaymentIntent({ orderId, method }));
-    if (intentRes.meta.requestStatus !== 'fulfilled') return setError('Payment intent failed.');
+    if (intentRes.meta.requestStatus !== 'fulfilled') {
+      setError(intentRes.payload || 'Payment gateway is not ready.');
+      return;
+    }
 
-    if (intentRes.payload && intentRes.payload.mock) {
+    if (intentRes.payload?.mock) {
       const confirm = await dispatch(confirmPayment({
         orderId,
         method,
@@ -83,19 +106,30 @@ export default function CheckoutPage() {
         razorpay_order_id: intentRes.payload.id,
         razorpay_signature: 'mock_signature'
       }));
-      return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError('Mock Node synchronization failed.');
+      return confirm.meta.requestStatus === 'fulfilled'
+        ? navigate('/checkout/success')
+        : setError(confirm.payload || 'Mock payment failed.');
     }
 
     const ok = await loadRazorpay();
-    if (!ok) return setError('Satellite payment node offline.');
+    if (!ok) {
+      setError('Payment gateway could not be loaded.');
+      return;
+    }
 
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID || '',
+    const rzp = new window.Razorpay({
+      key: intentRes.payload.key || import.meta.env.VITE_RAZORPAY_KEY_ID || '',
       amount: intentRes.payload.amount,
       currency: intentRes.payload.currency,
-      name: 'MediReach Enclave',
-      description: 'Medical Architecture Procurement',
+      name: 'MediReach',
+      description: 'Medicine order payment',
       order_id: intentRes.payload.id,
+      prefill: {
+        name: user?.name || 'MediReach User',
+        email: user?.email || '',
+        contact: user?.phone || ''
+      },
+      theme: { color: '#028090' },
       handler: async (response) => {
         const confirm = await dispatch(confirmPayment({
           orderId,
@@ -104,188 +138,198 @@ export default function CheckoutPage() {
           razorpay_order_id: response.razorpay_order_id,
           razorpay_signature: response.razorpay_signature
         }));
-        return confirm.meta.requestStatus === 'fulfilled' ? navigate('/checkout/success') : setError('Node synchronization failed.');
-      },
-    };
-
-    const rzp = new window.Razorpay({
-      ...options,
-      prefill: {
-        name: user?.name || 'MediPharm User',
-        email: user?.email || '',
-        contact: user?.phone || ''
+        return confirm.meta.requestStatus === 'fulfilled'
+          ? navigate('/checkout/success')
+          : setError(confirm.payload || 'Payment verification failed.');
       }
     });
 
     rzp.on('payment.failed', (response) => {
-      setError(response.error.description || 'Payment failed during satellite handshake.');
-      dispatch(logPaymentRetry({ orderId, reason: response.error.reason }));
+      setError(response.error?.description || 'Payment failed.');
+      dispatch(logPaymentRetry({ orderId, reason: response.error?.reason || 'unknown' }));
     });
 
     rzp.open();
   };
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-64 pt-24 overflow-x-hidden">
-      <div className="max-w-7xl mx-auto px-6 md:px-10">
-        
-        <div className="grid lg:grid-cols-[1fr_1.2fr] gap-12 md:gap-20 items-start">
-          
-          {/* Left Column: Order Summary */}
-          <section className="space-y-8 md:space-y-12">
-             <div className="space-y-3 md:space-y-4">
-                <div className="px-4 py-1.5 bg-navy rounded-xl w-fit flex items-center gap-2 text-[9px] md:text-[10px] font-black text-teal-400 uppercase tracking-widest italic leading-none">
-                   <Activity size={12} className="animate-pulse" /> Order Sync
-                </div>
-                <h1 className="font-syne font-black text-4xl md:text-7xl text-navy uppercase italic leading-tight tracking-tighter">
-                   Checkout
-                </h1>
-                <div className="bg-teal-500/5 border border-teal-500/10 p-3 md:p-4 rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-4 text-teal-600 shrink-0">
-                   <Truck size={18} className="animate-bounce-slow" />
-                   <div className="font-syne font-black text-[9px] md:text-xs uppercase italic tracking-widest leading-none">{t('estimatedDelivery')}: <span className="text-navy">25–35 Mins</span></div>
-                </div>
-             </div>
-
-             <div className="bg-white border border-gray-100 rounded-2xl md:rounded-[3.5rem] p-5 md:p-12 shadow-xl space-y-8 md:space-y-10 relative overflow-hidden">
-                <div className="absolute top-0 right-0 h-40 w-40 bg-teal-500 opacity-[0.02] rounded-full blur-[80px]" />
-                
-                <div className="flex items-center justify-between border-b border-gray-50 pb-6 md:pb-8">
-                   <div className="flex items-center gap-3 md:gap-4">
-                      <div className="h-1 w-8 md:w-16 bg-teal-500 rounded-full" />
-                      <h3 className="font-syne font-black text-xl md:text-2xl text-navy uppercase italic">{t('itemList')}</h3>
-                   </div>
-                   <span className="text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest">{t('modulesCount', { count: items.length })}</span>
-                </div>
-
-                <div className="space-y-6 md:space-y-8 max-h-[400px] md:max-h-[500px] overflow-y-auto pr-2 no-scrollbar">
-                   {items.map((i) => (
-                      <div key={i.id || i._id} className="flex items-center gap-4 md:gap-6 group">
-                         <div className="h-14 w-14 md:h-20 md:w-20 bg-gray-50 rounded-xl md:rounded-2xl overflow-hidden shrink-0 border border-gray-100 p-1.5 md:p-2">
-                            <img src={i.image} alt={i.name} className="h-full w-full object-contain group-hover:scale-110 transition duration-500" />
-                         </div>
-                         <div className="flex-1 min-w-0 space-y-0.5 md:space-y-1">
-                            <div className="font-syne font-black text-navy text-sm md:text-lg uppercase italic tracking-tight leading-tight truncate">{i.name}</div>
-                            <div className="flex justify-between items-center text-[8px] md:text-[10px] font-black uppercase text-gray-300 tracking-widest">
-                               <span>{t('qtyCount', { qty: i.qty })}</span>
-                               <span className="text-teal-600">₹{i.price * i.qty}</span>
-                            </div>
-                         </div>
-                      </div>
-                   ))}
-                </div>                 <div className="pt-6 md:pt-10 border-t border-gray-50 space-y-4 md:space-y-6">
-                   <div className="space-y-3 md:space-y-4">
-                      <div className="flex justify-between text-gray-400 font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest">
-                         <span>{t('subtotal')}</span>
-                         <span>₹{totalAmount}</span>
-                      </div>
-                      <div className="flex justify-between text-gray-400 font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest">
-                         <span>{t('deliveryFee')}</span>
-                         <span className="text-emerald-500">₹{deliveryFee}</span>
-                      </div>
-                      {discount > 0 && (
-                        <div className="flex justify-between text-teal-600 font-syne font-black text-[9px] md:text-[10px] uppercase italic tracking-widest">
-                           <span>{t('discount')}</span>
-                           <span>-₹{discount}</span>
-                        </div>
-                      )}
-                   </div>
-                   <div className="h-px bg-gray-50" />
-                   <div className="flex justify-between items-end pt-2 md:pt-4">
-                      <div className="font-syne font-black text-lg md:text-2xl text-navy uppercase italic">{t('grandTotal')}</div>
-                      <div className="font-syne font-black text-3xl md:text-5xl text-teal-600 italic tracking-tighter">₹{finalTotal}</div>
-                   </div>
-                </div>
-             </div>
-          </section>
-
-          {/* Right Column: Payment & Address */}
-          <section className="space-y-8 md:space-y-12">
-             <div className="bg-navy rounded-2xl md:rounded-[4.5rem] p-6 md:p-16 text-white space-y-10 md:space-y-12 shadow-2xl relative overflow-hidden border-t-[12px] md:border-t-[20px] border-teal-500">
-                <div className="absolute top-0 right-0 h-48 w-48 bg-teal-500 opacity-5 rounded-full blur-[100px]" />
-                
-                {/* Address Section */}
-                <div className="space-y-6 md:space-y-8 relative z-10">
-                   <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-4 md:gap-6">
-                         <div className="h-10 w-10 md:h-14 md:w-14 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-teal-400 shrink-0"><MapPin size={20}/></div>
-                         <h2 className="font-syne font-black text-lg md:text-2xl uppercase italic tracking-tighter">{t('deliveryAddress')}</h2>
-                      </div>
-                      <button className="h-9 w-9 md:h-12 md:w-12 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-teal-400 hover:bg-teal-500 hover:text-navy transition-all shrink-0"><Plus size={18}/></button>
-                   </div>
-
-                   <div className="grid gap-3 md:gap-4">
-                      {SAVED_ADDRESSES.map(addr => (
-                         <button 
-                            key={addr.id}
-                            onClick={() => setSelectedAddress(addr.id)}
-                            className={`p-4 md:p-6 rounded-2xl md:rounded-[2rem] border-2 text-left transition-all duration-500 relative group ${selectedAddress === addr.id ? 'bg-white/10 border-teal-500 ring-4 md:ring-8 ring-teal-500/5' : 'bg-transparent border-white/10 hover:border-white/30'}`}
-                         >
-                            <div className="flex justify-between items-start mb-1.5 md:mb-2">
-                               <div className="text-[8px] md:text-[9px] font-black uppercase text-teal-400 tracking-widest italic">{addr.label}</div>
-                               {selectedAddress === addr.id && <CheckCircle size={14} className="text-teal-500" />}
-                            </div>
-                            <div className="font-dm font-black text-sm md:text-lg italic text-white/80 group-hover:text-white transition-colors truncate">{addr.address}</div>
-                            <div className="text-[8px] md:text-[10px] font-black text-white/40 uppercase tracking-widest">{addr.city} &bull; {addr.zip}</div>
-                         </button>
-                      ))}
-                   </div>
-                </div>
-
-                {/* Payment Section */}
-                <div className="space-y-6 md:space-y-8 relative z-10 pt-8 md:pt-10 border-t border-white/5">
-                   <div className="flex items-center gap-4 md:gap-6">
-                      <div className="h-10 w-10 md:h-14 md:w-14 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-teal-400 shrink-0"><CreditCard size={20}/></div>
-                      <h2 className="font-syne font-black text-lg md:text-2xl uppercase italic tracking-tighter">{t('paymentMethod')}</h2>
-                   </div>
-
-                   <div className="grid grid-cols-3 gap-3 md:gap-4">
-                      {[
-                         { id: 'upi', icon: Smartphone, label: 'UPI' },
-                         { id: 'card', icon: CreditCard, label: 'CARD' },
-                         { id: 'cod', icon: Truck, label: 'COD' }
-                      ].map(m => (
-                         <button 
-                            key={m.id}
-                            onClick={() => setMethod(m.id)}
-                            className={`py-4 md:py-6 rounded-xl md:rounded-[1.8rem] border-2 transition-all duration-500 flex flex-col items-center gap-2 md:gap-3 ${method === m.id ? 'bg-white text-navy border-white' : 'bg-transparent border-white/10 text-white/40 hover:text-white hover:border-white/30'}`}
-                         >
-                            <m.icon size={18} className="md:size-5" />
-                            <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest">{m.label}</span>
-                         </button>
-                      ))}
-                   </div>
-
-                   {error && (
-                      <div className="p-3 md:p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 md:gap-4 text-red-500 text-[8px] md:text-[10px] font-black uppercase tracking-widest italic animate-shake">
-                         <AlertCircle size={14}/> {error}
-                      </div>
-                   )}
-
-                   <button 
-                      onClick={handlePay}
-                      disabled={status === 'loading'}
-                      className="w-full h-16 md:h-24 bg-teal-500 text-navy rounded-xl md:rounded-[3rem] font-syne font-black text-sm md:text-xl uppercase tracking-[0.2em] md:tracking-[0.4em] shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 md:gap-6 italic overflow-hidden relative group"
-                   >
-                      <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
-                      {status === 'loading' ? t('processing') : t('payNow')} 
-                      <ArrowRight size={20} className="md:size-6" />
-                   </button>
-                   
-                   <div className="flex items-center justify-center gap-4 text-[9px] font-black text-white/20 uppercase tracking-[0.4em] italic">
-                      <Lock size={12}/> {t('secureEncryption')}
-                   </div>
-                </div>
-             </div>
-
-             <div className="text-center space-y-6">
-                <Link to="/cart" className="inline-flex items-center gap-3 text-gray-300 font-syne font-black text-[10px] uppercase italic tracking-[0.2em] hover:text-[#0a1628] transition-colors group">
-                   <ArrowLeft size={14} className="group-hover:-translate-x-2 transition-transform" /> {t('backToCart')}
-                </Link>
-             </div>
-          </section>
-
+    <main className="min-h-screen bg-slate-50 px-4 pb-24 pt-8 md:px-8 lg:px-10">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold uppercase tracking-widest text-teal-300">
+              <ShoppingBag size={14} />
+              Order checkout
+            </div>
+            <h1 className="text-4xl font-extrabold leading-none text-slate-950 md:text-5xl">
+              Checkout
+            </h1>
+          </div>
+          <div className="flex w-fit items-center gap-3 rounded-2xl border border-teal-100 bg-teal-50 px-4 py-3 text-sm font-bold text-teal-800">
+            <Truck size={18} />
+            Estimated delivery: <span className="text-slate-950">25-35 mins</span>
+          </div>
         </div>
+
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
+          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-8">
+            <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-5">
+              <div className="flex items-center gap-3">
+                <Package className="text-teal-600" size={22} />
+                <h2 className="text-xl font-extrabold text-slate-950">Item list</h2>
+              </div>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">
+                {items.length} item{items.length === 1 ? '' : 's'}
+              </span>
+            </div>
+
+            <div className="divide-y divide-slate-100">
+              {items.map((item) => (
+                <div key={item.id || item._id} className="grid grid-cols-[64px_minmax(0,1fr)_auto] items-center gap-4 py-5">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 overflow-hidden">
+                    <img
+                      src={getItemImage(item)}
+                      alt={item.name || 'Medicine'}
+                      className="h-full w-full object-cover"
+                      onError={(event) => {
+                        event.currentTarget.src = getMedicineImage({ category: item.category || 'default' });
+                      }}
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="truncate text-base font-extrabold text-slate-950 md:text-lg">
+                      {item.name || 'Medicine'}
+                    </h3>
+                    <p className="mt-1 text-sm font-semibold text-slate-400">Qty: {item.quantity}</p>
+                  </div>
+                  <div className="text-right text-base font-extrabold text-teal-700">
+                    INR {(Number(item.price || 0) * Number(item.quantity || 1)).toLocaleString()}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 rounded-2xl bg-slate-50 p-5">
+              <div className="space-y-3 text-sm font-bold text-slate-500">
+                <div className="flex justify-between">
+                  <span>Subtotal</span>
+                  <span className="text-slate-900">INR {totalAmount.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Delivery fee</span>
+                  <span className={deliveryFee === 0 ? 'text-emerald-600' : 'text-slate-900'}>
+                    {deliveryFee === 0 ? 'Free' : `INR ${deliveryFee}`}
+                  </span>
+                </div>
+                {discount > 0 && (
+                  <div className="flex justify-between text-teal-700">
+                    <span>Discount</span>
+                    <span>- INR {discount}</span>
+                  </div>
+                )}
+              </div>
+              <div className="mt-5 flex items-end justify-between border-t border-slate-200 pt-5">
+                <span className="text-lg font-extrabold text-slate-950">Grand total</span>
+                <span className="text-3xl font-extrabold text-slate-950">INR {finalTotal.toLocaleString()}</span>
+              </div>
+            </div>
+          </section>
+
+          <aside className="rounded-3xl bg-slate-950 p-5 text-white shadow-xl md:p-6">
+            <section>
+              <div className="mb-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-teal-300">
+                    <MapPin size={20} />
+                  </div>
+                  <h2 className="text-lg font-extrabold">Delivery address</h2>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {SAVED_ADDRESSES.map((address) => (
+                  <button
+                    key={address.id}
+                    type="button"
+                    onClick={() => setSelectedAddress(address.id)}
+                    className={`w-full rounded-2xl border p-4 text-left transition ${
+                      selectedAddress === address.id
+                        ? 'border-teal-400 bg-teal-400/10'
+                        : 'border-white/10 bg-white/[0.03] hover:border-white/30'
+                    }`}
+                  >
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className="text-xs font-extrabold uppercase tracking-widest text-teal-300">{address.label}</span>
+                      {selectedAddress === address.id && <CheckCircle size={16} className="text-teal-300" />}
+                    </div>
+                    <div className="truncate text-base font-extrabold text-white">{address.address}</div>
+                    <div className="mt-1 text-xs font-bold uppercase tracking-widest text-white/40">
+                      {address.city} - {address.zip}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <section className="mt-8 border-t border-white/10 pt-8">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-teal-300">
+                  <CreditCard size={20} />
+                </div>
+                <h2 className="text-lg font-extrabold">Payment method</h2>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                {PAYMENT_METHODS.map((payment) => (
+                  <button
+                    key={payment.id}
+                    type="button"
+                    onClick={() => setMethod(payment.id)}
+                    className={`flex min-h-24 flex-col items-center justify-center gap-2 rounded-2xl border text-sm font-extrabold transition ${
+                      method === payment.id
+                        ? 'border-white bg-white text-slate-950'
+                        : 'border-white/10 bg-white/[0.03] text-white/50 hover:text-white'
+                    }`}
+                  >
+                    <payment.icon size={20} />
+                    {payment.label}
+                  </button>
+                ))}
+              </div>
+
+              {error && (
+                <div className="mt-5 flex gap-3 rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm font-bold text-red-200">
+                  <AlertCircle size={18} className="shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={handlePay}
+                disabled={status === 'loading'}
+                className="mt-6 flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-teal-400 px-5 text-sm font-extrabold uppercase tracking-widest text-slate-950 transition hover:bg-teal-300 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {status === 'loading' ? 'Processing' : 'Pay now'}
+                <ArrowRight size={18} />
+              </button>
+
+              <div className="mt-4 flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-white/30">
+                <Lock size={13} />
+                Secure payment
+              </div>
+            </section>
+          </aside>
+        </div>
+
+        <Link
+          to="/cart"
+          className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold text-slate-400 transition hover:text-slate-950"
+        >
+          <ArrowLeft size={16} />
+          Back to cart
+        </Link>
       </div>
-    </div>
+    </main>
   );
 }

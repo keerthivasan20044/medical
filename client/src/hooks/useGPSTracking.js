@@ -1,41 +1,43 @@
 import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
-
-const socket = io(import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001', {
-  withCredentials: true
-});
+import { deliveryService } from '../services/apiServices.js';
+import { socketService } from '../services/socket.js';
 
 /**
  * GPS Trajectory Tracker Hook
- * Connects the terminal to the live logistics stream.
+ * Connects the page to the live logistics stream.
  */
 export const useGPSTracking = (orderId) => {
   const [location, setLocation] = useState(null);
 
   useEffect(() => {
     if (!orderId) return;
+    const socket = socketService.connect();
 
     // Join the order room
-    socket.emit('track:order', orderId);
+    socket.emit('order:track-subscribe', { orderId });
 
     // Listen for live trajectory updates
-    socket.on('location:live', (data) => {
-if (import.meta.env.DEV) { console.log(`[GPS Terminal] Live update for ${orderId}:`, data); }
-      setLocation(data);
-    });
+    const handleLocation = (data) => {
+      if (String(data.orderId) !== String(orderId)) return;
+      const source = data?.location || data?.liveLocation || data;
+      const lat = Number(source?.lat);
+      const lng = Number(source?.lng);
+      if (Number.isFinite(lat) && Number.isFinite(lng)) {
+        setLocation({ ...data, lat, lng });
+      }
+    };
+    socket.on('order:location-update', handleLocation);
 
     return () => {
-      socket.off('location:live');
+      socket.off('order:location-update', handleLocation);
     };
   }, [orderId]);
 
-  // Delivery partner emit function
+  // Delivery partner updates pass through the authenticated API.
   const updateLocation = (lat, lng) => {
     if (!orderId) return;
-    socket.emit('location:update', { orderId, lat, lng });
+    return deliveryService.updateLocation(orderId, { lat, lng });
   };
 
   return { location, updateLocation };
 };
-
-export default socket;

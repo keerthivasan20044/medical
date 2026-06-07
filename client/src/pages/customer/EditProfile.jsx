@@ -4,8 +4,8 @@ import PageShell from '../../components/layout/PageShell';
 export default function EditProfile() {
   return (
     <PageShell 
-      title="Profile Sync" 
-      subtitle="Edit your district node identification and health credentials."
+      title="Edit Profile" 
+      subtitle="Edit your profile and health details."
       icon={Edit}
       actions={
         <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-xs rounded-2xl flex items-center gap-3 active:scale-95 shadow-4xl italic uppercase tracking-wider">
@@ -17,10 +17,10 @@ export default function EditProfile() {
         <div className="flex flex-col md:flex-row gap-12 items-center pb-12 border-b border-black/[0.03]">
            <div className="h-40 w-40 rounded-[3rem] bg-[#0a1628] flex items-center justify-center text-brand-teal text-6xl font-black italic shadow-4xl relative group cursor-pointer">
               T
-              <div className="absolute inset-0 bg-[#0a1628]/80 opacity-0 group-hover:opacity-100 transition-opacity rounded-[3rem] flex items-center justify-center text-xs uppercase tracking-widest font-black italic">Change Node</div>
+              <div className="absolute inset-0 bg-[#0a1628]/80 opacity-0 group-hover:opacity-100 transition-opacity rounded-[3rem] flex items-center justify-center text-xs uppercase tracking-widest font-black italic">Change Photo</div>
            </div>
            <div className="space-y-3">
-              <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic tracking-tighter">Terminal Node_Alpha</h3>
+              <h3 className="font-syne font-black text-3xl text-[#0a1628] uppercase italic tracking-tighter">Appointment_Alpha</h3>
               <p className="text-gray-400 font-dm italic font-bold">Authenticated Profile · Karaikal Central</p>
            </div>
         </div>

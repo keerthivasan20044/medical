@@ -6,7 +6,7 @@ import {
   Mail, Clock, AlertCircle, CheckCircle2,
   Cpu, Zap, Lock, Globe, Sparkles
 } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import OTPInput from '../../components/common/OTPInput';
 import { useOtpConfirm } from '../../hooks/useOtpConfirm.js';
 import { useOtpTimer } from '../../hooks/useOtpTimer.js';
@@ -18,10 +18,25 @@ const EMPTY_DIGITS = ['', '', '', '', '', ''];
 export default function OtpVerification() {
   const { t } = useLanguage();
   const location = useLocation();
+  const navigate = useNavigate();
   const [digits, setDigits] = useState(EMPTY_DIGITS);
   const [contact, setContact] = useState(location.state?.contact || '');
   const { timeLeft, reset: resetTimer } = useOtpTimer({ duration: 60, autoStart: true });
   const { confirmAccount, status, error, verified, resend, resendStatus, reset } = useOtpConfirm();
+
+  useEffect(() => {
+    if (!verified) return;
+    const role = location.state?.role || 'customer';
+    const paths = {
+      customer: '/home',
+      pharmacist: '/pharmacist/dashboard',
+      doctor: '/doctor/dashboard',
+      delivery: '/delivery/dashboard',
+      admin: '/admin/dashboard'
+    };
+    const timer = setTimeout(() => navigate(paths[role] || '/home', { replace: true }), 900);
+    return () => clearTimeout(timer);
+  }, [verified, location.state?.role, navigate]);
 
   const resendOtp = async () => {
     if (!contact || timeLeft > 0) return;
@@ -58,10 +73,10 @@ export default function OtpVerification() {
              <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-gray-50 pb-12">
                 <div className="space-y-6">
                     <div className="px-6 py-2.5 bg-[#0a1628] rounded-2xl w-fit flex items-center gap-3 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic leading-none">
-                       <Lock size={16} className="text-brand-teal animate-pulse" /> Security Verification
+                       <Lock size={16} className="text-brand-teal animate-pulse" /> OTP Verification
                     </div>
                     <h1 className="font-black text-6xl lg:text-7xl text-[#0a1628] leading-[0.85] tracking-tighter uppercase italic">
-                       Verify <br /><span className="text-brand-teal">Your Account.</span>
+                       Verify <br /><span className="text-brand-teal">Your Account</span>
                     </h1>
                 </div>
                 <div className="h-24 w-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center text-[#0a1628] shadow-inner shrink-0"><ShieldCheck size={48} className="animate-float-up" /></div>
@@ -69,16 +84,15 @@ export default function OtpVerification() {
 
              <div className="space-y-12">
                 <div className="p-10 bg-gray-50 rounded-[3.5rem] border border-gray-100 shadow-inner group/input hover:bg-white transition-all duration-1000 relative">
-                   <div className="absolute top-4 right-4 text-[10px] text-brand-teal font-black uppercase tracking-widest opacity-20 group-focus-within/input:opacity-100 transition-opacity">Identification_Registry</div>
                    <div className="flex items-center gap-6">
                       <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center text-brand-teal shadow-soft group-focus-within/input:bg-[#0a1628] group-focus-within/input:text-white transition-all">
                         {contact.includes('@') ? <Mail size={32}/> : <Smartphone size={32}/>}
                       </div>
                       <div className="flex-1 space-y-1">
-                         <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest leading-none">Verification Target</div>
+                         <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest leading-none">Email or Phone</div>
                          <input
                             className="bg-transparent border-none outline-none font-syne font-black text-2xl text-[#0a1628] w-full p-0"
-                            placeholder="Email or phone node..."
+                            placeholder="Enter email or phone"
                             value={contact}
                             onChange={(e) => setContact(e.target.value)}
                          />
@@ -88,10 +102,10 @@ export default function OtpVerification() {
 
                 <div className="space-y-8 py-4">
                   <div className="flex items-center justify-between px-6">
-                     <h3 className="text-[10px] font-black text-gray-300 uppercase tracking-[0.4em] italic">Enter Enclave Key</h3>
+                     <h3 className="text-[10px] font-black text-gray-300 uppercase tracking-[0.4em] italic">Enter 6 Digit OTP</h3>
                      <div className="flex items-center gap-3 text-brand-teal animate-pulse">
                         <Clock size={14} />
-                        <span className="text-[10px] font-black tracking-widest">{timeLeft > 0 ? `00:${timeLeft.toString().padStart(2, '0')}` : 'Key Expired'}</span>
+                        <span className="text-[10px] font-black tracking-widest">{timeLeft > 0 ? `00:${timeLeft.toString().padStart(2, '0')}` : 'OTP expired'}</span>
                      </div>
                   </div>
                   <div className="flex justify-center p-12 bg-[#0a1628] rounded-[4rem] border-t-8 border-brand-teal shadow-4xl group/otp">
@@ -115,7 +129,7 @@ export default function OtpVerification() {
                     >
                       <div className="h-14 w-14 bg-red-500 text-white rounded-2xl flex items-center justify-center shadow-lg"><AlertCircle size={24}/></div>
                       <div className="space-y-1 font-syne">
-                         <div className="text-[10px] font-black uppercase tracking-widest leading-none">Protocol Resilience Failed</div>
+                         <div className="text-[10px] font-black uppercase tracking-widest leading-none">Verification Failed</div>
                          <p className="text-sm font-bold italic">{error}</p>
                       </div>
                     </motion.div>
@@ -128,8 +142,8 @@ export default function OtpVerification() {
                     >
                       <div className="h-14 w-14 bg-brand-teal text-[#0a1628] rounded-2xl flex items-center justify-center shadow-lg"><CheckCircle2 size={24}/></div>
                       <div className="space-y-1 font-syne">
-                         <div className="text-[10px] font-black uppercase tracking-widest leading-none">Authorization Synchronization Complete</div>
-                         <p className="text-sm font-bold italic">Node verified. Identity protocol active.</p>
+                         <div className="text-[10px] font-black uppercase tracking-widest leading-none">Account Verified</div>
+                         <p className="text-sm font-bold italic">Your account is ready. Redirecting...</p>
                       </div>
                     </motion.div>
                   )}
@@ -150,7 +164,7 @@ export default function OtpVerification() {
                       disabled={status === 'loading'}
                       className="h-24 bg-[#0a1628] text-white rounded-[3rem] font-black uppercase tracking-[0.2em] italic text-xs flex items-center justify-center gap-4 shadow-4xl hover:bg-brand-teal hover:scale-105 active:scale-95 transition-all duration-700 group/submit"
                    >
-                      {status === 'loading' ? 'Synchronizing...' : 'Authorize Node'} <ArrowRight className="group-hover/submit:translate-x-3 transition-transform" size={18} />
+                      {status === 'loading' ? 'Verifying...' : 'Verify OTP'} <ArrowRight className="group-hover/submit:translate-x-3 transition-transform" size={18} />
                    </button>
                 </div>
              </div>
@@ -160,7 +174,7 @@ export default function OtpVerification() {
                    <Link to="/login" className="flex items-center gap-3 hover:text-brand-teal transition-colors"><Globe size={16}/> Back to Login</Link>
                    <Link to="/" className="flex items-center gap-3 hover:text-brand-teal transition-colors">Go Home</Link>
                 </div>
-                <div className="flex items-center gap-3"><Sparkles size={16} className="text-brand-teal animate-pulse"/> DISTRICT NETWORK 2.4</div>
+                <div className="flex items-center gap-3"><Sparkles size={16} className="text-brand-teal animate-pulse"/> Secure OTP</div>
              </div>
           </div>
         </div>

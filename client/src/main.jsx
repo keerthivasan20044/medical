@@ -53,7 +53,7 @@ class ErrorBoundary extends React.Component {
       return (
         <div style={{ padding: '40px', background: '#0a1628', color: '#ff4d4d', minHeight: '100vh', fontFamily: 'sans-serif' }}>
           <h1 style={{ fontSize: '24px', marginBottom: '20px' }}>Application Loading Error</h1>
-          <p style={{ color: '#fff', opacity: 0.6 }}>The application encountered a terminal runtime error.</p>
+          <p style={{ color: '#fff', opacity: 0.6 }}>The app had a loading problem.</p>
           <pre style={{ background: 'rgba(255,255,255,0.05)', padding: '20px', borderRadius: '12px', overflow: 'auto', marginTop: '20px' }}>
             {this.state.error?.toString()}
           </pre>

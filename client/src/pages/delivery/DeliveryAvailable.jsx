@@ -5,9 +5,11 @@ import { useDelivery } from '../../hooks/useDelivery';
 import DeliveryMap from '../../components/delivery/DeliveryMap';
 import toast from 'react-hot-toast';
 import { useLanguage } from '../../context/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function DeliveryAvailable() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const { availableTasks, fetchAvailable, acceptTask, loading } = useDelivery();
   const [viewMode, setViewMode] = useState('list');
   const [filterRadius, setFilterRadius] = useState(5); // km
@@ -19,7 +21,7 @@ export default function DeliveryAvailable() {
   const handleAccept = async (id) => {
     try {
       await acceptTask(id);
-      // Success handled in hook
+      navigate('/delivery/active');
     } catch (err) {
       // Error handled in hook
     }
@@ -31,8 +33,8 @@ export default function DeliveryAvailable() {
       <div className="p-6 md:p-10 space-y-8 bg-white border-b border-gray-100">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Discovery Hub</h1>
-            <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Real-time Regional Task Synchronization</p>
+            <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Available Orders</h1>
+            <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Find and accept nearby deliveries</p>
           </div>
           
           <div className="flex items-center gap-3">
@@ -106,9 +108,9 @@ export default function DeliveryAvailable() {
                                  <div className="space-y-1">
                                     <div className="flex items-center gap-2">
                                        <div className="h-1.5 w-1.5 rounded-full bg-brand-teal animate-pulse" />
-                                       <div className="text-[10px] font-black text-navy/20 uppercase tracking-widest italic">Node Sync Active</div>
+                                       <div className="text-[10px] font-black text-navy/20 uppercase tracking-widest italic">Order Available</div>
                                     </div>
-                                    <h3 className="font-syne font-black text-xl text-navy uppercase italic">{task.pharmacyId?.name || 'Node Unknown'}</h3>
+                                    <h3 className="font-syne font-black text-xl text-navy uppercase italic">{task.pharmacyId?.name || 'Pharmacy'}</h3>
                                  </div>
                                  <div className="h-12 w-12 bg-navy/5 rounded-2xl flex items-center justify-center text-navy/40 group-hover:text-brand-teal group-hover:bg-navy transition-all shadow-sm">
                                     <Store size={24} />
@@ -130,7 +132,7 @@ export default function DeliveryAvailable() {
                                        <Navigation size={16} />
                                     </div>
                                     <div>
-                                       <div className="text-[8px] font-black text-navy/20 uppercase tracking-widest italic leading-none mb-1">Drop Sector</div>
+                                       <div className="text-[8px] font-black text-navy/20 uppercase tracking-widest italic leading-none mb-1">Drop Area</div>
                                        <div className="text-xs font-dm font-bold text-navy/60 italic">{task.deliveryAddress?.split(',')[0] || 'Nagore Rd'}</div>
                                     </div>
                                  </div>
@@ -140,7 +142,7 @@ export default function DeliveryAvailable() {
                                  <div className="flex items-center gap-4">
                                     <div className="text-center">
                                        <div className="text-[9px] font-black text-navy/20 uppercase tracking-widest italic leading-none">Net Payout</div>
-                                       <div className="text-xl font-syne font-black text-navy italic tracking-tighter">₹{task.deliveryFare || 45}</div>
+                                       <div className="text-xl font-syne font-black text-navy italic tracking-tighter">INR {task.deliveryFare || 45}</div>
                                     </div>
                                     <div className="h-8 w-[1px] bg-gray-100" />
                                     <div className="text-center">
@@ -150,9 +152,10 @@ export default function DeliveryAvailable() {
                                  </div>
                                  <button 
                                    onClick={() => handleAccept(task._id)}
+                                   disabled={loading}
                                    className="h-12 px-6 bg-brand-teal text-navy rounded-xl font-syne font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-brand-teal/20"
                                  >
-                                   Accept Mission
+                                   {loading ? 'Accepting' : 'Accept Order'}
                                  </button>
                               </div>
                            </div>
@@ -164,14 +167,14 @@ export default function DeliveryAvailable() {
                             <Zap size={40} />
                          </div>
                          <div className="space-y-1">
-                            <h3 className="font-syne font-black text-2xl text-navy uppercase italic">Sector Clear</h3>
-                            <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest italic">No pending distribution tasks in your vicinity.</p>
+                            <h3 className="font-syne font-black text-2xl text-navy uppercase italic">No Orders</h3>
+                            <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest italic">No delivery orders are available near you.</p>
                          </div>
                          <button 
                            onClick={fetchAvailable}
                            className="h-14 px-8 bg-white border border-navy/10 text-navy rounded-2xl font-syne font-black text-xs uppercase tracking-widest hover:bg-navy hover:text-white transition-all shadow-sm"
                          >
-                            Force Registry Sync
+                            Refresh
                          </button>
                       </div>
                    )}

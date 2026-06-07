@@ -35,36 +35,36 @@ export default function PrescriptionScannerPreview() {
   }, [scanning]);
 
   return (
-    <section className="py-24 lg:py-40 bg-gray-50 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-32 items-center">
+    <section className="py-16 md:py-24 lg:py-40 bg-gray-50 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-10">
+        <div className="grid lg:grid-cols-2 gap-12 md:gap-16 lg:gap-32 items-center">
           
-          <div className="space-y-12 md:space-y-16">
-            <div className="space-y-6 md:space-y-8 text-center lg:text-left">
-              <div className="inline-flex items-center gap-4 px-6 py-2 bg-[#0a1628]/5 border border-black/5 rounded-full text-[#0a1628] font-syne font-black text-[10px] uppercase tracking-[0.4em] italic shadow-inner mx-auto lg:mx-0">
+          <div className="space-y-10 md:space-y-16 min-w-0">
+            <div className="space-y-5 md:space-y-8 text-center lg:text-left overflow-hidden">
+              <div className="inline-flex max-w-full items-center gap-3 md:gap-4 px-5 md:px-6 py-2 bg-[#0a1628]/5 border border-black/5 rounded-full text-[#0a1628] font-syne font-black text-[9px] md:text-[10px] uppercase tracking-[0.16em] md:tracking-[0.4em] italic shadow-inner mx-auto lg:mx-0">
                 <Terminal size={14} className="text-brand-teal" /> Smart Vision
               </div>
-              <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-6xl lg:text-8xl leading-[0.9] uppercase italic tracking-tighter mx-auto lg:mx-0">
+              <h2 className="font-syne font-black text-[#0a1628] text-4xl md:text-6xl lg:text-8xl leading-[0.95] md:leading-[0.9] uppercase italic tracking-normal md:tracking-tighter mx-auto lg:mx-0 break-words max-w-full">
                 Smart Prescription <br /><span className="text-brand-teal">Scanner.</span>
               </h2>
-              <p className="text-gray-400 font-dm text-lg md:text-2xl italic font-bold max-w-xl leading-relaxed mx-auto lg:mx-0">
+              <p className="text-gray-400 font-dm text-base md:text-2xl italic font-bold max-w-xl leading-relaxed mx-auto lg:mx-0">
                 Upload any handwritten prescription. Our district-wide network identifies medicines and synchronizes with local pharmacy stocks instantly.
               </p>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-5 md:space-y-8">
                {[
                  { label: 'Scanning Accuracy', val: '98.9% Accurate', icon: Activity },
                  { label: 'Speed', icon: Zap, val: '0.4s Fast' },
                  { label: 'Local Reach', icon: ShieldCheck, val: '128 Pharmacies' }
                ].map((f, i) => (
-                 <div key={i} className="flex items-center gap-8 group justify-center lg:justify-start">
-                    <div className="h-14 w-14 bg-white rounded-2xl flex items-center justify-center text-[#0a1628] shadow-soft group-hover:bg-brand-teal transition-all duration-500">
-                       <f.icon size={26} />
+                 <div key={i} className="flex items-center gap-4 md:gap-8 group justify-center lg:justify-start min-w-0">
+                    <div className="h-12 w-12 md:h-14 md:w-14 bg-white rounded-2xl flex shrink-0 items-center justify-center text-[#0a1628] shadow-soft group-hover:bg-brand-teal transition-all duration-500">
+                       <f.icon size={22} className="md:size-[26px]" />
                     </div>
-                    <div className="space-y-0.5 text-left">
-                       <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{f.label}</div>
-                       <div className="text-xl font-syne font-black text-[#0a1628] uppercase italic tracking-tighter">{f.val}</div>
+                    <div className="space-y-0.5 text-left min-w-0">
+                       <div className="text-[9px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{f.label}</div>
+                       <div className="text-base md:text-xl font-syne font-black text-[#0a1628] uppercase italic tracking-normal md:tracking-tighter break-words">{f.val}</div>
                     </div>
                  </div>
                ))}
@@ -72,7 +72,7 @@ export default function PrescriptionScannerPreview() {
 
             <button 
               onClick={() => setScanning(true)}
-              className="h-20 px-12 bg-[#0a1628] text-white rounded-[2rem] font-syne font-black text-xs uppercase tracking-[0.3em] italic flex items-center gap-6 hover:bg-brand-teal transition-all shadow-4xl group mx-auto lg:mx-0"
+              className="h-14 md:h-20 px-7 md:px-12 bg-[#0a1628] text-white rounded-2xl md:rounded-[2rem] font-syne font-black text-[10px] md:text-xs uppercase tracking-[0.18em] md:tracking-[0.3em] italic flex items-center gap-4 md:gap-6 hover:bg-brand-teal transition-all shadow-4xl group mx-auto lg:mx-0"
             >
               Start Scanning <Upload size={20} className="group-hover:-translate-y-2 transition-transform" />
             </button>

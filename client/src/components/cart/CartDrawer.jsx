@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, incrementQuantity, decrementQuantity, clearCart } from '../../store/cartSlice';
 import { setCartOpen } from '../../store/uiSlice';
+import { getMedicineImage } from '../../utils/medicineImages';
 
 // Self-contained: reads open state from Redux ui.cartOpen, no props needed
 export default function CartDrawer() {
@@ -115,12 +116,12 @@ export default function CartDrawer() {
                     transition={{ delay: i * 0.05 }}
                     className="flex gap-4 md:gap-6 group"
                   >
-                    <div className="h-20 w-20 md:h-24 md:w-24 bg-gray-50 rounded-3xl p-3 md:p-4 flex items-center justify-center border border-transparent group-hover:border-brand-teal/20 transition duration-500 overflow-hidden shrink-0">
+                    <div className="h-20 w-20 md:h-24 md:w-24 bg-gray-50 rounded-3xl flex items-center justify-center border border-transparent group-hover:border-brand-teal/20 transition duration-500 overflow-hidden shrink-0">
                       <img
-                        src={item.image || item.imageUrl || '/assets/medicine_default.png'}
+                        src={getMedicineImage(item)}
                         alt={item.name}
-                        onError={e => { e.target.src = '/assets/medicine_default.png'; }}
-                        className="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-110 transition duration-500"
+                        onError={e => { e.currentTarget.src = getMedicineImage({ category: item.category || 'default' }); }}
+                        className="h-full w-full object-cover group-hover:scale-110 transition duration-500"
                       />
                     </div>
                     <div className="flex-1 min-w-0 space-y-2 md:space-y-3">

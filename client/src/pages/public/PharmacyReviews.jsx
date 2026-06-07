@@ -49,14 +49,14 @@ export default function PharmacyReviewsPage() {
                         <div className="h-12 w-12 md:h-16 md:w-16 bg-gray-100 rounded-xl md:rounded-[1.5rem] flex items-center justify-center text-gray-400 font-syne font-black text-lg md:text-xl italic">U</div>
                         <div className="space-y-0.5">
                            <div className="font-syne font-black text-navy text-lg md:text-xl uppercase italic tracking-tighter">Verified Resident</div>
-                           <div className="text-[9px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic leading-none">Karaikal District Node</div>
+                           <div className="text-[9px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic leading-none">Karaikal</div>
                         </div>
                      </div>
                      <div className="flex text-amber-500 gap-0.5 scale-75 md:scale-100 origin-right">
                         {[1,2,3,4,5].map(s => <Star key={s} size={14} fill="currentColor"/>)}
                      </div>
                   </div>
-                  <p className="text-gray-400 font-dm italic text-lg md:text-xl font-bold leading-relaxed">"Exceptional clinical synchronization and fulfillment protocols. Highly recommended for district residents."</p>
+                  <p className="text-gray-400 font-dm italic text-lg md:text-xl font-bold leading-relaxed">"Good service and fast delivery. Recommended for local residents."</p>
                </motion.div>
             ))}
          </div>

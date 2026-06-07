@@ -1,7 +1,7 @@
 import { Toaster } from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AppRouter from './routes/AppRouter';
 import DistrictCommandBar from './components/layout/DistrictCommandBar';
 import EmergencyFAB from './components/layout/EmergencyFAB';
@@ -19,17 +19,29 @@ import Layout from './components/layout/Layout';
 export default function App() {
   const location = useLocation();
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const didRunStartupChecks = useRef(false);
   const isDashboard = location.pathname.startsWith('/admin') || 
                       location.pathname.startsWith('/pharmacist') || 
                       location.pathname.startsWith('/delivery');
-  const hideBottomNav = ['/otp', '/forgot-password'].includes(location.pathname);
+  const authUtilityRoutes = ['/verify-otp', '/forgot-password', '/reset-password'];
+  const transactionRoutes = ['/cart', '/checkout'];
+  const hasBottomAction = transactionRoutes.some((path) => location.pathname === path || location.pathname.startsWith(`${path}/`));
+  const hideBottomNav = authUtilityRoutes.includes(location.pathname);
   const hideNavbar = isDashboard;
-  const hideExtras = ['/otp', '/forgot-password'].includes(location.pathname);
+  const hideExtras = isDashboard || authUtilityRoutes.includes(location.pathname) || hasBottomAction;
 
   useEffect(() => {
-    dispatch(fetchMe());
+    if (didRunStartupChecks.current) return;
+    didRunStartupChecks.current = true;
+
+    const hasToken = Boolean(localStorage.getItem('authToken'));
+    if (hasToken || isAuthenticated) {
+      dispatch(fetchMe());
+    }
+
     loadGoogleMaps();
-  }, [dispatch]);
+  }, [dispatch, isAuthenticated]);
 
   return (
     <ErrorBoundary>

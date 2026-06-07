@@ -1,6 +1,22 @@
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+const DEFAULT_SOCKET_URL =
+  typeof window !== 'undefined'
+    ? `${window.location.protocol}//${window.location.hostname}:5001`
+    : 'http://localhost:5001';
+
+function getSocketUrl() {
+  const rawUrl = import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || DEFAULT_SOCKET_URL;
+  try {
+    const url = new URL(rawUrl, typeof window !== 'undefined' ? window.location.origin : DEFAULT_SOCKET_URL);
+    if (url.pathname.endsWith('/api')) url.pathname = url.pathname.slice(0, -4) || '/';
+    return url.origin + (url.pathname === '/' ? '' : url.pathname.replace(/\/$/, ''));
+  } catch {
+    return DEFAULT_SOCKET_URL;
+  }
+}
+
+const SOCKET_URL = getSocketUrl();
 
 class SocketService {
   constructor() {
@@ -10,9 +26,10 @@ class SocketService {
 
   connect(userId, role) {
     if (this.socket?.connected) return this.socket;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
 
     this.socket = io(SOCKET_URL, {
-      query: { userId, role },
+      auth: { token },
       transports: ['websocket', 'polling'],
       withCredentials: true,
       reconnection: true,
@@ -22,10 +39,7 @@ class SocketService {
     this.socket.on('connect', () => {
       this.connected = true;
       if (import.meta.env.DEV) { console.log(`[Socket] Connected as ${role} (ID: ${userId})`); }
-      // Join specific rooms
-      this.socket.emit('join', { userId, role });
-      if (role === 'admin') this.socket.emit('join', { room: 'admin' });
-      if (role === 'delivery') this.socket.emit('join', { room: 'delivery_pool' });
+      this.socket.emit('node:register');
     });
 
     this.socket.on('disconnect', () => {

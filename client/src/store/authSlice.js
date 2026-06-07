@@ -10,6 +10,7 @@ export const selectAuthPersist = (state) => ({
 export const loginUser = createAsyncThunk('auth/login', async (payload, thunkAPI) => {
   try {
     const res = await api.post('/api/auth/login', payload);
+    if (res.data.token) localStorage.setItem('authToken', res.data.token);
     return res.data.user;
   } catch (e) {
     return thunkAPI.rejectWithValue(e.response?.data?.error || e.response?.data?.message || 'Login failed');
@@ -19,6 +20,7 @@ export const loginUser = createAsyncThunk('auth/login', async (payload, thunkAPI
 export const googleOAuth = createAsyncThunk('auth/google', async (payload, thunkAPI) => {
   try {
     const res = await api.post('/api/auth/google', payload);
+    if (res.data.token) localStorage.setItem('authToken', res.data.token);
     return res.data.user;
   } catch (e) {
     return thunkAPI.rejectWithValue(e.response?.data?.error || e.response?.data?.message || 'Google login failed');
@@ -37,6 +39,7 @@ export const requestLoginOtp = createAsyncThunk('auth/loginOtp/request', async (
 export const verifyLoginOtp = createAsyncThunk('auth/loginOtp/verify', async (payload, thunkAPI) => {
   try {
     const res = await api.post('/api/auth/login-otp/verify', payload);
+    if (res.data.token) localStorage.setItem('authToken', res.data.token);
     return res.data.user;
   } catch (e) {
     return thunkAPI.rejectWithValue(e.response?.data?.message || 'OTP verification failed');
@@ -64,6 +67,7 @@ export const resetPassword = createAsyncThunk('auth/passwordReset/reset', async 
 export const registerUser = createAsyncThunk('auth/register', async (payload, thunkAPI) => {
   try {
     const res = await api.post('/api/auth/register', payload);
+    if (res.data.token) localStorage.setItem('authToken', res.data.token);
     return res.data.user;
   } catch (e) {
     return thunkAPI.rejectWithValue(e.response?.data?.error || e.response?.data?.message || 'Register failed');
@@ -72,13 +76,11 @@ export const registerUser = createAsyncThunk('auth/register', async (payload, th
 
 export const fetchMe = createAsyncThunk('auth/me', async (_, thunkAPI) => {
   try {
-    const token = localStorage.getItem('authToken');
-    if (!token) return thunkAPI.rejectWithValue('No token');
-    
     const res = await api.get('/api/users/me');
+    if (res.data.token) localStorage.setItem('authToken', res.data.token);
     return res.data.user;
   } catch (e) {
-    return thunkAPI.rejectWithValue(e.response?.data?.message || 'Auth check failed');
+    return thunkAPI.rejectWithValue(e.response?.data?.message || e.response?.data?.error || 'Auth check failed');
   }
 });
 
@@ -89,6 +91,7 @@ export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) =>
     // Even if server call fails, we still log out locally
   }
   // Always clear local storage
+  localStorage.removeItem('authToken');
   localStorage.removeItem('medireach_auth_v1');
   localStorage.removeItem('medireach_cart_v1');
   return true;
@@ -99,7 +102,7 @@ const initialState = {
   user: persisted?.user || null,
   role: persisted?.role || null,
   isAuthenticated: !!persisted?.user,
-  status: 'idle',
+  status: persisted?.user ? 'succeeded' : 'idle',
   error: null,
   oauthStatus: 'idle',
   otpStatus: 'idle',
@@ -205,11 +208,17 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
+        state.status = 'succeeded';
         state.user = action.payload;
         state.role = action.payload?.role || 'customer';
         state.isAuthenticated = true;
       })
+      .addCase(fetchMe.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
       .addCase(fetchMe.fulfilled, (state, action) => {
+        state.status = 'succeeded';
         state.user = action.payload;
         state.role = action.payload?.role || 'customer';
         state.isAuthenticated = true;

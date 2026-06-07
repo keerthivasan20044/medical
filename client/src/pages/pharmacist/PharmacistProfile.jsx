@@ -1,33 +1,86 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { User, Store, MapPin, Clock, ShieldCheck, Camera, Save, Phone, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { pharmacistService } from '../../services/apiServices';
 
 export default function PharmacistProfile() {
   const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    pharmacyName: '',
+    licenseNumber: '',
+    address: '',
+    pharmacyPhone: '',
+    pharmacyEmail: ''
+  });
 
-  const handleSave = () => {
-    toast.promise(
-      new Promise(resolve => setTimeout(resolve, 1000)),
-      {
-        loading: 'Updating Node registry...',
-        success: 'Profile Synchronized!',
-        error: 'Update Failed.',
-      }
-    );
+  useEffect(() => {
+    pharmacistService.getProfile()
+      .then(({ user, pharmacy }) => {
+        setForm({
+          name: user?.name || '',
+          phone: user?.phone || '',
+          email: user?.email || '',
+          pharmacyName: pharmacy?.name || '',
+          licenseNumber: pharmacy?.licenseNumber || '',
+          address: pharmacy?.address || '',
+          pharmacyPhone: Array.isArray(pharmacy?.phone) ? pharmacy.phone.join(', ') : pharmacy?.phone || '',
+          pharmacyEmail: pharmacy?.email || ''
+        });
+      })
+      .catch(() => toast.error('Failed to load profile'));
+  }, []);
+
+  const setField = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      const data = await pharmacistService.updateProfile({
+        user: {
+          name: form.name,
+          phone: form.phone,
+          email: form.email
+        },
+        pharmacy: {
+          name: form.pharmacyName,
+          address: form.address,
+          phone: form.pharmacyPhone,
+          email: form.pharmacyEmail
+        }
+      });
+      setForm((prev) => ({
+        ...prev,
+        name: data.user?.name || prev.name,
+        phone: data.user?.phone || prev.phone,
+        email: data.user?.email || prev.email,
+        pharmacyName: data.pharmacy?.name || prev.pharmacyName,
+        address: data.pharmacy?.address || prev.address,
+        pharmacyPhone: Array.isArray(data.pharmacy?.phone) ? data.pharmacy.phone.join(', ') : prev.pharmacyPhone,
+        pharmacyEmail: data.pharmacy?.email || prev.pharmacyEmail
+      }));
+      toast.success('Profile updatehronized');
+    } catch (err) {
+      toast.error(err.response?.data?.message || err.response?.data?.error || 'Update failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="space-y-10 pb-20">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Node Identity</h1>
+          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Profile</h1>
           <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Authorized Pharmacist Profile</p>
         </div>
         <button 
           onClick={handleSave}
           className="h-14 px-8 bg-navy text-brand-teal rounded-[2rem] font-syne font-black text-xs uppercase tracking-widest flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-navy/20"
         >
-          <Save size={18} /> Sync Profile
+          <Save size={18} /> {loading ? 'Saving...' : 'Save Profile'}
         </button>
       </div>
 
@@ -44,8 +97,8 @@ export default function PharmacistProfile() {
                  </button>
               </div>
               <div className="mt-6">
-                 <h3 className="font-syne font-black text-xl text-navy uppercase italic">Dr. K. Vasan</h3>
-                 <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic">Reg #KL-48291-PH</p>
+                 <h3 className="font-syne font-black text-xl text-navy uppercase italic">{form.name || 'Pharmacist'}</h3>
+                 <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic">Reg #{form.licenseNumber || 'UNASSIGNED'}</p>
               </div>
            </div>
 
@@ -74,37 +127,37 @@ export default function PharmacistProfile() {
                  <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-2">
                        <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Full Name</label>
-                       <input type="text" defaultValue="Dr. Keerthivasan" className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
+                       <input type="text" value={form.name} onChange={(e) => setField('name', e.target.value)} className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
                     </div>
                     <div className="space-y-2">
                        <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">License ID</label>
-                       <input type="text" defaultValue="KL-48291-PH" disabled className="w-full h-14 bg-gray-200 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy/40 outline-none cursor-not-allowed" />
+                       <input type="text" value={form.licenseNumber || 'Unassigned'} disabled className="w-full h-14 bg-gray-200 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy/40 outline-none cursor-not-allowed" />
                     </div>
                  </div>
               </div>
 
               <div className="space-y-8">
                  <h3 className="font-syne font-black text-xl text-navy uppercase italic flex items-center gap-3">
-                    <MapPin size={24} className="text-brand-teal" /> Pharmacy Node Location
+                    <MapPin size={24} className="text-brand-teal" /> Pharmacy Location
                  </h3>
                  <div className="space-y-8">
                     <div className="space-y-2">
                        <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Store Address</label>
-                       <textarea rows="3" defaultValue="42, Main Road, Karaikal Central, Karaikal - 609602" className="w-full bg-gray-50 border border-gray-100 rounded-3xl px-6 py-4 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all resize-none"></textarea>
+                       <textarea rows="3" value={form.address} onChange={(e) => setField('address', e.target.value)} className="w-full bg-gray-50 border border-gray-100 rounded-3xl px-6 py-4 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all resize-none"></textarea>
                     </div>
                     <div className="grid md:grid-cols-2 gap-8">
                        <div className="space-y-2">
                           <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Contact Phone</label>
                           <div className="relative">
                              <Phone size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-navy/20" />
-                             <input type="text" defaultValue="+91 98765 43210" className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl pl-14 pr-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
+                             <input type="text" value={form.pharmacyPhone || form.phone} onChange={(e) => setField('pharmacyPhone', e.target.value)} className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl pl-14 pr-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
                           </div>
                        </div>
                        <div className="space-y-2">
                           <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Support Email</label>
                           <div className="relative">
                              <Mail size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-navy/20" />
-                             <input type="email" defaultValue="apollo.karaikal@medipharm.in" className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl pl-14 pr-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
+                             <input type="email" value={form.pharmacyEmail || form.email} onChange={(e) => setField('pharmacyEmail', e.target.value)} className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl pl-14 pr-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all" />
                           </div>
                        </div>
                     </div>

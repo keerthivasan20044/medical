@@ -22,7 +22,7 @@ export default function AdminCompliance() {
         <div className="flex items-center gap-4">
            <div className="bg-white px-6 py-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3">
               <ShieldCheck className="text-brand-teal" size={20} />
-              <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">8 Nodes Flagged</span>
+              <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">8 Items Need Review</span>
            </div>
         </div>
       </div>
@@ -40,7 +40,7 @@ export default function AdminCompliance() {
           },
           { 
             key: 'type', 
-            label: 'Document Protocol',
+            label: 'Document Service',
             render: (val) => (
               <div className="flex items-center gap-2 text-[10px] font-black text-navy/40 uppercase tracking-widest italic">
                 <FileText size={14} className="text-brand-teal" />
@@ -79,7 +79,7 @@ export default function AdminCompliance() {
          <div className="bg-navy p-8 rounded-[2.5rem] text-white space-y-4">
             <div className="text-[10px] font-black text-brand-teal uppercase tracking-widest italic">Legal Verification</div>
             <div className="text-4xl font-syne font-black italic">94.2%</div>
-            <div className="text-[9px] font-bold text-white/40 uppercase tracking-widest italic">Across all registered nodes</div>
+            <div className="text-[9px] font-bold text-white/40 uppercase tracking-widest italic">Across all accounts</div>
          </div>
          <div className="bg-white border border-gray-100 p-8 rounded-[2.5rem] space-y-4">
             <div className="text-[10px] font-black text-brand-teal uppercase tracking-widest italic">Pending Audits</div>
@@ -89,7 +89,7 @@ export default function AdminCompliance() {
          <div className="bg-brand-teal p-8 rounded-[2.5rem] text-navy space-y-4">
             <div className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic">System Integrity</div>
             <div className="text-4xl font-syne font-black italic">Optimal</div>
-            <div className="text-[9px] font-bold text-navy/40 uppercase tracking-widest italic">Security protocol version 4.2</div>
+            <div className="text-[9px] font-bold text-navy/40 uppercase tracking-widest italic">Security version 4.2</div>
          </div>
       </div>
     </div>

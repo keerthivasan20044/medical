@@ -29,7 +29,7 @@ export default function Blog() {
          <div className="max-w-7xl mx-auto px-6 space-y-8">
             <div className="space-y-4">
                <h1 className="font-syne font-black text-5xl md:text-7xl text-[#0a1628] tracking-tighter">Health Tips & <br /><span className="text-[#028090]">Medical News.</span></h1>
-               <p className="text-gray-400 font-dm text-lg md:text-2xl max-w-2xl italic">Written by Karaikal doctors for Karaikal people. Localized medical architecture insights.</p>
+               <p className="text-gray-400 font-dm text-lg md:text-2xl max-w-2xl italic">Written by Karaikal doctors for Karaikal people. Local medical tips.</p>
             </div>
             
             <div className="flex flex-col md:flex-row gap-6 pt-10">
@@ -65,7 +65,7 @@ export default function Blog() {
                <img src={blogPosts[0].image} alt="Featured" className="h-full w-full object-cover group-hover:scale-110 transition duration-700" />
                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-transparent to-transparent opacity-80" />
                <div className="absolute bottom-12 left-12 right-12 space-y-4">
-                  <div className="px-6 py-2 bg-[#02C39A] text-white rounded-full text-[10px] font-black uppercase tracking-widest inline-block shadow-lg">Featured Architecture Article</div>
+                  <div className="px-6 py-2 bg-[#02C39A] text-white rounded-full text-[10px] font-black uppercase tracking-widest inline-block shadow-lg">Featured Article</div>
                   <h2 className="text-white font-syne font-black text-4xl leading-tight hover:text-[#02C39A] transition cursor-pointer">{blogPosts[0].title}</h2>
                </div>
             </div>
@@ -95,7 +95,7 @@ export default function Blog() {
       {/* Blog Grid */}
       <section className="max-w-7xl mx-auto px-6 py-24 space-y-16">
          <div className="flex items-center justify-between border-b border-gray-50 pb-8">
-            <h2 className="font-syne font-black text-3xl text-[#0a1628]">Recent Architecture Articles</h2>
+            <h2 className="font-syne font-black text-3xl text-[#0a1628]">Recent Articles</h2>
             <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Showing {filteredPosts.length} Results</div>
          </div>
 
@@ -153,7 +153,7 @@ export default function Blog() {
             <div className="absolute top-0 right-0 h-64 w-64 bg-[#028090] rounded-full blur-[120px] opacity-10" />
             <div className="max-w-3xl mx-auto space-y-12 relative z-10">
                <h2 className="font-syne font-black text-5xl md:text-7xl leading-tight">Join the Karaikal <br /><span className="text-[#02C39A]">Health Network.</span></h2>
-               <p className="text-white/40 font-dm text-lg md:text-2xl italic leading-relaxed">Weekly architecture insights, local medical trends, and exclusive pharmacy offers delivered to your inbox.</p>
+               <p className="text-white/40 font-dm text-lg md:text-2xl italic leading-relaxed">Weekly health tips, local medical news, and pharmacy offers sent to your inbox.</p>
                <div className="flex flex-col md:flex-row gap-4 max-w-xl mx-auto">
                   <input type="email" placeholder="Your medical email..." className="flex-1 bg-white/5 border border-white/10 rounded-3xl px-10 py-6 text-lg outline-none focus:bg-white/10 focus:border-[#02C39A] transition" />
                   <button className="px-12 py-6 bg-[#02C39A] text-[#0a1628] rounded-3xl font-syne font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-mint shadow-2xl">Subscribe Now &rarr;</button>

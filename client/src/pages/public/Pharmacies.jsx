@@ -15,6 +15,28 @@ const demandData = [
   { time: '20:00', volume: 80 }
 ];
 
+const KARAIKAL_CENTER = { lat: 10.9254, lng: 79.8386 };
+
+const fallbackGps = (index) => ({
+  lat: KARAIKAL_CENTER.lat + ((index % 5) - 2) * 0.006,
+  lng: KARAIKAL_CENTER.lng + (Math.floor(index / 5) - 1) * 0.007,
+});
+
+const normalizeGps = (pharmacy, index) => {
+  const coords = pharmacy.location?.coordinates;
+  if (Array.isArray(coords) && coords.length >= 2) {
+    return { lng: Number(coords[0]), lat: Number(coords[1]) };
+  }
+  return fallbackGps(index);
+};
+
+const formatHours = (hours) => {
+  const today = hours?.find((item) => !item.closed) || hours?.[0];
+  if (!today) return '8:00 AM - 10:00 PM';
+  if (today.closed) return 'Closed today';
+  return `${today.open || '8:00 AM'} - ${today.close || '10:00 PM'}`;
+};
+
 export default function PharmaciesListPage() {
   const { t } = useLanguage();
   const [pharmacies, setPharmacies] = useState([]);
@@ -45,35 +67,50 @@ export default function PharmaciesListPage() {
       // Filter by area if selected
       const data = await pharmacyService.getAll(params);
       
-      const mapped = (data.items || []).map(p => ({
+      const mapped = (data.items || []).map((p, index) => {
+        const gps = normalizeGps(p, index);
+        const image = normalizeUrl(
+          p.mainPhoto ||
+          p.photos?.[0] ||
+          p.customPhotos?.[0] ||
+          p.images?.[0]?.url ||
+          p.images?.[0] ||
+          '/assets/pharmacy_pro.png'
+        );
+        const services = p.services?.length ? p.services : ['Home Delivery', 'Prescription', 'Vaccines'];
+        const is24hr = services.some((service) => service.toLowerCase().includes('24')) || p.hours?.some((h) => h.open === '00:00' && h.close === '23:59');
+
+        return {
         id: p._id,
+        _id: p._id,
         name: p.name,
-        area: p.address?.city || 'Karaikal',
-        address: `${p.address?.street || ''}, ${p.address?.city || 'Karaikal'}`,
-        location: `${p.address?.street || ''}, ${p.address?.city || 'Karaikal'}`,
-        phone: p.phone || '04368-222288',
-        timings: p.timings || '8:00 AM - 10:00 PM',
+        area: p.city || 'Karaikal',
+        address: [p.address, p.city, p.pincode].filter(Boolean).join(', '),
+        location: [p.address, p.city || 'Karaikal'].filter(Boolean).join(', '),
+        phone: Array.isArray(p.phone) ? p.phone[0] : (p.phone || '04368-222288'),
+        timings: formatHours(p.hours),
         rating: p.rating || 4.2,
-        reviewsCount: p.totalReviews || p.reviewsCount || 120,
-        totalReviews: p.totalReviews || 120,
-        status: p.isOpen ? 'OPEN NOW' : 'CLOSED',
-        is24hr: !!(p.timings?.includes('24')),
+        reviewsCount: p.reviewCount || p.totalReviews || p.reviewsCount || 120,
+        totalReviews: p.reviewCount || p.totalReviews || 120,
+        status: p.status === 'active' ? 'OPEN NOW' : 'CLOSED',
+        is24hr,
         deliveryFee: p.deliveryFee || 0,
         freeThreshold: p.freeThreshold || 300,
         eta: '12 MINS',
-        distance: 1.2,
-        image: normalizeUrl(p.images?.[0]?.url || p.images?.[0] || '/assets/pharmacy_pro.png'),
-        images: [normalizeUrl(p.images?.[0]?.url || p.images?.[0] || '/assets/pharmacy_pro.png')],
-        services: p.services || ['Home Delivery', 'Prescription', 'Vaccines'],
-        coordinates: p.address?.coordinates || { lat: 10.9254, lng: 79.8386 },
-        gps: p.address?.coordinates || { lat: 10.9254 + (Math.random() * 0.02 - 0.01), lng: 79.8386 + (Math.random() * 0.02 - 0.01) },
+        distance: Number((Math.hypot(gps.lat - KARAIKAL_CENTER.lat, gps.lng - KARAIKAL_CENTER.lng) * 111).toFixed(1)),
+        image,
+        images: [image],
+        services,
+        coordinates: gps,
+        gps,
         stock: p.stock || { tablets: 75, syrups: 60, vaccines: 45, injections: 50, baby: 40, ayurvedic: 30 },
         alerts: p.alerts || [],
         isTopRated: (p.rating || 0) >= 4.7,
         isFastest: false,
         isAyurvedicSpecialist: false,
         isBabyCareSpecialist: false,
-      }));
+        };
+      });
       setPharmacies(mapped);
     } catch (err) {
       console.error('Could not load pharmacies from registry:', err);
@@ -103,9 +140,10 @@ export default function PharmaciesListPage() {
                          (openStatus === '24 Hours' && p.is24hr);
       const matchesDelivery = !freeDelivery || p.deliveryFee === 0;
       const matchesRating = p.rating >= minRating;
+      const matchesDistance = maxDistance === 'Any' || p.distance <= Number(maxDistance.replace('km', ''));
       const matchesServices = selectedServices.every(s => p.services.includes(s));
 
-      return matchesSearch && matchesArea && matchesOpen && matchesDelivery && matchesRating && matchesServices;
+      return matchesSearch && matchesArea && matchesOpen && matchesDelivery && matchesRating && matchesDistance && matchesServices;
     });
 
     if (sortBy === 'Rating') result.sort((a, b) => b.rating - a.rating);
@@ -139,6 +177,23 @@ export default function PharmaciesListPage() {
                >
                  <SlidersHorizontal size={18} />
                </button>
+               <div className="hidden sm:flex bg-slate-100 border border-slate-200 p-1 rounded-xl">
+                 {[
+                   { id: 'grid', icon: Grid2X2, label: 'Grid' },
+                   { id: 'list', icon: List, label: 'List' },
+                   { id: 'map', icon: MapIcon, label: 'Map' }
+                 ].map(mode => (
+                   <button
+                     key={mode.id}
+                     type="button"
+                     title={mode.label}
+                     onClick={() => setViewMode(mode.id)}
+                     className={`h-8 w-9 rounded-lg flex items-center justify-center transition-all ${viewMode === mode.id ? 'bg-slate-900 text-teal-400 shadow-sm' : 'text-slate-400 hover:text-slate-900'}`}
+                   >
+                     <mode.icon size={15} />
+                   </button>
+                 ))}
+               </div>
             </div>
             
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth pb-1">
@@ -164,12 +219,19 @@ export default function PharmaciesListPage() {
                    <span className="whitespace-nowrap">{pill.label}</span>
                  </button>
                ))}
+               <button
+                 onClick={() => setViewMode(viewMode === 'map' ? 'grid' : 'map')}
+                 className={`sm:hidden h-8 px-4 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all flex items-center gap-2 shrink-0 border ${viewMode === 'map' ? 'bg-slate-900 text-teal-400 border-slate-900 shadow-sm' : 'bg-white text-slate-400 border-slate-200'}`}
+               >
+                 <MapIcon size={13} />
+                 <span>Map</span>
+               </button>
             </div>
          </div>
       </div>
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 space-y-16">
-         {/* Live District Demand Telemetry Hub */}
+         {/* Live District Demand Tracking Hub */}
          <div className="bg-white border border-slate-100 rounded-3xl md:rounded-[4.5rem] p-6 md:p-16 shadow-sm flex flex-col lg:flex-row items-center gap-8 md:gap-16 relative overflow-hidden">
             <div className="absolute top-0 right-0 h-64 w-64 bg-brand-teal opacity-[0.02] rounded-full blur-[80px]" />
             <div className="lg:w-1/3 space-y-8 text-center lg:text-left">
@@ -229,16 +291,24 @@ export default function PharmaciesListPage() {
             <div className="space-y-12">
                <AnimatePresence mode="wait">
                  {viewMode === 'map' ? (
-                   <motion.div key="mapView" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="h-[800px] w-full bg-white rounded-[5rem] overflow-hidden border border-black/[0.03] shadow-soft relative"><KaraikalMap pharmacies={filteredPharmacies} /></motion.div>
+                   <motion.div key="mapView" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="h-[620px] md:h-[800px] w-full bg-white rounded-3xl md:rounded-[5rem] overflow-hidden border border-black/[0.03] shadow-soft relative"><KaraikalMap pharmacies={filteredPharmacies} /></motion.div>
                  ) : (
                    <motion.div key={viewMode} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} className={`grid gap-4 md:gap-12 px-3 md:px-0 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>{filteredPharmacies.map(p => (<PharmacyCard_v2 key={p.id} item={p} layout={viewMode} />))}</motion.div>
                  )}
                </AnimatePresence>
 
+               {filteredPharmacies.length === 0 && (
+                  <div className="py-24 bg-white rounded-3xl border border-slate-100 text-center shadow-sm">
+                     <MapPin size={42} className="mx-auto text-slate-200" />
+                     <h3 className="mt-6 font-syne font-black text-2xl text-[#0a1628] uppercase italic tracking-tighter">No pharmacies found</h3>
+                     <p className="mt-2 text-sm font-bold text-slate-400 italic">Adjust the filters or search another area.</p>
+                  </div>
+               )}
+
                {filteredPharmacies.length > 0 && (
                   <div className="flex justify-center pt-12">
                      <button className="h-16 px-12 bg-white border border-black/[0.05] text-[#0a1628] font-syne font-black text-[10px] uppercase italic tracking-widest rounded-2xl shadow-soft hover:bg-[#0a1628] hover:text-brand-teal transition-all duration-700 active:scale-95">
-                        Load More Enclaves
+                        Load More
                      </button>
                   </div>
                )}

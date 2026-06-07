@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 
 /**
- * Standard page title architecture with breadcrumbs.
+ * Standard page title system with breadcrumbs.
  */
 export function PageHeader({ title, subtitle, breadcrumbs = [] }) {
   const { t } = useLanguage();
@@ -24,7 +24,7 @@ export function PageHeader({ title, subtitle, breadcrumbs = [] }) {
                   ))}
                </div>
              )}
-             <h1 className="font-syne font-black text-6xl md:text-9xl text-white tracking-tighter leading-none drop-shadow-2xl">{title} <br /><span className="text-[#02C39A]">{t('enclaveSuffix')}</span></h1>
+             <h1 className="font-syne font-black text-6xl md:text-9xl text-white tracking-tighter leading-none drop-shadow-2xl">{title} <br /><span className="text-[#02C39A]">{t('areaSuffix')}</span></h1>
              {subtitle && <p className="text-white/40 font-dm text-lg md:text-2xl max-w-2xl mx-auto italic leading-relaxed tracking-wide">{subtitle}</p>}
           </motion.div>
        </div>
@@ -33,14 +33,14 @@ export function PageHeader({ title, subtitle, breadcrumbs = [] }) {
 }
 
 /**
- * Modern section title architecture with optional CTA.
+ * Modern section title system with optional CTA.
  */
 export function SectionHeader({ title, subtitle, cta, to }) {
   const { t } = useLanguage();
   return (
     <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 border-b border-gray-50 pb-12 mb-20 animate-fade-in">
        <div className="space-y-4">
-          <h2 className="font-syne font-black text-5xl text-[#0a1628] leading-tight select-none">{title} <br /><span className="text-[#028090]">{t('architectureSuffix')}</span></h2>
+          <h2 className="font-syne font-black text-5xl text-[#0a1628] leading-tight select-none">{title} <br /><span className="text-[#028090]">{t('systemSuffix')}</span></h2>
           {subtitle && <p className="text-gray-400 font-dm font-bold text-xl italic tracking-wide marker:text-[#02C39A]">/ {subtitle}</p>}
        </div>
        {cta && to && (
@@ -53,7 +53,7 @@ export function SectionHeader({ title, subtitle, cta, to }) {
 }
 
 /**
- * Full-screen architecture loader.
+ * Full-screen system loader.
  */
 export function PageLoader() {
   const { t } = useLanguage();
@@ -66,7 +66,7 @@ export function PageLoader() {
           </div>
        </div>
        <div className="space-y-4 text-center">
-          <h2 className="font-syne font-black text-3xl text-white tracking-widest uppercase italic">{t('syncingEnclave')}</h2>
+          <h2 className="font-syne font-black text-3xl text-white tracking-widest uppercase italic">{t('updateingArea')}</h2>
           <div className="flex gap-3 justify-center">
              {[...Array(3)].map((_, i) => (
                 <div key={i} className="h-2 w-2 bg-[#02C39A] rounded-full animate-bounce shadow-mint" style={{ animationDelay: `${i * 200}ms` }} />
@@ -78,7 +78,7 @@ export function PageLoader() {
 }
 
 /**
- * Stylized loading spinner architecture.
+ * Stylized loading spinner system.
  */
 export function Spinner({ size = 24, color = "text-[#02C39A]" }) {
   return <Loader2 className={`animate-spin ${color}`} size={size} />;
@@ -105,7 +105,7 @@ export function MedicineCardSkeleton() {
 }
 
 /**
- * Profile enclave skeleton loader.
+ * Profile area skeleton loader.
  */
 export function ProfileSkeleton() {
   return (
@@ -125,7 +125,7 @@ export function ProfileSkeleton() {
 }
 
 /**
- * Global verification protocol badge.
+ * Global verification step badge.
  */
 export function VerifiedBadge() {
   const { t } = useLanguage();

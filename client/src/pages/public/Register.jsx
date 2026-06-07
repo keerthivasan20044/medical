@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   User, Mail, Lock, Phone, 
@@ -9,7 +9,8 @@ import {
   Eye, EyeOff
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setAuth } from '../../store/authSlice';
 import { Button, Input, OTPInput } from '../../components/common/Core';
 import { useGeolocation, useToast } from '../../hooks/core';
 import { useLanguage } from '../../context/LanguageContext';
@@ -20,6 +21,7 @@ export default function Register() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [verifiedUser, setVerifiedUser] = useState(null);
   const [formData, setFormData] = useState({
     role: 'customer',
     name: '',
@@ -35,24 +37,9 @@ export default function Register() {
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const toast = useToast();
   const location = useGeolocation();
-  const { isAuthenticated, user } = useSelector(state => state.auth);
-
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      const ROLE_DASHBOARDS = {
-        admin: '/admin/dashboard',
-        pharmacist: '/pharmacist/dashboard',
-        doctor: '/doctor/dashboard',
-        delivery: '/delivery/dashboard',
-        customer: '/home',
-      };
-      const dest = ROLE_DASHBOARDS[user.role] || '/home';
-      navigate(dest, { replace: true });
-    }
-  }, [isAuthenticated, user, navigate]);
-
   const handleNext = () => setStep(s => s + 1);
   const handleBack = () => {
     if (loading) return;
@@ -62,7 +49,7 @@ export default function Register() {
   const autoDetectAddress = () => {
     if (location.lat) {
       setFormData(prev => ({ ...prev, address: `Detected Location: ${location.lat}, ${location.lng}` }));
-      toast.success(t('gpsSyncSuccess'));
+      toast.success(t('gpsUpdateSuccess'));
     } else {
       toast.error(t('locationError'));
     }
@@ -74,7 +61,7 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      await authService.register(formData);
+      const data = await authService.register(formData);
       toast.success(t('authSignalBroadcasted'));
       setStep(4);
       if (import.meta.env.MODE === 'development') {
@@ -90,12 +77,15 @@ export default function Register() {
   const verifyRegistration = async (otpCode) => {
     setLoading(true);
     try {
-      await authService.verifyOTP({ 
+      const data = await authService.verifyOTP({ 
         email: formData.email, 
         phone: formData.phone, 
         code: otpCode 
       });
-      toast.success(t('nodeVerified'));
+      if (data.user) {
+        setVerifiedUser(data.user);
+      }
+      toast.success(t('itemVerified'));
       setStep(5);
     } catch (err) {
       toast.error(err.response?.data?.error || err.response?.data?.message || t('verificationFailed'));
@@ -108,7 +98,7 @@ export default function Register() {
     const file = e.target.files[0];
     if (file) {
       setFormData(prev => ({ ...prev, photo: file }));
-      toast.success(t('visualHandshakeSync'));
+      toast.success(t('visualHandshakeUpdate'));
     }
   };
 
@@ -121,6 +111,19 @@ export default function Register() {
         data.append('email', formData.email);
         data.append('phone', formData.phone);
         await authService.uploadAvatar(data);
+      }
+      if (verifiedUser) {
+        const role = verifiedUser.role || formData.role;
+        const dashboards = {
+          admin: '/admin/dashboard',
+          pharmacist: '/pharmacist/dashboard',
+          doctor: '/doctor/dashboard',
+          delivery: '/delivery/dashboard',
+          customer: '/home',
+        };
+        dispatch(setAuth({ user: verifiedUser, role }));
+        navigate(dashboards[role] || '/home', { replace: true });
+        return;
       }
       toast.success(t('registrationFinalized'));
       navigate('/login');
@@ -381,7 +384,7 @@ export default function Register() {
                                          {formData.photo ? formData.photo.name : t('pendingLog')}
                                       </div>
                                       <div className="text-[8px] md:text-[10px] text-white/20 font-black uppercase tracking-widest italic animate-pulse">
-                                         {formData.photo ? t('syncedStatus', { size: (formData.photo.size / (1024 * 1024)).toFixed(1) }) : t('awaitingHandshake')}
+                                         {formData.photo ? t('updateedStatus', { size: (formData.photo.size / (1024 * 1024)).toFixed(1) }) : t('awaitingHandshake')}
                                       </div>
                                    </div>
                                 </div>

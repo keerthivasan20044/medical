@@ -163,7 +163,7 @@ export default function PharmacyDetailPage() {
         )}
       </AnimatePresence>
 
-      {/* Breadcrumb Terminal */}
+      {/* Breadcrumb Page */}
       <section className="bg-white/30 backdrop-blur-sm border-b border-black/[0.02] py-4 mt-16 md:mt-24">
          <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="flex flex-wrap items-center gap-3 text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-[0.4em] italic leading-none">

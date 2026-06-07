@@ -51,7 +51,7 @@ export default function Cart() {
 
   if (items.length === 0) {
     return (
-      <div className="bg-[#f8fafc] min-h-screen py-32 px-6 px-10">
+      <div className="bg-[#f8fafc] min-h-screen py-20 md:py-32 px-4 md:px-10">
          <div className="max-w-4xl mx-auto">
             <EmptyState
               icon={ShoppingCart}
@@ -66,14 +66,14 @@ export default function Cart() {
   }
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-48 pt-16 md:pt-24">
+    <div className="bg-[#f8fafc] min-h-screen pb-44 pt-6 md:pb-32 md:pt-24">
       <div className="max-w-7xl mx-auto px-4 md:px-10">
          <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-8 md:mb-20">
             <div className="space-y-3 md:space-y-6 w-full">
                <div className="px-4 py-1.5 bg-navy rounded-xl w-fit flex items-center gap-2 text-[9px] md:text-[10px] font-black text-teal-400 uppercase tracking-widest italic leading-none">
                   <Activity size={12} className="animate-pulse" /> {t('shoppingCart')}
                </div>
-               <h1 className="font-syne font-black text-4xl md:text-7xl lg:text-9xl text-navy leading-tight tracking-tighter uppercase italic">
+               <h1 className="font-syne font-black text-3xl sm:text-4xl md:text-7xl lg:text-9xl text-navy leading-tight uppercase italic break-words">
                   {t('my')} <span className="text-teal-600">{t('inventory')}</span>
                </h1>
             </div>
@@ -105,9 +105,9 @@ export default function Cart() {
                      <div className="flex items-center justify-between border-b border-gray-50 pb-4 md:pb-8 px-2 md:px-4">
                         <div className="flex items-center gap-3 md:gap-6">
                            <div className="h-1 w-8 md:w-16 bg-teal-500 rounded-full" />
-                           <h2 className="font-syne font-black text-lg md:text-2xl text-navy uppercase tracking-tighter italic">{t('selectedItems')}</h2>
+                           <h2 className="font-dm font-black text-base sm:text-lg md:text-2xl text-navy uppercase italic whitespace-nowrap">{t('selectedItems')}</h2>
                         </div>
-                        <div className="text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{items.length} {t('activeSyncs')}</div>
+                        <div className="text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{items.length} {t('activeUpdates')}</div>
                      </div>
                      
                      <div className="space-y-4 md:space-y-6">
@@ -133,7 +133,7 @@ export default function Cart() {
                   </div>
                </div>
 
-               {/* Logistics Synchronization Notes */}
+               {/* Logistics Updatehronization Notes */}
                <div className="bg-navy rounded-2xl md:rounded-[4rem] p-6 md:p-12 text-white relative overflow-hidden border-l-8 md:border-l-[16px] border-teal-500 shadow-xl">
                   <div className="absolute top-0 right-0 h-32 w-32 bg-teal-500 opacity-[0.03] rounded-full blur-[100px]" />
                   <div className="space-y-4 md:space-y-8 relative z-10">
@@ -148,7 +148,7 @@ export default function Cart() {
                      <textarea
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
-                        placeholder="Ex: Entrance door code: 128-Sync..."
+                        placeholder="Ex: Ex: Door code 128..."
                         rows={3}
                         className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-[2.5rem] px-4 md:px-10 py-4 md:py-8 text-white font-syne font-black text-[10px] md:text-xs uppercase tracking-widest focus:border-teal-500 outline-none transition-all placeholder:text-white/10 italic resize-none"
                      />
@@ -188,11 +188,12 @@ export default function Cart() {
                      onTipChange={setTip}
                      onCheckout={handleCheckout}
                      isCheckoutDisabled={items.length === 0}
+                     showCheckout
                   />
                </div>
                
                {/* Mobile Coupon & Summary Section */}
-               <div className="lg:hidden space-y-10 mb-10">
+               <div className="lg:hidden space-y-6 mb-10">
                   <CartSummary
                      subtotal={subtotal}
                      deliveryFee={deliveryFee}
@@ -209,12 +210,13 @@ export default function Cart() {
                      onTipChange={setTip}
                      onCheckout={handleCheckout}
                      isCheckoutDisabled={items.length === 0}
+                     showCheckout={false}
                   />
                </div>
 
                <div className="hidden md:flex mt-12 px-8 items-center justify-between text-[11px] font-black uppercase italic tracking-[0.2em] text-gray-200">
                   <div className="flex items-center gap-3">
-                     <Zap size={16} className="text-amber-500" /> Secure Delivery Protocol
+                     <Zap size={16} className="text-amber-500" /> Secure Delivery Service
                   </div>
                   <div className="flex items-center gap-3">
                      <ShieldCheck size={16} className="text-emerald-500" /> KARAIKAL Network
@@ -230,15 +232,15 @@ export default function Cart() {
             <motion.div 
               initial={{ y: 200 }}
               animate={{ y: 0 }}
-              className="lg:hidden fixed bottom-[80px] inset-x-2 z-[100] bg-navy h-20 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between px-4 gap-4"
+              className="lg:hidden fixed bottom-[calc(4.25rem+env(safe-area-inset-bottom))] inset-x-3 z-[44] bg-navy h-[4.25rem] rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between px-4 gap-3"
             >
                <div className="flex flex-col min-w-0">
                   <span className="text-[7px] font-black text-white/30 uppercase italic tracking-widest">TOTAL_SYNC</span>
-                  <div className="font-syne font-black text-teal-400 text-2xl italic leading-none truncate">₹{totalAmount}</div>
+                  <div className="font-dm font-black text-teal-400 text-xl italic leading-none truncate">₹{totalAmount}</div>
                </div>
                <button 
                  onClick={handleCheckout}
-                 className="flex-1 h-12 bg-teal-500 text-white font-syne font-black text-[9px] uppercase italic tracking-widest rounded-xl shadow-lg active:scale-95 transition-transform truncate"
+                 className="flex-1 h-12 bg-teal-500 text-white font-dm font-bold text-xs uppercase rounded-xl shadow-lg active:scale-95 transition-transform whitespace-nowrap px-3"
                >
                   PROCEED TO CHECKOUT
                </button>

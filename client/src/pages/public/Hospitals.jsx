@@ -152,7 +152,7 @@ export default function HospitalsPage() {
                <div className="space-y-6 text-center lg:text-left">
                   <div className="h-20 w-20 bg-white rounded-3xl flex items-center justify-center text-red-500 shadow-4xl animate-bounce mx-auto lg:mx-0"><Activity size={48}/></div>
                   <h2 className="font-syne font-black text-5xl lg:text-[5.5rem] text-white tracking-tighter uppercase italic leading-none">{t('emergencyServices').split(' ')[0]} <br/><span className="text-white/40 italic">{t('emergencyServices').split(' ')[1]}</span></h2>
-                  <p className="text-white font-dm italic font-bold text-2xl max-w-xl">{t('districtArchitectureHeader')}</p>
+                  <p className="text-white font-dm italic font-bold text-2xl max-w-xl">{t('districtSystemHeader')}</p>
                </div>
                <div className="flex flex-col items-center gap-8">
                   <div className="text-center">

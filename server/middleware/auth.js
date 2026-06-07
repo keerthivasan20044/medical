@@ -21,7 +21,7 @@ export async function verifyToken(req, res, next) {
     const decoded = jwt.verify(token, JWT_SECRET);
     
     // Achieving real-time authorization: Validating actual DB state
-    const user = await User.findById(decoded.id).select('isActive isVerified role').lean();
+    const user = await User.findById(decoded.id).select('isActive isVerified role pharmacyId').lean();
     
     if (!user || !user.isActive) {
       return res.status(401).json({ error: 'Your session has ended. Please log in again.' });
@@ -29,9 +29,9 @@ export async function verifyToken(req, res, next) {
     
     // Ensure role matches current database record
     if (user.role !== decoded.role) {
-      req.user = { ...decoded, role: user.role };
+      req.user = { ...decoded, role: user.role, pharmacyId: user.pharmacyId };
     } else {
-      req.user = decoded;
+      req.user = { ...decoded, pharmacyId: decoded.pharmacyId || user.pharmacyId };
     }
     
     next();

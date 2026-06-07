@@ -15,7 +15,7 @@ export default function DeliveryHistory() {
   const formattedData = history.map(order => ({
     id: order.orderNumber || (order._id || order.id).slice(-6),
     pharmacy: order.pharmacyId?.name || 'Unknown Pharmacy',
-    customer: order.customerName || 'Resident Node',
+    customer: order.customerName || order.customerId?.name || 'Customer',
     payout: order.deliveryFare || 45,
     date: new Date(order.deliveredAt || order.createdAt).toLocaleString('en-IN', {
       day: 'numeric',
@@ -39,7 +39,7 @@ export default function DeliveryHistory() {
       {loading ? (
         <div className="h-64 flex flex-col items-center justify-center space-y-4">
           <Loader2 className="animate-spin text-brand-teal" size={40} />
-          <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Synchronizing Logs...</p>
+          <p className="text-xs font-dm font-black text-navy/20 uppercase tracking-widest italic">Loading delivery history...</p>
         </div>
       ) : (
         <DataTable 
@@ -74,7 +74,7 @@ export default function DeliveryHistory() {
               key: 'payout', 
               label: 'Earnings', 
               render: (val) => (
-                <span className="font-syne font-black text-navy italic">₹{val}</span>
+                <span className="font-syne font-black text-navy italic">INR {val}</span>
               )
             },
             { 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import DataTable from '../../components/dashboard/DataTable';
 import { adminService } from '../../services/apiServices';
-import { User, Activity, ShieldCheck, Clock, Star, Phone, MoreHorizontal, CheckCircle, XCircle } from 'lucide-react';
+import { ShieldCheck, Clock, Star, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function AdminDoctors() {
@@ -27,7 +27,7 @@ export default function AdminDoctors() {
       setTotalPages(data.pages || 1);
       setTotalRecords(data.total || 0);
     } catch (e) {
-      toast.error('Failed to sync doctor registry');
+      toast.error('Could not load doctors');
     } finally {
       setLoading(false);
     }
@@ -44,7 +44,7 @@ export default function AdminDoctors() {
 
   const toggleVerification = async (id) => {
     try {
-      // Logic for verification toggle would go here
+      await adminService.toggleUserVerification(id);
       toast.success('Doctor verification status updated');
       fetchDoctors(page, search);
     } catch (err) {
@@ -53,16 +53,16 @@ export default function AdminDoctors() {
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6 md:space-y-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Doctor Registry</h1>
+        <div className="min-w-0">
+          <h1 className="font-syne font-black text-3xl md:text-4xl text-navy italic tracking-normal md:tracking-tighter uppercase leading-tight break-words">Doctor Registry</h1>
           <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Verified Professionals across the Mesh</p>
         </div>
         <div className="flex items-center gap-4">
            <div className="bg-white px-6 py-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3">
               <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">{totalRecords} Nodes Active</span>
+              <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">{totalRecords} Active</span>
            </div>
         </div>
       </div>
@@ -80,12 +80,12 @@ export default function AdminDoctors() {
             key: 'name', 
             label: 'Practitioner',
             render: (val, row) => (
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 bg-navy text-brand-teal rounded-xl flex items-center justify-center font-black italic">
-                   {val[0]}
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="h-10 w-10 shrink-0 bg-navy text-brand-teal rounded-xl flex items-center justify-center font-black italic">
+                   {val?.[0] || 'D'}
                 </div>
-                <div>
-                  <div className="font-dm font-black text-navy text-sm italic">{val}</div>
+                <div className="min-w-0">
+                  <div className="font-dm font-black text-navy text-sm italic break-words">{val}</div>
                   <div className="text-[10px] font-bold text-navy/40 uppercase tracking-widest italic">{row.doctorProfile?.specialization || 'General Physician'}</div>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export default function AdminDoctors() {
             key: 'isVerified', 
             label: 'Verification',
             render: (val) => (
-              <div className={`flex items-center gap-2 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest w-fit ${
+              <div className={`flex items-center gap-2 px-3 md:px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider md:tracking-widest w-fit ${
                 val ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
               }`}>
                 {val ? <CheckCircle size={10} /> : <ShieldCheck size={10} />}
@@ -137,6 +137,7 @@ export default function AdminDoctors() {
         ]}
         data={doctors}
         actions={true}
+        onEdit={(row) => toggleVerification(row._id || row.id)}
       />
     </div>
   );

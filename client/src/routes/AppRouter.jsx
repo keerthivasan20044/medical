@@ -53,6 +53,7 @@ const MyOrdersPage = lazy(() => import('../pages/customer/Orders'));
 const OrderDetailPage = lazy(() => import('../pages/customer/OrderDetail'));
 const LiveTrackingPage = lazy(() => import('../pages/customer/OrderTrack'));
 const InvoicePage = lazy(() => import('../pages/customer/Invoice'));
+const ReceiptsPage = lazy(() => import('../pages/customer/Receipts'));
 const CartPage = lazy(() => import('../pages/customer/Cart'));
 const CheckoutPage = lazy(() => import('../pages/customer/Checkout'));
 const OrderSuccessPage = lazy(() => import('../pages/customer/OrderSuccess'));
@@ -143,6 +144,7 @@ export default function AppRouter() {
               <Route path="/orders/:id" element={<OrderDetailPage />} />
               <Route path="/orders/:id/track" element={<LiveTrackingPage />} />
               <Route path="/orders/:id/invoice" element={<InvoicePage />} />
+              <Route path="/receipts" element={<ReceiptsPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/order/:pharmacyId/prescription" element={<PrescriptionUploadFlow />} />
               <Route path="/checkout" element={<CheckoutPage />} />

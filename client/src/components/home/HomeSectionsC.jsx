@@ -266,7 +266,7 @@ export function GPSTracking() {
                   {/* HUD Grid Layout */}
                   <div className="absolute inset-0 bg-[linear-gradient(white/5_1px,transparent_1px),linear-gradient(90deg,white/5_1px,transparent_1px)] bg-[size:40px_40px] opacity-20" />
                   
-                  {/* District Radar Protocol */}
+                  {/* District Radar Service */}
                   <motion.div 
                      animate={{ scale: [1, 2], opacity: [0.6, 0] }}
                      transition={{ repeat: Infinity, duration: 4 }}
@@ -278,17 +278,17 @@ export function GPSTracking() {
                      <path d="M50 350 Q200 300 150 200 T300 50" stroke="#02C39A" strokeWidth="6" strokeDasharray="12 12" fill="none" className="animate-dash" />
                   </svg>
 
-                  {/* Customer Node */}
+                  {/* Customer Item */}
                   <div className="absolute left-[20px] md:left-[50px] bottom-[20px] md:bottom-[50px] space-y-2 md:space-y-4 z-20 scale-75 md:scale-100">
                      <div className="bg-navy text-white text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-xl flex items-center gap-3 md:gap-4 border-2 border-white/10 italic">
                         <div className="h-1.5 w-1.5 md:h-2 md:w-2 bg-red-500 rounded-full animate-ping" /> {t('yourHouse') || 'YOUR HOUSE'}
                      </div>
-                     <div className="h-12 w-12 md:h-16 md:w-16 bg-white rounded-xl md:rounded-[1.5rem] shadow-xl flex items-center justify-center text-red-500 border-2 md:border-4 border-red-500/10 scale-110"><MapPin size={24} md:size={32} fill="currentColor" /></div>
+                     <div className="h-12 w-12 md:h-16 md:w-16 bg-white rounded-xl md:rounded-[1.5rem] shadow-xl flex items-center justify-center text-red-500 border-2 md:border-4 border-red-500/10 scale-110"><MapPin className="h-6 w-6 md:h-8 md:w-8" fill="currentColor" /></div>
                   </div>
 
-                  {/* Terminal Node */}
+                  {/* Appointment */}
                   <div className="absolute right-[30px] md:right-[80px] top-[30px] md:top-[60px] space-y-2 md:space-y-4 z-20 scale-75 md:scale-100">
-                     <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 10, ease: "linear" }} className="h-12 w-12 md:h-16 md:w-16 bg-navy rounded-xl md:rounded-[1.5rem] shadow-xl flex items-center justify-center text-teal-400 border-2 border-teal-500/40"><Store size={24} md:size={32} /></motion.div>
+                     <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 10, ease: "linear" }} className="h-12 w-12 md:h-16 md:w-16 bg-navy rounded-xl md:rounded-[1.5rem] shadow-xl flex items-center justify-center text-teal-400 border-2 border-teal-500/40"><Store className="h-6 w-6 md:h-8 md:w-8" /></motion.div>
                      <div className="bg-white/90 backdrop-blur-3xl text-navy text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl border-2 border-gray-100 shadow-xl italic">{t('pharmacy') || 'PHARMACY'}</div>
                   </div>
 
@@ -301,7 +301,7 @@ export function GPSTracking() {
                      <Truck size={36} className="group-hover:rotate-12 transition-transform" />
                   </motion.div>
 
-                  {/* Telemetry Status HUD */}
+                  {/* Tracking Status HUD */}
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-navy p-6 md:p-12 rounded-3xl md:rounded-[4rem] border-2 border-white/10 shadow-2xl text-center space-y-3 md:space-y-4 w-[220px] md:w-80 transform group-hover:scale-105 md:group-hover:scale-110 transition duration-1000 z-30 backdrop-blur-3xl">
                      <div className="text-[7px] md:text-[10px] font-black text-white/40 uppercase tracking-[0.3em] md:tracking-[0.4em] leading-none italic">Delivery Progress</div>
                      <div className="font-syne font-black text-3xl md:text-6xl text-teal-400 tracking-tighter italic">04:12 <span className="text-white/10 text-xs md:text-xl font-normal">MIN</span></div>
@@ -489,9 +489,9 @@ export function LogoStrip() {
 
 export function BlogPreview() {
    const BLOGS = [
-      { id: 1, title: 'Managing Diabetes in Karaikal Summer', img: '/assets/hospital_pro.png', author: 'Dr. K. Anand Kumar', tag: 'Health Tips' },
-      { id: 2, title: '5 Medicines Every Home Should Have', img: '/assets/medicine_default.png', author: 'Dr. S. Priya Raman', tag: 'Medicine Guide' },
-      { id: 3, title: 'Visiting JIPMER vs Online Consult', img: '/assets/hospital_pro.png', author: 'MediPharm Team', tag: 'Healthcare' }
+      { id: 1, slug: 'summer-health-tips', title: 'Managing Diabetes in Karaikal Summer', img: '/assets/hospital_pro.png', author: 'Dr. K. Anand Kumar', tag: 'Health Tips' },
+      { id: 2, slug: 'essentials-karaikal-home', title: '5 Medicines Every Home Should Have', img: '/assets/medicine_default.png', author: 'Dr. S. Priya Raman', tag: 'Medicine Guide' },
+      { id: 3, slug: 'summer-health-tips', title: 'Visiting JIPMER vs Online Consult', img: '/assets/hospital_pro.png', author: 'MediPharm Team', tag: 'Healthcare' }
    ];
 
    return (
@@ -504,7 +504,7 @@ export function BlogPreview() {
             
             <div className="grid md:grid-cols-3 gap-8">
                {BLOGS.map((b, i) => (
-                  <Link key={i} to={`/blog/${b.id}`} className="group bg-white rounded-[3rem] border border-gray-100 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500">
+                  <Link key={i} to={`/blog/${b.slug}`} className="group bg-white rounded-[3rem] border border-gray-100 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500">
                      <div className="h-56 overflow-hidden relative">
                         <img src={b.img} alt={b.title} className="h-full w-full object-cover group-hover:scale-110 transition duration-700" />
                         <div className="absolute bottom-4 left-4 bg-white/20 backdrop-blur-md text-white text-[9px] font-bold px-3 py-1.5 rounded-xl border border-white/20 uppercase tracking-widest">{b.tag}</div>

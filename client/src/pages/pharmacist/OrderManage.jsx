@@ -4,7 +4,7 @@ import PageShell from '../../components/layout/PageShell';
 export default function OrderManage() {
   return (
     <PageShell 
-      title="Terminal Dispatch" 
+      title="Order Dispatch" 
       subtitle="Full logistical control and verification for order ID: ORD-5542-KKL."
       icon={Package}
       actions={
@@ -13,7 +13,7 @@ export default function OrderManage() {
             <CheckCircle size={18} className="group-hover:animate-pulse" /> Confirm Package
           </button>
           <button className="h-16 px-10 bg-[#0a1628] text-brand-teal font-syne font-black text-xs rounded-2xl flex items-center gap-3 active:scale-95 shadow-4xl italic uppercase tracking-wider">
-            <Truck size={18} /> Deploy Rider Node
+            <Truck size={18} /> Send Rider
           </button>
         </div>
       }
@@ -29,16 +29,16 @@ export default function OrderManage() {
                </div>
                
                <div className="space-y-6">
-                  {[
+                  {(window.__ORDER_ITEMS || [
                      { name: 'Dolo 650mg', quantity: 2, batch: 'B2201-KKL', price: 64 },
                      { name: 'Cetirizine 10mg', quantity: 1, batch: 'C998-KKL', price: 25 }
-                  ].map(item => (
+                  ]).map(item => (
                      <div key={item.name} className="p-8 bg-white rounded-3xl border border-black/[0.01] shadow-soft flex items-center justify-between group hover:shadow-2xl hover:border-brand-teal/20 transition-all duration-700">
                         <div className="flex items-center gap-6">
                            <div className="h-16 w-16 bg-gray-50 rounded-2xl flex items-center justify-center text-brand-teal group-hover:scale-110 transition-transform"><Pill size={24}/></div>
                            <div className="space-y-1">
                               <div className="font-syne font-black text-[#0a1628] text-xl uppercase italic">{item.name}</div>
-                              <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">Batch Sync: {item.batch}</div>
+                              <div className="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">Batch: {item.batch}</div>
                            </div>
                         </div>
                         <div className="text-right space-y-1">
@@ -64,7 +64,7 @@ export default function OrderManage() {
                      <div className="h-20 w-20 bg-white/5 border border-white/10 rounded-[2rem] flex items-center justify-center text-brand-teal shadow-2xl transition group-hover:scale-105"><User size={32}/></div>
                      <div>
                         <h3 className="font-syne font-black text-2xl uppercase italic tracking-tighter text-white">Ramesh Kumar</h3>
-                        <p className="text-white/40 font-dm italic font-bold">Terminal Sync ID: CUST-8842</p>
+                        <p className="text-white/40 font-dm italic font-bold">Customer ID: CUST-8842</p>
                      </div>
                   </div>
                   
@@ -73,8 +73,8 @@ export default function OrderManage() {
                         <div className="flex items-center gap-6">
                            <MapPin className="text-brand-teal" size={24} />
                            <div className="space-y-1">
-                              <div className="text-[10px] text-brand-teal font-black uppercase tracking-widest italic leading-none">Delivery Node</div>
-                              <div className="font-syne font-black text-white text-lg uppercase italic tracking-tighter">Market Road Terminal</div>
+                              <div className="text-[10px] text-brand-teal font-black uppercase tracking-widest italic leading-none">Delivery Address</div>
+                              <div className="font-syne font-black text-white text-lg uppercase italic tracking-tighter">Market Road</div>
                            </div>
                         </div>
                      </div>
@@ -96,7 +96,7 @@ export default function OrderManage() {
                <div className="flex items-center gap-4 text-brand-teal font-syne font-black text-sm uppercase italic">
                   <Package size={24} className="group-hover:animate-bounce" /> PACKAGING_PROTOCOL
                </div>
-               <p className="text-[#0a1628]/60 font-dm italic font-bold">Verify double-layered sterilization for the district medical enclave before rider assignment.</p>
+               <p className="text-[#0a1628]/60 font-dm italic font-bold">Verify double-layered sterilization for the district medical area before rider assignment.</p>
             </div>
          </div>
       </div>

@@ -9,7 +9,7 @@ import { Button } from '../common/Core';
 import { useLanguage } from '../../context/LanguageContext';
 
 /**
- * Side-sliding basket enclave.
+ * Side-sliding basket area.
  */
 export function CartDrawer({ isOpen, onClose }) {
   const { items, subtotal, removeFromCart, incrementQty, decrementQty } = useCart();

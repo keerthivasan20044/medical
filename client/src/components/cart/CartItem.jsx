@@ -1,8 +1,10 @@
 import { Minus, Plus, Trash2, Activity, ShieldCheck, Zap } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { getMedicineImage } from '../../utils/medicineImages';
 
 export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
   const { t } = useLanguage();
+  const imageUrl = getMedicineImage(item);
   
   return (
     <div className="group bg-white hover:bg-gray-50/50 border border-gray-100 rounded-2xl md:rounded-[2.5rem] p-3 md:p-8 transition-all duration-300 hover:shadow-xl relative overflow-hidden flex flex-col xl:flex-row xl:items-center justify-between gap-4 md:gap-10">
@@ -10,19 +12,26 @@ export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
       
       <div className="flex items-center gap-4 md:gap-8 relative z-10">
          <div className="h-14 w-14 md:h-24 md:w-24 bg-gray-50 rounded-xl md:rounded-[1.8rem] flex items-center justify-center p-2 md:p-4 border border-gray-100 shrink-0 group-hover:rotate-2 transition-transform duration-500">
-            <img src={item.image} alt={item.name} className="h-full w-full object-contain mix-blend-multiply opacity-80 group-hover:opacity-100 transition-opacity" />
+            <img
+              src={imageUrl}
+              alt={item.name}
+              className="h-full w-full object-contain mix-blend-multiply opacity-80 group-hover:opacity-100 transition-opacity"
+              onError={(event) => {
+                event.currentTarget.src = getMedicineImage({ category: 'default' });
+              }}
+            />
          </div>
          <div className="space-y-1 min-w-0 flex-1">
             <div className="flex items-center gap-2">
                <div className="h-1 w-6 bg-teal-500 rounded-full" />
                <span className="text-[8px] md:text-[10px] text-teal-600 font-black uppercase tracking-widest italic truncate">{item.category}</span>
             </div>
-            <h3 className="font-syne font-black text-base md:text-2xl text-navy uppercase italic tracking-tighter leading-tight truncate">{item.name}</h3>
+            <h3 className="font-dm font-black text-base md:text-2xl text-navy uppercase italic leading-tight truncate">{item.name}</h3>
             <div className="flex items-center gap-3">
                <div className="text-[9px] md:text-[11px] font-dm font-black text-gray-300 italic whitespace-nowrap">₹{item.price}</div>
                <div className="h-1 w-1 bg-gray-200 rounded-full" />
                <div className="flex items-center gap-1 text-[8px] md:text-[10px] font-black text-teal-600 uppercase tracking-widest italic">
-                  <Activity size={10} className="animate-pulse" /> {t('synced')}
+                  <Activity size={10} className="animate-pulse" /> {t('updateed')}
                </div>
             </div>
          </div>
@@ -30,7 +39,7 @@ export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
            type="button"
            onClick={onRemove}
            className="h-10 w-10 md:h-16 md:w-16 rounded-xl md:rounded-2xl bg-white border border-red-500/10 text-red-500/30 flex items-center justify-center hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-500 shadow-soft md:hidden shrink-0"
-           aria-label={t('removeNode')}
+           aria-label={t('removeItem')}
          >
            <Trash2 size={16} />
          </button>
@@ -56,7 +65,7 @@ export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
         </div>
 
         <div className="space-y-0.5 text-right min-w-[70px] md:min-w-[120px]">
-           <div className="text-[8px] md:text-[10px] text-gray-200 font-black uppercase tracking-widest italic">{t('syncYield')}</div>
+           <div className="text-[8px] md:text-[10px] text-gray-200 font-black uppercase tracking-widest italic">{t('updateYield')}</div>
            <div className="text-lg md:text-3xl font-syne font-black text-navy tracking-tighter italic origin-right group-hover:scale-105 transition-transform">₹{item.price * item.quantity}</div>
         </div>
 
@@ -64,7 +73,7 @@ export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
           type="button"
           onClick={onRemove}
           className="hidden md:flex h-16 w-16 rounded-2xl bg-white border-2 border-red-500/10 text-red-500/30 items-center justify-center hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-500 shadow-soft"
-          aria-label={t('removeNode')}
+          aria-label={t('removeItem')}
         >
           <Trash2 size={22} className="group-hover:rotate-12 transition-transform" />
         </button>

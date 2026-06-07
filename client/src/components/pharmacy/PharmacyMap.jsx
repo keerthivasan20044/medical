@@ -33,7 +33,7 @@ export default function PharmacyMap({ pharmacies, center }) {
               <div style="padding: 10px; font-family: 'DM Sans', sans-serif;">
                 <h4 style="margin: 0; font-weight: 900; text-transform: uppercase; color: #0a1628;">${p.name}</h4>
                 <p style="margin: 5px 0 0; font-size: 10px; color: #94a3b8;">${p.address}</p>
-                <a href="/pharmacies/${p._id}" style="display: block; margin-top: 10px; font-size: 10px; font-weight: 900; color: #02C39A; text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em;">View Node →</a>
+                <a href="/pharmacies/${p._id}" style="display: block; margin-top: 10px; font-size: 10px; font-weight: 900; color: #02C39A; text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em;">View Pharmacy →</a>
               </div>
             `
           });
@@ -53,7 +53,7 @@ export default function PharmacyMap({ pharmacies, center }) {
          <div className="absolute inset-0 flex items-center justify-center bg-white/10 backdrop-blur-sm">
             <div className="text-center">
                <div className="h-12 w-12 border-4 border-brand-teal border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-               <p className="text-[10px] font-black text-navy uppercase tracking-widest italic">Syncing Geo-Nodes...</p>
+               <p className="text-[10px] font-black text-navy uppercase tracking-widest italic">Updateing Geo-Items...</p>
             </div>
          </div>
        )}

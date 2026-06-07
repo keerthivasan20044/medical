@@ -11,6 +11,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { medicineService } from '../../services/apiServices';
 import { normalizeUrl } from '../../utils/url';
 import { Loader2 } from 'lucide-react';
+import { getMedicineImage, resolveMedicineImageSource } from '../../utils/medicineImages';
 
 export default function MedicineDetailPage() {
   const { t } = useLanguage();
@@ -37,9 +38,9 @@ export default function MedicineDetailPage() {
     try {
       setLoading(true);
       const data = await medicineService.getById(id);
-      setMedicine(data);
+      setMedicine(data?.item || data);
     } catch (err) {
-      console.warn('Node fetch failed, attempting fallback protocol...', err);
+      console.warn('Item fetch failed, attempting fallback step...', err);
       const fallback = mockMedicines.find(m => m.id === id || m._id === id);
       setMedicine(fallback);
     } finally {
@@ -54,12 +55,14 @@ export default function MedicineDetailPage() {
   };
 
   const handleAddToCart = () => {
+    const cartPharmacyId = medicine?.pharmacyId?._id || medicine?.pharmacyId || medicine?.pharmacy?._id || medicine?.pharmacy;
     dispatch(addToCart({
       id: medicine?._id || medicine?.id,
       name: medicine?.name,
       price: medicine?.price,
-      image: normalizeUrl(medicine?.images?.[0] || '/assets/medicine_default.png'),
+      image: galleryImages[0],
       brand: medicine?.brand,
+      pharmacyId: cartPharmacyId,
       quantity: qty
     }));
     toast.success(`${qty} units added to cart.`);
@@ -86,11 +89,18 @@ export default function MedicineDetailPage() {
     </div>
   );
 
-  const pharmacyId = medicine.pharmacyId || medicine.pharmacy;
+  const pharmacyId = medicine.pharmacyId?._id || medicine.pharmacyId || medicine.pharmacy?._id || medicine.pharmacy;
+  const fallbackImage = getMedicineImage(medicine);
+  const galleryImages = (medicine.images?.length ? medicine.images : [medicine.image || fallbackImage])
+    .map(resolveMedicineImageSource)
+    .filter(Boolean)
+    .map((img) => (img === '/assets/medicine_default.png' ? fallbackImage : img))
+    .map((img) => normalizeUrl(img));
+  const activeImage = galleryImages[activeImg] || galleryImages[0] || '/assets/medicine_default.png';
 
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-64 font-dm">
-      {/* Breadcrumb Terminal */}
+      {/* Breadcrumb Page */}
       <section className="bg-[#f8fafc] pt-24 pb-6 md:pt-32 md:pb-12">
          <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="flex flex-wrap items-center gap-3 text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-[0.4em] italic leading-none">
@@ -105,13 +115,13 @@ export default function MedicineDetailPage() {
 
       <div className="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-12 gap-10 md:gap-20">
          
-         {/* LEFT — Image gallery Terminal */}
+         {/* LEFT — Image gallery Page */}
          <div className="lg:col-span-6 space-y-6 md:space-y-10">
             <div className="relative aspect-square rounded-[2rem] md:rounded-[4rem] bg-white border border-black/[0.03] shadow-sm overflow-hidden group">
                <img 
-                 src={normalizeUrl(medicine.images?.[activeImg] || medicine.images?.[0] || '/assets/medicine_default.png')} 
+                 src={activeImage} 
                  alt={medicine.name} 
-                 onError={(e) => { e.target.src = '/assets/medicine_default.png'; }}
+                 onError={(e) => { e.target.src = fallbackImage; }}
                  className="w-full h-full object-cover grayscale-[0.1] hover:grayscale-0 transition-all duration-1000 hover:scale-105"
                />
                <div className="absolute top-4 right-4 md:top-10 md:right-10 flex flex-col gap-4 z-20">
@@ -122,13 +132,13 @@ export default function MedicineDetailPage() {
             </div>
 
             <div className="flex gap-4 md:gap-6 justify-center">
-               {(medicine.images || []).map((img, i) => (
+               {galleryImages.map((img, i) => (
                  <button 
                    key={i} 
                    onClick={() => setActiveImg(i)}
                    className={`h-16 w-16 md:h-24 md:w-24 rounded-2xl md:rounded-3xl overflow-hidden border-2 transition-all duration-500 p-1 bg-white ${activeImg === i ? 'border-brand-teal shadow-mint scale-105' : 'border-transparent grayscale opacity-40'}`}
                  >
-                    <img src={normalizeUrl(img)} className="w-full h-full object-cover rounded-xl" alt="thumbnail" />
+                    <img src={img} className="w-full h-full object-cover rounded-xl" alt="thumbnail" />
                  </button>
                ))}
             </div>
@@ -249,7 +259,7 @@ export default function MedicineDetailPage() {
          ))}
       </section>
 
-       {/* Sticky Quick-Action Bar Node */}
+       {/* Sticky Quick-Action Bar Item */}
        <AnimatePresence>
           <motion.div 
             initial={{ y: 200 }}

@@ -3,6 +3,17 @@ import { toast } from 'react-hot-toast';
 import api from '../../services/api';
 import { CreditCard, ShieldCheck, RefreshCw } from 'lucide-react';
 
+function loadRazorpay() {
+  return new Promise((resolve) => {
+    if (window.Razorpay) return resolve(true);
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
 export const RazorpayPayment = ({ order, onPaymentSuccess, onPaymentError }) => {
   const [loading, setLoading] = useState(false);
 
@@ -16,8 +27,33 @@ export const RazorpayPayment = ({ order, onPaymentSuccess, onPaymentError }) => 
         method: 'razorpay'
       });
 
+      if (data.intent && data.intent.mock) {
+        try {
+          const confirmRes = await api.post('/api/payments/confirm', {
+            orderId: order._id || order.id,
+            method: 'razorpay',
+            razorpay_payment_id: `pay_mock_${Math.random().toString(36).substring(2, 11)}`,
+            razorpay_order_id: data.intent.id,
+            razorpay_signature: 'mock_signature'
+          });
+          toast.success('Mock Payment Secured!');
+          if (onPaymentSuccess) onPaymentSuccess(confirmRes.data.order);
+        } catch (err) {
+          toast.error('Mock payment confirmation failed.');
+          if (onPaymentError) onPaymentError(err);
+        }
+        setLoading(false);
+        return;
+      }
+
+      const ready = await loadRazorpay();
+      if (!ready) {
+        toast.error('Payment gateway could not be loaded. Please try again.');
+        return;
+      }
+
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_KKL_ARCH_NODE',
+        key: data.intent.key || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_KKL_ARCH_NODE',
         amount: data.intent.amount,
         currency: data.intent.currency,
         name: 'MediReach Pharmacy',
@@ -34,10 +70,10 @@ export const RazorpayPayment = ({ order, onPaymentSuccess, onPaymentError }) => 
               razorpay_signature: response.razorpay_signature
             });
             
-            toast.success('Architecture Node Payment Secured!');
+            toast.success('Payment completed!');
             if (onPaymentSuccess) onPaymentSuccess(confirmRes.data.order);
           } catch (err) {
-            toast.error('Payment confirmation synchronization failed.');
+            toast.error('Payment confirmation failed.');
             if (onPaymentError) onPaymentError(err);
           }
         },
@@ -53,12 +89,12 @@ export const RazorpayPayment = ({ order, onPaymentSuccess, onPaymentError }) => 
 
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', (response) => {
-        toast.error(`Payment node failed: ${response.error.description}`);
+        toast.error(`Payment failed: ${response.error.description}`);
         if (onPaymentError) onPaymentError(response.error);
       });
       rzp.open();
     } catch (err) {
-      toast.error('Failed to initiate payment architecture stream.');
+      toast.error('Could not start payment.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -78,7 +114,7 @@ export const RazorpayPayment = ({ order, onPaymentSuccess, onPaymentError }) => 
             {loading ? <RefreshCw className="animate-spin text-white/40" size={20} /> : <CreditCard size={20} />}
          </div>
          <div className="text-left">
-            <div className="text-[10px] uppercase font-black tracking-widest leading-none mb-1 opacity-50">Secure Architecture</div>
+            <div className="text-[10px] uppercase font-black tracking-widest leading-none mb-1 opacity-50">Secure Payment</div>
             <div className="text-sm font-syne font-black uppercase tracking-widest">{loading ? 'Initiating Gate...' : 'Pay with Razorpay'}</div>
          </div>
       </div>

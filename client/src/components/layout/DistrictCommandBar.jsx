@@ -35,12 +35,12 @@ export default function DistrictCommandBar() {
   }, [isOpen]);
 
   const COMMANDS = [
-    { id: 'c1', icon: Pill, label: t('searchMedicineNode'), desc: t('scanDistrictInventoryClusters'), path: '/medicines' },
-    { id: 'c2', icon: Store, label: t('locateTerminalNodes'), desc: t('findVerifiedRegionalPharmacies'), path: '/pharmacies' },
-    { id: 'c3', icon: Zap, label: t('logisticsTelemetry'), desc: t('trackActiveDeliveryStreams'), path: '/orders' },
-    { id: 'c4', icon: MessageSquare, label: t('teleconsultPulse'), desc: t('syncWithCertifiedClinicians'), path: '/doctors' },
-    { id: 'c5', icon: ShieldCheck, label: t('medicalVault'), desc: t('accessEncryptedPrescriptions'), path: '/prescriptions' },
-    { id: 'c6', icon: Activity, label: t('systemHealth'), desc: t('districtArchitectureStatus'), path: '/admin/dashboard' }
+    { id: 'c1', icon: Pill, label: t('searchMedicineItem'), desc: t('scanDistrictInventoryClusters'), path: '/medicines' },
+    { id: 'c2', icon: Store, label: t('locatePageItems'), desc: t('findVerifiedRegionalPharmacies'), path: '/pharmacies' },
+    { id: 'c3', icon: Zap, label: t('logisticsTracking'), desc: t('trackActiveDeliveryStreams'), path: '/orders' },
+    { id: 'c4', icon: MessageSquare, label: t('teleconsultPulse'), desc: t('updateWithCertifiedClinicians'), path: '/doctors' },
+    { id: 'c5', icon: ShieldCheck, label: t('medicalRecords'), desc: t('accessEncryptedPrescriptions'), path: '/prescriptions' },
+    { id: 'c6', icon: Activity, label: t('systemHealth'), desc: t('districtSystemStatus'), path: '/admin/dashboard' }
   ];
 
   const filtered = COMMANDS.filter(c => 
@@ -80,7 +80,7 @@ export default function DistrictCommandBar() {
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder={t('searchNode')}
+                    placeholder={t('searchItem')}
                     className="flex-1 bg-transparent border-none outline-none font-syne font-black text-lg md:text-2xl text-[#0a1628] placeholder:text-gray-200 uppercase tracking-tighter italic"
                   />
                   <button 
@@ -90,14 +90,14 @@ export default function DistrictCommandBar() {
                     <X size={16} />
                   </button>
                 </div>
-                {/* Visual Telemetry Bar */}
+                {/* Visual Tracking Bar */}
                 <div className="absolute bottom-0 left-0 h-1 bg-brand-teal w-full origin-left" />
               </div>
 
-              {/* Command Results Architecture */}
+              {/* Command Results System */}
               <div className="p-4 md:p-8 max-h-[350px] md:max-h-[450px] overflow-y-auto no-scrollbar">
                 <div className="space-y-4">
-                  <div className="px-4 md:px-6 text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-[0.4em] italic mb-4 md:mb-6">{t('districtProtocolSync')}</div>
+                  <div className="px-4 md:px-6 text-[8px] md:text-[10px] font-black text-gray-300 uppercase tracking-[0.4em] italic mb-4 md:mb-6">{t('districtServiceUpdate')}</div>
                   
                   {filtered.length > 0 ? (
                     filtered.map((c, i) => (
@@ -136,14 +136,14 @@ export default function DistrictCommandBar() {
               <div className="p-4 md:p-8 bg-[#0a1628] flex flex-col md:flex-row items-center justify-between gap-6 md:gap-0 text-white/40">
                 <div className="flex items-center gap-4">
                    <div className="h-2 w-2 bg-emerald-500 rounded-full animate-ping" />
-                   <span className="text-[8px] font-black uppercase tracking-[0.3em] italic leading-none">{t('systemOnlineSynchronized')}</span>
+                   <span className="text-[8px] font-black uppercase tracking-[0.3em] italic leading-none">{t('systemOnlineUpdatehronized')}</span>
                 </div>
                 <div className="flex flex-wrap justify-center gap-3 md:gap-4">
                    <div className="px-3 py-1 bg-white/5 rounded-lg border border-white/10 text-[8px] font-black uppercase tracking-widest flex items-center gap-2">
                       <Truck size={10} /> {t('activeDeliveries').replace('{count}', '14')}
                    </div>
                    <div className="px-3 py-1 bg-white/5 rounded-lg border border-white/10 text-[8px] font-black uppercase tracking-widest flex items-center gap-2">
-                      <Store size={10} /> {t('nodeTerminalsOnline').replace('{count}', '8')}
+                      <Store size={10} /> {t('itemPagesOnline').replace('{count}', '8')}
                    </div>
                 </div>
                 <div className="hidden md:block text-[8px] font-black uppercase tracking-widest italic opacity-20">{t('pressEscToExit')}</div>

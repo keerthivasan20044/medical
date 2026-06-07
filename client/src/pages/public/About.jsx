@@ -26,7 +26,7 @@ export default function About() {
     { title: t('zeroLagTitle'), desc: t('zeroLagDesc'), icon: Zap },
     { title: t('universalAccessTitle'), desc: t('universalAccessDesc'), icon: Globe },
     { title: t('absoluteIntegrityTitle'), desc: t('absoluteIntegrityDesc'), icon: Activity },
-    { title: t('sustainableEnclaveTitle'), desc: t('sustainableEnclaveDesc'), icon: Heart }
+    { title: t('sustainableAreaTitle'), desc: t('sustainableAreaDesc'), icon: Heart }
   ];
 
   const MILESTONES = [
@@ -191,7 +191,7 @@ export default function About() {
                   </div>
                   <div className="space-y-3 p-12 bg-[#0a1628] rounded-[3.5rem] group hover:shadow-4xl transition-all duration-700 hover:-translate-y-4 border-l-[16px] border-l-brand-teal shadow-4xl">
                      <div className="font-syne font-black text-6xl text-brand-teal italic leading-none">50K+</div>
-                     <div className="text-[11px] text-white/20 font-black uppercase tracking-[0.3em] italic">{t('enclaveOrders')}</div>
+                     <div className="text-[11px] text-white/20 font-black uppercase tracking-[0.3em] italic">{t('areaOrders')}</div>
                   </div>
                </div>
             </div>
@@ -298,7 +298,7 @@ export default function About() {
       <section className="max-w-7xl mx-auto px-10 py-56 space-y-32">
          <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
             <h2 className="font-syne font-black text-6xl lg:text-7xl text-[#0a1628] uppercase italic leading-[0.9] tracking-tighter">
-               {t('theJourney')} <br /><span className="text-brand-teal">{t('enclaveChronoview')}</span>
+               {t('theJourney')} <br /><span className="text-brand-teal">{t('areaChronoview')}</span>
             </h2>
             <div className="px-8 py-3 bg-[#0a1628] rounded-[1.5rem] inline-flex items-center gap-4 text-[10px] font-black text-brand-teal uppercase tracking-[0.4em] italic shadow-4xl animate-pulse">
                <Activity size={18} /> Our Story

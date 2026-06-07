@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import { Loader2, ChevronRight } from 'lucide-react';
 
 /**
- * Standard button architecture for MediPharm.
+ * Standard button system for MediPharm.
  * @param {string} variant - primary | outline | ghost | danger
  * @param {boolean} loading - spinner inside button
- * @param {ReactNode} icon - icon left of text
+ * @param {ReactItem} icon - icon left of text
  */
 export function Button({ 
   children, 
@@ -44,7 +44,7 @@ export function Button({
 }
 
 /**
- * Specialized input architecture with labels and error states.
+ * Specialized input system with labels and error states.
  */
 export function Input({ label, icon: Icon, error, helperText, className = '', ...props }) {
   return (

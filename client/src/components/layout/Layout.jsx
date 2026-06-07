@@ -4,6 +4,7 @@ import MobileBottomNav from './MobileBottomNav';
 import DistrictCommandBar from './DistrictCommandBar';
 import ScrollToTopButton from '../common/ScrollToTopButton';
 import EmergencyFAB from './EmergencyFAB';
+import CustomerAssistant from '../assistant/CustomerAssistant';
 
 const Layout = ({ children, hideNavbar = false, hideBottomNav = false, hideExtras = false }) => {
   return (
@@ -21,6 +22,7 @@ const Layout = ({ children, hideNavbar = false, hideBottomNav = false, hideExtra
         <>
           <ScrollToTopButton />
           <EmergencyFAB />
+          <CustomerAssistant />
         </>
       )}
       {!hideBottomNav && <MobileBottomNav />}

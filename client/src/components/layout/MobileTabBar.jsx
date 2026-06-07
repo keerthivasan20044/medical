@@ -6,20 +6,20 @@ import { useLanguage } from '../../context/LanguageContext';
 
 export default function MobileTabBar() {
   const location = useLocation();
-  const { totalQty } = useSelector(s => s.cart);
+  const { totalQuantity } = useSelector(s => s.cart);
   const { t } = useLanguage();
 
   const NAV_ITEMS = [
     { label: t('home') || 'Home', icon: Home, to: '/' },
     { label: t('medicines') || 'Buy', icon: Pill, to: '/medicines' },
     { label: t('teleconsultation') || 'Dr', icon: Stethoscope, to: '/doctors' },
-    { label: t('cart') || 'Cart', icon: ShoppingBag, to: '/cart', badge: totalQty },
+    { label: t('cart') || 'Cart', icon: ShoppingBag, to: '/cart', badge: totalQuantity },
     { label: t('profile') || 'Self', icon: User, to: '/profile' },
   ];
 
   // Only show on smaller screens
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-2xl border-t border-black/[0.04] z-[2500] px-4 pb-safe">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-2xl border-t border-black/[0.04] z-[2500] px-2 pb-[env(safe-area-inset-bottom)]">
       <div className="flex items-center justify-around h-20 max-w-md mx-auto">
         {NAV_ITEMS.map((item) => {
           const isActive = location.pathname === item.to || (item.to !== '/' && location.pathname.startsWith(item.to));
@@ -29,7 +29,7 @@ export default function MobileTabBar() {
             <Link 
               key={item.to} 
               to={item.to}
-              className="relative flex flex-col items-center justify-center gap-1 min-w-[64px] group"
+              className="relative flex min-w-0 flex-1 flex-col items-center justify-center gap-1 group"
             >
               <div className={`h-10 w-10 rounded-2xl flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-[#0a1628] text-brand-teal shadow-lg' : 'text-gray-400 group-active:scale-90'}`}>
                 <Icon size={20} className={isActive ? 'scale-110' : ''} />
@@ -37,7 +37,7 @@ export default function MobileTabBar() {
                   <span className="absolute top-0 right-2 h-4 w-4 bg-brand-teal text-[#0a1628] rounded-full flex items-center justify-center text-[8px] font-black border-2 border-white">{item.badge}</span>
                 )}
               </div>
-              <span className={`text-[9px] font-syne font-black uppercase tracking-widest transition-colors ${isActive ? 'text-[#0a1628]' : 'text-gray-300'}`}>
+              <span className={`max-w-full truncate px-1 text-[9px] font-syne font-black uppercase tracking-wide transition-colors ${isActive ? 'text-[#0a1628]' : 'text-gray-300'}`}>
                 {item.label}
               </span>
               {isActive && (

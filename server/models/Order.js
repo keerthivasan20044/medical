@@ -18,13 +18,16 @@ const orderSchema = new mongoose.Schema(
     
     // ── Delivery Specific Fields ──────────────────────────────
     deliveryPartner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    deliveryStatus: { type: String, enum: ['pending', 'accepted', 'pickup_started', 'at_pickup', 'out_for_delivery', 'arrived', 'delivered', 'cancelled'], default: 'pending' },
+    deliveryStatus: { type: String, enum: ['pending', 'accepted', 'pickup_started', 'at_pickup', 'out_for_delivery', 'arrived', 'delivered', 'cancelled', 'on_hold'], default: 'pending' },
     pickupStartedAt: Date,
     pickedUpAt: Date,
     outForDeliveryAt: Date,
     arrivedAt: Date,
     deliveredAt: Date,
     deliveryOTP: { type: String, default: () => Math.floor(100000 + Math.random() * 900000).toString() },
+    deliveryOtpAttempts: { type: Number, default: 0 },
+    deliveryOtpConfirmedAt: Date,
+    deliveryOtpConfirmedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     deliveryLocation: {
       type: { type: String, enum: ['Point'], default: 'Point' },
       coordinates: { type: [Number] }

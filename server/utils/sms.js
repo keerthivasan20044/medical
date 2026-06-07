@@ -7,14 +7,26 @@ import config from '../config/config.js';
  */
 export const sendOTP = async (phone, otp) => {
   const apiKey = config.sms.fast2smsKey;
+  const normalizedPhone = String(phone || '').replace(/\D/g, '').replace(/^91(?=\d{10}$)/, '');
+
+  if (!/^\d{10}$/.test(normalizedPhone)) {
+    console.log(`[SMS Simulation] Invalid phone for OTP delivery: ${phone}`);
+    return { success: false, message: 'Invalid phone number' };
+  }
   
   if (config.env === 'development' || !apiKey) {
-    console.log(`[SMS Simulation] OTP for ${phone}: ${otp}`);
+    console.log(`[SMS Simulation] OTP for ${normalizedPhone}: ${otp}`);
     return { success: true, message: 'Simulation Mode Active' };
   }
 
   try {
-    const response = await fetch(`https://www.fast2sms.com/dev/bulkV2?authorization=${apiKey}&route=otp&variables_values=${otp}&numbers=${phone}`);
+    const params = new URLSearchParams({
+      authorization: apiKey,
+      route: 'otp',
+      variables_values: String(otp),
+      numbers: normalizedPhone
+    });
+    const response = await fetch(`https://www.fast2sms.com/dev/bulkV2?${params.toString()}`);
     const data = await response.json();
     
     if (data.return) {

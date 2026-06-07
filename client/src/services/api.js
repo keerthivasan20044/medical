@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+const defaultApiUrl =
+  typeof window !== 'undefined'
+    ? `${window.location.protocol}//${window.location.hostname}:5001`
+    : 'http://localhost:5001';
+
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5001',
+  baseURL: import.meta.env.VITE_API_URL || defaultApiUrl,
   withCredentials: true
 });
 
@@ -36,7 +41,28 @@ api.interceptors.response.use(
       localStorage.removeItem('authToken');
       
       // Only redirect if NOT on a public page or specifically a private page
-      const publicPaths = ['/login', '/register', '/otp', '/forgot-password', '/', '/about', '/contact', '/pharmacies', '/medicines', '/medicine'];
+      const publicPaths = [
+        '/',
+        '/about',
+        '/blog',
+        '/compare',
+        '/contact',
+        '/doctors',
+        '/emergency',
+        '/faq',
+        '/forgot-password',
+        '/hospitals',
+        '/login',
+        '/medicine',
+        '/medicines',
+        '/offers',
+        '/otp',
+        '/pharmacies',
+        '/register',
+        '/reset-password',
+        '/search',
+        '/vaccines'
+      ];
       const currentPath = window.location.pathname;
       
       const isPublicPath = publicPaths.some(path => currentPath === path || currentPath.startsWith(path + '/'));

@@ -25,7 +25,7 @@ const FAQ_DATA = [
       { q: 'Do you deliver to Nagore and Poompuhar?', a: 'Yes! We cover the entire Karaikal district including Nagore, Poompuhar, and T.R. Pattinam.' },
       { q: 'What if I am not home during delivery?', a: 'Our rider will call you. You can authorize them to leave it with a neighbor or reschedule the delivery.' },
       { q: 'How does GPS tracking work?', a: 'Once an order is "Out for Delivery", you can view the live GPS location of your rider on the "Track Order" page.' },
-      { q: 'What is OTP delivery confirmation?', a: 'For security, you must provide a 4-digit code (sent via SMS) to the rider to confirm you received your medicine correctly.' }
+      { q: 'What is OTP delivery confirmation?', a: 'For security, share the 6-digit delivery OTP with the rider only after you receive your medicines.' }
     ]
   },
   { 
@@ -33,7 +33,7 @@ const FAQ_DATA = [
     questions: [
       { q: 'Are all medicines authentic at Karaikal pharmacies?', a: 'Yes. MediReach only partners with licensed pharmacies in the Karaikal district. Every delivery comes with a real tax invoice.' },
       { q: 'Can I get prescription medicines without prescription?', a: 'No. For Schedule H and X medicines, a valid prescription is legally required and must be verified by our licensed pharmacists.' },
-      { q: 'What if a medicine is out of stock?', a: 'The app will notify you if a medicine is unavailable at your chosen pharmacy. You can try searching in other partner pharmacies in the enclave.' }
+      { q: 'What if a medicine is out of stock?', a: 'The app will notify you if a medicine is unavailable at your chosen pharmacy. You can try searching in other partner pharmacies nearby.' }
     ]
   },
   { 
@@ -95,7 +95,7 @@ export default function FAQ() {
          <div className="absolute -top-8 -right-8 h-64 w-64 bg-[#02C39A] rounded-full blur-3xl opacity-10" />
       </section>
 
-      {/* Main Content Enclave */}
+      {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-6 py-24">
          <div className="grid lg:grid-cols-[300px_1fr] gap-20 items-start">
             

@@ -92,7 +92,7 @@ export default function Login() {
         }, 1000);
       }
     } catch (err) {
-      toast.error(err.response?.data?.error || err.response?.data?.message || err.message || t('signalSyncFailed'));
+      toast.error(err.response?.data?.error || err.response?.data?.message || err.message || t('signalUpdateFailed'));
       setLoading(false); // Manually clear in case of early catch
     } finally {
       setLoading(false);
@@ -339,15 +339,15 @@ export default function Login() {
                </div>
                <div className="grid grid-cols-2 gap-4">
                   {[
-                    { r: 'Customer', e: 'customer@test.com' },
-                    { r: 'Doctor', e: 'doctor@test.com' },
-                    { r: 'Pharmacist', e: 'pharmacist@test.com' },
-                    { r: 'Delivery', e: 'delivery@test.com' },
-                    { r: 'Admin', e: 'admin@medipharm.com' }
+                    { r: 'Customer', e: 'kkl@demo.in', p: '123456' },
+                    { r: 'Doctor', e: 'doc@demo.in', p: '123456' },
+                    { r: 'Pharmacist', e: 'shop@demo.in', p: '123456' },
+                    { r: 'Delivery', e: 'ride@demo.in', p: '123456' },
+                    { r: 'Admin', e: 'admin@demo.in', p: '123456' }
                   ].map(d => (
                     <div key={d.r} className="p-4 bg-white rounded-2xl border border-gray-100 hover:shadow-lg transition duration-500">
                        <div className="text-[8px] font-black uppercase text-brand-teal mb-1">{d.r}</div>
-                       <div className="text-[10px] font-dm italic text-gray-400 select-all truncate">{d.e} / {d.r === 'Admin' ? 'admin1234' : 'test1234'}</div>
+                       <div className="text-[10px] font-dm italic text-gray-400 select-all truncate">{d.e} / {d.p}</div>
                     </div>
                   ))}
                </div>

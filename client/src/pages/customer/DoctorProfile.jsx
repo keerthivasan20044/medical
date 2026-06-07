@@ -37,7 +37,7 @@ export default function DoctorProfile() {
       const data = await doctorService.getById(id);
       setDoc(data);
     } catch (err) {
-      console.warn('Doctor sync failed, using fallback hub...', err);
+      console.warn('Doctor update failed, using fallback hub...', err);
       const fallback = mockDoctors.find(d => d.id === id || d._id === id) || mockDoctors[0];
       setDoc(fallback);
     } finally {
@@ -150,7 +150,7 @@ export default function DoctorProfile() {
                   >
                      {t('bookAppointment')} <ArrowRight size={20} />
                   </button>
-                  <p className="text-[10px] text-white/30 font-dm text-center italic">100% Secure Architecture Payment. Instant confirmation in Karaikal district.</p>
+                  <p className="text-[10px] text-white/30 font-dm text-center italic">100% Secure Payment. Instant confirmation in Karaikal district.</p>
                </div>
             </div>
          </div>
@@ -266,7 +266,7 @@ export default function DoctorProfile() {
                   <div className="p-12 space-y-10">
                      <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                           <h3 className="font-syne font-black text-[#0a1628] text-3xl">{t('architectureConsultation')}</h3>
+                           <h3 className="font-syne font-black text-[#0a1628] text-3xl">{t('systemConsultation')}</h3>
                            <p className="text-gray-400 font-dm">Consult with {doc.name} from Karaikal.</p>
                         </div>
                         <button onClick={() => setShowModal(false)} className="h-12 w-12 bg-gray-50 hover:bg-white rounded-full flex items-center justify-center text-gray-400 shadow-sm transition"><X size={20} /></button>

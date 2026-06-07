@@ -25,7 +25,7 @@ export default function AdminAppointments() {
       setTotalPages(data.pages || 1);
       setTotalRecords(data.total || 0);
     } catch (e) {
-      toast.error('Failed to sync appointment database');
+      toast.error('Could not load appointments');
     } finally {
       setLoading(false);
     }
@@ -45,12 +45,12 @@ export default function AdminAppointments() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">Clinical Appointments</h1>
-          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Global Synchronization of Doctor-Patient Nodes</p>
+          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Doctor and patient appointments</p>
         </div>
         <div className="flex items-center gap-4">
            <div className="bg-white px-6 py-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3">
               <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-              <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">{totalRecords} Pending Syncs</span>
+              <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">{totalRecords} Pending</span>
            </div>
         </div>
       </div>
@@ -81,7 +81,7 @@ export default function AdminAppointments() {
           },
           { 
             key: 'doctor', 
-            label: 'Doctor Node',
+            label: 'Doctor',
             render: (val, row) => (
               <div className="flex items-center gap-3">
                 <div className="h-8 w-8 bg-brand-teal/10 rounded-lg flex items-center justify-center text-brand-teal">
@@ -106,7 +106,7 @@ export default function AdminAppointments() {
           },
           { 
             key: 'status', 
-            label: 'Protocol Status',
+            label: 'Service Status',
             render: (val) => (
               <div className={`flex items-center gap-2 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest w-fit border ${
                 val === 'confirmed' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 

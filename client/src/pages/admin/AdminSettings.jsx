@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { Settings, Shield, Bell, CreditCard, Database, Globe, Save, RefreshCw } from 'lucide-react';
+import { Settings, Shield, Bell, CreditCard, Database, Globe, Save, RefreshCw, MailCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { adminService } from '../../services/apiServices';
 
 export default function AdminSettings() {
   const [activeSection, setActiveSection] = useState('Gateway');
+  const [emailTo, setEmailTo] = useState('');
+  const [testingEmail, setTestingEmail] = useState(false);
 
   const SECTIONS = [
     { label: 'Gateway', icon: CreditCard },
@@ -17,11 +20,23 @@ export default function AdminSettings() {
     toast.promise(
       new Promise(resolve => setTimeout(resolve, 1500)),
       {
-        loading: 'Synchronizing system protocols...',
-        success: 'Settings updated across all nodes!',
-        error: 'Synchronization failed.',
+        loading: 'Updating settings...',
+        success: 'Settings updated!',
+        error: 'Update failed.',
       }
     );
+  };
+
+  const handleTestEmail = async () => {
+    try {
+      setTestingEmail(true);
+      const data = await adminService.sendTestEmail(emailTo || undefined);
+      toast.success(data.message || 'Email test completed');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Email test failed');
+    } finally {
+      setTestingEmail(false);
+    }
   };
 
   return (
@@ -29,7 +44,7 @@ export default function AdminSettings() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="font-syne font-black text-4xl text-navy italic tracking-tighter uppercase">System Configuration</h1>
-          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Core Protocol Management</p>
+          <p className="text-xs font-dm font-bold text-navy/40 uppercase tracking-widest mt-1 italic">Core Service Management</p>
         </div>
         <button 
           onClick={handleSave}
@@ -65,8 +80,8 @@ export default function AdminSettings() {
            {activeSection === 'Gateway' && (
              <div className="space-y-8">
                 <div className="pb-6 border-b border-gray-50">
-                   <h3 className="font-syne font-black text-xl text-navy uppercase italic">Razorpay Protocol</h3>
-                   <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic mt-1">Payment gateway synchronization keys</p>
+                   <h3 className="font-syne font-black text-xl text-navy uppercase italic">Razorpay Service</h3>
+                   <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic mt-1">Payment gateway keys</p>
                 </div>
                 
                 <div className="grid md:grid-cols-2 gap-8">
@@ -92,20 +107,51 @@ export default function AdminSettings() {
                    <RefreshCw size={24} className="text-amber-500 mt-1" />
                    <div>
                       <h4 className="font-syne font-black text-sm text-amber-600 uppercase italic">Key Rotation Required</h4>
-                      <p className="text-xs font-dm font-medium text-amber-600/80 mt-1">For security, it is recommended to rotate your synchronization keys every 90 days. Last rotated 42 days ago.</p>
+                      <p className="text-xs font-dm font-medium text-amber-600/80 mt-1">For security, it is recommended to rotate your keys every 90 days. Last rotated 42 days ago.</p>
                    </div>
                 </div>
              </div>
            )}
 
-           {activeSection !== 'Gateway' && (
+           {activeSection === 'Notifications' && (
+             <div className="space-y-8">
+                <div className="pb-6 border-b border-gray-50">
+                   <h3 className="font-syne font-black text-xl text-navy uppercase italic">Email Notifications</h3>
+                   <p className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic mt-1">Nodemailer SMTP health check</p>
+                </div>
+                <div className="grid gap-4 md:grid-cols-[1fr_auto]">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest italic ml-1">Test recipient</label>
+                    <input
+                      type="email"
+                      value={emailTo}
+                      onChange={(event) => setEmailTo(event.target.value)}
+                      placeholder="admin@example.com"
+                      className="w-full h-14 bg-gray-50 border border-gray-100 rounded-2xl px-6 font-dm font-bold text-navy outline-none focus:border-brand-teal transition-all"
+                    />
+                  </div>
+                  <button
+                    onClick={handleTestEmail}
+                    disabled={testingEmail}
+                    className="h-14 self-end px-8 bg-navy text-brand-teal rounded-2xl font-syne font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 disabled:opacity-50"
+                  >
+                    <MailCheck size={18} /> {testingEmail ? 'Testing...' : 'Send Test'}
+                  </button>
+                </div>
+                <div className="p-6 bg-emerald-50 border border-emerald-100 rounded-2xl text-sm font-dm font-bold text-emerald-800">
+                  Configure SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, and SMTP_FROM in the server environment. Without SMTP keys, the server logs a simulated email instead of sending.
+                </div>
+             </div>
+           )}
+
+           {activeSection !== 'Gateway' && activeSection !== 'Notifications' && (
              <div className="h-60 flex flex-col items-center justify-center text-center space-y-4">
                 <div className="h-20 w-20 bg-navy/5 rounded-[2rem] flex items-center justify-center text-navy/20">
                    <Settings size={32} />
                 </div>
                 <div className="space-y-1">
                    <h3 className="font-syne font-black text-lg text-navy uppercase italic">{activeSection} Module Pending</h3>
-                   <p className="text-xs font-dm font-medium text-navy/40 uppercase tracking-widest italic">Core logic for this node is in the next deployment cycle.</p>
+                   <p className="text-xs font-dm font-medium text-navy/40 uppercase tracking-widest italic">This setting will be added later.</p>
                 </div>
              </div>
            )}

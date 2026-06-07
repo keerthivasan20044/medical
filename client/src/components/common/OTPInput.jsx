@@ -4,7 +4,7 @@ export default function OTPInput({ length = 6, value = [], onChange, onComplete,
   const refs = useRef([]);
 
   const handleChange = (idx, val) => {
-    const cleaned = val.replace(/\s/g, '').slice(-1);
+    const cleaned = val.replace(/\D/g, '').slice(-1);
     const next = [...value];
     next[idx] = cleaned;
     onChange(next);

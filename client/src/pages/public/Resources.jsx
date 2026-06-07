@@ -73,9 +73,9 @@ export default function Resources() {
       {/* Emergency Contacts Grid */}
       <section className="max-w-7xl mx-auto px-10 -mt-12 relative z-20">
          <div className="grid lg:grid-cols-4 gap-8">
-            {EMERGENCY_CONTACTS.map((node, i) => (
+            {EMERGENCY_CONTACTS.map((item, i) => (
               <motion.div 
-                 key={node.label}
+                 key={item.label}
                  initial={{ opacity: 0, y: 20 }}
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
@@ -86,15 +86,15 @@ export default function Resources() {
                  <div className="flex items-center justify-between mb-8">
                     <div className="h-12 w-12 bg-gray-50 rounded-2xl flex items-center justify-center text-[#028090] shadow-inner group-hover:bg-[#0a1628] group-hover:text-white transition-all duration-300"><Phone size={20}/></div>
                     <span className="text-[10px] font-black uppercase tracking-widest text-[#02C39A] flex items-center gap-2">
-                       <div className="h-2 w-2 bg-[#02C39A] rounded-full animate-pulse" /> {node.status}
+                       <div className="h-2 w-2 bg-[#02C39A] rounded-full animate-pulse" /> {item.status}
                     </span>
                  </div>
                  <div className="space-y-1 mb-10 relative z-10">
                     <div className="text-[10px] text-gray-300 font-bold uppercase tracking-widest leading-none">Emergency Contact</div>
-                    <h3 className="font-syne font-black text-xl text-[#0a1628] leading-tight uppercase tracking-tight group-hover:text-[#028090] transition">{node.label}</h3>
+                    <h3 className="font-syne font-black text-xl text-[#0a1628] leading-tight uppercase tracking-tight group-hover:text-[#028090] transition">{item.label}</h3>
                  </div>
-                 <a href={`tel:${node.phone}`} className="flex items-center gap-4 group/link">
-                    <span className="font-syne font-black text-2xl text-[#0a1628]">{node.phone}</span>
+                 <a href={`tel:${item.phone}`} className="flex items-center gap-4 group/link">
+                    <span className="font-syne font-black text-2xl text-[#0a1628]">{item.phone}</span>
                     <ArrowUpRight size={18} className="text-[#028090] opacity-0 group-hover/link:opacity-100 transition translate-y-1 group-hover/link:translate-y-0" />
                  </a>
               </motion.div>
@@ -128,9 +128,9 @@ export default function Resources() {
 
          {/* Resources List */}
          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
-            {HEALTH_RESOURCES.map((node, i) => (
+            {HEALTH_RESOURCES.map((item, i) => (
               <motion.div 
-                 key={node.id}
+                 key={item.id}
                  initial={{ opacity: 0, y: 30 }}
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
@@ -138,20 +138,20 @@ export default function Resources() {
                  className="group bg-white rounded-[4rem] border border-gray-100 p-12 hover:shadow-4xl hover:-translate-y-3 transition-all duration-500 flex flex-col justify-between h-full relative"
               >
                  <div className="space-y-8">
-                    <div className={`h-20 w-20 rounded-[2.5rem] flex items-center justify-center ${node.color} shadow-sm group-hover:scale-110 group-hover:rotate-12 transition duration-500`}>
-                       <node.icon size={36} />
+                    <div className={`h-20 w-20 rounded-[2.5rem] flex items-center justify-center ${item.color} shadow-sm group-hover:scale-110 group-hover:rotate-12 transition duration-500`}>
+                       <item.icon size={36} />
                     </div>
                     <div className="space-y-3">
                        <div className="inline-flex items-center gap-3">
-                          <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest leading-none underline decoration-[#02C39A] underline-offset-4">{node.category}</span>
+                          <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest leading-none underline decoration-[#02C39A] underline-offset-4">{item.category}</span>
                        </div>
-                       <h3 className="font-syne font-black text-2xl text-[#0a1628] group-hover:text-[#028090] transition leading-tight">{node.title}</h3>
+                       <h3 className="font-syne font-black text-2xl text-[#0a1628] group-hover:text-[#028090] transition leading-tight">{item.title}</h3>
                     </div>
                  </div>
                  
                  <div className="mt-12 pt-8 border-t border-gray-50 flex items-center justify-between text-gray-400">
                     <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest">
-                       <div className="h-2 w-2 bg-[#028090] rounded-full" /> {node.readTime}
+                       <div className="h-2 w-2 bg-[#028090] rounded-full" /> {item.readTime}
                     </div>
                     <button className="h-14 w-14 rounded-2xl bg-gray-50 text-[#0a1628] flex items-center justify-center group-hover:bg-[#0a1628] group-hover:text-[#02C39A] shadow-soft transition-all duration-500 hover:rotate-45">
                        <ArrowUpRight size={24} />

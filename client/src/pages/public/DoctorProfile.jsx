@@ -19,17 +19,17 @@ export default function DoctorProfilePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchDoctorNode();
+    fetchDoctorItem();
     window.scrollTo(0, 0);
   }, [id]);
 
-  const fetchDoctorNode = async () => {
+  const fetchDoctorItem = async () => {
     try {
       setLoading(true);
       const data = await doctorService.getById(id);
       setDoctor(data);
     } catch (err) {
-      console.warn('Clinical node fetch failed, attempting fallback...', err);
+      console.warn('Clinical item fetch failed, attempting fallback...', err);
       const fallback = mockDoctors.find(dr => dr.id === id || dr._id === id);
       setDoctor(fallback);
     } finally {
@@ -62,7 +62,7 @@ export default function DoctorProfilePage() {
 
   return (
     <div className="bg-slate-50 min-h-screen pb-32 overflow-x-hidden">
-      {/* Profile Clinical Header Terminal */}
+      {/* Profile Clinical Header Page */}
       <section className="bg-slate-900 pt-20 pb-20 md:pt-32 md:pb-48 relative overflow-hidden">
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-50 to-transparent z-0" />
         
@@ -238,7 +238,7 @@ export default function DoctorProfilePage() {
          </div>
       </div>
 
-      {/* Booking Modal Node Terminal */}
+      {/* Booking Modal Item Page */}
       <AnimatePresence>
          {showBookingModal && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] bg-[#0a1628]/95 backdrop-blur-3xl flex items-end md:items-center justify-center md:p-10">

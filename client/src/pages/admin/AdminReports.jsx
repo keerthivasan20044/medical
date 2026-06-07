@@ -7,11 +7,11 @@ export default function AdminReports() {
 
   const reports = [
     { id: 'revenue', title: 'Financial Analytics', desc: 'Monthly revenue, tax, and profit margins.', icon: TrendingUp, color: 'text-emerald-500 bg-emerald-50' },
-    { id: 'users', title: 'User Growth Node', desc: 'New registrations and retention metrics.', icon: Users, color: 'text-blue-500 bg-blue-50' },
+    { id: 'users', title: 'User Growth', desc: 'New registrations and retention metrics.', icon: Users, color: 'text-blue-500 bg-blue-50' },
     { id: 'orders', title: 'Fulfillment Report', desc: 'Order success rate and delivery times.', icon: ShoppingBag, color: 'text-orange-500 bg-orange-50' },
-    { id: 'appointments', title: 'Clinical Syncs', desc: 'Doctor-patient consultation volume.', icon: Calendar, color: 'text-brand-teal bg-brand-teal/10' },
+    { id: 'appointments', title: 'Doctor Visits', desc: 'Doctor-patient consultation volume.', icon: Calendar, color: 'text-brand-teal bg-brand-teal/10' },
     { id: 'inventory', title: 'Inventory Matrix', desc: 'Medicine stock levels and expiration logs.', icon: Activity, color: 'text-purple-500 bg-purple-50' },
-    { id: 'system', title: 'System Protocol', desc: 'Audit logs and security events.', icon: FileText, color: 'text-navy/40 bg-navy/5' },
+    { id: 'system', title: 'System Service', desc: 'Audit logs and security events.', icon: FileText, color: 'text-navy/40 bg-navy/5' },
   ];
 
   const handleDownload = (id) => {
@@ -31,7 +31,7 @@ export default function AdminReports() {
         </div>
         <div className="flex items-center gap-4 bg-white px-6 py-3 rounded-2xl border border-gray-100 shadow-sm">
            <div className="h-2 w-2 rounded-full bg-brand-teal animate-pulse" />
-           <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">Node v2.4 Secured</span>
+           <span className="text-[10px] font-black text-navy/60 uppercase tracking-widest italic">Secure v2.4</span>
         </div>
       </div>
 
@@ -69,7 +69,7 @@ export default function AdminReports() {
         ))}
       </div>
 
-      {/* Global Export Node */}
+      {/* Global Export Item */}
       <div className="bg-navy rounded-[4rem] p-12 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
          <div className="absolute top-0 right-0 h-96 w-96 bg-brand-teal opacity-5 rounded-full blur-[100px]" />
          <div className="space-y-3 relative z-10 text-center md:text-left">

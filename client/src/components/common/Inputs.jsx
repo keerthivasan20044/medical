@@ -3,7 +3,7 @@ import { Search as SearchIcon, Phone, X, SlidersHorizontal, ArrowUpRight } from 
 import { motion, AnimatePresence } from 'framer-motion';
 
 /**
- * 4-6 digit security protocol input.
+ * 4-6 digit security step input.
  */
 export function OTPInput({ length = 6, onComplete }) {
   const [otp, setOtp] = useState(new Array(length).fill(''));
@@ -45,12 +45,12 @@ export function OTPInput({ length = 6, onComplete }) {
 }
 
 /**
- * Standard +91 mobile enclave input.
+ * Standard +91 mobile area input.
  */
 export function PhoneInput({ prefix = "+91", ...props }) {
   return (
     <div className="space-y-4 w-full">
-      <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300 ml-6">Mobile Architecture</label>
+      <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300 ml-6">Mobile Number</label>
       <div className="relative group flex items-center bg-gray-50 border-2 border-transparent rounded-[3rem] px-8 py-6 focus-within:bg-white focus-within:border-[#02C39A]/20 transition-all shadow-inner">
          <div className="flex items-center gap-3 pr-8 border-r border-gray-100 mr-8 text-gray-400 font-syne font-black text-lg group-focus-within:text-[#0a1628] transition">
             <Phone size={18} className="text-[#02C39A]" /> {prefix}
@@ -67,7 +67,7 @@ export function PhoneInput({ prefix = "+91", ...props }) {
 }
 
 /**
- * Advanced search terminal with live node suggestions.
+ * Advanced search page with live item suggestions.
  */
 export function SearchInput({ placeholder, suggestions = [], onSearch }) {
   const [val, setVal] = useState('');
@@ -96,7 +96,7 @@ export function SearchInput({ placeholder, suggestions = [], onSearch }) {
               exit={{ opacity: 0, y: 10, scale: 0.98 }}
               className="absolute top-24 left-4 right-4 bg-white border border-gray-100 rounded-[3rem] p-10 shadow-[0_45px_100px_rgba(0,0,0,0.1)] z-[100] space-y-8"
             >
-               <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-200">Recommended Enclave Nodes</h4>
+               <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-200">Recommended Reviews</h4>
                <div className="space-y-4">
                   {suggestions.slice(0, 5).map(s => (
                     <button 
@@ -117,7 +117,7 @@ export function SearchInput({ placeholder, suggestions = [], onSearch }) {
 }
 
 /**
- * Filter architecture price range enclave.
+ * Filter system price range area.
  */
 export function PriceRangeSlider({ min = 0, max = 2000, onChange }) {
   const [range, setRange] = useState([min, max]);
@@ -125,7 +125,7 @@ export function PriceRangeSlider({ min = 0, max = 2000, onChange }) {
   return (
     <div className="space-y-8 py-6">
        <div className="flex items-center justify-between">
-          <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300">Price Architecture</label>
+          <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300">Price Range</label>
           <div className="font-syne font-black text-xs text-[#0a1628]">₹{range[0]} — ₹{range[1]}</div>
        </div>
        <div className="relative h-2 bg-gray-50 rounded-full border border-gray-100 shadow-inner group">
@@ -134,8 +134,8 @@ export function PriceRangeSlider({ min = 0, max = 2000, onChange }) {
           <div className="absolute top-1/2 left-[100%] -translate-x-full -translate-y-1/2 h-8 w-8 bg-white border-4 border-[#0a1628] rounded-2xl shadow-xl cursor-pointer hover:border-[#02C39A] transition duration-500" />
        </div>
        <div className="flex items-center justify-between text-[8px] font-black text-gray-200 uppercase tracking-widest italic">
-          <span>₹{min} Protocol</span>
-          <span>₹{max} Max Enclave</span>
+          <span>₹{min} Service</span>
+          <span>₹{max} Max</span>
        </div>
     </div>
   );

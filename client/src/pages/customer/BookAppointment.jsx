@@ -4,8 +4,8 @@ import PageShell from '../../components/layout/PageShell';
 export default function BookAppointment() {
   return (
     <PageShell 
-      title="Appointment Async" 
-      subtitle="Synchronize your clinical schedule with certified district clinicians."
+      title="Appointment Update" 
+      subtitle="Book an appointment with a doctor."
       icon={Calendar}
       actions={
         <button className="h-16 px-10 bg-brand-teal text-[#0a1628] font-syne font-black text-xs rounded-2xl flex items-center gap-3 active:scale-95 shadow-4xl italic uppercase tracking-wider group">
@@ -33,7 +33,7 @@ export default function BookAppointment() {
                      <div className="text-3xl font-syne font-black italic text-white flex items-center gap-2">₹200</div>
                   </div>
                   <div className="p-8 bg-white/5 rounded-3xl border border-white/5 space-y-2">
-                     <div className="text-[10px] text-brand-teal font-black uppercase tracking-widest italic leading-none">Terminal Node</div>
+                     <div className="text-[10px] text-brand-teal font-black uppercase tracking-widest italic leading-none">Appointment</div>
                      <div className="text-xl font-syne font-black italic text-white uppercase tracking-tighter">KKL-CENTRAL-01</div>
                   </div>
                </div>
@@ -41,7 +41,7 @@ export default function BookAppointment() {
 
             <div className="space-y-8">
                <h4 className="font-syne font-black text-2xl text-[#0a1628] uppercase italic leading-none flex items-center gap-4">
-                  <Clock className="text-brand-teal" size={24} /> Select Time Protocol
+                  <Clock className="text-brand-teal" size={24} /> Select Time Service
                </h4>
                <div className="grid grid-cols-4 gap-4">
                   {['09:00', '10:30', '11:45', '14:00', '15:30', '17:00', '18:15', '20:00'].map(time => (
@@ -75,7 +75,7 @@ export default function BookAppointment() {
                <div className="flex items-center gap-4 text-brand-teal font-syne font-black text-sm uppercase italic">
                   <Info size={20} /> SYNC_POLICY_AUTOADHERE
                </div>
-               <p className="text-[#0a1628]/60 font-dm italic font-bold">Rescheduling is available within 4 hours of the synchronized session time via the Command Center.</p>
+               <p className="text-[#0a1628]/60 font-dm italic font-bold">Rescheduling is available within 4 hours of the updatehronized session time via the Command Center.</p>
             </div>
          </div>
       </div>
